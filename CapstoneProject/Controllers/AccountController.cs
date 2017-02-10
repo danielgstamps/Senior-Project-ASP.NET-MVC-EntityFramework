@@ -138,7 +138,7 @@ namespace CapstoneProject.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut();
-            return RedirectToAction("Home", "Listing");
+            return RedirectToAction("Index", "Home");
         }
 
         //
