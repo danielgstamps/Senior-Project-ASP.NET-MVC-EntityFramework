@@ -161,3 +161,4 @@ C:\Users\csuser\Desktop\capstone-project\CapstoneProject\bin\Microsoft.Owin.Secu
 C:\Users\csuser\Desktop\capstone-project\CapstoneProject\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
 C:\Users\csuser\Desktop\capstone-project\CapstoneProject\obj\Debug\CapstoneProject.dll
 C:\Users\csuser\Desktop\capstone-project\CapstoneProject\obj\Debug\CapstoneProject.pdb
+C:\Users\csuser\Desktop\capstone-project\CapstoneProject\obj\Debug\CapstoneProject.csprojResolveAssemblyReference.cache
