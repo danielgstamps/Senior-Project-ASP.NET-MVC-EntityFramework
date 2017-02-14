@@ -23,5 +23,7 @@ namespace CapstoneProject.Models
         [Display(Name = "Comment")]
         [StringLength(MAX_LENGTH)]
         public string Comment { get; set; }
+
+        public ICollection<Category> Categories { get; set; }
     }
 }

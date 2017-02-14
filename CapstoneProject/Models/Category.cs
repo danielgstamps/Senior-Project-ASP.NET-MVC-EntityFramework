@@ -25,5 +25,11 @@ namespace CapstoneProject.Models
         [StringLength(MAX_DESC_LENGTH)]
         [Required(ErrorMessage = "Description required. Cannot exede 500 characters")]
         public string Description { get; set; }
+
+        public int EvaluationID { get; set; }
+
+        public Evaluation Evaluation { get; set; }
+
+        public ICollection<Question> Questions { get; set; }
     }
 }

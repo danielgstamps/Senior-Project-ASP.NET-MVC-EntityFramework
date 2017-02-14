@@ -50,5 +50,7 @@ namespace CapstoneProject.Models
         public int ManagerID { get; set; }
 
         public Employee Manager { get; set; }
+
+        public ICollection<Evaluation> Evaluations { get; set; }
     }
 }
