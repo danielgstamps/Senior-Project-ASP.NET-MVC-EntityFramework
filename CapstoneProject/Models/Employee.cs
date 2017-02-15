@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -43,13 +44,15 @@ namespace CapstoneProject.Models
 
         public Cohort Cohort { get; set; }
 
-        public int SupervisorID { get; set; }
+        public int? SupervisorID { get; set; }
 
-        public Employee Supervisor { get; set; }
+        [ForeignKey("SupervisorID")]
+        public virtual Employee Supervisor { get; set; }
 
-        public int ManagerID { get; set; }
+        public int? ManagerID { get; set; }
 
-        public Employee Manager { get; set; }
+        [ForeignKey("ManagerID")]
+        public virtual Employee Manager { get; set; }
 
         public ICollection<Evaluation> Evaluations { get; set; }
     }
