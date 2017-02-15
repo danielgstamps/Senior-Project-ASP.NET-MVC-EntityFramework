@@ -326,3 +326,5 @@ C:\Users\csuser\Documents\capstone-project\CapstoneProject\bin\Microsoft.Owin.Se
 C:\Users\csuser\Documents\capstone-project\CapstoneProject\bin\Microsoft.Owin.Security.Google.xml
 C:\Users\csuser\Documents\capstone-project\CapstoneProject\bin\Microsoft.Owin.Security.Twitter.xml
 C:\Users\csuser\Documents\capstone-project\CapstoneProject\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+C:\Users\csuser\Documents\capstone-project\CapstoneProject\obj\Debug\CapstoneProject.EvaluationMigrations.EvaluationContext.EvaluationInitialSeed.resources
+C:\Users\csuser\Documents\capstone-project\CapstoneProject\obj\Debug\CapstoneProject.csproj.GenerateResource.Cache

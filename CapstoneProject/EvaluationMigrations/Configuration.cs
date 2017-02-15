@@ -16,8 +16,9 @@ namespace CapstoneProject.EvaluationMigrations
             MigrationsDirectory = @"EvaluationMigrations";
         }
 
-        protected override void Seed(CapstoneProject.DAL.EvaluationContext context)
+        protected override void Seed(DAL.EvaluationContext context)
         {
+
             var cohortList = new List<Cohort>
             {
                 new Cohort {CohortID = 1, Name = "Cohort 1", Employees = new List<Employee>()},
@@ -25,7 +26,14 @@ namespace CapstoneProject.EvaluationMigrations
                 new Cohort {CohortID = 3, Name = "Cohort 3", Employees = new List<Employee>()}
             };
 
-            cohortList.ForEach(s => context.Cohorts.Add(s));
+            //cohortList.ForEach(s => context.Cohorts.Add(s));
+            foreach (var cohort in cohortList)
+            {
+                if (!context.Cohorts.Any(c => c.CohortID == cohort.CohortID))
+                {
+                    context.Cohorts.Add(cohort);
+                }
+            }
             context.SaveChanges();
 
             var employeeList = new List<Employee>
@@ -39,7 +47,14 @@ namespace CapstoneProject.EvaluationMigrations
                 new Employee {EmployeeID = 7, FirstName = "Deon", LastName = "Booker", CohortID = 1, Address = "1446 Circle Drive, Houston, TX 77020", Email = "DeonMBooker@armyspy.com", Phone = "832-551-1196", ManagerID = 2, SupervisorID = 3, Evaluations = new List<Evaluation>()},
                 new Employee {EmployeeID = 8, FirstName = "Joyce", LastName = "Clifton", CohortID = 2, Address = "4675 Cottrill Lane, Stlouis, MO 63101", Email = "JoyceDClifton@dayrep.com", Phone = "314-420-7760", ManagerID = 3, SupervisorID = 3, Evaluations = new List<Evaluation>()}
             };
-            employeeList.ForEach(s => context.Employees.Add(s));
+            //employeeList.ForEach(s => context.Employees.Add(s));
+            foreach (var emp in employeeList)
+            {
+                if (!context.Employees.Any(e => e.EmployeeID == emp.EmployeeID))
+                {
+                    context.Employees.Add(emp);
+                }
+            }
             context.SaveChanges();
 
             var evaluationList = new List<Evaluation>
@@ -53,7 +68,14 @@ namespace CapstoneProject.EvaluationMigrations
                 new Evaluation {EvaluationID = 7, EmployeeID = 7, Stage = "7", Categories = new List<Category>()},
                 new Evaluation {EvaluationID = 8, EmployeeID = 8, Stage = "8", Categories = new List<Category>()},
             };
-            evaluationList.ForEach(s => context.Evaluations.Add(s));
+            //evaluationList.ForEach(s => context.Evaluations.Add(s));
+            foreach (var eval in evaluationList)
+            {
+                if (!context.Evaluations.Any(e => e.EvaluationID == eval.EvaluationID))
+                {
+                    context.Evaluations.Add(eval);
+                }
+            }
             context.SaveChanges();
 
             var categoryList = new List<Category>
@@ -62,7 +84,14 @@ namespace CapstoneProject.EvaluationMigrations
                 new Category { CategoryID = 2, Name = "Category 2", Description = "Category 2", EvaluationID = 2, Questions = new List<Question>()},
                 new Category { CategoryID = 3, Name = "Category 3", Description = "Category 3", EvaluationID = 3, Questions = new List<Question>()},
             };
-            categoryList.ForEach(s => context.Categories.Add(s));
+            // categoryList.ForEach(s => context.Categories.Add(s));
+            foreach (var cat in categoryList)
+            {
+                if (!context.Categories.Any(c => c.CategoryID == cat.CategoryID))
+                {
+                    context.Categories.Add(cat);
+                }
+            }
             context.SaveChanges();
 
             var questionList = new List<Question>
@@ -71,7 +100,14 @@ namespace CapstoneProject.EvaluationMigrations
                 new Question {QuestionID = 2, Comment = "", QuestionText = "I get along with my coworkers", Categories = new List<Category>()},
                 new Question {QuestionID = 3, Comment = "", QuestionText = "I complete projects early", Categories = new List<Category>()}
             };
-            questionList.ForEach(s => context.Questions.Add(s));
+            //questionList.ForEach(s => context.Questions.Add(s));
+            foreach (var question in questionList)
+            {
+                if (!context.Questions.Any(q => q.QuestionID == question.QuestionID))
+                {
+                    context.Questions.Add(question);
+                }
+            }
             context.SaveChanges();
         }
     }

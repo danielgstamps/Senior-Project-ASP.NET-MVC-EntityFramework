@@ -203,6 +203,10 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="DAL\EvaluationContext.cs" />
     <Compile Include="EvaluationMigrations\Configuration.cs" />
+    <Compile Include="EvaluationMigrations\EvaluationContext\201702151709071_Evaluation_Initial_Seed.cs" />
+    <Compile Include="EvaluationMigrations\EvaluationContext\201702151709071_Evaluation_Initial_Seed.Designer.cs">
+      <DependentUpon>201702151709071_Evaluation_Initial_Seed.cs</DependentUpon>
+    </Compile>
     <Compile Include="EvaluationMigrations\EvaluationContext\Configuration.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -274,16 +278,16 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\Info.cshtml" />
     <Content Include="Views\Shared\_NavBar.cshtml" />
-    <Content Include="Views\Employees\Create.cshtml" />
-    <Content Include="Views\Employees\Delete.cshtml" />
-    <Content Include="Views\Employees\Details.cshtml" />
-    <Content Include="Views\Employees\Edit.cshtml" />
-    <Content Include="Views\Employees\Index.cshtml" />
     <Content Include="Views\Cohorts\Create.cshtml" />
     <Content Include="Views\Cohorts\Delete.cshtml" />
     <Content Include="Views\Cohorts\Details.cshtml" />
     <Content Include="Views\Cohorts\Edit.cshtml" />
     <Content Include="Views\Cohorts\Index.cshtml" />
+    <Content Include="Views\Employees\Create.cshtml" />
+    <Content Include="Views\Employees\Delete.cshtml" />
+    <Content Include="Views\Employees\Details.cshtml" />
+    <Content Include="Views\Employees\Edit.cshtml" />
+    <Content Include="Views\Employees\Index.cshtml" />
     <Content Include="Views\Evaluations\Create.cshtml" />
     <Content Include="Views\Evaluations\Delete.cshtml" />
     <Content Include="Views\Evaluations\Details.cshtml" />
@@ -300,6 +304,11 @@
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="EvaluationMigrations\EvaluationContext\201702151709071_Evaluation_Initial_Seed.resx">
+      <DependentUpon>201702151709071_Evaluation_Initial_Seed.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
