@@ -20,6 +20,6 @@ namespace CapstoneProject.Models
         [Required(ErrorMessage = "Cohort name required")]
         public string Name { get; set; }
 
-        public ICollection<Employee> Employees { get; set; }
+        public virtual ICollection<Employee> Employees { get; set; }
     }
 }

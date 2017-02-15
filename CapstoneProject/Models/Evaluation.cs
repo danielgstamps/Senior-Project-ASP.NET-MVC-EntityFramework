@@ -30,8 +30,8 @@ namespace CapstoneProject.Models
         
         public int EmployeeID { get; set; }
 
-        public Employee Employee { get; set; }
+        public virtual Employee Employee { get; set; }
 
-        public ICollection<Category> Categories { get; set; }
+        public virtual ICollection<Category> Categories { get; set; }
     }
 }

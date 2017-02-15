@@ -28,8 +28,8 @@ namespace CapstoneProject.Models
 
         public int EvaluationID { get; set; }
 
-        public Evaluation Evaluation { get; set; }
+        public virtual Evaluation Evaluation { get; set; }
 
-        public ICollection<Question> Questions { get; set; }
+        public virtual ICollection<Question> Questions { get; set; }
     }
 }

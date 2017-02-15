@@ -27,6 +27,7 @@ namespace CapstoneProject.Models
         public string LastName { get; set; }
 
         [Display(Name = "Email Address")]
+        [DataType(DataType.EmailAddress)]
         [Required(ErrorMessage = "The email address is required")]
         [EmailAddress(ErrorMessage = "Invalid Email Address")]
         public string Email { get; set; }
@@ -37,12 +38,12 @@ namespace CapstoneProject.Models
 
         [Display(Name = "Phone Number")]
         [Required(ErrorMessage = "Phone number required")]
-        // TODO Add phone number validation
+        [DataType(DataType.PhoneNumber)]
         public string Phone { get; set; }
 
         public int CohortID { get; set; }
 
-        public Cohort Cohort { get; set; }
+        public virtual Cohort Cohort { get; set; }
 
         public int? SupervisorID { get; set; }
 
@@ -54,6 +55,6 @@ namespace CapstoneProject.Models
         [ForeignKey("ManagerID")]
         public virtual Employee Manager { get; set; }
 
-        public ICollection<Evaluation> Evaluations { get; set; }
+        public virtual ICollection<Evaluation> Evaluations { get; set; }
     }
 }

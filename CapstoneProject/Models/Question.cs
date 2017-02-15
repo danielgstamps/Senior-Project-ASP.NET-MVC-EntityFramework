@@ -24,6 +24,6 @@ namespace CapstoneProject.Models
         [StringLength(MAX_LENGTH)]
         public string Comment { get; set; }
 
-        public ICollection<Category> Categories { get; set; }
+        public virtual ICollection<Category> Categories { get; set; }
     }
 }
