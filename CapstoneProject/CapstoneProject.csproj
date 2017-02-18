@@ -201,13 +201,12 @@
     <Compile Include="Controllers\EvaluationsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="DAL\EvaluationContext.cs" />
-    <Compile Include="EvaluationMigrations\Configuration.cs" />
-    <Compile Include="EvaluationMigrations\EvaluationContext\201702151709071_Evaluation_Initial_Seed.cs" />
-    <Compile Include="EvaluationMigrations\EvaluationContext\201702151709071_Evaluation_Initial_Seed.Designer.cs">
-      <DependentUpon>201702151709071_Evaluation_Initial_Seed.cs</DependentUpon>
+    <Compile Include="DAL\DataContext.cs" />
+    <Compile Include="DataMigrations\201702181901241_Initial.cs" />
+    <Compile Include="DataMigrations\201702181901241_Initial.Designer.cs">
+      <DependentUpon>201702181901241_Initial.cs</DependentUpon>
     </Compile>
-    <Compile Include="EvaluationMigrations\EvaluationContext\Configuration.cs" />
+    <Compile Include="DataMigrations\DataConfiguration.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -306,8 +305,8 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="EvaluationMigrations\EvaluationContext\201702151709071_Evaluation_Initial_Seed.resx">
-      <DependentUpon>201702151709071_Evaluation_Initial_Seed.cs</DependentUpon>
+    <EmbeddedResource Include="DataMigrations\201702181901241_Initial.resx">
+      <DependentUpon>201702181901241_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

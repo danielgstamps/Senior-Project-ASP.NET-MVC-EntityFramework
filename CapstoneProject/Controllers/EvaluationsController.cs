@@ -13,7 +13,7 @@ namespace CapstoneProject.Controllers
 {
     public class EvaluationsController : Controller
     {
-        private EvaluationContext db = new EvaluationContext();
+        private DataContext db = new DataContext();
 
         // GET: Evaluations
         public ActionResult Index()
