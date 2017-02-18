@@ -220,6 +220,10 @@
     <Compile Include="Models\Question.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="UserMigrations\201702182234025_Init.cs" />
+    <Compile Include="UserMigrations\201702182234025_Init.Designer.cs">
+      <DependentUpon>201702182234025_Init.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserMigrations\Configuration.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -307,6 +311,9 @@
   <ItemGroup>
     <EmbeddedResource Include="DataMigrations\201702181901241_Initial.resx">
       <DependentUpon>201702181901241_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserMigrations\201702182234025_Init.resx">
+      <DependentUpon>201702182234025_Init.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

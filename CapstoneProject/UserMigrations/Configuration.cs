@@ -20,36 +20,43 @@ namespace CapstoneProject.UserMigrations
         protected override void Seed(CapstoneProject.Models.ApplicationDbContext context)
         {
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
-            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+            var userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(context));
 
-
-            // In Startup iam creating first Admin Role and creating a default Admin User    
+            // If the admin role doesn't exist, create it.
             if (!roleManager.RoleExists("Admin"))
             {
-
-                // first we create Admin role   
                 var role = new IdentityRole { Name = "Admin" };
                 roleManager.Create(role);
+            }
 
-                //Here we create a Admin super user who will maintain the website                  
+            // If the admin already exists, delete it. (Can instead be manually deleted from DB)
+            //if (userManager.FindByEmail("admin4982@mailinator.com") != null)
+            //{
+            //    userManager.Delete(userManager.FindByEmail("admin4982@mailinator.com"));
+            //}
 
-                var user = new ApplicationUser
-                {
-                    UserName = "admin4982@mailinator.com",
-                    Email = "admin4982@mailinator.com",
-                    PhoneNumber = "678-555-3399"
-                };
+            // Create user.
+            var user = new ApplicationUser
+            {
+                UserName = "admin4982@mailinator.com",
+                Email = "admin4982@mailinator.com",
+                PhoneNumber = "678-555-3399",
+                EmailConfirmed = true
+            };
 
-                const string userPwd = "Password2017?";
-                userManager.SetLockoutEnabled(user.Id, false);
-                var chkUser = userManager.Create(user, userPwd);
+            const string userPwd = "123123";
 
-                // Add default User to Role Admin   
-                if (chkUser.Succeeded)
-                {
-                    userManager.AddToRole(user.Id, "Admin");
-                }
+            // Write user to DB.
+            var result = userManager.Create(user, userPwd);
+   
+            // If that worked, make him an Admin.
+            if (result.Succeeded)
+            {
+                userManager.AddToRole(user.Id, "Admin");
+            }
+            else
+            {
+                throw new Exception(result.Errors.First()); }
             }
         }
     }
-}
