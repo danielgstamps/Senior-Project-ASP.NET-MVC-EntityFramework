@@ -12,22 +12,18 @@ namespace CapstoneProjectTests
         private Employee michaelScott;
         private Employee dwightSchrute;
         private ICollection<Employee> employees;
-        private Cohort cohort0;
+        private Cohort cohort;
 
         [TestInitialize]
         public void TestInitialize()
         {
             createJimHalpert();
             createMichaelScott();
-
+            createDwightSchrute();
             addEmployeesToCollection();
-
             createCohort();
-
-            jimHalpert.CohortID = cohort0.CohortID;
-            jimHalpert.Cohort = cohort0;
-            michaelScott.CohortID = cohort0.CohortID;
-            michaelScott.Cohort = cohort0;
+            setManagers();
+            setSupervisors();
         }
 
         private void createJimHalpert()
@@ -39,10 +35,6 @@ namespace CapstoneProjectTests
             jimHalpert.Address = "123 Columbia Drive, New York, NY 123456";
             jimHalpert.Email = "jhalpert@dundermifflin.com";
             jimHalpert.Phone = "(123) 456-780";
-            jimHalpert.ManagerID = michaelScott.EmployeeID;
-            jimHalpert.Manager = michaelScott;
-            jimHalpert.SupervisorID = michaelScott.EmployeeID;
-            jimHalpert.Supervisor = michaelScott;
         }
 
         private void createMichaelScott()
@@ -56,31 +48,89 @@ namespace CapstoneProjectTests
             michaelScott.Phone = "(234) 567-8901";
         }
 
+        private void createDwightSchrute()
+        {
+            dwightSchrute = new Employee();
+            dwightSchrute.EmployeeID = 2;
+            dwightSchrute.FirstName = "Dwight";
+            dwightSchrute.LastName = "Schrute";
+            dwightSchrute.Address = "345 Moonlight Drive, New York, NY 345678";
+            dwightSchrute.Email = "dschrute@dundermifflin.com";
+            dwightSchrute.Phone = "(345) 678-9012";
+        }
+
+        private void setSupervisors()
+        {
+            jimHalpert.SupervisorID = michaelScott.EmployeeID;
+            jimHalpert.Supervisor = michaelScott;
+            dwightSchrute.SupervisorID = jimHalpert.EmployeeID;
+            dwightSchrute.Supervisor = jimHalpert;
+        }
+
+        private void setManagers()
+        {
+            jimHalpert.ManagerID = michaelScott.EmployeeID;
+            jimHalpert.Manager = michaelScott;
+            dwightSchrute.ManagerID = michaelScott.EmployeeID;
+            dwightSchrute.Manager = michaelScott;
+        }
+
         private void addEmployeesToCollection()
         {
             employees = new List<Employee>();
             employees.Add(jimHalpert);
             employees.Add(michaelScott);
+            employees.Add(dwightSchrute);
         }
 
         private void createCohort()
         {
-            cohort0 = new Cohort();
-            cohort0.CohortID = 0;
-            cohort0.Name = "Cohort 0";
-            cohort0.Employees = employees;
+            cohort = new Cohort();
+            cohort.CohortID = 0;
+            cohort.Name = "Cohort 0";
+            cohort.Employees = employees;
+            jimHalpert.CohortID = cohort.CohortID;
+            jimHalpert.Cohort = cohort;
+            michaelScott.CohortID = cohort.CohortID;
+            michaelScott.Cohort = cohort;
+            dwightSchrute.CohortID = cohort.CohortID;
+            dwightSchrute.Cohort = cohort;
         }
 
         [TestMethod]
         public void TestEmployeeHasCohortID()
         {
-            Assert.AreEqual(cohort0.CohortID, jimHalpert.CohortID);
+            Assert.AreEqual(cohort.CohortID, jimHalpert.CohortID);
         }
 
         [TestMethod]
-        public void TestEmployeeHashCohort()
+        public void TestEmployeeHasCohort()
         {
-            Assert.AreSame(cohort0, jimHalpert.Cohort);
+            Assert.AreSame(cohort, jimHalpert.Cohort);
+        }
+
+        [TestMethod]
+        public void TestJimHalpertHasMichaelScottAsSupervisor()
+        {
+            Assert.AreSame(this.michaelScott, this.jimHalpert.Supervisor);
+        }
+
+        [TestMethod]
+        public void TestJimHalpertSupervisorIDIsMichaelScottEmployeeID()
+        {
+            Assert.AreEqual(michaelScott.EmployeeID, jimHalpert.SupervisorID);
+        }
+
+        [TestMethod]
+        public void TestJimHalpertManagerIsMichaelScott()
+        {
+            Assert.AreSame(this.michaelScott, this.jimHalpert.Manager);
+        }
+
+        [TestMethod]
+        public void TestJimHalpertManagerIDIsMichaelScottEmployeeID()
+        {
+            Assert.AreEqual(jimHalpert.ManagerID, michaelScott.EmployeeID);
         }
     }
 }
