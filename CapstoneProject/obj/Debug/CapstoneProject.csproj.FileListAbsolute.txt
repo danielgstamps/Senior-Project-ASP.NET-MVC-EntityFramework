@@ -328,3 +328,5 @@ C:\Users\csuser\Documents\capstone-project\CapstoneProject\bin\Microsoft.Owin.Se
 C:\Users\csuser\Documents\capstone-project\CapstoneProject\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
 C:\Users\csuser\Documents\capstone-project\CapstoneProject\obj\Debug\CapstoneProject.EvaluationMigrations.EvaluationContext.EvaluationInitialSeed.resources
 C:\Users\csuser\Documents\capstone-project\CapstoneProject\obj\Debug\CapstoneProject.csproj.GenerateResource.Cache
+C:\Users\csuser\Desktop\capstone-project\CapstoneProject\obj\Debug\CapstoneProject.EvaluationMigrations.EvaluationContext.EvaluationInitialSeed.resources
+C:\Users\csuser\Desktop\capstone-project\CapstoneProject\obj\Debug\CapstoneProject.csproj.GenerateResource.Cache
