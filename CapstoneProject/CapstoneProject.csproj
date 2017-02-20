@@ -206,7 +206,7 @@
     <Compile Include="DataMigrations\201702181901241_Initial.Designer.cs">
       <DependentUpon>201702181901241_Initial.cs</DependentUpon>
     </Compile>
-    <Compile Include="DataMigrations\DataConfiguration.cs" />
+    <Compile Include="DataMigrations\DataConfig.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -220,11 +220,11 @@
     <Compile Include="Models\Question.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="UserMigrations\201702182234025_Init.cs" />
-    <Compile Include="UserMigrations\201702182234025_Init.Designer.cs">
-      <DependentUpon>201702182234025_Init.cs</DependentUpon>
+    <Compile Include="UserMigrations\201702202104105_Initial.cs" />
+    <Compile Include="UserMigrations\201702202104105_Initial.Designer.cs">
+      <DependentUpon>201702202104105_Initial.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserMigrations\Configuration.cs" />
+    <Compile Include="UserMigrations\UserConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -238,6 +238,7 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Properties\PublishProfiles\wudsco - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -296,9 +297,6 @@
     <Content Include="Views\Evaluations\Details.cshtml" />
     <Content Include="Views\Evaluations\Edit.cshtml" />
     <Content Include="Views\Evaluations\Index.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Employees\UploadData.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -315,8 +313,8 @@
     <EmbeddedResource Include="DataMigrations\201702181901241_Initial.resx">
       <DependentUpon>201702181901241_Initial.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserMigrations\201702182234025_Init.resx">
-      <DependentUpon>201702182234025_Init.cs</DependentUpon>
+    <EmbeddedResource Include="UserMigrations\201702202104105_Initial.resx">
+      <DependentUpon>201702202104105_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
