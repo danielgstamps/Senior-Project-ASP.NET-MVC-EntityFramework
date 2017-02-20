@@ -210,6 +210,10 @@
     <Compile Include="DataMigrations\201702181901241_Initial.Designer.cs">
       <DependentUpon>201702181901241_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="DataMigrations\201702202033201_CohortsNullable.cs" />
+    <Compile Include="DataMigrations\201702202033201_CohortsNullable.Designer.cs">
+      <DependentUpon>201702202033201_CohortsNullable.cs</DependentUpon>
+    </Compile>
     <Compile Include="DataMigrations\DataConfiguration.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -318,6 +322,9 @@
   <ItemGroup>
     <EmbeddedResource Include="DataMigrations\201702181901241_Initial.resx">
       <DependentUpon>201702181901241_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataMigrations\201702202033201_CohortsNullable.resx">
+      <DependentUpon>201702202033201_CohortsNullable.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserMigrations\201702182234025_Init.resx">
       <DependentUpon>201702182234025_Init.cs</DependentUpon>

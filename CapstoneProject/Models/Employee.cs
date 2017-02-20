@@ -41,7 +41,7 @@ namespace CapstoneProject.Models
         [DataType(DataType.PhoneNumber)]
         public string Phone { get; set; }
 
-        public int CohortID { get; set; }
+        public int? CohortID { get; set; }
 
         public virtual Cohort Cohort { get; set; }
 

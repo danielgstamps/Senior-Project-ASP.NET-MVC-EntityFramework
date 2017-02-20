@@ -47,7 +47,7 @@ namespace CapstoneProject.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Upload(HttpPostedFileBase upload)
+        public ActionResult UploadData(HttpPostedFileBase upload)
         {
             if (ModelState.IsValid)
             {
