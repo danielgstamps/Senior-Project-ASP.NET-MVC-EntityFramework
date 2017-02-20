@@ -10,7 +10,7 @@ namespace CapstoneProject.DAL
 {
     public class DataContext : DbContext
     {
-        public DataContext() : base("DataContext")
+        public DataContext() : base("DefaultConnection")
         {
         }
 
