@@ -37,6 +37,11 @@ namespace CapstoneProject.Controllers
             }
             return View(employee);
         }
+        
+        public ActionResult UploadData()
+        {
+            return View();
+        }
 
         // GET: Employees/Create
         public ActionResult Create()
