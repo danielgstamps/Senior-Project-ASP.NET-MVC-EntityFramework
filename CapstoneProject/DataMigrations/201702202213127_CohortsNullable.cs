@@ -2,7 +2,7 @@ namespace CapstoneProject.DataMigrations
 {
     using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class CohortsNullable : DbMigration
     {
         public override void Up()
@@ -13,7 +13,7 @@ namespace CapstoneProject.DataMigrations
             CreateIndex("dbo.Employee", "CohortID");
             AddForeignKey("dbo.Employee", "CohortID", "dbo.Cohort", "CohortID");
         }
-        
+
         public override void Down()
         {
             DropForeignKey("dbo.Employee", "CohortID", "dbo.Cohort");

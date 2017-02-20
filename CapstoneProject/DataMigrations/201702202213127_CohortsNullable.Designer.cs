@@ -13,7 +13,7 @@ namespace CapstoneProject.DataMigrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201702202033201_CohortsNullable"; }
+            get { return "201702202213127_CohortsNullable"; }
         }
         
         string IMigrationMetadata.Source

@@ -206,15 +206,16 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="DAL\DataContext.cs" />
-    <Compile Include="DataMigrations\201702181901241_Initial.cs" />
-    <Compile Include="DataMigrations\201702181901241_Initial.Designer.cs">
-      <DependentUpon>201702181901241_Initial.cs</DependentUpon>
+    <Compile Include="DataMigrations\201702202211339_Init.cs" />
+    <Compile Include="DataMigrations\201702202211339_Init.Designer.cs">
+      <DependentUpon>201702202211339_Init.cs</DependentUpon>
     </Compile>
-    
-    <Compile Include="DataMigrations\DataConfig.cs" />    <Compile Include="DataMigrations\201702202033201_CohortsNullable.cs" />    <Compile Include="DataMigrations\201702202033201_CohortsNullable.Designer.cs">
-      <DependentUpon>201702202033201_CohortsNullable.cs</DependentUpon>
+    <Compile Include="DataMigrations\201702202213127_CohortsNullable.cs" />
+    <Compile Include="DataMigrations\201702202213127_CohortsNullable.Designer.cs">
+      <DependentUpon>201702202213127_CohortsNullable.cs</DependentUpon>
     </Compile>
-    <Compile Include="DataMigrations\DataConfiguration.cs" />    <Compile Include="Global.asax.cs">
+    <Compile Include="DataMigrations\DataConfig.cs" />
+    <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
@@ -317,12 +318,14 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="DataMigrations\201702181901241_Initial.resx">
-      <DependentUpon>201702181901241_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="DataMigrations\201702202211339_Init.resx">
+      <DependentUpon>201702202211339_Init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataMigrations\201702202213127_CohortsNullable.resx">
+      <DependentUpon>201702202213127_CohortsNullable.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserMigrations\201702202104105_Initial.resx">
-      <DependentUpon>201702202104105_Initial.cs</DependentUpon>    </EmbeddedResource>    <EmbeddedResource Include="DataMigrations\201702202033201_CohortsNullable.resx">
-      <DependentUpon>201702202033201_CohortsNullable.cs</DependentUpon>
+      <DependentUpon>201702202104105_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
