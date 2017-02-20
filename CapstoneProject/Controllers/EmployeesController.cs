@@ -11,6 +11,7 @@ using CapstoneProject.Models;
 
 namespace CapstoneProject.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class EmployeesController : Controller
     {
         private DataContext db = new DataContext();
