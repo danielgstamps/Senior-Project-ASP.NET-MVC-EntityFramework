@@ -40,15 +40,15 @@ namespace CapstoneProject.Controllers
             private set { _signInManager = value; }
         }
 
+        #region REGISTER
+        /*
         // GET: /Account/Register
         [AllowAnonymous]
         public ActionResult Register()
         {
             return View();
         }
-
-        #region REGISTER
-        /*
+        
         // POST: /Account/Register
         [HttpPost]
         [AllowAnonymous]
