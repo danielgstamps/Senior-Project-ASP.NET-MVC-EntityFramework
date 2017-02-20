@@ -13,7 +13,7 @@ using LumenWorks.Framework.IO.Csv;
 
 namespace CapstoneProject.Controllers
 {
-   // [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class EmployeesController : Controller
     {
         private DataContext db = new DataContext();
