@@ -1,0 +1,3 @@
+EmployeeID,FirstName,LastName,Email,Address,Phone
+0,"Michael","Scott","mscott@mailinator.com","123 Maple St, New York, NY 123456","(123) 456-7890"
+1,"Jim","Halpert","jhalpert@mailinator.com","234 Oak St, New York, NY 234567","(234) 567-8901"

@@ -44,6 +44,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="LumenWorks.Framework.IO, Version=3.9.1.0, Culture=neutral, PublicKeyToken=5ad3ea2f85776344, processorArchitecture=MSIL">
+      <HintPath>..\packages\LumenWorksCsvReader.3.9.1\lib\net20\LumenWorks.Framework.IO.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.0.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.0.6\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
       <Private>True</Private>
@@ -206,8 +210,11 @@
     <Compile Include="DataMigrations\201702181901241_Initial.Designer.cs">
       <DependentUpon>201702181901241_Initial.cs</DependentUpon>
     </Compile>
-    <Compile Include="DataMigrations\DataConfig.cs" />
-    <Compile Include="Global.asax.cs">
+    
+    <Compile Include="DataMigrations\DataConfig.cs" />    <Compile Include="DataMigrations\201702202033201_CohortsNullable.cs" />    <Compile Include="DataMigrations\201702202033201_CohortsNullable.Designer.cs">
+      <DependentUpon>201702202033201_CohortsNullable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataMigrations\DataConfiguration.cs" />    <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
@@ -314,7 +321,8 @@
       <DependentUpon>201702181901241_Initial.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserMigrations\201702202104105_Initial.resx">
-      <DependentUpon>201702202104105_Initial.cs</DependentUpon>
+      <DependentUpon>201702202104105_Initial.cs</DependentUpon>    </EmbeddedResource>    <EmbeddedResource Include="DataMigrations\201702202033201_CohortsNullable.resx">
+      <DependentUpon>201702202033201_CohortsNullable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
