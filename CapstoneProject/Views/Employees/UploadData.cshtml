@@ -1,0 +1,51 @@
+﻿
+@{
+    ViewBag.Title = "Upload Employee Data";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Upload Employee Data</h2>
+
+@model System.Data.DataTable
+@using System.Data;
+
+<h2>Upload File</h2>
+
+@using (Html.BeginForm("UploadData", "Employees", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+
+    <div class="form-group">
+        <input type="file" id="dataFile" name="upload" />
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Upload" class="btn btn-default" />
+    </div>
+
+    if (Model != null)
+    {
+        <table>
+            <thead>
+                <tr>
+                    @foreach (DataColumn col in Model.Columns)
+                    {
+                        <th>@col.ColumnName</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (DataRow row in Model.Rows)
+                {
+                    <tr>
+                        @foreach (DataColumn col in Model.Columns)
+                        {
+                            <td>@row[col.ColumnName]</td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
