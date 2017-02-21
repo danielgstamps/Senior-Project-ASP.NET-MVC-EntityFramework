@@ -188,6 +188,8 @@ namespace CapstoneProject.Controllers
             var employee = db.Employees.Find(id);
             db.Employees.Remove(employee);
 
+            // This currently causes a crash when deleting seeded emps, since they have no associated aspNetUser.
+            // We can fix this by simply moving the seeds to the CSV file.
             var aspNetUser = dbUser.Users.Where(a => a.Email.Equals(employee.Email)).Single();
             dbUser.Users.Remove(aspNetUser);
 
