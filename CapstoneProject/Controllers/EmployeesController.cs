@@ -83,8 +83,8 @@ namespace CapstoneProject.Controllers
                     FirstName = csvTable.Rows[i][0].ToString(),
                     LastName = csvTable.Rows[i][1].ToString(),
                     Email = csvTable.Rows[i][2].ToString(),
-                    Address = csvTable.Rows[i][2].ToString(),
-                    Phone = csvTable.Rows[i][3].ToString()
+                    Address = csvTable.Rows[i][3].ToString(),
+                    Phone = csvTable.Rows[i][4].ToString()
                 };
                 var u1 = new ApplicationUser
                 {
@@ -187,7 +187,12 @@ namespace CapstoneProject.Controllers
         {
             var employee = db.Employees.Find(id);
             db.Employees.Remove(employee);
+
+            var aspNetUser = dbUser.Users.Where(a => a.Email.Equals(employee.Email)).Single();
+            dbUser.Users.Remove(aspNetUser);
+
             db.SaveChanges();
+            dbUser.SaveChanges();
             return RedirectToAction("Index");
         }
 

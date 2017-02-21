@@ -11,28 +11,22 @@
     <h4>Employee</h4>
     <hr />
     <dl class="dl-horizontal">
+        
+
         <dt>
-            @Html.DisplayNameFor(model => model.Cohort.Name)
+           <!-- @Html.DisplayNameFor(model => model.Manager.FirstName) -->
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Cohort.Name)
+           <!-- @Html.DisplayFor(model => model.Manager.FirstName) -->
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Manager.FirstName)
+            <!--@Html.DisplayNameFor(model => model.Supervisor.FirstName) -->
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Manager.FirstName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Supervisor.FirstName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Supervisor.FirstName)
+           <!-- @Html.DisplayFor(model => model.Supervisor.FirstName) -->
         </dd>
 
         <dt>
@@ -73,6 +67,13 @@
 
         <dd>
             @Html.DisplayFor(model => model.Phone)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Cohort.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cohort.Name)
         </dd>
 
     </dl>
