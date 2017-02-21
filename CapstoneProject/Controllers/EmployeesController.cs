@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.IO;
@@ -17,6 +16,7 @@ namespace CapstoneProject.Controllers
     public class EmployeesController : Controller
     {
         private DataContext db = new DataContext();
+        private DataTable csvTable = new DataTable();
 
         // GET: Employees
         public ActionResult Index()
@@ -32,7 +32,7 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Employee employee = db.Employees.Find(id);
+            var employee = db.Employees.Find(id);
             if (employee == null)
             {
                 return HttpNotFound();
@@ -51,33 +51,43 @@ namespace CapstoneProject.Controllers
         {
             if (ModelState.IsValid)
             {
-
                 if (upload != null && upload.ContentLength > 0)
                 {
 
                     if (upload.FileName.EndsWith(".csv"))
                     {
-                        Stream stream = upload.InputStream;
-                        DataTable csvTable = new DataTable();
-                        using (CsvReader csvReader =
+                        var stream = upload.InputStream;
+                        using (var csvReader =
                             new CsvReader(new StreamReader(stream), true))
                         {
                             csvTable.Load(csvReader);
                         }
+                        insertCSVDataIntoDB();
                         return View(csvTable);
                     }
-                    else
-                    {
-                        ModelState.AddModelError("File", "This file format is not supported.\r\n\r\nPlease upload a .csv file.");
-                        return View();
-                    }
+                    ModelState.AddModelError("File", "This file format is not supported.\r\n\r\nPlease upload a .csv file.");
+                    return View();
                 }
-                else
-                {
-                    ModelState.AddModelError("File", "Please Upload Your file");
-                }
+                ModelState.AddModelError("File", "Please Upload Your file");
             }
             return View();
+        }
+
+        private void insertCSVDataIntoDB()
+        {
+            for(var i = 0; i < csvTable.Rows.Count; i++)
+            {
+                var e1 = new Employee
+                {
+                    FirstName = csvTable.Rows[i][0].ToString(),
+                    LastName = csvTable.Rows[i][1].ToString(),
+                    Email = csvTable.Rows[i][2].ToString(),
+                    Address = csvTable.Rows[i][2].ToString(),
+                    Phone = csvTable.Rows[i][3].ToString()
+                };
+                db.Employees.Add(e1);
+                db.SaveChanges();
+            }
         }
 
         // GET: Employees/Create
@@ -116,7 +126,7 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Employee employee = db.Employees.Find(id);
+            var employee = db.Employees.Find(id);
             if (employee == null)
             {
                 return HttpNotFound();
@@ -153,7 +163,7 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Employee employee = db.Employees.Find(id);
+            var employee = db.Employees.Find(id);
             if (employee == null)
             {
                 return HttpNotFound();
@@ -166,7 +176,7 @@ namespace CapstoneProject.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Employee employee = db.Employees.Find(id);
+            var employee = db.Employees.Find(id);
             db.Employees.Remove(employee);
             db.SaveChanges();
             return RedirectToAction("Index");

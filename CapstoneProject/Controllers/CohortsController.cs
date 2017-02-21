@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using CapstoneProject.DAL;
 using CapstoneProject.Models;
@@ -28,7 +24,7 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Cohort cohort = db.Cohorts.Find(id);
+            var cohort = db.Cohorts.Find(id);
             if (cohort == null)
             {
                 return HttpNotFound();
@@ -69,7 +65,7 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Cohort cohort = db.Cohorts.Find(id);
+            var cohort = db.Cohorts.Find(id);
             if (cohort == null)
             {
                 return HttpNotFound();
@@ -102,7 +98,7 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Cohort cohort = db.Cohorts.Find(id);
+            var cohort = db.Cohorts.Find(id);
             if (cohort == null)
             {
                 return HttpNotFound();
@@ -116,7 +112,7 @@ namespace CapstoneProject.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Cohort cohort = db.Cohorts.Find(id);
+            var cohort = db.Cohorts.Find(id);
             db.Cohorts.Remove(cohort);
             db.SaveChanges();
             return RedirectToAction("Index");

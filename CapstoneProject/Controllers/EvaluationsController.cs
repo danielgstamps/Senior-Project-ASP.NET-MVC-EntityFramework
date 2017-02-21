@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using CapstoneProject.DAL;
 using CapstoneProject.Models;
@@ -30,7 +26,7 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Evaluation evaluation = db.Evaluations.Find(id);
+            var evaluation = db.Evaluations.Find(id);
             if (evaluation == null)
             {
                 return HttpNotFound();
@@ -70,7 +66,7 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Evaluation evaluation = db.Evaluations.Find(id);
+            var evaluation = db.Evaluations.Find(id);
             if (evaluation == null)
             {
                 return HttpNotFound();
@@ -103,7 +99,7 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Evaluation evaluation = db.Evaluations.Find(id);
+            var evaluation = db.Evaluations.Find(id);
             if (evaluation == null)
             {
                 return HttpNotFound();
@@ -116,7 +112,7 @@ namespace CapstoneProject.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Evaluation evaluation = db.Evaluations.Find(id);
+            var evaluation = db.Evaluations.Find(id);
             db.Evaluations.Remove(evaluation);
             db.SaveChanges();
             return RedirectToAction("Index");

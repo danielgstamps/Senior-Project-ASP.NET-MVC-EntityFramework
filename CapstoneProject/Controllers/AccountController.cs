@@ -1,8 +1,4 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
@@ -112,7 +108,7 @@ namespace CapstoneProject.Controllers
             {
                 if (!await UserManager.IsEmailConfirmedAsync(user.Id))
                 {
-                    string callbackUrl = await SendEmailConfirmationTokenAsync(user.Id, "Confirm your account-Resend");
+                    var callbackUrl = await SendEmailConfirmationTokenAsync(user.Id, "Confirm your account-Resend");
                     ViewBag.errorMessage = "You must have a confirmed email to log on. "
                                            + "The confirmation token has been resent to your email account.";
                     return View("Error");
@@ -168,7 +164,7 @@ namespace CapstoneProject.Controllers
                     return View("ForgotPasswordConfirmation");
                 }
 
-                string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                var code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
                 var callbackUrl = Url.Action("ResetPassword", "Account", new {userId = user.Id, code = code},
                     protocol: Request.Url.Scheme);
                 await UserManager.SendEmailAsync(user.Id, "Reset Password",
@@ -231,7 +227,7 @@ namespace CapstoneProject.Controllers
 
         private async Task<string> SendEmailConfirmationTokenAsync(string userID, string subject)
         {
-            string code = await UserManager.GenerateEmailConfirmationTokenAsync(userID);
+            var code = await UserManager.GenerateEmailConfirmationTokenAsync(userID);
 
             var callbackUrl = Url.Action("ConfirmEmail", "Account",
                 new {userId = userID, code = code}, protocol: Request.Url.Scheme);

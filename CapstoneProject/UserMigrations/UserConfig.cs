@@ -1,3 +1,4 @@
+using System.Linq;
 using CapstoneProject.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -5,9 +6,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 namespace CapstoneProject.UserMigrations
 {
     using System;
-    using System.Data.Entity;
     using System.Data.Entity.Migrations;
-    using System.Linq;
 
     internal sealed class UserConfig : DbMigrationsConfiguration<CapstoneProject.Models.ApplicationDbContext>
     {
