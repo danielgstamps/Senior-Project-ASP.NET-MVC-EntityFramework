@@ -37,7 +37,7 @@ namespace CapstoneProject.Controllers
         }
 
         #region REGISTER
-        /*
+        
         // GET: /Account/Register
         [AllowAnonymous]
         public ActionResult Register()
@@ -68,7 +68,7 @@ namespace CapstoneProject.Controllers
 
             return View(model);
         }
-        */
+        
         #endregion
 
         // GET: /Account/ConfirmEmail

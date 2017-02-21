@@ -17,6 +17,7 @@ namespace CapstoneProject.Controllers
     {
         private DataContext db = new DataContext();
         private DataTable csvTable = new DataTable();
+        private ApplicationDbContext dbUser = new ApplicationDbContext();
 
         // GET: Employees
         public ActionResult Index()
@@ -85,7 +86,15 @@ namespace CapstoneProject.Controllers
                     Address = csvTable.Rows[i][2].ToString(),
                     Phone = csvTable.Rows[i][3].ToString()
                 };
+                var u1 = new ApplicationUser
+                {
+                    Email = e1.Email,
+                    UserName = e1.Email,
+                    PhoneNumber = e1.Phone
+                };
+                dbUser.Users.Add(u1);
                 db.Employees.Add(e1);
+                dbUser.SaveChanges();
                 db.SaveChanges();
             }
         }

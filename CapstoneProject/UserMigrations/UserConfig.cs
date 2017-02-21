@@ -28,6 +28,13 @@ namespace CapstoneProject.UserMigrations
                 roleManager.Create(role);
             }
 
+            // If the user role doesn't exist, create it.
+            if (!roleManager.RoleExists("User"))
+            {
+                var role = new IdentityRole { Name = "User" };
+                roleManager.Create(role);
+            }
+
             // If the admin already exists, delete it. (Can instead be manually deleted from DB)
             if (userManager.FindByEmail("admin@gmail.com") != null)
             {
