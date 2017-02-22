@@ -9,12 +9,11 @@
 @model System.Data.DataTable
 @using System.Data;
 
-<h2>Upload File</h2>
-
 @using (Html.BeginForm("UploadData", "Employees", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary()
+    <p class="alert-info">@ViewBag.Duplicates</p>
 
     <div class="form-group">
         <input type="file" id="dataFile" name="upload" />
@@ -30,14 +29,14 @@
             <thead>
                 <tr>
                     @foreach (DataColumn col in Model.Columns)
-                    {
+        {
                         <th>@col.ColumnName</th>
                     }
                 </tr>
             </thead>
             <tbody>
                 @foreach (DataRow row in Model.Rows)
-                {
+        {
                     <tr>
                         @foreach (DataColumn col in Model.Columns)
                         {

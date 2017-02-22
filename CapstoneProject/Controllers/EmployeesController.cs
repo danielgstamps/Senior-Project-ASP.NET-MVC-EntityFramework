@@ -76,6 +76,7 @@ namespace CapstoneProject.Controllers
 
         private void insertCSVDataIntoDB()
         {
+            string duplicates = "";
             for(var i = 0; i < csvTable.Rows.Count; i++)
             {
                 var e1 = new Employee
@@ -92,10 +93,24 @@ namespace CapstoneProject.Controllers
                     UserName = e1.Email,
                     PhoneNumber = e1.Phone
                 };
-                dbUser.Users.Add(u1);
-                db.Employees.Add(e1);
-                dbUser.SaveChanges();
-                db.SaveChanges();
+
+                if (db.Employees.Any(e => e.Email.Equals(e1.Email)) || 
+                    dbUser.Users.Any(u => u.Email.Equals(u1.Email))){
+                    duplicates += e1.FirstName + " " + e1.LastName + ", ";
+                }
+                else
+                {
+                    dbUser.Users.Add(u1);
+                    db.Employees.Add(e1);
+                    dbUser.SaveChanges();
+                    db.SaveChanges();
+                }
+            }
+
+            if (!string.IsNullOrEmpty(duplicates))
+            {
+                ViewBag.Duplicates = "The following duplicates were skipped: " + 
+                    duplicates.Substring(0, duplicates.Length - 2) + ".";
             }
         }
 
@@ -188,8 +203,6 @@ namespace CapstoneProject.Controllers
             var employee = db.Employees.Find(id);
             db.Employees.Remove(employee);
 
-            // This currently causes a crash when deleting seeded emps, since they have no associated aspNetUser.
-            // We can fix this by simply moving the seeds to the CSV file.
             var aspNetUser = dbUser.Users.Where(a => a.Email.Equals(employee.Email)).Single();
             dbUser.Users.Remove(aspNetUser);
 
