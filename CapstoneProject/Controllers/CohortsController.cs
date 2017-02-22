@@ -29,14 +29,14 @@ namespace CapstoneProject.Controllers
             {
                 return HttpNotFound();
             }
-            return View(cohort);
+            return View("Details", cohort);
         }
 
         [Authorize(Roles = "Admin")]
         // GET: Cohorts/Create
         public ActionResult Create()
         {
-            return View();
+            return View("Create");
         }
 
         // POST: Cohorts/Create
@@ -70,7 +70,7 @@ namespace CapstoneProject.Controllers
             {
                 return HttpNotFound();
             }
-            return View(cohort);
+            return View("Edit", cohort);
         }
 
         // POST: Cohorts/Edit/5
@@ -103,7 +103,7 @@ namespace CapstoneProject.Controllers
             {
                 return HttpNotFound();
             }
-            return View(cohort);
+            return View("Delete", cohort);
         }
 
         [Authorize(Roles = "Admin")]

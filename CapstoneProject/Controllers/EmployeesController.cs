@@ -40,7 +40,7 @@ namespace CapstoneProject.Controllers
             }
             return View(employee);
         }
-        
+
         public ActionResult UploadData()
         {
             return View();
@@ -77,7 +77,7 @@ namespace CapstoneProject.Controllers
         private void insertCSVDataIntoDB()
         {
             string duplicates = "";
-            for(var i = 0; i < csvTable.Rows.Count; i++)
+            for (var i = 0; i < csvTable.Rows.Count; i++)
             {
                 var e1 = new Employee
                 {
@@ -87,29 +87,30 @@ namespace CapstoneProject.Controllers
                     Address = csvTable.Rows[i][3].ToString(),
                     Phone = csvTable.Rows[i][4].ToString()
                 };
-                var u1 = new ApplicationUser
+                /*var u1 = new ApplicationUser
                 {
                     Email = e1.Email,
                     UserName = e1.Email,
                     PhoneNumber = e1.Phone
-                };
+                };*/
 
-                if (db.Employees.Any(e => e.Email.Equals(e1.Email)) || 
-                    dbUser.Users.Any(u => u.Email.Equals(u1.Email))){
+                if (db.Employees.Any(e => e.Email.Equals(e1.Email))/* ||
+                    dbUser.Users.Any(u => u.Email.Equals(u1.Email))*/)
+                {
                     duplicates += e1.FirstName + " " + e1.LastName + ", ";
                 }
                 else
                 {
-                    dbUser.Users.Add(u1);
+                    //dbUser.Users.Add(u1);
                     db.Employees.Add(e1);
-                    dbUser.SaveChanges();
+                    //dbUser.SaveChanges();
                     db.SaveChanges();
                 }
             }
 
             if (!string.IsNullOrEmpty(duplicates))
             {
-                ViewBag.Duplicates = "The following duplicates were skipped: " + 
+                ViewBag.Duplicates = "The following duplicates were skipped: " +
                     duplicates.Substring(0, duplicates.Length - 2) + ".";
             }
         }

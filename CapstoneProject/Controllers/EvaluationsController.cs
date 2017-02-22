@@ -38,7 +38,7 @@ namespace CapstoneProject.Controllers
         public ActionResult Create()
         {
             ViewBag.EmployeeID = new SelectList(db.Employees, "EmployeeID", "FirstName");
-            return View();
+            return View("Create");
         }
 
         // POST: Evaluations/Create
