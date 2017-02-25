@@ -12,7 +12,7 @@ using CapstoneProject.DAL;
 using CapstoneProject.Models;
 using LumenWorks.Framework.IO.Csv;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework
+using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 namespace CapstoneProject.Controllers
 {
@@ -126,8 +126,8 @@ namespace CapstoneProject.Controllers
                     i--; // Since row[0] was just deleted, row[1] became row[0], so move i back.
                     continue;
                 }
-                userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(dbUser));
-                const string userPwd = "123123";
+                //userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(dbUser));
+                //const string userPwd = "123123";
                 var e1 = new Employee
                 {
                     FirstName = firstName,
@@ -140,13 +140,14 @@ namespace CapstoneProject.Controllers
                 {
                     Email = e1.Email,
                     UserName = e1.Email,
-                    PhoneNumber = e1.Phone,
-                    EmailConfirmed = true
+                    PhoneNumber = e1.Phone
                 };
 
-                userManager.Create(u1, userPwd);
-                userManager.AddToRole(u1.Id, "User");
+                //userManager.Create(u1, userPwd);
+                //_userManager.AddToRole(u1.Id, "User");
+                dbUser.Users.Add(u1);
                 db.Employees.Add(e1);
+                dbUser.SaveChanges();
                 db.SaveChanges();
                 await SendPasswordCreationEmail(u1);            }
 
