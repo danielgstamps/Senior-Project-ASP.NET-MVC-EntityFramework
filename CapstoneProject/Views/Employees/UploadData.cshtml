@@ -23,29 +23,34 @@
         <input type="submit" value="Upload" class="btn btn-default" />
     </div>
 
-    if (Model != null)
+    if (Model != null && Model.Rows.Count > 0)
     {
+        <p>Uploaded employee data:</p>
         <table>
             <thead>
-                <tr>
-                    @foreach (DataColumn col in Model.Columns)
-        {
-                        <th>@col.ColumnName</th>
-                    }
-                </tr>
+            <tr>
+                @foreach (DataColumn col in Model.Columns)
+                {
+                    <th>@col.ColumnName</th>
+                }
+            </tr>
             </thead>
             <tbody>
-                @foreach (DataRow row in Model.Rows)
-        {
-                    <tr>
-                        @foreach (DataColumn col in Model.Columns)
-                        {
-                            <td>@row[col.ColumnName]</td>
-                        }
-                    </tr>
-                }
+            @foreach (DataRow row in Model.Rows)
+            {
+                <tr>
+                    @foreach (DataColumn col in Model.Columns)
+                    {
+                        <td>@row[col.ColumnName]</td>
+                    }
+                </tr>
+            }
             </tbody>
         </table>
+    }
+    if (Model != null && Model.Rows.Count == 0)
+    {
+        <p class="alert-info">No employees were added.</p>
     }
 }
 

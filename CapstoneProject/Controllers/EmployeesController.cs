@@ -9,6 +9,8 @@ using System.Web.Mvc;
 using CapstoneProject.DAL;
 using CapstoneProject.Models;
 using LumenWorks.Framework.IO.Csv;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace CapstoneProject.Controllers
 {
@@ -18,6 +20,7 @@ namespace CapstoneProject.Controllers
         private DataContext db = new DataContext();
         private DataTable csvTable = new DataTable();
         private ApplicationDbContext dbUser = new ApplicationDbContext();
+        private ApplicationUserManager userManager;
 
         // GET: Employees
         public ActionResult Index()
@@ -40,7 +43,7 @@ namespace CapstoneProject.Controllers
             }
             return View(employee);
         }
-        
+
         public ActionResult UploadData()
         {
             return View();
@@ -63,7 +66,7 @@ namespace CapstoneProject.Controllers
                         {
                             csvTable.Load(csvReader);
                         }
-                        insertCSVDataIntoDB();
+                        InsertCsvDataIntoDb();
                         return View(csvTable);
                     }
                     ModelState.AddModelError("File", "This file format is not supported.\r\n\r\nPlease upload a .csv file.");
@@ -74,42 +77,60 @@ namespace CapstoneProject.Controllers
             return View();
         }
 
-        private void insertCSVDataIntoDB()
+        private void InsertCsvDataIntoDb()
         {
-            string duplicates = "";
-            for(var i = 0; i < csvTable.Rows.Count; i++)
+            var duplicates = "";
+            for (var i = 0; i < csvTable.Rows.Count; i++)
             {
+                var isDuplicate = false;
+                var firstName = csvTable.Rows[i][0].ToString();
+                var lastName = csvTable.Rows[i][1].ToString();
+                var email = csvTable.Rows[i][2].ToString();
+                var address = csvTable.Rows[i][3].ToString();
+                var phone = csvTable.Rows[i][4].ToString();
+
+                if (db.Employees.Any(e => e.Email.Equals(email)) ||
+                    dbUser.Users.Any(u => u.Email.Equals(email)))
+                {
+                    isDuplicate = true;
+                }
+
+                // Remove duplicate emails from displayed table. Will need to change if csv format changes (if email is moved).
+                if (isDuplicate)
+                {
+                    csvTable.Rows.Remove(csvTable.Rows[i]);
+                    duplicates += firstName + " " + lastName + ", ";
+                    i--;
+                    continue;
+                }
+                userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(dbUser));
+                const string userPwd = "123123";
                 var e1 = new Employee
                 {
-                    FirstName = csvTable.Rows[i][0].ToString(),
-                    LastName = csvTable.Rows[i][1].ToString(),
-                    Email = csvTable.Rows[i][2].ToString(),
-                    Address = csvTable.Rows[i][3].ToString(),
-                    Phone = csvTable.Rows[i][4].ToString()
+                    FirstName = firstName,
+                    LastName = lastName,
+                    Email = email,
+                    Address = address,
+                    Phone = phone
                 };
                 var u1 = new ApplicationUser
                 {
                     Email = e1.Email,
                     UserName = e1.Email,
-                    PhoneNumber = e1.Phone
+                    PhoneNumber = e1.Phone,
+                    EmailConfirmed = true
                 };
 
-                if (db.Employees.Any(e => e.Email.Equals(e1.Email)) || 
-                    dbUser.Users.Any(u => u.Email.Equals(u1.Email))){
-                    duplicates += e1.FirstName + " " + e1.LastName + ", ";
-                }
-                else
-                {
-                    dbUser.Users.Add(u1);
-                    db.Employees.Add(e1);
-                    dbUser.SaveChanges();
-                    db.SaveChanges();
-                }
+                userManager.Create(u1, userPwd);
+                userManager.AddToRole(u1.Id, "User");
+                db.Employees.Add(e1);
+                db.SaveChanges();
+
             }
 
             if (!string.IsNullOrEmpty(duplicates))
             {
-                ViewBag.Duplicates = "The following duplicates were skipped: " + 
+                ViewBag.Duplicates = "The following duplicates were skipped: " +
                     duplicates.Substring(0, duplicates.Length - 2) + ".";
             }
         }
