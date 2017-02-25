@@ -9,6 +9,8 @@ using System.Web.Mvc;
 using CapstoneProject.DAL;
 using CapstoneProject.Models;
 using LumenWorks.Framework.IO.Csv;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace CapstoneProject.Controllers
 {
@@ -18,6 +20,7 @@ namespace CapstoneProject.Controllers
         private DataContext db = new DataContext();
         private DataTable csvTable = new DataTable();
         private ApplicationDbContext dbUser = new ApplicationDbContext();
+        private ApplicationUserManager userManager;
 
         // GET: Employees
         public ActionResult Index()
@@ -40,7 +43,7 @@ namespace CapstoneProject.Controllers
             }
             return View(employee);
         }
-        
+
         public ActionResult UploadData()
         {
             return View();
@@ -77,7 +80,7 @@ namespace CapstoneProject.Controllers
         private void InsertCsvDataIntoDb()
         {
             string duplicates = "";
-            for(var i = 0; i < csvTable.Rows.Count; i++)
+            for (var i = 0; i < csvTable.Rows.Count; i++)
             {
                 bool isDuplicate = false;
                 string firstName = csvTable.Rows[i][0].ToString();
@@ -100,7 +103,8 @@ namespace CapstoneProject.Controllers
                     i--;
                     continue;
                 }
-
+                userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(dbUser));
+                const string userPwd = "123123";
                 var e1 = new Employee
                 {
                     FirstName = firstName,
@@ -113,19 +117,20 @@ namespace CapstoneProject.Controllers
                 {
                     Email = e1.Email,
                     UserName = e1.Email,
-                    PhoneNumber = e1.Phone
+                    PhoneNumber = e1.Phone,
+                    EmailConfirmed = true
                 };
 
-                dbUser.Users.Add(u1);
+                userManager.Create(u1, userPwd);
+                userManager.AddToRole(u1.Id, "User");
                 db.Employees.Add(e1);
-                dbUser.SaveChanges();
                 db.SaveChanges();
-                
+
             }
 
             if (!string.IsNullOrEmpty(duplicates))
             {
-                ViewBag.Duplicates = "The following duplicates were skipped: " + 
+                ViewBag.Duplicates = "The following duplicates were skipped: " +
                     duplicates.Substring(0, duplicates.Length - 2) + ".";
             }
         }
