@@ -234,7 +234,6 @@
     </Compile>
     <Compile Include="UserMigrations\UserConfig.cs" />
     <Compile Include="ViewModels\AssignedEmployeeData.cs" />
-    <Compile Include="ViewModels\CohortIndexData.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />

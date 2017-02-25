@@ -109,17 +109,8 @@ namespace CapstoneProject.Controllers
                     ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
                 }
             }
-            //ViewBag.AgentID = new SelectList(db.Agents, "ID", "Name", cohortToUpdate.AgentID);
             populateAssignedEmployees(cohortToUpdate);
             return View(cohortToUpdate);
-
-            /*if (ModelState.IsValid)
-            {
-                db.Entry(cohort).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(cohort);*/
         }
 
         private void updateCohortEmployees(string[] selectedEmployees, Cohort cohortToUpdate)
@@ -169,8 +160,8 @@ namespace CapstoneProject.Controllers
             ViewBag.Employees = assignedEmployee;
         }
 
-        [Authorize(Roles = "Admin")]
         // GET: Cohorts/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -185,8 +176,8 @@ namespace CapstoneProject.Controllers
             return View("Delete", cohort);
         }
 
-        [Authorize(Roles = "Admin")]
         // POST: Cohorts/Delete/5
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
