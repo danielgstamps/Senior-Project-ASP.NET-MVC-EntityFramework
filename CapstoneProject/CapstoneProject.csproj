@@ -233,6 +233,7 @@
       <DependentUpon>201702202104105_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="UserMigrations\UserConfig.cs" />
+    <Compile Include="ViewModels\AssignedEmployeeData.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />

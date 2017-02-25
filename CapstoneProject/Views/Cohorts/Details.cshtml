@@ -17,6 +17,19 @@
         <dd>
             @Html.DisplayFor(model => model.Name)
         </dd>
+        
+        <dt>
+            @Html.DisplayNameFor(model => model.Employees)
+        </dt>
+        
+        @foreach (var employee in Model.Employees)
+        {
+            <dd>
+                @employee.FirstName  @employee.LastName
+            </dd>
+        }
+
+        
 
     </dl>
 </div>

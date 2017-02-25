@@ -12,8 +12,8 @@ using CapstoneProject.DAL;
 using CapstoneProject.Models;
 using LumenWorks.Framework.IO.Csv;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework
 using Microsoft.AspNet.Identity.Owin;
-
 namespace CapstoneProject.Controllers
 {
     [Authorize(Roles = "Admin")]
@@ -21,11 +21,8 @@ namespace CapstoneProject.Controllers
     {
         private DataContext db = new DataContext();
         private DataTable csvTable = new DataTable();
-        private ApplicationDbContext dbUser = new ApplicationDbContext();
-      //  private AccountController accountController = new AccountController();
-        private ApplicationUserManager _userManager;
+        private ApplicationDbContext dbUser = new ApplicationDbContext();        private ApplicationUserManager _userManager;
         private ApplicationSignInManager _signInManager;
-
         public EmployeesController()
         {
         }
@@ -69,7 +66,7 @@ namespace CapstoneProject.Controllers
             }
             return View(employee);
         }
-        
+
         public ActionResult UploadData()
         {
             return View();
@@ -105,15 +102,15 @@ namespace CapstoneProject.Controllers
 
         private async Task InsertCsvDataIntoDb()
         {
-            string duplicates = "";
-            for(var i = 0; i < csvTable.Rows.Count; i++)
+            var duplicates = "";
+            for (var i = 0; i < csvTable.Rows.Count; i++)
             {
-                bool isDuplicate = false;
-                string firstName = csvTable.Rows[i][0].ToString();
-                string lastName = csvTable.Rows[i][1].ToString();
-                string email = csvTable.Rows[i][2].ToString();
-                string address = csvTable.Rows[i][3].ToString();
-                string phone = csvTable.Rows[i][4].ToString();
+                var isDuplicate = false;
+                var firstName = csvTable.Rows[i][0].ToString();
+                var lastName = csvTable.Rows[i][1].ToString();
+                var email = csvTable.Rows[i][2].ToString();
+                var address = csvTable.Rows[i][3].ToString();
+                var phone = csvTable.Rows[i][4].ToString();
 
                 if (db.Employees.Any(e => e.Email.Equals(email)) ||
                     dbUser.Users.Any(u => u.Email.Equals(email)))
@@ -129,7 +126,8 @@ namespace CapstoneProject.Controllers
                     i--; // Since row[0] was just deleted, row[1] became row[0], so move i back.
                     continue;
                 }
-
+                userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(dbUser));
+                const string userPwd = "123123";
                 var e1 = new Employee
                 {
                     FirstName = firstName,
@@ -142,19 +140,19 @@ namespace CapstoneProject.Controllers
                 {
                     Email = e1.Email,
                     UserName = e1.Email,
-                    PhoneNumber = e1.Phone
+                    PhoneNumber = e1.Phone,
+                    EmailConfirmed = true
                 };
 
-                dbUser.Users.Add(u1);
+                userManager.Create(u1, userPwd);
+                userManager.AddToRole(u1.Id, "User");
                 db.Employees.Add(e1);
-                dbUser.SaveChanges();
                 db.SaveChanges();
-                await SendPasswordCreationEmail(u1);
-            }
+                await SendPasswordCreationEmail(u1);            }
 
             if (!string.IsNullOrEmpty(duplicates))
             {
-                ViewBag.Duplicates = "The following duplicates were skipped: " + 
+                ViewBag.Duplicates = "The following duplicates were skipped: " +
                     duplicates.Substring(0, duplicates.Length - 2) + ".";
             }
         }
