@@ -79,15 +79,15 @@ namespace CapstoneProject.Controllers
 
         private void InsertCsvDataIntoDb()
         {
-            string duplicates = "";
+            var duplicates = "";
             for (var i = 0; i < csvTable.Rows.Count; i++)
             {
-                bool isDuplicate = false;
-                string firstName = csvTable.Rows[i][0].ToString();
-                string lastName = csvTable.Rows[i][1].ToString();
-                string email = csvTable.Rows[i][2].ToString();
-                string address = csvTable.Rows[i][3].ToString();
-                string phone = csvTable.Rows[i][4].ToString();
+                var isDuplicate = false;
+                var firstName = csvTable.Rows[i][0].ToString();
+                var lastName = csvTable.Rows[i][1].ToString();
+                var email = csvTable.Rows[i][2].ToString();
+                var address = csvTable.Rows[i][3].ToString();
+                var phone = csvTable.Rows[i][4].ToString();
 
                 if (db.Employees.Any(e => e.Email.Equals(email)) ||
                     dbUser.Users.Any(u => u.Email.Equals(email)))
