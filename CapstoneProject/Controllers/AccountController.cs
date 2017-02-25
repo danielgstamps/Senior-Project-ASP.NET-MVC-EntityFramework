@@ -39,50 +39,50 @@ namespace CapstoneProject.Controllers
         #region REGISTER
         
         // GET: /Account/Register
-        [AllowAnonymous]
-        public ActionResult Register()
-        {
-            return View();
-        }
+        //[AllowAnonymous]
+        //public ActionResult Register()
+        //{
+        //    return View();
+        //}
         
         // POST: /Account/Register
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var user = new ApplicationUser {UserName = model.Email, Email = model.Email};
-                var result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    string callbackUrl = await SendEmailConfirmationTokenAsync(user.Id, "Confirm your account");
-                    ViewBag.Message = "Check your email and confirm your account, you must be confirmed "
-                                      + "before you can log in.";
-                    return View("Info");
-                }
+        //[HttpPost]
+        //[AllowAnonymous]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> Register(RegisterViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var user = new ApplicationUser {UserName = model.Email, Email = model.Email};
+        //        var result = await UserManager.CreateAsync(user, model.Password);
+        //        if (result.Succeeded)
+        //        {
+        //            string callbackUrl = await SendEmailConfirmationTokenAsync(user.Id, "Confirm your account");
+        //            ViewBag.Message = "Check your email and confirm your account, you must be confirmed "
+        //                              + "before you can log in.";
+        //            return View("Info");
+        //        }
 
-                AddErrors(result);
-            }
+        //        AddErrors(result);
+        //    }
 
-            return View(model);
-        }
+        //    return View(model);
+        //}
         
         #endregion
 
         // GET: /Account/ConfirmEmail
-        [AllowAnonymous]
-        public async Task<ActionResult> ConfirmEmail(string userId, string code)
-        {
-            if (userId == null || code == null)
-            {
-                return View("Error");
-            }
+        //[AllowAnonymous]
+        //public async Task<ActionResult> ConfirmEmail(string userId, string code)
+        //{
+        //    if (userId == null || code == null)
+        //    {
+        //        return View("Error");
+        //    }
 
-            var result = await UserManager.ConfirmEmailAsync(userId, code);
-            return View(result.Succeeded ? "ConfirmEmail" : "Error");
-        }
+        //    var result = await UserManager.ConfirmEmailAsync(userId, code);
+        //    return View(result.Succeeded ? "ConfirmEmail" : "Error");
+        //}
 
         // GET: /Account/Login
         [AllowAnonymous]
@@ -104,16 +104,16 @@ namespace CapstoneProject.Controllers
             }
 
             var user = await UserManager.FindByNameAsync(model.Email);
-            if (user != null)
-            {
-                if (!await UserManager.IsEmailConfirmedAsync(user.Id))
-                {
-                    var callbackUrl = await SendEmailConfirmationTokenAsync(user.Id, "Confirm your account-Resend");
-                    ViewBag.errorMessage = "You must have a confirmed email to log on. "
-                                           + "The confirmation token has been resent to your email account.";
-                    return View("Error");
-                }
-            }
+            //if (user != null)
+            //{
+            //    if (!await UserManager.IsEmailConfirmedAsync(user.Id))
+            //    {
+            //        //var callbackUrl = await SendEmailConfirmationTokenAsync(user.Id, "Confirm your account-Resend");
+            //        ViewBag.errorMessage = "You must have a confirmed email to log on. "
+            //                               + "The confirmation token has been resent to your email account.";
+            //        return View("Error");
+            //    }
+            //}
 
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe,
                 shouldLockout: false);
@@ -123,9 +123,9 @@ namespace CapstoneProject.Controllers
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new {ReturnUrl = returnUrl, RememberMe = model.RememberMe});
-                case SignInStatus.Failure:
+                //case SignInStatus.RequiresVerification:
+                //    return RedirectToAction("SendCode", new {ReturnUrl = returnUrl, RememberMe = model.RememberMe});
+                //case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Invalid email/password.");
                     return View(model);
@@ -149,6 +149,16 @@ namespace CapstoneProject.Controllers
             return View();
         }
 
+        private async Task SendPasswordCreationEmail(ApplicationUser user)
+        {
+            var code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+            var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code },
+                protocol: Request.Url.Scheme);
+            await UserManager.SendEmailAsync(user.Id, "Create your WUDSCO password",
+                    "Click <a href=\"" + callbackUrl + "\">here</a> to create your password.");
+        }
+        
+
         //
         // POST: /Account/ForgotPassword
         [HttpPost]
@@ -165,7 +175,7 @@ namespace CapstoneProject.Controllers
                 }
 
                 var code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                var callbackUrl = Url.Action("ResetPassword", "Account", new {userId = user.Id, code = code},
+                var callbackUrl = Url.Action("ResetPassword", "Account", new {userId = user.Id, code},
                     protocol: Request.Url.Scheme);
                 await UserManager.SendEmailAsync(user.Id, "Reset Password",
                     "Click <a href=\"" + callbackUrl + "\">here</a> to reset your password.");
@@ -225,18 +235,18 @@ namespace CapstoneProject.Controllers
             return View();
         }
 
-        private async Task<string> SendEmailConfirmationTokenAsync(string userID, string subject)
-        {
-            var code = await UserManager.GenerateEmailConfirmationTokenAsync(userID);
+        //private async Task<string> SendEmailConfirmationTokenAsync(string userID, string subject)
+        //{
+        //    var code = await UserManager.GenerateEmailConfirmationTokenAsync(userID);
 
-            var callbackUrl = Url.Action("ConfirmEmail", "Account",
-                new {userId = userID, code = code}, protocol: Request.Url.Scheme);
+        //    var callbackUrl = Url.Action("ConfirmEmail", "Account",
+        //        new {userId = userID, code = code}, protocol: Request.Url.Scheme);
 
-            await UserManager.SendEmailAsync(userID, subject,
-                "Click <a href=\"" + callbackUrl + "\">here</a> to confirm your email.");
+        //    await UserManager.SendEmailAsync(userID, subject,
+        //        "Click <a href=\"" + callbackUrl + "\">here</a> to confirm your email.");
 
-            return callbackUrl;
-        }
+        //    return callbackUrl;
+        //}
 
         #region Helpers
 

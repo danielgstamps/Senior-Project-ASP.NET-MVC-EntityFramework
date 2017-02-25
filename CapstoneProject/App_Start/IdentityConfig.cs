@@ -25,7 +25,7 @@ namespace CapstoneProject
             client.UseDefaultCredentials = false;
             client.Credentials = new NetworkCredential("dstamps1@my.westga.edu", "Temppass123!");
 
-            return client.SendMailAsync("support@realtorhelper.com",
+            return client.SendMailAsync("support@wudsco.com",
                                         message.Destination,
                                         message.Subject,
                                         message.Body);

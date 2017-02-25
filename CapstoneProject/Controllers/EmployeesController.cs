@@ -1,14 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using CapstoneProject.DAL;
 using CapstoneProject.Models;
 using LumenWorks.Framework.IO.Csv;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 
 namespace CapstoneProject.Controllers
 {
@@ -18,6 +22,31 @@ namespace CapstoneProject.Controllers
         private DataContext db = new DataContext();
         private DataTable csvTable = new DataTable();
         private ApplicationDbContext dbUser = new ApplicationDbContext();
+      //  private AccountController accountController = new AccountController();
+        private ApplicationUserManager _userManager;
+        private ApplicationSignInManager _signInManager;
+
+        public EmployeesController()
+        {
+        }
+
+        public EmployeesController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
+        {
+            UserManager = userManager;
+            SignInManager = signInManager;
+        }
+
+        public ApplicationUserManager UserManager
+        {
+            get { return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
+            private set { _userManager = value; }
+        }
+
+        public ApplicationSignInManager SignInManager
+        {
+            get { return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>(); }
+            private set { _signInManager = value; }
+        }
 
         // GET: Employees
         public ActionResult Index()
@@ -48,7 +77,7 @@ namespace CapstoneProject.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult UploadData(HttpPostedFileBase upload)
+        public async Task<ActionResult> UploadData(HttpPostedFileBase upload)
         {
             if (ModelState.IsValid)
             {
@@ -63,7 +92,7 @@ namespace CapstoneProject.Controllers
                         {
                             csvTable.Load(csvReader);
                         }
-                        InsertCsvDataIntoDb();
+                        await InsertCsvDataIntoDb();
                         return View(csvTable);
                     }
                     ModelState.AddModelError("File", "This file format is not supported.\r\n\r\nPlease upload a .csv file.");
@@ -74,7 +103,7 @@ namespace CapstoneProject.Controllers
             return View();
         }
 
-        private void InsertCsvDataIntoDb()
+        private async Task InsertCsvDataIntoDb()
         {
             string duplicates = "";
             for(var i = 0; i < csvTable.Rows.Count; i++)
@@ -97,7 +126,7 @@ namespace CapstoneProject.Controllers
                 {
                     csvTable.Rows.Remove(csvTable.Rows[i]);
                     duplicates += firstName + " " + lastName + ", ";
-                    i--;
+                    i--; // Since row[0] was just deleted, row[1] became row[0], so move i back.
                     continue;
                 }
 
@@ -120,7 +149,7 @@ namespace CapstoneProject.Controllers
                 db.Employees.Add(e1);
                 dbUser.SaveChanges();
                 db.SaveChanges();
-                
+                await SendPasswordCreationEmail(u1);
             }
 
             if (!string.IsNullOrEmpty(duplicates))
@@ -128,6 +157,16 @@ namespace CapstoneProject.Controllers
                 ViewBag.Duplicates = "The following duplicates were skipped: " + 
                     duplicates.Substring(0, duplicates.Length - 2) + ".";
             }
+        }
+
+        private async Task SendPasswordCreationEmail(ApplicationUser user)
+        {
+            var code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+            var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code },
+                protocol: Request.Url.Scheme);
+            await UserManager.SendEmailAsync(user.Id, "Create your WUDSCO password",
+                "Click <a href=\"" + callbackUrl + "\">here</a> to create your password.");
+
         }
 
         // GET: Employees/Create

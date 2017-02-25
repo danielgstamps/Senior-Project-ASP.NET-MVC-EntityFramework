@@ -256,7 +256,6 @@ C:\Users\csuser\Desktop\capstone-project\CapstoneProject\bin\Microsoft.Owin.Secu
 C:\Users\csuser\Desktop\capstone-project\CapstoneProject\bin\Microsoft.Owin.Security.Google.xml
 C:\Users\csuser\Desktop\capstone-project\CapstoneProject\bin\Microsoft.Owin.Security.Twitter.xml
 C:\Users\csuser\Desktop\capstone-project\CapstoneProject\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
-C:\Users\csuser\Desktop\capstone-project\CapstoneProject\obj\Release\CapstoneProject.csprojResolveAssemblyReference.cache
 C:\Users\csuser\Desktop\capstone-project\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.Init.resources
 C:\Users\csuser\Desktop\capstone-project\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.CohortsNullable.resources
 C:\Users\csuser\Desktop\capstone-project\CapstoneProject\obj\Release\CapstoneProject.UserMigrations.Initial.resources
