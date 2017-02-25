@@ -1,9 +1,12 @@
-﻿using System.Data.Entity;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using CapstoneProject.DAL;
 using CapstoneProject.Models;
+using CapstoneProject.ViewModels;
 
 namespace CapstoneProject.Controllers
 {
@@ -58,7 +61,7 @@ namespace CapstoneProject.Controllers
         }
 
         // GET: Cohorts/Edit/5
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -66,6 +69,9 @@ namespace CapstoneProject.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var cohort = db.Cohorts.Find(id);
+            var employeesUnordered = db.Employees.ToList();
+            var employeesOrdered = employeesUnordered.OrderBy(e => e.LastName).ToList();
+            ViewBag.Employees = employeesOrdered;
             if (cohort == null)
             {
                 return HttpNotFound();
@@ -76,18 +82,91 @@ namespace CapstoneProject.Controllers
         // POST: Cohorts/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "CohortID,Name")] Cohort cohort)
+        public ActionResult Edit(int? id, string[] selectedEmployees/*[Bind(Include = "CohortID,Name")] Cohort cohort*/)
         {
-            if (ModelState.IsValid)
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var cohortToUpdate = db.Cohorts.Include(c => c.Employees).Where(c => c.CohortID == id).Single();
+            if (TryUpdateModel(cohortToUpdate, "",
+               new string[] { "Name" }))
+            {
+                try
+                {
+                    updateCohortEmployees(selectedEmployees, cohortToUpdate);
+
+                    db.SaveChanges();
+
+                    return RedirectToAction("Index");
+                }
+                catch (RetryLimitExceededException /* dex */)
+                {
+                    //Log the error (uncomment dex variable name and add a line here to write a log.
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                }
+            }
+            //ViewBag.AgentID = new SelectList(db.Agents, "ID", "Name", cohortToUpdate.AgentID);
+            populateAssignedEmployees(cohortToUpdate);
+            return View(cohortToUpdate);
+
+            /*if (ModelState.IsValid)
             {
                 db.Entry(cohort).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(cohort);
+            return View(cohort);*/
+        }
+
+        private void updateCohortEmployees(string[] selectedEmployees, Cohort cohortToUpdate)
+        {
+            if (selectedEmployees == null)
+            {
+                cohortToUpdate.Employees = new List<Employee>();
+                return;
+            }
+
+            var selectedEmployeesHashSet = new HashSet<string>(selectedEmployees);
+            var cohortEmployees = new HashSet<int>
+                (cohortToUpdate.Employees.Select(e => e.EmployeeID));
+            foreach (var employee in db.Employees)
+            {
+                if (selectedEmployeesHashSet.Contains(employee.EmployeeID.ToString()))
+                {
+                    if (!cohortEmployees.Contains(employee.EmployeeID))
+                    {
+                        cohortToUpdate.Employees.Add(employee);
+                    }
+                }
+                else
+                {
+                    if (cohortEmployees.Contains(employee.EmployeeID))
+                    {
+                        cohortToUpdate.Employees.Remove(employee);
+                    }
+                }
+            }
+        }
+
+        private void populateAssignedEmployees(Cohort cohort)
+        {
+            var allEmployees = db.Employees;
+            var cohortEmployees = new HashSet<int>(cohort.Employees.Select(e => e.EmployeeID));
+            var assignedEmployee = new List<AssignedEmployeeData>();
+            foreach (var employee in allEmployees)
+            {
+                assignedEmployee.Add(
+                    new AssignedEmployeeData()
+                    {
+                        Employee = employee,
+                        Assigned = cohortEmployees.Contains(employee.EmployeeID)
+                    });
+            }
+            ViewBag.Employees = assignedEmployee;
         }
 
         [Authorize(Roles = "Admin")]

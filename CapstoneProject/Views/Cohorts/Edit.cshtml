@@ -9,7 +9,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Cohort</h4>
         <hr />
@@ -22,6 +22,36 @@
                 @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
             </div>
+        </div>
+
+        <div class="col-md-offset-2 col-md-10">
+            <table>
+                <tr>
+                    @{
+                        int count = 0;
+                        List<CapstoneProject.Models.Employee> employees = ViewBag.Employees;
+                        foreach (var employee in employees)
+                        {
+                            if (count++ % 3 == 0)
+                            {
+                @:</tr><tr>
+                            }
+
+                            bool inCohort = Model.Employees.Contains(employee);
+
+                            @:<td>
+                            <input type="checkbox"
+                                   name="selectedEmployees"
+                                   value="@employee.EmployeeID"
+                                   @(Html.Raw(inCohort ? "checked=\"checked\"" : "")) />
+
+                                        @employee.FirstName  @employee.LastName   
+                                        
+                            @:</td>
+                        }
+                @:</tr>
+                    }
+            </table>
         </div>
 
         <div class="form-group">
