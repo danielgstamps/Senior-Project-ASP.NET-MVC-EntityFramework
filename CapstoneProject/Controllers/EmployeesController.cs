@@ -165,12 +165,12 @@ namespace CapstoneProject.Controllers
 
         private async Task SendPasswordCreationEmail(ApplicationUser user)
         {
-            var code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-            var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code },
+          //  var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+            var email = user.Email;
+            var callbackUrl = Url.Action("CreatePassword", "Account", new { userId = user.Id, email = email },
                 protocol: Request.Url.Scheme);
             await UserManager.SendEmailAsync(user.Id, "Create your WUDSCO password",
                 "Click <a href=\"" + callbackUrl + "\">here</a> to create your password.");
-
         }
 
         // GET: Employees/Create

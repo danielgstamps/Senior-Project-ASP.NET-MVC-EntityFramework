@@ -103,7 +103,7 @@ namespace CapstoneProject.Controllers
                 return View(model);
             }
 
-            var user = await UserManager.FindByNameAsync(model.Email);
+            //var user = await UserManager.FindByNameAsync(model.Email);
             //if (user != null)
             //{
             //    if (!await UserManager.IsEmailConfirmedAsync(user.Id))
@@ -149,14 +149,14 @@ namespace CapstoneProject.Controllers
             return View();
         }
 
-        private async Task SendPasswordCreationEmail(ApplicationUser user)
-        {
-            var code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-            var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code },
-                protocol: Request.Url.Scheme);
-            await UserManager.SendEmailAsync(user.Id, "Create your WUDSCO password",
-                    "Click <a href=\"" + callbackUrl + "\">here</a> to create your password.");
-        }
+        //private async Task SendPasswordCreationEmail(ApplicationUser user)
+        //{
+        //    var code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+        //    var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code },
+        //        protocol: Request.Url.Scheme);
+        //    await UserManager.SendEmailAsync(user.Id, "Create your WUDSCO password",
+        //            "Click <a href=\"" + callbackUrl + "\">here</a> to create your password.");
+        //}
         
 
         //
@@ -228,9 +228,52 @@ namespace CapstoneProject.Controllers
             return View();
         }
 
+        // GET: /Account/CreatePassword
+        [AllowAnonymous]
+        public ActionResult CreatePassword(string email)
+        {
+            return email == null ? View("Error") : View();
+        }
+
+        // POST: /Account/CreatePassword
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> CreatePassword(CreatePasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await UserManager.FindByNameAsync(model.Email);
+            if (user == null)
+            {
+                return View("Error");
+            }
+
+            var result = await UserManager.AddPasswordAsync(user.Id, model.Password);
+            if (result.Succeeded)
+            {
+                UserManager.FindByEmail(model.Email).EmailConfirmed = true;
+                UserManager.Update(user);
+                return RedirectToAction("CreatePasswordConfirmation", "Account");
+            }
+
+            AddErrors(result);
+            return View();
+        }
+
         // GET: /Account/ResetPasswordConfirmation
         [AllowAnonymous]
         public ActionResult ResetPasswordConfirmation()
+        {
+            return View();
+        }
+
+        // GET: /Account/CreatePasswordConfirmation
+        [AllowAnonymous]
+        public ActionResult CreatePasswordConfirmation()
         {
             return View();
         }
