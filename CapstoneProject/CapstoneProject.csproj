@@ -308,6 +308,8 @@
     <Content Include="Views\Evaluations\Edit.cshtml" />
     <Content Include="Views\Evaluations\Index.cshtml" />
     <Content Include="Views\Employees\UploadData.cshtml" />
+    <Content Include="Views\Account\CreatePassword.cshtml" />
+    <Content Include="Views\Account\CreatePasswordConfirmation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

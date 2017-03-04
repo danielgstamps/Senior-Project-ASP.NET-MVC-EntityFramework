@@ -7,7 +7,7 @@ using CapstoneProject.Models;
 
 namespace CapstoneProject.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class EvaluationsController : Controller
     {
         private DataContext db = new DataContext();
