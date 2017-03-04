@@ -14,11 +14,19 @@
         <dt>
             @Html.DisplayNameFor(model => model.Name)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.Name)
         </dd>
 
+        <dt>
+            These employees will need to be assigned to new cohorts: 
+        </dt>
+        @foreach (var employee in Model.Employees)
+        {
+            <dd>
+                @employee.FirstName  @employee.LastName
+            </dd>
+        }
     </dl>
 
     @using (Html.BeginForm()) {

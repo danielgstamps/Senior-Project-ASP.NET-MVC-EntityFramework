@@ -61,7 +61,7 @@ namespace CapstoneProject.Controllers
         }
 
         // GET: Cohorts/Edit/5
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -82,7 +82,7 @@ namespace CapstoneProject.Controllers
         // POST: Cohorts/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int? id, string[] selectedEmployees/*[Bind(Include = "CohortID,Name")] Cohort cohort*/)
@@ -183,6 +183,11 @@ namespace CapstoneProject.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             var cohort = db.Cohorts.Find(id);
+            foreach (var employee in cohort.Employees)
+            {
+                employee.CohortID = null;
+                employee.Cohort = null;
+            }
             db.Cohorts.Remove(cohort);
             db.SaveChanges();
             return RedirectToAction("Index");
