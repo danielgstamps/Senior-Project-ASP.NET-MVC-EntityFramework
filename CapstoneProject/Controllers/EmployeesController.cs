@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
@@ -11,8 +9,6 @@ using System.Web.Mvc;
 using CapstoneProject.DAL;
 using CapstoneProject.Models;
 using LumenWorks.Framework.IO.Csv;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 namespace CapstoneProject.Controllers
 {
@@ -24,14 +20,18 @@ namespace CapstoneProject.Controllers
         private ApplicationDbContext dbUser = new ApplicationDbContext();
         private ApplicationUserManager _userManager;
         private ApplicationSignInManager _signInManager;
+        private IEmployeeRepository employeeRepo;
+
         public EmployeesController()
         {
+            this.employeeRepo = new EmployeeRepository(new DataContext());
         }
 
         public EmployeesController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
+            this.employeeRepo = new EmployeeRepository(new DataContext());
         }
 
         public ApplicationUserManager UserManager
@@ -49,7 +49,10 @@ namespace CapstoneProject.Controllers
         // GET: Employees
         public ActionResult Index()
         {
-            var employees = db.Employees.Include(e => e.Cohort).Include(e => e.Manager).Include(e => e.Supervisor);
+            var employees = from e
+                in employeeRepo.GetEmployees()
+                select e;
+            //var employees = db.Employees.Include(e => e.Cohort).Include(e => e.Manager).Include(e => e.Supervisor);
             return View(employees.ToList());
         }
 
@@ -60,7 +63,8 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var employee = db.Employees.Find(id);
+            var employee = employeeRepo.GetEmployeeByID(id);
+            //var employee = db.Employees.Find(id);
             if (employee == null)
             {
                 return HttpNotFound();
@@ -187,8 +191,10 @@ namespace CapstoneProject.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Employees.Add(employee);
-                db.SaveChanges();
+                this.employeeRepo.InsertEmployee(employee);
+                this.employeeRepo.Save();
+                //db.Employees.Add(employee);
+                //db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
@@ -205,7 +211,8 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var employee = db.Employees.Find(id);
+            var employee = this.employeeRepo.GetEmployeeByID(id);
+            //var employee = db.Employees.Find(id);
             if (employee == null)
             {
                 return HttpNotFound();
@@ -225,8 +232,10 @@ namespace CapstoneProject.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(employee).State = EntityState.Modified;
-                db.SaveChanges();
+                this.employeeRepo.UpdateEmployee(employee);
+                this.employeeRepo.Save();
+                //db.Entry(employee).State = EntityState.Modified;
+                //db.SaveChanges();
                 return RedirectToAction("Index");
             }
             ViewBag.CohortID = new SelectList(db.Cohorts, "CohortID", "Name", employee.CohortID);
@@ -242,7 +251,8 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var employee = db.Employees.Find(id);
+            var employee = this.employeeRepo.GetEmployeeByID(id);
+            //var employee = db.Employees.Find(id);
             if (employee == null)
             {
                 return HttpNotFound();
@@ -270,7 +280,8 @@ namespace CapstoneProject.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                //db.Dispose();
+                this.employeeRepo.Dispose();
             }
             base.Dispose(disposing);
         }
