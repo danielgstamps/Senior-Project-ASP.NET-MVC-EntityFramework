@@ -207,7 +207,9 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="DAL\DataContext.cs" />
     <Compile Include="DAL\EmployeeRepository.cs" />
+    <Compile Include="DAL\GenericRepository.cs" />
     <Compile Include="DAL\IEmployeeRepository.cs" />
+    <Compile Include="DAL\UnitOfWork.cs" />
     <Compile Include="DataMigrations\201702202211339_Init.cs" />
     <Compile Include="DataMigrations\201702202211339_Init.Designer.cs">
       <DependentUpon>201702202211339_Init.cs</DependentUpon>
