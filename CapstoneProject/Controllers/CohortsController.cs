@@ -183,6 +183,11 @@ namespace CapstoneProject.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             var cohort = db.Cohorts.Find(id);
+            foreach (var employee in cohort.Employees)
+            {
+                employee.CohortID = null;
+                employee.Cohort = null;
+            }
             db.Cohorts.Remove(cohort);
             db.SaveChanges();
             return RedirectToAction("Index");
