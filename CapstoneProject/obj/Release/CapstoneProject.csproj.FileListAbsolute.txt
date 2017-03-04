@@ -262,4 +262,3 @@ C:\Users\csuser\Desktop\capstone-project\CapstoneProject\obj\Release\CapstonePro
 C:\Users\csuser\Desktop\capstone-project\CapstoneProject\obj\Release\CapstoneProject.csproj.GenerateResource.Cache
 C:\Users\csuser\Desktop\capstone-project\CapstoneProject\obj\Release\CapstoneProject.dll
 C:\Users\csuser\Desktop\capstone-project\CapstoneProject\obj\Release\CapstoneProject.pdb
-C:\Users\csuser\Desktop\capstone-project\CapstoneProject\obj\Release\CapstoneProject.csprojResolveAssemblyReference.cache
