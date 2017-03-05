@@ -1,5 +1,4 @@
-﻿using System.Data.Entity;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using CapstoneProject.DAL;
@@ -11,12 +10,14 @@ namespace CapstoneProject.Controllers
     public class EvaluationsController : Controller
     {
         private DataContext db = new DataContext();
+        private UnitOfWork unitOfWork = new UnitOfWork();
 
         // GET: Evaluations
         public ActionResult Index()
         {
-            var evaluations = db.Evaluations.Include(e => e.Employee);
-            return View(evaluations.ToList());
+            //var evaluations = db.Evaluations.Include(e => e.Employee);
+            var evaluations = unitOfWork.EvaluationRepository.Get();
+            return View("Index", evaluations.ToList());
         }
 
         // GET: Evaluations/Details/5
@@ -26,7 +27,8 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var evaluation = db.Evaluations.Find(id);
+            //var evaluation = db.Evaluations.Find(id);
+            var evaluation = unitOfWork.EvaluationRepository.GetByID(id);
             if (evaluation == null)
             {
                 return HttpNotFound();
@@ -50,13 +52,15 @@ namespace CapstoneProject.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Evaluations.Add(evaluation);
-                db.SaveChanges();
+                //db.Evaluations.Add(evaluation);
+                //db.SaveChanges();
+                this.unitOfWork.EvaluationRepository.Insert(evaluation);
+                this.unitOfWork.Save();
                 return RedirectToAction("Index");
             }
 
             ViewBag.EmployeeID = new SelectList(db.Employees, "EmployeeID", "FirstName", evaluation.EmployeeID);
-            return View(evaluation);
+            return View("Create", evaluation);
         }
 
         // GET: Evaluations/Edit/5
@@ -66,13 +70,14 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var evaluation = db.Evaluations.Find(id);
+            //var evaluation = db.Evaluations.Find(id);
+            var evaluation = unitOfWork.EvaluationRepository.GetByID(id);
             if (evaluation == null)
             {
                 return HttpNotFound();
             }
             ViewBag.EmployeeID = new SelectList(db.Employees, "EmployeeID", "FirstName", evaluation.EmployeeID);
-            return View(evaluation);
+            return View("Edit", evaluation);
         }
 
         // POST: Evaluations/Edit/5
@@ -84,8 +89,10 @@ namespace CapstoneProject.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(evaluation).State = EntityState.Modified;
-                db.SaveChanges();
+                //db.Entry(evaluation).State = EntityState.Modified;
+                //db.SaveChanges();
+                this.unitOfWork.EvaluationRepository.Update(evaluation);
+                this.unitOfWork.Save();
                 return RedirectToAction("Index");
             }
             ViewBag.EmployeeID = new SelectList(db.Employees, "EmployeeID", "FirstName", evaluation.EmployeeID);
@@ -99,7 +106,8 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var evaluation = db.Evaluations.Find(id);
+            //var evaluation = db.Evaluations.Find(id);
+            var evaluation = this.unitOfWork.EvaluationRepository.GetByID(id);
             if (evaluation == null)
             {
                 return HttpNotFound();
@@ -112,9 +120,12 @@ namespace CapstoneProject.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            var evaluation = db.Evaluations.Find(id);
-            db.Evaluations.Remove(evaluation);
-            db.SaveChanges();
+            //var evaluation = db.Evaluations.Find(id);
+            //db.Evaluations.Remove(evaluation);
+            //db.SaveChanges();
+            var evaluation = unitOfWork.EvaluationRepository.GetByID(id);
+            this.unitOfWork.EvaluationRepository.Delete(evaluation);
+            this.unitOfWork.Save();
             return RedirectToAction("Index");
         }
 

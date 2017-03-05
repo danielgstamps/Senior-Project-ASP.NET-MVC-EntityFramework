@@ -11,6 +11,7 @@ namespace CapstoneProject.DAL
         private DataContext context = new DataContext();
         private GenericRepository<Employee> employeeRepository;
         private GenericRepository<Cohort> cohortRepository;
+        private GenericRepository<Evaluation> evaluationRepository;
         private bool disposed = false;
 
         public GenericRepository<Employee> EmployeeRepository
@@ -36,6 +37,18 @@ namespace CapstoneProject.DAL
                 return cohortRepository;
             }
         }
+
+        public GenericRepository<Evaluation> EvaluationRepository
+        {
+            get
+            {
+                if (this.evaluationRepository == null)
+                {
+                    this.evaluationRepository = new GenericRepository<Evaluation>(this.context);
+                }
+                return this.evaluationRepository;
+            }
+        } 
 
         public void Save()
         {

@@ -13,6 +13,7 @@ using Microsoft.AspNet.Identity.Owin;
 namespace CapstoneProject.Controllers
 {
     [Authorize(Roles = "Admin")]
+    [HandleError]
     public class EmployeesController : Controller
     {
         private DataContext db = new DataContext();
@@ -21,6 +22,12 @@ namespace CapstoneProject.Controllers
         private ApplicationUserManager _userManager;
         private ApplicationSignInManager _signInManager;
         private IEmployeeRepository employeeRepo;
+        private IEmployeeRepository mockEmployeeRepository;
+
+        public EmployeesController(IEmployeeRepository mockEmployeeRepository)
+        {
+            this.mockEmployeeRepository = mockEmployeeRepository;
+        }
 
         public EmployeesController()
         {

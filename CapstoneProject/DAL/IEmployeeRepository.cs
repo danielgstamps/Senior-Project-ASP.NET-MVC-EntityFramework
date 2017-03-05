@@ -11,11 +11,17 @@ namespace CapstoneProject.DAL
     /// <seealso cref="System.IDisposable" />
     public interface IEmployeeRepository : IDisposable
     {
-        IEnumerable<Employee> GetEmployees();
-        Employee GetEmployeeByID(int? employeeID);
         void InsertEmployee(Employee employee);
-        void DeleteEmployee(int employeeID);
+
+        IEnumerable<Employee> GetEmployees();
+
+        Employee GetEmployeeByID(int? employeeID);
+
         void UpdateEmployee(Employee employee);
+
+        void DeleteEmployee(int employeeID);
+
         void Save();
+
     }
 }
