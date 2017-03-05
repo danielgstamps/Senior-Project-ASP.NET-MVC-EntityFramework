@@ -12,7 +12,7 @@ namespace CapstoneProject.Models
         [Required(ErrorMessage = "Cohort ID required")]
         public int CohortID { get; set; }
 
-        [Display(Name = "Cohort Name")]
+        [Display(Name = "Name")]
         [StringLength(MAX_NAME_LENGTH)]
         [Required(ErrorMessage = "Cohort name required")]
         public string Name { get; set; }
