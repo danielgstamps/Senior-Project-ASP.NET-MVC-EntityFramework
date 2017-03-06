@@ -82,7 +82,6 @@
   </Choose>
   <ItemGroup>
     <Compile Include="CategoryTest.cs" />
-    <Compile Include="CohortsControllerTest.cs" />
     <Compile Include="EmployeesControllerTest.cs" />
     <Compile Include="EvaluationTest.cs" />
     <Compile Include="Models\InMemoryEmployeeRepository.cs" />

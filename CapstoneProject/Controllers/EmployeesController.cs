@@ -186,7 +186,7 @@ namespace CapstoneProject.Controllers
             ViewBag.CohortID = new SelectList(db.Cohorts, "CohortID", "Name");
             ViewBag.ManagerID = new SelectList(db.Employees, "EmployeeID", "FirstName");
             ViewBag.SupervisorID = new SelectList(db.Employees, "EmployeeID", "FirstName");
-            return View();
+            return View("Create");
         }
 
         // POST: Employees/Create
@@ -227,7 +227,7 @@ namespace CapstoneProject.Controllers
             ViewBag.CohortID = new SelectList(db.Cohorts, "CohortID", "Name", employee.CohortID);
             ViewBag.ManagerID = new SelectList(db.Employees, "EmployeeID", "FirstName", employee.ManagerID);
             ViewBag.SupervisorID = new SelectList(db.Employees, "EmployeeID", "FirstName", employee.SupervisorID);
-            return View(employee);
+            return View("Edit", employee);
         }
 
         // POST: Employees/Edit/5
@@ -248,7 +248,7 @@ namespace CapstoneProject.Controllers
             ViewBag.CohortID = new SelectList(db.Cohorts, "CohortID", "Name", employee.CohortID);
             ViewBag.ManagerID = new SelectList(db.Employees, "EmployeeID", "FirstName", employee.ManagerID);
             ViewBag.SupervisorID = new SelectList(db.Employees, "EmployeeID", "FirstName", employee.SupervisorID);
-            return View(employee);
+            return View("Edit", employee);
         }
 
         // GET: Employees/Delete/5
@@ -264,7 +264,7 @@ namespace CapstoneProject.Controllers
             {
                 return HttpNotFound();
             }
-            return View(employee);
+            return View("Delete", employee);
         }
 
         // POST: Employees/Delete/5

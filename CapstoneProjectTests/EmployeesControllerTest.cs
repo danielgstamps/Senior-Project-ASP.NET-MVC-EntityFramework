@@ -1,4 +1,5 @@
-﻿using System.Security.Principal;
+﻿using System.Runtime.InteropServices;
+using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -71,29 +72,12 @@ namespace CapstoneProjectTests
             });
         }
 
-        /*[TestMethod]
+        [TestMethod]
         public void TestCreate()
         {
-            var result = controller.Create() as ViewResult;
+            controller.ModelState.AddModelError("", "Invalid model state");
+            ViewResult result = controller.Create() as ViewResult;
             Assert.AreEqual("Create", result.ViewName);
-        }*/
-
-        [TestMethod]
-        public void TestEmployeesIndex()
-        {
-            //Act
-            ViewResult result = (ViewResult) controller.Index();
-            //Assert
-            Assert.AreEqual("Index", result.ViewName);
-        }
-
-        [TestMethod]
-        public void TestEmployeesDetails()
-        {
-
-            ViewResult result = (ViewResult) controller.Details(1);
-
-            Assert.AreEqual("Details", result.ViewName);
         }
 
         [TestMethod]
@@ -103,6 +87,32 @@ namespace CapstoneProjectTests
             Assert.AreEqual("Angela", employee.FirstName);
         }
 
+        [TestMethod]
+        public void TestEmployeesIndex()
+        {
+            ViewResult result = controller.Index() as ViewResult;
+            Assert.AreEqual("Index", result.ViewName);
+        }
 
+        [TestMethod]
+        public void TestEmployeesDetails()
+        {
+            ViewResult result = controller.Details(1) as ViewResult;
+            Assert.AreEqual("Details", result.ViewName);
+        }
+
+        [TestMethod]
+        public void TestEmployeesEdit()
+        {
+            ViewResult result = controller.Edit(1) as ViewResult;
+            Assert.AreEqual("Edit", result.ViewName);
+        }
+
+        [TestMethod]
+        public void TestEmployeesDelete()
+        {
+            ViewResult result = controller.Delete(1) as ViewResult;
+            Assert.AreEqual("Delete", result.ViewName);
+        }
     }
 }
