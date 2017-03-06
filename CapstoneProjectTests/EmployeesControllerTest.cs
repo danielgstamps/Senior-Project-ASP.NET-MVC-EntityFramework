@@ -44,7 +44,7 @@ namespace CapstoneProjectTests
             }
         }
 
-        [TestInitialize]
+        /*[TestInitialize]
         public void Initialize()
         {
             controller = new EmployeesController();
@@ -55,6 +55,12 @@ namespace CapstoneProjectTests
         {
             var result = controller.Create() as ViewResult;
             Assert.AreEqual("Create", result.ViewName);
+        }*/
+
+        [TestMethod]
+        public void TestEmployeesIndex()
+        {
+            var controller = GetEmployeesController(new InMemoryRepository());
         }
     }
 }
