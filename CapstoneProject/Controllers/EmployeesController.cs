@@ -22,11 +22,11 @@ namespace CapstoneProject.Controllers
         private ApplicationUserManager _userManager;
         private ApplicationSignInManager _signInManager;
         private IEmployeeRepository employeeRepo;
-        private IEmployeeRepository mockEmployeeRepository;
+        //private IEmployeeRepository mockEmployeeRepository;
 
         public EmployeesController(IEmployeeRepository mockEmployeeRepository)
         {
-            this.mockEmployeeRepository = mockEmployeeRepository;
+            this.employeeRepo = mockEmployeeRepository;
         }
 
         public EmployeesController()
@@ -60,7 +60,7 @@ namespace CapstoneProject.Controllers
                 in employeeRepo.GetEmployees()
                 select e;
             //var employees = db.Employees.Include(e => e.Cohort).Include(e => e.Manager).Include(e => e.Supervisor);
-            return View(employees.ToList());
+            return View("Index", employees.ToList());
         }
 
         // GET: Employees/Details/5

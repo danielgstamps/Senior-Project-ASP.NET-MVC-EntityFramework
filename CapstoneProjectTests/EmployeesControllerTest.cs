@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using CapstoneProject.Controllers;
 using CapstoneProject.DAL;
+using CapstoneProjectTests.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CapstoneProjectTests
@@ -11,7 +12,7 @@ namespace CapstoneProjectTests
     [TestClass]
     public class EmployeesControllerTest
     {
-        private EmployeesController controller;
+        //private EmployeesController controller;
 
         private static EmployeesController GetEmployeesController(IEmployeeRepository repository)
         {
@@ -60,7 +61,12 @@ namespace CapstoneProjectTests
         [TestMethod]
         public void TestEmployeesIndex()
         {
-            var controller = GetEmployeesController(new InMemoryRepository());
+            //Arrange
+            var controller = GetEmployeesController(new InMemoryEmployeeRepository());
+            //Act
+            ViewResult result = (ViewResult) controller.Index();
+            //Assert
+            Assert.AreEqual("Index", result.ViewName);
         }
     }
 }
