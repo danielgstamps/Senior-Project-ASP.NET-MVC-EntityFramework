@@ -47,12 +47,12 @@ namespace CapstoneProjectTests.Models
 
         public void Save()
         {
-            throw new NotImplementedException();
+            // not needed
         }
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            // not needed
         }
     }
 }

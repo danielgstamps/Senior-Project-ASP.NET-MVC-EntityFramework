@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using CapstoneProject.Controllers;
 using CapstoneProject.DAL;
+using CapstoneProject.Models;
 using CapstoneProjectTests.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -12,7 +13,8 @@ namespace CapstoneProjectTests
     [TestClass]
     public class EmployeesControllerTest
     {
-        //private EmployeesController controller;
+        private EmployeesController controller;
+        private InMemoryEmployeeRepository repo;
 
         private static EmployeesController GetEmployeesController(IEmployeeRepository repository)
         {
@@ -45,13 +47,31 @@ namespace CapstoneProjectTests
             }
         }
 
-        /*[TestInitialize]
+        [TestInitialize]
         public void Initialize()
         {
-            controller = new EmployeesController();
+            //Arrange
+            repo = new InMemoryEmployeeRepository();
+            controller = GetEmployeesController(repo);
+            controller.Create(new Employee()
+            {
+                EmployeeID = 1,
+                FirstName = "Angela",
+                LastName = "Martin",
+                Email = "amartin@mailinator.com",
+                Address = "123 Scranton Ave, New York, NY 123456",
+                Phone = "(770) 123-1234",
+                CohortID = null,
+                Cohort = null,
+                SupervisorID = null,
+                Supervisor = null,
+                ManagerID = null,
+                Manager = null,
+                Evaluations = null
+            });
         }
 
-        [TestMethod]
+        /*[TestMethod]
         public void TestCreate()
         {
             var result = controller.Create() as ViewResult;
@@ -61,12 +81,28 @@ namespace CapstoneProjectTests
         [TestMethod]
         public void TestEmployeesIndex()
         {
-            //Arrange
-            var controller = GetEmployeesController(new InMemoryEmployeeRepository());
             //Act
             ViewResult result = (ViewResult) controller.Index();
             //Assert
             Assert.AreEqual("Index", result.ViewName);
         }
+
+        [TestMethod]
+        public void TestEmployeesDetails()
+        {
+
+            ViewResult result = (ViewResult) controller.Details(1);
+
+            Assert.AreEqual("Details", result.ViewName);
+        }
+
+        [TestMethod]
+        public void TestReturnCorrectEmployee()
+        {
+            var employee = repo.GetEmployeeByID(1);
+            Assert.AreEqual("Angela", employee.FirstName);
+        }
+
+
     }
 }

@@ -76,7 +76,7 @@ namespace CapstoneProject.Controllers
             {
                 return HttpNotFound();
             }
-            return View(employee);
+            return View("Details", employee);
         }
 
         public ActionResult UploadData()
