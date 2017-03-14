@@ -6,6 +6,7 @@ namespace CapstoneProject.Models
     public class Evaluation
     {
         private const int MAX_STAGE_NAME_LENGTH = 9;
+        private const int MAX_LENGTH = 500;
         private const int TYPE_ONE = 1;
         private const int TYPE_TWO = 2;
 
@@ -25,6 +26,10 @@ namespace CapstoneProject.Models
         public int Type { get; set; }
         
         public int EmployeeID { get; set; }
+
+        [Display(Name = "Comment")]
+        [StringLength(MAX_LENGTH)]
+        public string Comment { get; set; }
 
         public virtual Employee Employee { get; set; }
 
