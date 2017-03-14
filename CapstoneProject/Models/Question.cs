@@ -16,10 +16,6 @@ namespace CapstoneProject.Models
         [StringLength(MAX_LENGTH)]
         [Required(ErrorMessage = "Must have question")]
         public string QuestionText { get; set; }
-        
-        [Display(Name = "Comment")]
-        [StringLength(MAX_LENGTH)]
-        public string Comment { get; set; }
 
         public virtual ICollection<Category> Categories { get; set; }
     }
