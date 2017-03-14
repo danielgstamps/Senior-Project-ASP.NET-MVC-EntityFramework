@@ -23,16 +23,25 @@ namespace CapstoneProject.Controllers
         private ApplicationSignInManager _signInManager;
         private IEmployeeRepository employeeRepo;
         //private IEmployeeRepository mockEmployeeRepository;
+        
+        public EmployeesController()
+        {
+            this.employeeRepo = new EmployeeRepository(new DataContext());
+        }
 
+        /// <summary>
+        /// Use this for unit tests
+        /// </summary>
+        /// <param name="mockEmployeeRepository">The mock employee repository.</param>
         public EmployeesController(IEmployeeRepository mockEmployeeRepository)
         {
             this.employeeRepo = mockEmployeeRepository;
         }
 
-        public EmployeesController()
+        /*public EmployeesController()
         {
-            this.employeeRepo = new EmployeeRepository(new DataContext());
-        }
+            
+        }*/
 
         public EmployeesController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {

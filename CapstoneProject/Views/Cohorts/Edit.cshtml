@@ -34,22 +34,21 @@
                         {
                             if (count++ % 3 == 0)
                             {
-                @:</tr><tr>
+                                @:</tr><tr>
                             }
-
                             bool inCohort = Model.Employees.Contains(employee);
-
-                            @:<td>
-                            <input type="checkbox"
-                                   name="selectedEmployees"
-                                   value="@employee.EmployeeID"
-                                   @(Html.Raw(inCohort ? "checked=\"checked\"" : "")) />
-
-                                        @employee.FirstName  @employee.LastName   
-                                        
-                            @:</td>
+                            if (!inCohort)
+                            {
+                                @:<td>
+                                    <input type="checkbox"
+                                    name="selectedEmployees"
+                                    value="@employee.EmployeeID"
+                                    @(Html.Raw(inCohort ? "checked=\"checked\"" : "")) />
+                                    @employee.FirstName  @employee.LastName
+                                @:</td>
+                            }
                         }
-                @:</tr>
+                        @:</tr>
                     }
             </table>
         </div>

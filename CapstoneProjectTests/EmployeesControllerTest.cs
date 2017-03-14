@@ -29,6 +29,19 @@ namespace CapstoneProjectTests
             return controller;
         }
 
+        private static EmployeesController GetEmployeesController(GenericRepository<Employee> repository)
+        {
+            EmployeesController controller = new EmployeesController(repository);
+
+            controller.ControllerContext = new ControllerContext()
+            {
+                Controller = controller,
+                RequestContext = new RequestContext(new MockHttpContext(), new RouteData())
+            };
+
+            return controller;
+        }
+
 
         private class MockHttpContext : HttpContextBase
         {
