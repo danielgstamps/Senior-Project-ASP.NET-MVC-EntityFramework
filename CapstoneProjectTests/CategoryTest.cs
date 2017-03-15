@@ -33,26 +33,5 @@ namespace CapstoneProjectTests
             category.Evaluation = referencedEvaluation;
             Assert.AreNotSame(nonReferencedEvaluation, category.Evaluation);
         }
-
-        [TestMethod]
-        public void TestCategoryReferencesID()
-        {
-            var category = new Category();
-            var evaluation = new Evaluation();
-            category.Evaluation = evaluation;
-            Assert.AreEqual(evaluation.EvaluationID, category.EvaluationID);
-        }
-
-        [TestMethod]
-        public void TestCategoryDoesNotReferenceID()
-        {
-            var category = new Category();
-            var referencedEvaluation = new Evaluation();
-            referencedEvaluation.EvaluationID = 0;
-            var nonReferencedEvaluation = new Evaluation();
-            nonReferencedEvaluation.EvaluationID = 1;
-            category.Evaluation = referencedEvaluation;
-            Assert.AreNotEqual(nonReferencedEvaluation.EvaluationID, category.EvaluationID);
-        }
     }
 }
