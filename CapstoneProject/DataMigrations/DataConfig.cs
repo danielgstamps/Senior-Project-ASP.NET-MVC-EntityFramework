@@ -56,14 +56,14 @@ namespace CapstoneProject.DataMigrations
 
             var evaluationList = new List<Evaluation>
             {
-                new Evaluation {EvaluationID = 1, EmployeeID = 1, Stage = "1", Type = 1, Categories = new List<Category>()},
-                new Evaluation {EvaluationID = 2, EmployeeID = 2, Stage = "2", Type = 1, Categories = new List<Category>()},
-                new Evaluation {EvaluationID = 3, EmployeeID = 3, Stage = "3", Type = 1, Categories = new List<Category>()},
-                new Evaluation {EvaluationID = 4, EmployeeID = 4, Stage = "4", Type = 1, Categories = new List<Category>()},
-                new Evaluation {EvaluationID = 5, EmployeeID = 5, Stage = "5", Type = 1, Categories = new List<Category>()},
-                new Evaluation {EvaluationID = 6, EmployeeID = 6, Stage = "6", Type = 1, Categories = new List<Category>()},
-                new Evaluation {EvaluationID = 7, EmployeeID = 7, Stage = "7", Type = 1, Categories = new List<Category>()},
-                new Evaluation {EvaluationID = 8, EmployeeID = 8, Stage = "8", Type = 1, Categories = new List<Category>()},
+                new Evaluation {EvaluationID = 1, EmployeeID = 1, Type = 1, Categories = new List<Category>()},
+                new Evaluation {EvaluationID = 2, EmployeeID = 2,  Type = 1, Categories = new List<Category>()},
+                new Evaluation {EvaluationID = 3, EmployeeID = 3, Type = 1, Categories = new List<Category>()},
+                new Evaluation {EvaluationID = 4, EmployeeID = 4,  Type = 1, Categories = new List<Category>()},
+                new Evaluation {EvaluationID = 5, EmployeeID = 5, Type = 1, Categories = new List<Category>()},
+                new Evaluation {EvaluationID = 6, EmployeeID = 6, Type = 1, Categories = new List<Category>()},
+                new Evaluation {EvaluationID = 7, EmployeeID = 7,  Type = 1, Categories = new List<Category>()},
+                new Evaluation {EvaluationID = 8, EmployeeID = 8, Type = 1, Categories = new List<Category>()},
             };
             //evaluationList.ForEach(s => context.Evaluations.Add(s));
             foreach (var eval in evaluationList)
@@ -77,9 +77,9 @@ namespace CapstoneProject.DataMigrations
 
             var categoryList = new List<Category>
             {
-                new Category { CategoryID = 1, Name = "Category 1", Description = "Category 1", EvaluationID = 1, Questions = new List<Question>()},
-                new Category { CategoryID = 2, Name = "Category 2", Description = "Category 2", EvaluationID = 2, Questions = new List<Question>()},
-                new Category { CategoryID = 3, Name = "Category 3", Description = "Category 3", EvaluationID = 3, Questions = new List<Question>()},
+                new Category { CategoryID = 1, Name = "Category 1", Description = "Category 1", Questions = new List<Question>()},
+                new Category { CategoryID = 2, Name = "Category 2", Description = "Category 2",  Questions = new List<Question>()},
+                new Category { CategoryID = 3, Name = "Category 3", Description = "Category 3", Questions = new List<Question>()},
             };
             // categoryList.ForEach(s => context.Categories.Add(s));
             foreach (var cat in categoryList)
@@ -93,9 +93,9 @@ namespace CapstoneProject.DataMigrations
 
             var questionList = new List<Question>
             {
-                new Question {QuestionID = 1, Comment = "", QuestionText = "I am never late for work", Categories = new List<Category>()},
-                new Question {QuestionID = 2, Comment = "", QuestionText = "I get along with my coworkers", Categories = new List<Category>()},
-                new Question {QuestionID = 3, Comment = "", QuestionText = "I complete projects early", Categories = new List<Category>()}
+                new Question {QuestionID = 1, QuestionText = "I am never late for work", Categories = new List<Category>()},
+                new Question {QuestionID = 2, QuestionText = "I get along with my coworkers", Categories = new List<Category>()},
+                new Question {QuestionID = 3, QuestionText = "I complete projects early", Categories = new List<Category>()}
             };
             //questionList.ForEach(s => context.Questions.Add(s));
             foreach (var question in questionList)
