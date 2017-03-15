@@ -40,7 +40,7 @@ namespace CapstoneProjectTests
             var category = new Category();
             var evaluation = new Evaluation();
             category.Evaluation = evaluation;
-           // Assert.AreEqual(evaluation.EvaluationID, category.EvaluationID);
+            Assert.AreEqual(evaluation.EvaluationID, category.EvaluationID);
         }
 
         [TestMethod]
@@ -52,7 +52,7 @@ namespace CapstoneProjectTests
             var nonReferencedEvaluation = new Evaluation();
             nonReferencedEvaluation.EvaluationID = 1;
             category.Evaluation = referencedEvaluation;
-          //  Assert.AreNotEqual(nonReferencedEvaluation.EvaluationID, category.EvaluationID);
+            Assert.AreNotEqual(nonReferencedEvaluation.EvaluationID, category.EvaluationID);
         }
     }
 }

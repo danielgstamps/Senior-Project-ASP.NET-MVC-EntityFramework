@@ -18,5 +18,7 @@ namespace CapstoneProject.Models
         public string QuestionText { get; set; }
 
         public virtual ICollection<Category> Categories { get; set; }
+
+        public virtual ICollection<Answer> Answers { get; set; }
     }
 }

@@ -26,5 +26,9 @@ namespace CapstoneProject.Models
         public virtual Evaluation Evaluation { get; set; }
 
         public virtual ICollection<Question> Questions { get; set; }
+
+        public int TypeID { get; set; }
+
+        public Type Type { get; set; }
     }
 }

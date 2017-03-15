@@ -13,11 +13,10 @@ namespace CapstoneProject.Models
         [Range(0, int.MaxValue, ErrorMessage = "ID must be a non-negative whole number")]
         [Required(ErrorMessage = "Evaluation ID required")]
         public int EvaluationID { get; set; }
-        
-        [Display(Name = "Type")]
-        [Range(TYPE_ONE, TYPE_TWO)]
-        [Required(ErrorMessage = "Type required. May only be Type 1 or Type 2")]
-        public int Type { get; set; }
+
+        public int TypeID { get; set; }
+
+        public virtual Type Type { get; set; }
         
         public int EmployeeID { get; set; }
 
@@ -27,6 +26,6 @@ namespace CapstoneProject.Models
 
         public virtual Employee Employee { get; set; }
 
-        public virtual ICollection<Category> Categories { get; set; }
+        public ICollection<Stage> Stages { get; set; }
     }
 }
