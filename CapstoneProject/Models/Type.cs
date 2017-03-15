@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
 namespace CapstoneProject.Models
 {
-    public class Answer
+    public class Type
     {
-        public int AnswerID { get; set; }
+        public int TypeID { get; set; }
+
+        public string TypeName { get; set; }
     }
 }

@@ -23,8 +23,6 @@ namespace CapstoneProject.Models
         [Required(ErrorMessage = "Description required. Cannot exede 500 characters")]
         public string Description { get; set; }
 
-        public int EvaluationID { get; set; }
-
         public virtual Evaluation Evaluation { get; set; }
 
         public virtual ICollection<Question> Questions { get; set; }
