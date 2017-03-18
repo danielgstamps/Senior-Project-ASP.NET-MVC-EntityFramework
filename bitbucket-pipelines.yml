@@ -9,6 +9,6 @@ pipelines:
   default:
     - step:
         script: # Modify the commands below to build your repository.
-          - nuget restore capstone-project/CapstoneProject.sln
+          - dotnet restore
           - dotnet build
           - dotnet test
