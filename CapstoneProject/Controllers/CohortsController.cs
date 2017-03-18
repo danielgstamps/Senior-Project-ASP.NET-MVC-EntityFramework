@@ -68,9 +68,27 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             var cohort = db.Cohorts.Find(id);
-            var employeesUnordered = db.Employees.ToList();
-            var employeesOrdered = employeesUnordered.OrderBy(e => e.LastName).ToList();
+            var allCohorts = db.Cohorts.ToList();
+            var allEmployees = db.Employees.ToList();
+            var employeesToShow = allEmployees;
+            foreach (var currentCohort in allCohorts.ToList())
+            {
+                foreach (var currentEmployee in allEmployees.ToList())
+                {
+                    if (currentCohort.Employees.Contains(currentEmployee))
+                    {
+                        employeesToShow.Remove(currentEmployee);
+                        if (cohort.Employees.Contains(currentEmployee))
+                        {
+                            employeesToShow.Add(currentEmployee);
+                        }
+                    }
+                }
+            }
+
+            var employeesOrdered = employeesToShow.OrderBy(e => e.LastName).ToList();
             ViewBag.Employees = employeesOrdered;
             if (cohort == null)
             {
@@ -147,17 +165,17 @@ namespace CapstoneProject.Controllers
         {
             var allEmployees = db.Employees;
             var cohortEmployees = new HashSet<int>(cohort.Employees.Select(e => e.EmployeeID));
-            var assignedEmployee = new List<AssignedEmployeeData>();
+            var assignedEmployees = new List<AssignedEmployeeData>();
             foreach (var employee in allEmployees)
             {
-                assignedEmployee.Add(
+                assignedEmployees.Add(
                     new AssignedEmployeeData()
                     {
                         Employee = employee,
                         Assigned = cohortEmployees.Contains(employee.EmployeeID)
                     });
             }
-            ViewBag.Employees = assignedEmployee;
+            ViewBag.AssignedEmployees = assignedEmployees;
         }
 
         // GET: Cohorts/Delete/5

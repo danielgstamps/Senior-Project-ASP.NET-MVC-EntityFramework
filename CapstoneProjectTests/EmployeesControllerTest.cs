@@ -29,7 +29,7 @@ namespace CapstoneProjectTests
             return controller;
         }
 
-        private static EmployeesController GetEmployeesController(GenericRepository<Employee> repository)
+        /*private static EmployeesController GetEmployeesController(GenericRepository<Employee> repository)
         {
             EmployeesController controller = new EmployeesController(repository);
 
@@ -40,7 +40,7 @@ namespace CapstoneProjectTests
             };
 
             return controller;
-        }
+        }*/
 
 
         private class MockHttpContext : HttpContextBase
