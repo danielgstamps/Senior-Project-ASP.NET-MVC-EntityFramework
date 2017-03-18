@@ -10,5 +10,5 @@ pipelines:
     - step:
         script: # Modify the commands below to build your repository.
           - dotnet restore
-          - msbuild
+          - dotnet build
           - dotnet test
