@@ -17,8 +17,6 @@ namespace CapstoneProject.Models
         public int TypeID { get; set; }
 
         public virtual Type Type { get; set; }
-        
-        public int EmployeeID { get; set; }
 
         [Display(Name = "Comment")]
         [StringLength(MAX_LENGTH)]
@@ -27,5 +25,7 @@ namespace CapstoneProject.Models
         public virtual Employee Employee { get; set; }
 
         public ICollection<Stage> Stages { get; set; }
+
+        public ICollection<Question> Questions { get; set; }
     }
 }

@@ -17,6 +17,8 @@ namespace CapstoneProject.Models
         [Required(ErrorMessage = "Must have question")]
         public string QuestionText { get; set; }
 
+        public string SelectedAnswer { get; set; }
+
         public virtual ICollection<Category> Categories { get; set; }
 
         public virtual ICollection<Answer> Answers { get; set; }

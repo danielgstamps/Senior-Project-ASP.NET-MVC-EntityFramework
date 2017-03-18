@@ -10,6 +10,8 @@ namespace CapstoneProject.Models
     {
         public int AnswerID { get; set; }
 
+        public string AnswerText { get; set; }
+
         public virtual ICollection<Question> Questions { get; set; }
     }
 }

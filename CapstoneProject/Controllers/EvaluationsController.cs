@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using CapstoneProject.DAL;
@@ -15,9 +16,28 @@ namespace CapstoneProject.Controllers
         // GET: Evaluations
         public ActionResult Index()
         {
+            var eval = new Evaluation();
+
+            var questions = new List<Question>();
+            var q1 = new Question { QuestionID = 1, QuestionText = "I am never late for work." };
+            var q2 = new Question { QuestionID = 2, QuestionText = "I get along with my coworkers." };
+            var q3 = new Question { QuestionID = 3, QuestionText = "I complete projects early." };
+            questions.Add(q1);
+            questions.Add(q2);
+            questions.Add(q3);
+
+            foreach (var question in questions)
+            {
+                question.Answers.Add(new Answer { AnswerText = "Strongly Disagree" });
+                question.Answers.Add(new Answer { AnswerText = "Disagree" });
+                question.Answers.Add(new Answer { AnswerText = "Neutral" });
+                question.Answers.Add(new Answer { AnswerText = "Agree" });
+                question.Answers.Add(new Answer { AnswerText = "Strongly Agree" });
+                eval.Questions.Add(question);
+            }
             //var evaluations = db.Evaluations.Include(e => e.Employee);
             var evaluations = unitOfWork.EvaluationRepository.Get();
-            return View("Index", evaluations.ToList());
+            return View(eval);
         }
 
         // GET: Evaluations/Details/5
@@ -59,7 +79,7 @@ namespace CapstoneProject.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.EmployeeID = new SelectList(db.Employees, "EmployeeID", "FirstName", evaluation.EmployeeID);
+            ViewBag.EmployeeID = new SelectList(db.Employees, "EmployeeID", "FirstName", evaluation.Employee);
             return View("Create", evaluation);
         }
 
@@ -76,7 +96,7 @@ namespace CapstoneProject.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.EmployeeID = new SelectList(db.Employees, "EmployeeID", "FirstName", evaluation.EmployeeID);
+            ViewBag.EmployeeID = new SelectList(db.Employees, "EmployeeID", "FirstName", evaluation.Employee);
             return View("Edit", evaluation);
         }
 
@@ -95,7 +115,7 @@ namespace CapstoneProject.Controllers
                 this.unitOfWork.Save();
                 return RedirectToAction("Index");
             }
-            ViewBag.EmployeeID = new SelectList(db.Employees, "EmployeeID", "FirstName", evaluation.EmployeeID);
+            ViewBag.EmployeeID = new SelectList(db.Employees, "EmployeeID", "FirstName", evaluation.Employee);
             return View(evaluation);
         }
 
