@@ -1,0 +1,11 @@
+﻿@model CapstoneProject.Models.Question
+<div>
+    @Html.HiddenFor(x=>x.QuestionID)
+    <h3>@Model.QuestionText</h3>
+    @foreach (var ans in Model.Answers)
+    {
+        <p>
+            @Html.RadioButtonFor(b=>b.SelectedAnswer, ans.AnswerID) @ans.AnswerText
+        </p>
+    }
+</div>

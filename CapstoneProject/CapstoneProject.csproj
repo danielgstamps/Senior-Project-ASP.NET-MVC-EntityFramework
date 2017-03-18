@@ -222,6 +222,10 @@
     <Compile Include="DataMigrations\201703151750079_Evaluation Refactor.Designer.cs">
       <DependentUpon>201703151750079_Evaluation Refactor.cs</DependentUpon>
     </Compile>
+    <Compile Include="DataMigrations\201703181953057_Evaluation Questions Refactor.cs" />
+    <Compile Include="DataMigrations\201703181953057_Evaluation Questions Refactor.Designer.cs">
+      <DependentUpon>201703181953057_Evaluation Questions Refactor.cs</DependentUpon>
+    </Compile>
     <Compile Include="DataMigrations\DataConfig.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -316,7 +320,7 @@
     <Content Include="Views\Employees\UploadData.cshtml" />
     <Content Include="Views\Account\CreatePassword.cshtml" />
     <Content Include="Views\Account\CreatePasswordConfirmation.cshtml" />
-    <Content Include="Views\Evaluations\Questions.cshtml" />
+    <Content Include="Views\Evaluations\Question.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -338,6 +342,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DataMigrations\201703151750079_Evaluation Refactor.resx">
       <DependentUpon>201703151750079_Evaluation Refactor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataMigrations\201703181953057_Evaluation Questions Refactor.resx">
+      <DependentUpon>201703181953057_Evaluation Questions Refactor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserMigrations\201702202104105_Initial.resx">
       <DependentUpon>201702202104105_Initial.cs</DependentUpon>

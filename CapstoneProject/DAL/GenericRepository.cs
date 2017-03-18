@@ -39,10 +39,7 @@ namespace CapstoneProject.DAL
             {
                 return orderBy(query).ToList();
             }
-            else
-            {
-                return query.ToList();
-            }
+            return query.ToList();
         }
 
         public virtual TEntity GetByID(object id)

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CapstoneProject.Models
 {
-    public class Question
+    public sealed class Question
     {
         private const int MAX_LENGTH = 500;
 
@@ -19,8 +19,13 @@ namespace CapstoneProject.Models
 
         public string SelectedAnswer { get; set; }
 
-        public virtual ICollection<Category> Categories { get; set; }
+        public ICollection<Category> Categories { get; set; }
 
-        public virtual ICollection<Answer> Answers { get; set; }
+        public ICollection<Answer> Answers { get; set; }
+
+        public Question()
+        {
+            Answers = new List<Answer>();
+        }
     }
 }

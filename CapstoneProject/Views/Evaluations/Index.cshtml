@@ -1,10 +1,14 @@
 ﻿@model CapstoneProject.Models.Evaluation
 
-@{
-    ViewBag.Title = "Index";
-}
-
-<h2>Evaluations</h2>
+<h2>Evaluation Title</h2>
+<p>Please rate how much you agree with each statement</p>
+<div>
+    @using (Html.BeginForm())
+    {
+       @Html.EditorFor(x=>x.Questions)
+        <input type="submit"/> 
+    }
+</div>
 
 
 

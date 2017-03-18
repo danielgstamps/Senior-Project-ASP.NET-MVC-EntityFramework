@@ -40,6 +40,23 @@ namespace CapstoneProject.Controllers
             return View(eval);
         }
 
+        [HttpPost]
+        public ActionResult Index(Evaluation model)
+        {
+            if (ModelState.IsValid)
+            {
+                foreach (var q in model.Questions)
+                {
+                    var qId = q.QuestionID;
+                    var selectedAnswer = q.SelectedAnswer;
+                    // Save the data 
+                }
+                return RedirectToAction("Index"); //Should be changed to a send evaluation link
+            }
+            //to do : reload questions and answers
+            return View(model);
+        }
+
         // GET: Evaluations/Details/5
         public ActionResult Details(int? id)
         {

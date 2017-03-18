@@ -27,5 +27,10 @@ namespace CapstoneProject.Models
         public ICollection<Stage> Stages { get; set; }
 
         public ICollection<Question> Questions { get; set; }
+
+        public Evaluation()
+        {
+            Questions = new List<Question>();
+        }
     }
 }
