@@ -10,5 +10,5 @@ pipelines:
     - step:
         script: # Modify the commands below to build your repository.
           - dotnet restore
-          - dotnet build CapstoneProject
+          - dotnet build capstone-project
           - dotnet test CapstoneProjectTests
