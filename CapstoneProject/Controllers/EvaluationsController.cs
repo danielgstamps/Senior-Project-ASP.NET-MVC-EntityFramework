@@ -49,6 +49,11 @@ namespace CapstoneProject.Controllers
                 {
                     var qId = q.QuestionID;
                     var selectedAnswer = q.SelectedAnswer;
+                    db.Questions.Add(new Question
+                    {
+                        QuestionID = qId,
+                        SelectedAnswer = selectedAnswer
+                    });
                     // Save the data 
                 }
                 return RedirectToAction("Index"); //Should be changed to a send evaluation link
