@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using CapstoneProject.Models;
 
 namespace CapstoneProject.DAL
@@ -12,6 +9,11 @@ namespace CapstoneProject.DAL
         private GenericRepository<Employee> employeeRepository;
         private GenericRepository<Cohort> cohortRepository;
         private GenericRepository<Evaluation> evaluationRepository;
+        private GenericRepository<Answer> answeRepository;
+        private GenericRepository<Category> categoryRepository;
+        private GenericRepository<Question> questionRepository;
+        private GenericRepository<Stage> stageRepository;
+        private GenericRepository<CapstoneProject.Models.Type> typeRepository; // Type's namespace must be explicitly called to avoid ambiguity with System.Type
         private bool disposed = false;
 
         public GenericRepository<Employee> EmployeeRepository
