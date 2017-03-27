@@ -18,12 +18,12 @@ namespace CapstoneProjectTests
             this.employee.EmployeeID = 2;
         }
 
-        [TestMethod]
-        public void TestEvaluationHasEmployeeID()
-        {
-            this.evaluation.EmployeeID = 2;
-            Assert.AreEqual(employee.EmployeeID, this.evaluation.EmployeeID);
-        }
+        //[TestMethod]
+        //public void TestEvaluationHasEmployeeID()
+        //{
+        //    this.evaluation.EmployeeID = 2;
+        //    Assert.AreEqual(employee.EmployeeID, this.evaluation.EmployeeID);
+        //}
 
         [TestMethod]
         public void TestEvaluationHasEmployee()
@@ -32,12 +32,12 @@ namespace CapstoneProjectTests
             Assert.AreEqual(this.employee, this.evaluation.Employee);
         }
 
-        [TestMethod]
-        public void TestEvaluationDoesNotHaveEmployeeID()
-        {
-            this.evaluation.EmployeeID = 3;
-            Assert.AreNotEqual(this.employee.EmployeeID, this.evaluation.EmployeeID);
-        }
+        //[TestMethod]
+        //public void TestEvaluationDoesNotHaveEmployeeID()
+        //{
+        //    this.evaluation.EmployeeID = 3;
+        //    Assert.AreNotEqual(this.employee.EmployeeID, this.evaluation.EmployeeID);
+        //}
 
         [TestMethod]
         public void TestEvaluationDoesNotHaveEmployee()
