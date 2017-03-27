@@ -322,7 +322,6 @@
     <Content Include="Views\Employees\UploadData.cshtml" />
     <Content Include="Views\Account\CreatePassword.cshtml" />
     <Content Include="Views\Account\CreatePasswordConfirmation.cshtml" />
-    <Content Include="Views\Evaluations\Question.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

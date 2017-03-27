@@ -2,18 +2,24 @@
 
 <h2>Evaluation Title</h2>
 <p>Please rate how much you agree with each statement</p>
+<br />
 <div>
-    @using (Html.BeginForm())
+    @foreach (var q in Model.Questions)
     {
-       @Html.EditorFor(x=>x.Questions)
-        <input type="submit"/> 
+        <h4>@q.QuestionID. @q.QuestionText</h4>
+        foreach (var ans in q.Answers)
+        {
+            <p>
+                @Html.RadioButtonFor(b => q.SelectedAnswer, ans.AnswerID) @ans.AnswerText
+               
+            </p>
+        }
+        <br />
     }
+    <br/>
+    <input type="submit" /> 
 </div>
-@foreach (var q in Model.Questions)
-{
-    <h3>@q.QuestionText</h3>
-}
-{
+
 
 
 
