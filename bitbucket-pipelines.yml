@@ -10,5 +10,6 @@ pipelines:
     - step:
         script: # Modify the commands below to build your repository.
           - dotnet restore
+          - apt-get update
           - dotnet build
           - dotnet test
