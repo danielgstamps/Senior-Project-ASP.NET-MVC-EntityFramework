@@ -13,9 +13,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.QuestionText)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Answers)
-            </th>
             <th></th>
         </tr>
 
@@ -29,11 +26,7 @@
                     @Html.DisplayFor(modelItem => item.QuestionText)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Answers)
-                </td>
-                <td>
                     @Html.ActionLink("Edit", "Edit", new { id = item.QuestionID })
-                    @Html.ActionLink("Details", "Details", new { id = item.QuestionID })
                     @Html.ActionLink("Delete", "Delete", new { id = item.QuestionID })
                 </td>
             </tr>
