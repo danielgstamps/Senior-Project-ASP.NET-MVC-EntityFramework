@@ -54,6 +54,7 @@ namespace CapstoneProject.Controllers
                         QuestionID = qId,
                         SelectedAnswer = selectedAnswer
                     });
+                    
                     // Save the data 
                 }
                 return RedirectToAction("Index"); //Should be changed to a send evaluation link

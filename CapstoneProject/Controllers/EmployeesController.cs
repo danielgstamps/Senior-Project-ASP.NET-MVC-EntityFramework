@@ -17,7 +17,8 @@ namespace CapstoneProject.Controllers
     [HandleError]
     public class EmployeesController : Controller
     {
-        private DataContext db = new DataContext();
+        //private DataContext db = new DataContext();
+        private UnitOfWork unitOfWork = new UnitOfWork();
         private DataTable csvTable = new DataTable();
         private ApplicationDbContext dbUser = new ApplicationDbContext();
         private ApplicationUserManager _userManager;
@@ -134,7 +135,7 @@ namespace CapstoneProject.Controllers
                 var address = csvTable.Rows[i][3].ToString();
                 var phone = csvTable.Rows[i][4].ToString();
 
-                if (db.Employees.Any(e => e.Email.Equals(email)) ||
+                if (unitOfWork.EmployeeRepository.Get().Any(e => e.Email.Equals(email)) ||
                     dbUser.Users.Any(u => u.Email.Equals(email)))
                 {
                     isDuplicate = true;
@@ -148,8 +149,6 @@ namespace CapstoneProject.Controllers
                     i--; // Since row[0] was just deleted, row[1] became row[0], so move i back.
                     continue;
                 }
-                //userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(dbUser));
-                //const string userPwd = "123123";
                 var e1 = new Employee
                 {
                     FirstName = firstName,
@@ -164,14 +163,13 @@ namespace CapstoneProject.Controllers
                     UserName = e1.Email,
                     PhoneNumber = e1.Phone
                 };
-
-                //userManager.Create(u1, userPwd);
-                //_userManager.AddToRole(u1.Id, "User");
+                
                 dbUser.Users.Add(u1);
-                db.Employees.Add(e1);
+                this.unitOfWork.EmployeeRepository.Insert(e1);
                 dbUser.SaveChanges();
-                db.SaveChanges();
-                await SendPasswordCreationEmail(u1);            }
+                this.unitOfWork.Save();
+                await SendPasswordCreationEmail(u1);
+            }
 
             if (!string.IsNullOrEmpty(duplicates))
             {
@@ -182,7 +180,6 @@ namespace CapstoneProject.Controllers
 
         private async Task SendPasswordCreationEmail(ApplicationUser user)
         {
-          //  var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
             var email = user.Email;
             var callbackUrl = Url.Action("CreatePassword", "Account", new { userId = user.Id, email = email },
                 protocol: Request.Url.Scheme);
@@ -193,9 +190,9 @@ namespace CapstoneProject.Controllers
         // GET: Employees/Create
         public ActionResult Create()
         {
-            ViewBag.CohortID = new SelectList(db.Cohorts, "CohortID", "Name");
-            ViewBag.ManagerID = new SelectList(db.Employees, "EmployeeID", "FirstName");
-            ViewBag.SupervisorID = new SelectList(db.Employees, "EmployeeID", "FirstName");
+            ViewBag.CohortID = new SelectList(this.unitOfWork.CohortRepository.Get(), "CohortID", "Name");
+            ViewBag.ManagerID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName");
+            ViewBag.SupervisorID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName");
             return View("Create");
         }
 
@@ -215,9 +212,9 @@ namespace CapstoneProject.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.CohortID = new SelectList(db.Cohorts, "CohortID", "Name", employee.CohortID);
-            ViewBag.ManagerID = new SelectList(db.Employees, "EmployeeID", "FirstName", employee.ManagerID);
-            ViewBag.SupervisorID = new SelectList(db.Employees, "EmployeeID", "FirstName", employee.SupervisorID);
+            ViewBag.CohortID = new SelectList(this.unitOfWork.CohortRepository.Get(), "CohortID", "Name", employee.CohortID);
+            ViewBag.ManagerID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", employee.ManagerID);
+            ViewBag.SupervisorID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", employee.SupervisorID);
             return View(employee);
         }
 
@@ -234,9 +231,9 @@ namespace CapstoneProject.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.CohortID = new SelectList(db.Cohorts, "CohortID", "Name", employee.CohortID);
-            ViewBag.ManagerID = new SelectList(db.Employees, "EmployeeID", "FirstName", employee.ManagerID);
-            ViewBag.SupervisorID = new SelectList(db.Employees, "EmployeeID", "FirstName", employee.SupervisorID);
+            ViewBag.CohortID = new SelectList(this.unitOfWork.CohortRepository.Get(), "CohortID", "Name", employee.CohortID);
+            ViewBag.ManagerID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", employee.ManagerID);
+            ViewBag.SupervisorID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", employee.SupervisorID);
             return View("Edit", employee);
         }
 
@@ -255,9 +252,9 @@ namespace CapstoneProject.Controllers
                 //db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.CohortID = new SelectList(db.Cohorts, "CohortID", "Name", employee.CohortID);
-            ViewBag.ManagerID = new SelectList(db.Employees, "EmployeeID", "FirstName", employee.ManagerID);
-            ViewBag.SupervisorID = new SelectList(db.Employees, "EmployeeID", "FirstName", employee.SupervisorID);
+            ViewBag.CohortID = new SelectList(this.unitOfWork.CohortRepository.Get(), "CohortID", "Name", employee.CohortID);
+            ViewBag.ManagerID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", employee.ManagerID);
+            ViewBag.SupervisorID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", employee.SupervisorID);
             return View("Edit", employee);
         }
 
@@ -282,13 +279,13 @@ namespace CapstoneProject.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            var employee = db.Employees.Find(id);
-            db.Employees.Remove(employee);
+            var employee = this.unitOfWork.EmployeeRepository.GetByID(id);
+            this.unitOfWork.EmployeeRepository.Delete(employee);
 
             var aspNetUser = dbUser.Users.Where(a => a.Email.Equals(employee.Email)).Single();
             dbUser.Users.Remove(aspNetUser);
 
-            db.SaveChanges();
+            this.unitOfWork.Save();
             dbUser.SaveChanges();
             return RedirectToAction("Index");
         }

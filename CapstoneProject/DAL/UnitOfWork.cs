@@ -6,27 +6,17 @@ namespace CapstoneProject.DAL
     public class UnitOfWork : IDisposable
     {
         private DataContext context = new DataContext();
-        private GenericRepository<Employee> employeeRepository;
-        private GenericRepository<Cohort> cohortRepository;
-        private GenericRepository<Evaluation> evaluationRepository;
-        private GenericRepository<Answer> answeRepository;
+
+        private GenericRepository<Answer> answerRepository;
         private GenericRepository<Category> categoryRepository;
+        private GenericRepository<Cohort> cohortRepository;
+        private GenericRepository<Employee> employeeRepository;
+        private GenericRepository<Evaluation> evaluationRepository;
         private GenericRepository<Question> questionRepository;
         private GenericRepository<Stage> stageRepository;
         private GenericRepository<CapstoneProject.Models.Type> typeRepository; // Type's namespace must be explicitly called to avoid ambiguity with System.Type
-        private bool disposed = false;
 
-        public GenericRepository<Employee> EmployeeRepository
-        {
-            get
-            {
-                if (this.employeeRepository == null)
-                {
-                    this.employeeRepository = new GenericRepository<Employee>(this.context);
-                }
-                return employeeRepository;
-            }
-        }
+        private bool disposed = false;
 
         public GenericRepository<Cohort> CohortRepository
         {
@@ -37,6 +27,18 @@ namespace CapstoneProject.DAL
                     this.cohortRepository = new GenericRepository<Cohort>(this.context);
                 }
                 return cohortRepository;
+            }
+        }
+
+        public GenericRepository<Employee> EmployeeRepository
+        {
+            get
+            {
+                if (this.employeeRepository == null)
+                {
+                    this.employeeRepository = new GenericRepository<Employee>(this.context);
+                }
+                return employeeRepository;
             }
         }
 
