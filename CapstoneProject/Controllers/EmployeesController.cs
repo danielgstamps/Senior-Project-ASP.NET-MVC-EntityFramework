@@ -1,5 +1,4 @@
 ﻿using System.Data;
-using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -17,27 +16,33 @@ namespace CapstoneProject.Controllers
     [HandleError]
     public class EmployeesController : Controller
     {
-        private UnitOfWork unitOfWork = new UnitOfWork();
+        private UnitOfWork unitOfWork;
+        private GenericRepository<Employee> employeeRepo;
         private DataTable csvTable = new DataTable();
         private ApplicationDbContext dbUser = new ApplicationDbContext();
         private ApplicationUserManager _userManager;
         private ApplicationSignInManager _signInManager;
-        private IEmployeeRepository employeeRepo;
 
         /// <summary>
         /// Use this for unit tests
         /// </summary>
         /// <param name="mockEmployeeRepository">The mock employee repository.</param>
-        public EmployeesController(IEmployeeRepository mockEmployeeRepository)
+        /*public EmployeesController(IEmployeeRepository mockEmployeeRepository)
         {
             this.employeeRepo = mockEmployeeRepository;
+        }*/
+
+        public EmployeesController(UnitOfWork unitOfWork)
+        {
+            this.unitOfWork = unitOfWork;
         }
 
         public EmployeesController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
-            this.employeeRepo = new EmployeeRepository(new DataContext());
+            this.unitOfWork = new UnitOfWork();
+            this.employeeRepo = unitOfWork.EmployeeRepository;
         }
 
         public ApplicationUserManager UserManager
@@ -55,9 +60,7 @@ namespace CapstoneProject.Controllers
         // GET: Employees
         public ActionResult Index()
         {
-            var employees = from e
-                in employeeRepo.GetEmployees()
-                select e;
+            var employees = this.employeeRepo.Get();
             return View("Index", employees.ToList());
         }
 
@@ -68,7 +71,7 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var employee = employeeRepo.GetEmployeeByID(id);
+            var employee = this.employeeRepo.GetByID(id);
             if (employee == null)
             {
                 return HttpNotFound();
@@ -191,8 +194,10 @@ namespace CapstoneProject.Controllers
         {
             if (ModelState.IsValid)
             {
-                this.employeeRepo.InsertEmployee(employee);
-                this.employeeRepo.Save();
+                //this.employeeRepo.InsertEmployee(employee);
+                //this.employeeRepo.Save();
+                this.employeeRepo.Insert(employee);
+                this.unitOfWork.Save();
                 return RedirectToAction("Index");
             }
 
@@ -209,7 +214,7 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var employee = this.employeeRepo.GetEmployeeByID(id);
+            var employee = this.employeeRepo.GetByID(id);
             if (employee == null)
             {
                 return HttpNotFound();
@@ -229,8 +234,10 @@ namespace CapstoneProject.Controllers
         {
             if (ModelState.IsValid)
             {
-                this.employeeRepo.UpdateEmployee(employee);
-                this.employeeRepo.Save();
+                //this.employeeRepo.UpdateEmployee(employee);
+                //this.employeeRepo.Save();
+                this.employeeRepo.Update(employee);
+                this.unitOfWork.Save();
                 return RedirectToAction("Index");
             }
             ViewBag.CohortID = new SelectList(this.unitOfWork.CohortRepository.Get(), "CohortID", "Name", employee.CohortID);
@@ -246,7 +253,7 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var employee = this.employeeRepo.GetEmployeeByID(id);
+            var employee = this.employeeRepo.GetByID(id);
             if (employee == null)
             {
                 return HttpNotFound();
@@ -274,7 +281,7 @@ namespace CapstoneProject.Controllers
         {
             if (disposing)
             {
-                this.employeeRepo.Dispose();
+                this.unitOfWork.Dispose();
             }
             base.Dispose(disposing);
         }
