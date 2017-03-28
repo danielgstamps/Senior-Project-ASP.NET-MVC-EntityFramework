@@ -16,51 +16,51 @@ namespace CapstoneProject.Controllers
         // GET: Evaluations
         public ActionResult Index()
         {
-            var eval = new Evaluation();
+            //var eval = new Evaluation();
 
-            var questions = new List<Question>();
-            var q1 = new Question { QuestionID = 1, QuestionText = "I am never late for work." };
-            var q2 = new Question { QuestionID = 2, QuestionText = "I get along with my coworkers." };
-            var q3 = new Question { QuestionID = 3, QuestionText = "I complete projects early." };
-            questions.Add(q1);
-            questions.Add(q2);
-            questions.Add(q3);
+            //var questions = new List<Question>();
+            //var q1 = new Question { QuestionID = 1, QuestionText = "I am never late for work." };
+            //var q2 = new Question { QuestionID = 2, QuestionText = "I get along with my coworkers." };
+            //var q3 = new Question { QuestionID = 3, QuestionText = "I complete projects early." };
+            //questions.Add(q1);
+            //questions.Add(q2);
+            //questions.Add(q3);
 
-            foreach (var question in questions)
-            {
-                question.Answers.Add(new Answer { AnswerText = "Strongly Disagree" });
-                question.Answers.Add(new Answer { AnswerText = "Disagree" });
-                question.Answers.Add(new Answer { AnswerText = "Neutral" });
-                question.Answers.Add(new Answer { AnswerText = "Agree" });
-                question.Answers.Add(new Answer { AnswerText = "Strongly Agree" });
-                eval.Questions.Add(question);
-            }
+            //foreach (var question in questions)
+            //{
+            //    question.Answers.Add(new Answer { AnswerText = "Strongly Disagree" });
+            //    question.Answers.Add(new Answer { AnswerText = "Disagree" });
+            //    question.Answers.Add(new Answer { AnswerText = "Neutral" });
+            //    question.Answers.Add(new Answer { AnswerText = "Agree" });
+            //    question.Answers.Add(new Answer { AnswerText = "Strongly Agree" });
+            //    eval.Questions.Add(question);
+            //}
             //var evaluations = db.Evaluations.Include(e => e.Employee);
             var evaluations = unitOfWork.EvaluationRepository.Get();
-            return View(eval);
+            return View(evaluations);
         }
 
-        [HttpPost]
-        public ActionResult Index(Evaluation model)
-        {
-            if (ModelState.IsValid)
-            {
-                foreach (var q in model.Questions)
-                {
-                    var qId = q.QuestionID;
-                    var selectedAnswer = q.SelectedAnswer;
-                    db.Questions.Add(new Question
-                    {
-                        QuestionID = qId,
-                        SelectedAnswer = selectedAnswer
-                    });
-                    // Save the data 
-                }
-                return RedirectToAction("Index"); //Should be changed to a send evaluation link
-            }
-            //to do : reload questions and answers
-            return View(model);
-        }
+        //[HttpPost]
+        //public ActionResult Index(Evaluation model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        foreach (var q in model.Questions)
+        //        {
+        //            var qId = q.QuestionID;
+        //            var selectedAnswer = q.SelectedAnswer;
+        //            db.Questions.Add(new Question
+        //            {
+        //                QuestionID = qId,
+        //                SelectedAnswer = selectedAnswer
+        //            });
+        //            // Save the data 
+        //        }
+        //        return RedirectToAction("Index"); //Should be changed to a send evaluation link
+        //    }
+        //    //to do : reload questions and answers
+        //    return View(model);
+        //}
 
         // GET: Evaluations/Details/5
         public ActionResult Details(int? id)
