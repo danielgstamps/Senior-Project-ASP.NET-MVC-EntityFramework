@@ -1,0 +1,47 @@
+﻿@model IEnumerable<CapstoneProject.Models.Question>
+
+<h2>Questions: Admin View</h2>
+<br />
+@Html.ActionLink("Create New", "Create")
+
+<div>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Categories)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.QuestionText)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Answers)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Categories)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.QuestionText)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Answers)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.QuestionID })
+                    @Html.ActionLink("Details", "Details", new { id = item.QuestionID })
+                    @Html.ActionLink("Delete", "Delete", new { id = item.QuestionID })
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+
+
+
+
+

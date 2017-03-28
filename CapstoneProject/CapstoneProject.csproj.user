@@ -4,11 +4,14 @@
     <UseIISExpress>true</UseIISExpress>
     <WebStackScaffolding_ViewDialogWidth>600</WebStackScaffolding_ViewDialogWidth>
     <WebStackScaffolding_IsLayoutPageSelected>True</WebStackScaffolding_IsLayoutPageSelected>
-    <WebStackScaffolding_IsPartialViewSelected>True</WebStackScaffolding_IsPartialViewSelected>
+    <WebStackScaffolding_IsPartialViewSelected>False</WebStackScaffolding_IsPartialViewSelected>
     <WebStackScaffolding_IsReferencingScriptLibrariesSelected>False</WebStackScaffolding_IsReferencingScriptLibrariesSelected>
     <WebStackScaffolding_LayoutPageFile>~/Views/Shared/_Layout.cshtml</WebStackScaffolding_LayoutPageFile>
     <NameOfLastUsedPublishProfile>wudsco - Web Deploy</NameOfLastUsedPublishProfile>
     <ProjectView>ShowAllFiles</ProjectView>
+    <WebStackScaffolding_ControllerDialogWidth>600</WebStackScaffolding_ControllerDialogWidth>
+    <WebStackScaffolding_IsAsyncSelected>False</WebStackScaffolding_IsAsyncSelected>
+    <WebStackScaffolding_DbContextTypeFullName>CapstoneProject.DAL.DataContext</WebStackScaffolding_DbContextTypeFullName>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
