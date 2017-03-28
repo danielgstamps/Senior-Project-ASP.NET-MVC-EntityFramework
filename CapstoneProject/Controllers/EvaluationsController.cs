@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using System.Net;
 using System.Web.Mvc;
 using CapstoneProject.DAL;
 using CapstoneProject.Models;
@@ -10,13 +8,12 @@ namespace CapstoneProject.Controllers
     [Authorize]
     public class EvaluationsController : Controller
     {
-        private DataContext db = new DataContext();
         private UnitOfWork unitOfWork = new UnitOfWork();
 
         // GET: Evaluations
         public ActionResult Index()
         {
-            var eval = new Evaluation();
+            /*var eval = new Evaluation();
 
             var questions = new List<Question>();
             var q1 = new Question { QuestionID = 1, QuestionText = "I am never late for work." };
@@ -34,13 +31,13 @@ namespace CapstoneProject.Controllers
                 question.Answers.Add(new Answer { AnswerText = "Agree" });
                 question.Answers.Add(new Answer { AnswerText = "Strongly Agree" });
                 eval.Questions.Add(question);
-            }
+            }*/
             //var evaluations = db.Evaluations.Include(e => e.Employee);
             var evaluations = unitOfWork.EvaluationRepository.Get();
-            return View(eval);
+            return View(evaluations);
         }
 
-        [HttpPost]
+        /*[HttpPost]
         public ActionResult Index(Evaluation model)
         {
             if (ModelState.IsValid)
@@ -54,13 +51,14 @@ namespace CapstoneProject.Controllers
                         QuestionID = qId,
                         SelectedAnswer = selectedAnswer
                     });
+                    
                     // Save the data 
                 }
                 return RedirectToAction("Index"); //Should be changed to a send evaluation link
             }
             //to do : reload questions and answers
             return View(model);
-        }
+        }*/
 
         // GET: Evaluations/Details/5
         public ActionResult Details(int? id)
@@ -69,7 +67,6 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            //var evaluation = db.Evaluations.Find(id);
             var evaluation = unitOfWork.EvaluationRepository.GetByID(id);
             if (evaluation == null)
             {
@@ -81,7 +78,7 @@ namespace CapstoneProject.Controllers
         // GET: Evaluations/Create
         public ActionResult Create()
         {
-            ViewBag.EmployeeID = new SelectList(db.Employees, "EmployeeID", "FirstName");
+            ViewBag.EmployeeID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName");
             return View("Create");
         }
 
@@ -94,14 +91,12 @@ namespace CapstoneProject.Controllers
         {
             if (ModelState.IsValid)
             {
-                //db.Evaluations.Add(evaluation);
-                //db.SaveChanges();
                 this.unitOfWork.EvaluationRepository.Insert(evaluation);
                 this.unitOfWork.Save();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.EmployeeID = new SelectList(db.Employees, "EmployeeID", "FirstName", evaluation.Employee);
+            ViewBag.EmployeeID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", evaluation.Employee);
             return View("Create", evaluation);
         }
 
@@ -112,13 +107,12 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            //var evaluation = db.Evaluations.Find(id);
             var evaluation = unitOfWork.EvaluationRepository.GetByID(id);
             if (evaluation == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.EmployeeID = new SelectList(db.Employees, "EmployeeID", "FirstName", evaluation.Employee);
+            ViewBag.EmployeeID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", evaluation.Employee);
             return View("Edit", evaluation);
         }
 
@@ -131,13 +125,11 @@ namespace CapstoneProject.Controllers
         {
             if (ModelState.IsValid)
             {
-                //db.Entry(evaluation).State = EntityState.Modified;
-                //db.SaveChanges();
                 this.unitOfWork.EvaluationRepository.Update(evaluation);
                 this.unitOfWork.Save();
                 return RedirectToAction("Index");
             }
-            ViewBag.EmployeeID = new SelectList(db.Employees, "EmployeeID", "FirstName", evaluation.Employee);
+            ViewBag.EmployeeID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", evaluation.Employee);
             return View(evaluation);
         }
 
@@ -148,7 +140,6 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            //var evaluation = db.Evaluations.Find(id);
             var evaluation = this.unitOfWork.EvaluationRepository.GetByID(id);
             if (evaluation == null)
             {
@@ -162,9 +153,6 @@ namespace CapstoneProject.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            //var evaluation = db.Evaluations.Find(id);
-            //db.Evaluations.Remove(evaluation);
-            //db.SaveChanges();
             var evaluation = unitOfWork.EvaluationRepository.GetByID(id);
             this.unitOfWork.EvaluationRepository.Delete(evaluation);
             this.unitOfWork.Save();
@@ -175,7 +163,7 @@ namespace CapstoneProject.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                this.unitOfWork.Dispose();
             }
             base.Dispose(disposing);
         }
