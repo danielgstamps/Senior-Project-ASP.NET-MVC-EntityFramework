@@ -1,5 +1,6 @@
 ﻿using System;
 using CapstoneProject.Models;
+using Type = CapstoneProject.Models.Type;
 
 namespace CapstoneProject.DAL
 {
@@ -14,9 +15,33 @@ namespace CapstoneProject.DAL
         private GenericRepository<Evaluation> evaluationRepository;
         private GenericRepository<Question> questionRepository;
         private GenericRepository<Stage> stageRepository;
-        private GenericRepository<CapstoneProject.Models.Type> typeRepository; // Type's namespace must be explicitly called to avoid ambiguity with System.Type
+        private GenericRepository<Models.Type> typeRepository; // Type's namespace must be explicitly called to avoid ambiguity with System.Type
 
         private bool disposed = false;
+
+        public GenericRepository<Answer> AnsweRepository
+        {
+            get
+            {
+                if (this.answerRepository == null)
+                {
+                    this.answerRepository = new GenericRepository<Answer>(this.context);
+                }
+                return this.answerRepository;
+            }
+        }
+
+        public GenericRepository<Category> CategoryRepository
+        {
+            get
+            {
+                if (this.categoryRepository == null)
+                {
+                    this.categoryRepository = new GenericRepository<Category>(this.context);
+                }
+                return this.categoryRepository;
+            }
+        }
 
         public GenericRepository<Cohort> CohortRepository
         {
@@ -52,7 +77,43 @@ namespace CapstoneProject.DAL
                 }
                 return this.evaluationRepository;
             }
-        } 
+        }
+
+        public GenericRepository<Question> QuestionRepository
+        {
+            get
+            {
+                if (this.questionRepository == null)
+                {
+                    this.questionRepository = new GenericRepository<Question>(this.context);   
+                }
+                return this.questionRepository;
+            }
+        }
+
+        public GenericRepository<Stage> StageRepository
+        {
+            get
+            {
+                if (this.stageRepository == null)
+                {
+                    this.stageRepository = new GenericRepository<Stage>(this.context);
+                }
+                return this.stageRepository;
+            }
+        }
+
+        public GenericRepository<Type> TypeRepository
+        {
+            get
+            {
+                if (this.typeRepository == null)
+                {
+                    this.typeRepository = new GenericRepository<Type>(this.context);
+                }
+                return this.typeRepository;
+            }
+        }
 
         public void Save()
         {

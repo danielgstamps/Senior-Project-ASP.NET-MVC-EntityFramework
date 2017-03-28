@@ -17,19 +17,12 @@ namespace CapstoneProject.Controllers
     [HandleError]
     public class EmployeesController : Controller
     {
-        //private DataContext db = new DataContext();
         private UnitOfWork unitOfWork = new UnitOfWork();
         private DataTable csvTable = new DataTable();
         private ApplicationDbContext dbUser = new ApplicationDbContext();
         private ApplicationUserManager _userManager;
         private ApplicationSignInManager _signInManager;
         private IEmployeeRepository employeeRepo;
-        //private IEmployeeRepository mockEmployeeRepository;
-        
-        public EmployeesController()
-        {
-            this.employeeRepo = new EmployeeRepository(new DataContext());
-        }
 
         /// <summary>
         /// Use this for unit tests
@@ -39,11 +32,6 @@ namespace CapstoneProject.Controllers
         {
             this.employeeRepo = mockEmployeeRepository;
         }
-
-        /*public EmployeesController()
-        {
-            
-        }*/
 
         public EmployeesController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
@@ -70,7 +58,6 @@ namespace CapstoneProject.Controllers
             var employees = from e
                 in employeeRepo.GetEmployees()
                 select e;
-            //var employees = db.Employees.Include(e => e.Cohort).Include(e => e.Manager).Include(e => e.Supervisor);
             return View("Index", employees.ToList());
         }
 
@@ -82,7 +69,6 @@ namespace CapstoneProject.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var employee = employeeRepo.GetEmployeeByID(id);
-            //var employee = db.Employees.Find(id);
             if (employee == null)
             {
                 return HttpNotFound();
@@ -207,8 +193,6 @@ namespace CapstoneProject.Controllers
             {
                 this.employeeRepo.InsertEmployee(employee);
                 this.employeeRepo.Save();
-                //db.Employees.Add(employee);
-                //db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
@@ -226,7 +210,6 @@ namespace CapstoneProject.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var employee = this.employeeRepo.GetEmployeeByID(id);
-            //var employee = db.Employees.Find(id);
             if (employee == null)
             {
                 return HttpNotFound();
@@ -248,8 +231,6 @@ namespace CapstoneProject.Controllers
             {
                 this.employeeRepo.UpdateEmployee(employee);
                 this.employeeRepo.Save();
-                //db.Entry(employee).State = EntityState.Modified;
-                //db.SaveChanges();
                 return RedirectToAction("Index");
             }
             ViewBag.CohortID = new SelectList(this.unitOfWork.CohortRepository.Get(), "CohortID", "Name", employee.CohortID);
@@ -266,7 +247,6 @@ namespace CapstoneProject.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var employee = this.employeeRepo.GetEmployeeByID(id);
-            //var employee = db.Employees.Find(id);
             if (employee == null)
             {
                 return HttpNotFound();
@@ -294,7 +274,6 @@ namespace CapstoneProject.Controllers
         {
             if (disposing)
             {
-                //db.Dispose();
                 this.employeeRepo.Dispose();
             }
             base.Dispose(disposing);
