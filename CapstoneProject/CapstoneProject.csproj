@@ -205,6 +205,7 @@
     <Compile Include="Controllers\EvaluationsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\QuestionsController.cs" />
     <Compile Include="DAL\DataContext.cs" />
     <Compile Include="DAL\EmployeeRepository.cs" />
     <Compile Include="DAL\GenericRepository.cs" />
@@ -322,6 +323,8 @@
     <Content Include="Views\Employees\UploadData.cshtml" />
     <Content Include="Views\Account\CreatePassword.cshtml" />
     <Content Include="Views\Account\CreatePasswordConfirmation.cshtml" />
+    <Content Include="Views\Questions\Index.cshtml" />
+    <Content Include="Views\Questions\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

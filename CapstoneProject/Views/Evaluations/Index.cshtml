@@ -2,6 +2,7 @@
 
 <h2>Evaluations: Admin View</h2>
 <br />
+@Html.ActionLink("Create New", "Create")
 <div>
     @*@foreach (var q in Model.Questions)
     {
@@ -48,7 +49,6 @@
                     @Html.DisplayFor(modelItem => item.Comment)
                 </td>
                 <td>
-                    @Html.ActionLink("Create New", "Create")
                     @Html.ActionLink("Edit", "Edit", new {id = item.EvaluationID})
                     @Html.ActionLink("Details", "Details", new {id = item.EvaluationID})
                     @Html.ActionLink("Delete", "Delete", new {id = item.EvaluationID})
