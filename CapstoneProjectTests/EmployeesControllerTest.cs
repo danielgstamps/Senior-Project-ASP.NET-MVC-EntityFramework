@@ -16,7 +16,7 @@ namespace CapstoneProjectTests
         private EmployeesController controller;
         private InMemoryEmployeeRepository repo;
 
-        private static EmployeesController GetEmployeesController(IEmployeeRepository repository)
+        /*private static EmployeesController GetEmployeesController(IEmployeeRepository repository)
         {
             EmployeesController controller = new EmployeesController(repository);
 
@@ -28,7 +28,7 @@ namespace CapstoneProjectTests
             return controller;
         }
 
-        /*private static EmployeesController GetEmployeesController(GenericRepository<Employee> repository)
+        private static EmployeesController GetEmployeesController(GenericRepository<Employee> repository)
         {
             EmployeesController controller = new EmployeesController(repository);
 
@@ -65,7 +65,7 @@ namespace CapstoneProjectTests
         {
             //Arrange
             repo = new InMemoryEmployeeRepository();
-            controller = GetEmployeesController(repo);
+            //controller = GetEmployeesController(repo);
             controller.Create(new Employee()
             {
                 EmployeeID = 1,

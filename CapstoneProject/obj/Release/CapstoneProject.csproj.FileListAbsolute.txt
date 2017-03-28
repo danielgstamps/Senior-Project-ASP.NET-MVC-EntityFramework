@@ -262,7 +262,6 @@ C:\Users\csuser\Desktop\capstone-project\CapstoneProject\obj\Release\CapstonePro
 C:\Users\csuser\Desktop\capstone-project\CapstoneProject\obj\Release\CapstoneProject.csproj.GenerateResource.Cache
 C:\Users\csuser\Desktop\capstone-project\CapstoneProject\obj\Release\CapstoneProject.dll
 C:\Users\csuser\Desktop\capstone-project\CapstoneProject\obj\Release\CapstoneProject.pdb
-C:\Users\csuser\Desktop\capstone-project\CapstoneProject\obj\Release\CapstoneProject.csprojResolveAssemblyReference.cache
 C:\Users\csuser\Downloads\CHUMA92-capstone-project-018c2be6bb88\CapstoneProject\obj\Release\CapstoneProject.csprojResolveAssemblyReference.cache
 C:\Users\csuser\Downloads\CHUMA92-capstone-project-018c2be6bb88\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.Init.resources
 C:\Users\csuser\Downloads\CHUMA92-capstone-project-018c2be6bb88\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.CohortsNullable.resources
@@ -353,3 +352,6 @@ C:\Users\csuser\Downloads\CHUMA92-capstone-project-018c2be6bb88\CapstoneProject\
 C:\Users\csuser\Downloads\CHUMA92-capstone-project-018c2be6bb88\CapstoneProject\bin\Microsoft.Owin.Security.Twitter.xml
 C:\Users\csuser\Downloads\CHUMA92-capstone-project-018c2be6bb88\CapstoneProject\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
 C:\Users\csuser\Downloads\CHUMA92-capstone-project-018c2be6bb88\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.EvaluationRefactor.resources
+C:\Users\csuser\Desktop\capstone-project\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.EvaluationRefactor.resources
+C:\Users\csuser\Desktop\capstone-project\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.EvaluationQuestionsRefactor.resources
+C:\Users\csuser\Desktop\capstone-project\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.EvaluationImplementation.resources

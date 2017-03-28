@@ -1,5 +1,4 @@
 ﻿using System.Data;
-using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -10,44 +9,40 @@ using CapstoneProject.DAL;
 using CapstoneProject.Models;
 using LumenWorks.Framework.IO.Csv;
 using Microsoft.AspNet.Identity.Owin;
+
 namespace CapstoneProject.Controllers
 {
     [Authorize(Roles = "Admin")]
     [HandleError]
     public class EmployeesController : Controller
     {
-        private DataContext db = new DataContext();
+        private UnitOfWork unitOfWork;
+        private GenericRepository<Employee> employeeRepo;
         private DataTable csvTable = new DataTable();
         private ApplicationDbContext dbUser = new ApplicationDbContext();
         private ApplicationUserManager _userManager;
         private ApplicationSignInManager _signInManager;
-        private IEmployeeRepository employeeRepo;
-        //private IEmployeeRepository mockEmployeeRepository;
-        
-        public EmployeesController()
-        {
-            this.employeeRepo = new EmployeeRepository(new DataContext());
-        }
 
         /// <summary>
         /// Use this for unit tests
         /// </summary>
         /// <param name="mockEmployeeRepository">The mock employee repository.</param>
-        public EmployeesController(IEmployeeRepository mockEmployeeRepository)
+        /*public EmployeesController(IEmployeeRepository mockEmployeeRepository)
         {
             this.employeeRepo = mockEmployeeRepository;
-        }
-
-        /*public EmployeesController()
-        {
-            
         }*/
+
+        public EmployeesController(UnitOfWork unitOfWork)
+        {
+            this.unitOfWork = unitOfWork;
+        }
 
         public EmployeesController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
-            this.employeeRepo = new EmployeeRepository(new DataContext());
+            this.unitOfWork = new UnitOfWork();
+            this.employeeRepo = unitOfWork.EmployeeRepository;
         }
 
         public ApplicationUserManager UserManager
@@ -65,10 +60,7 @@ namespace CapstoneProject.Controllers
         // GET: Employees
         public ActionResult Index()
         {
-            var employees = from e
-                in employeeRepo.GetEmployees()
-                select e;
-            //var employees = db.Employees.Include(e => e.Cohort).Include(e => e.Manager).Include(e => e.Supervisor);
+            var employees = this.employeeRepo.Get();
             return View("Index", employees.ToList());
         }
 
@@ -79,8 +71,7 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var employee = employeeRepo.GetEmployeeByID(id);
-            //var employee = db.Employees.Find(id);
+            var employee = this.employeeRepo.GetByID(id);
             if (employee == null)
             {
                 return HttpNotFound();
@@ -133,7 +124,7 @@ namespace CapstoneProject.Controllers
                 var address = csvTable.Rows[i][3].ToString();
                 var phone = csvTable.Rows[i][4].ToString();
 
-                if (db.Employees.Any(e => e.Email.Equals(email)) ||
+                if (unitOfWork.EmployeeRepository.Get().Any(e => e.Email.Equals(email)) ||
                     dbUser.Users.Any(u => u.Email.Equals(email)))
                 {
                     isDuplicate = true;
@@ -147,8 +138,6 @@ namespace CapstoneProject.Controllers
                     i--; // Since row[0] was just deleted, row[1] became row[0], so move i back.
                     continue;
                 }
-                //userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(dbUser));
-                //const string userPwd = "123123";
                 var e1 = new Employee
                 {
                     FirstName = firstName,
@@ -163,14 +152,13 @@ namespace CapstoneProject.Controllers
                     UserName = e1.Email,
                     PhoneNumber = e1.Phone
                 };
-
-                //userManager.Create(u1, userPwd);
-                //_userManager.AddToRole(u1.Id, "User");
+                
                 dbUser.Users.Add(u1);
-                db.Employees.Add(e1);
+                this.unitOfWork.EmployeeRepository.Insert(e1);
                 dbUser.SaveChanges();
-                db.SaveChanges();
-                await SendPasswordCreationEmail(u1);            }
+                this.unitOfWork.Save();
+                await SendPasswordCreationEmail(u1);
+            }
 
             if (!string.IsNullOrEmpty(duplicates))
             {
@@ -181,7 +169,6 @@ namespace CapstoneProject.Controllers
 
         private async Task SendPasswordCreationEmail(ApplicationUser user)
         {
-          //  var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
             var email = user.Email;
             var callbackUrl = Url.Action("CreatePassword", "Account", new { userId = user.Id, email = email },
                 protocol: Request.Url.Scheme);
@@ -192,9 +179,9 @@ namespace CapstoneProject.Controllers
         // GET: Employees/Create
         public ActionResult Create()
         {
-            ViewBag.CohortID = new SelectList(db.Cohorts, "CohortID", "Name");
-            ViewBag.ManagerID = new SelectList(db.Employees, "EmployeeID", "FirstName");
-            ViewBag.SupervisorID = new SelectList(db.Employees, "EmployeeID", "FirstName");
+            ViewBag.CohortID = new SelectList(this.unitOfWork.CohortRepository.Get(), "CohortID", "Name");
+            ViewBag.ManagerID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName");
+            ViewBag.SupervisorID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName");
             return View("Create");
         }
 
@@ -207,16 +194,16 @@ namespace CapstoneProject.Controllers
         {
             if (ModelState.IsValid)
             {
-                this.employeeRepo.InsertEmployee(employee);
-                this.employeeRepo.Save();
-                //db.Employees.Add(employee);
-                //db.SaveChanges();
+                //this.employeeRepo.InsertEmployee(employee);
+                //this.employeeRepo.Save();
+                this.employeeRepo.Insert(employee);
+                this.unitOfWork.Save();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.CohortID = new SelectList(db.Cohorts, "CohortID", "Name", employee.CohortID);
-            ViewBag.ManagerID = new SelectList(db.Employees, "EmployeeID", "FirstName", employee.ManagerID);
-            ViewBag.SupervisorID = new SelectList(db.Employees, "EmployeeID", "FirstName", employee.SupervisorID);
+            ViewBag.CohortID = new SelectList(this.unitOfWork.CohortRepository.Get(), "CohortID", "Name", employee.CohortID);
+            ViewBag.ManagerID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", employee.ManagerID);
+            ViewBag.SupervisorID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", employee.SupervisorID);
             return View(employee);
         }
 
@@ -227,15 +214,14 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var employee = this.employeeRepo.GetEmployeeByID(id);
-            //var employee = db.Employees.Find(id);
+            var employee = this.employeeRepo.GetByID(id);
             if (employee == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.CohortID = new SelectList(db.Cohorts, "CohortID", "Name", employee.CohortID);
-            ViewBag.ManagerID = new SelectList(db.Employees, "EmployeeID", "FirstName", employee.ManagerID);
-            ViewBag.SupervisorID = new SelectList(db.Employees, "EmployeeID", "FirstName", employee.SupervisorID);
+            ViewBag.CohortID = new SelectList(this.unitOfWork.CohortRepository.Get(), "CohortID", "Name", employee.CohortID);
+            ViewBag.ManagerID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", employee.ManagerID);
+            ViewBag.SupervisorID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", employee.SupervisorID);
             return View("Edit", employee);
         }
 
@@ -248,15 +234,15 @@ namespace CapstoneProject.Controllers
         {
             if (ModelState.IsValid)
             {
-                this.employeeRepo.UpdateEmployee(employee);
-                this.employeeRepo.Save();
-                //db.Entry(employee).State = EntityState.Modified;
-                //db.SaveChanges();
+                //this.employeeRepo.UpdateEmployee(employee);
+                //this.employeeRepo.Save();
+                this.employeeRepo.Update(employee);
+                this.unitOfWork.Save();
                 return RedirectToAction("Index");
             }
-            ViewBag.CohortID = new SelectList(db.Cohorts, "CohortID", "Name", employee.CohortID);
-            ViewBag.ManagerID = new SelectList(db.Employees, "EmployeeID", "FirstName", employee.ManagerID);
-            ViewBag.SupervisorID = new SelectList(db.Employees, "EmployeeID", "FirstName", employee.SupervisorID);
+            ViewBag.CohortID = new SelectList(this.unitOfWork.CohortRepository.Get(), "CohortID", "Name", employee.CohortID);
+            ViewBag.ManagerID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", employee.ManagerID);
+            ViewBag.SupervisorID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", employee.SupervisorID);
             return View("Edit", employee);
         }
 
@@ -267,8 +253,7 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var employee = this.employeeRepo.GetEmployeeByID(id);
-            //var employee = db.Employees.Find(id);
+            var employee = this.employeeRepo.GetByID(id);
             if (employee == null)
             {
                 return HttpNotFound();
@@ -281,13 +266,13 @@ namespace CapstoneProject.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            var employee = db.Employees.Find(id);
-            db.Employees.Remove(employee);
+            var employee = this.unitOfWork.EmployeeRepository.GetByID(id);
+            this.unitOfWork.EmployeeRepository.Delete(employee);
 
             var aspNetUser = dbUser.Users.Where(a => a.Email.Equals(employee.Email)).Single();
             dbUser.Users.Remove(aspNetUser);
 
-            db.SaveChanges();
+            this.unitOfWork.Save();
             dbUser.SaveChanges();
             return RedirectToAction("Index");
         }
@@ -296,8 +281,7 @@ namespace CapstoneProject.Controllers
         {
             if (disposing)
             {
-                //db.Dispose();
-                this.employeeRepo.Dispose();
+                this.unitOfWork.Dispose();
             }
             base.Dispose(disposing);
         }

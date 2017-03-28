@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
@@ -12,12 +11,12 @@ namespace CapstoneProject.Controllers
 {
     public class CohortsController : Controller
     {
-        private DataContext db = new DataContext();
+        private UnitOfWork unitOfWork = new UnitOfWork();
 
         // GET: Cohorts
         public ActionResult Index()
         {
-            return View(db.Cohorts.ToList());
+            return View(this.unitOfWork.CohortRepository.Get());
         }
 
         // GET: Cohorts/Details/5
@@ -27,7 +26,7 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var cohort = db.Cohorts.Find(id);
+            var cohort = this.unitOfWork.CohortRepository.GetByID(id);
             if (cohort == null)
             {
                 return HttpNotFound();
@@ -52,8 +51,8 @@ namespace CapstoneProject.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Cohorts.Add(cohort);
-                db.SaveChanges();
+                this.unitOfWork.CohortRepository.Insert(cohort);
+                this.unitOfWork.Save();
                 return RedirectToAction("Index");
             }
 
@@ -69,10 +68,10 @@ namespace CapstoneProject.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var cohort = db.Cohorts.Find(id);
-            var allCohorts = db.Cohorts.ToList();
-            var allEmployees = db.Employees.ToList();
-            var employeesToShow = allEmployees;
+            var cohort = this.unitOfWork.CohortRepository.GetByID(id);
+            var allCohorts = this.unitOfWork.CohortRepository.Get();
+            var allEmployees = this.unitOfWork.EmployeeRepository.Get();
+            var employeesToShow = allEmployees.ToList();
             foreach (var currentCohort in allCohorts.ToList())
             {
                 foreach (var currentEmployee in allEmployees.ToList())
@@ -109,7 +108,7 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var cohortToUpdate = db.Cohorts.Include(c => c.Employees).Where(c => c.CohortID == id).Single();
+            var cohortToUpdate = this.unitOfWork.CohortRepository.GetByID(id);
             if (TryUpdateModel(cohortToUpdate, "",
                new string[] { "Name" }))
             {
@@ -117,7 +116,7 @@ namespace CapstoneProject.Controllers
                 {
                     updateCohortEmployees(selectedEmployees, cohortToUpdate);
 
-                    db.SaveChanges();
+                    this.unitOfWork.Save();
 
                     return RedirectToAction("Index");
                 }
@@ -142,7 +141,7 @@ namespace CapstoneProject.Controllers
             var selectedEmployeesHashSet = new HashSet<string>(selectedEmployees);
             var cohortEmployees = new HashSet<int>
                 (cohortToUpdate.Employees.Select(e => e.EmployeeID));
-            foreach (var employee in db.Employees)
+            foreach (var employee in this.unitOfWork.EmployeeRepository.Get())
             {
                 if (selectedEmployeesHashSet.Contains(employee.EmployeeID.ToString()))
                 {
@@ -163,7 +162,7 @@ namespace CapstoneProject.Controllers
 
         private void populateAssignedEmployees(Cohort cohort)
         {
-            var allEmployees = db.Employees;
+            var allEmployees = this.unitOfWork.EmployeeRepository.Get();
             var cohortEmployees = new HashSet<int>(cohort.Employees.Select(e => e.EmployeeID));
             var assignedEmployees = new List<AssignedEmployeeData>();
             foreach (var employee in allEmployees)
@@ -186,7 +185,7 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var cohort = db.Cohorts.Find(id);
+            var cohort = this.unitOfWork.CohortRepository.GetByID(id);
             if (cohort == null)
             {
                 return HttpNotFound();
@@ -200,14 +199,14 @@ namespace CapstoneProject.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            var cohort = db.Cohorts.Find(id);
+            var cohort = this.unitOfWork.CohortRepository.GetByID(id);
             foreach (var employee in cohort.Employees)
             {
                 employee.CohortID = null;
                 employee.Cohort = null;
             }
-            db.Cohorts.Remove(cohort);
-            db.SaveChanges();
+            this.unitOfWork.CohortRepository.Delete(cohort);
+            this.unitOfWork.Save();
             return RedirectToAction("Index");
         }
 
@@ -215,7 +214,7 @@ namespace CapstoneProject.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                this.unitOfWork.Dispose();
             }
             base.Dispose(disposing);
         }
