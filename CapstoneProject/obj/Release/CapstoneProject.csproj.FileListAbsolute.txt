@@ -355,3 +355,8 @@ C:\Users\csuser\Downloads\CHUMA92-capstone-project-018c2be6bb88\CapstoneProject\
 C:\Users\csuser\Desktop\capstone-project\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.EvaluationRefactor.resources
 C:\Users\csuser\Desktop\capstone-project\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.EvaluationQuestionsRefactor.resources
 C:\Users\csuser\Desktop\capstone-project\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.EvaluationImplementation.resources
+C:\Users\Daniel\Desktop\capstone-project\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.EvaluationRefactor.resources
+C:\Users\Daniel\Desktop\capstone-project\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.EvaluationQuestionsRefactor.resources
+C:\Users\Daniel\Desktop\capstone-project\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.EvaluationImplementation.resources
+C:\Users\Daniel\Desktop\capstone-project\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.removeEvalFromCategory.resources
+C:\Users\Daniel\Desktop\capstone-project\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.QuestionNowHasOneCategory.resources

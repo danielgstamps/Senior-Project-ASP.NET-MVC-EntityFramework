@@ -1,4 +1,4 @@
-﻿@model CapstoneProject.Models.Question
+﻿@model CapstoneProject.Models.QuestionViewModel
 
 <h2>Add New Question</h2>
 
@@ -18,7 +18,13 @@
             </div>
         </div>
 
-        <!-- choose category -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.CategoryID, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.CategoryID, Model.CategoryList, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CategoryID, "", new { @class = "text-danger" })
+            </div>
+        </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">

@@ -38,22 +38,34 @@ namespace CapstoneProject.Controllers
         // GET: Questions/Create
         public ActionResult Create()
         {
-            return View();
+            QuestionViewModel model = new QuestionViewModel();
+            model.CategoryList = unitOfWork.CategoryRepository.dbSet.Select(c => new SelectListItem()
+            {
+                Value = c.CategoryID.ToString(),
+                Text = c.Name
+            });
+            return View(model);
         }
 
         // POST: Questions/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "QuestionText,Category")] Question question)
+        public ActionResult Create([Bind(Include = "QuestionText,CategoryID")] QuestionViewModel model)
         {
             if (ModelState.IsValid)
             {
-                this.unitOfWork.QuestionRepository.Insert(question);
-                this.unitOfWork.Save();
+                Question question = new Question()
+                {
+                    QuestionText = model.QuestionText,
+                    Category = unitOfWork.CategoryRepository.GetByID(model.CategoryID)
+                };
+
+                unitOfWork.QuestionRepository.Insert(question);
+                unitOfWork.Save();
                 return RedirectToAction("Index");
             }
 
-            return View(question);
+            return View(model);
         }
 
         // GET: Questions/Edit/5
