@@ -214,6 +214,8 @@
     <Compile Include="DAL\EmployeeRepository.cs" />
     <Compile Include="DAL\GenericRepository.cs" />
     <Compile Include="DAL\IEmployeeRepository.cs" />
+    <Compile Include="DAL\IGenericRepository.cs" />
+    <Compile Include="DAL\IUnitOfWork.cs" />
     <Compile Include="DAL\UnitOfWork.cs" />
     <Compile Include="DataMigrations\201702202211339_Init.cs" />
     <Compile Include="DataMigrations\201702202211339_Init.Designer.cs">

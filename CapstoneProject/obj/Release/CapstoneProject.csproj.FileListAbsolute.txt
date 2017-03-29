@@ -450,4 +450,3 @@ C:\Users\Will\Source\Repos\capstone-project\CapstoneProject\obj\Release\Capstone
 C:\Users\Will\Source\Repos\capstone-project\CapstoneProject\obj\Release\CapstoneProject.pdb
 C:\Users\Will\Source\Repos\capstone-project\CapstoneProject\bin\Castle.Core.dll
 C:\Users\Will\Source\Repos\capstone-project\CapstoneProject\bin\Castle.Core.xml
-C:\Users\Will\Source\Repos\capstone-project\CapstoneProject\obj\Release\CapstoneProject.csprojResolveAssemblyReference.cache
