@@ -54,3 +54,7 @@ C:\Users\Will\Source\Repos\capstone-project\CapstoneProjectTests\bin\Release\Mic
 C:\Users\Will\Source\Repos\capstone-project\CapstoneProjectTests\bin\Release\Microsoft.Owin.Host.SystemWeb.xml
 C:\Users\Will\Source\Repos\capstone-project\CapstoneProjectTests\obj\Release\CapstoneProjectTests.dll
 C:\Users\Will\Source\Repos\capstone-project\CapstoneProjectTests\obj\Release\CapstoneProjectTests.pdb
+C:\Users\Will\Source\Repos\capstone-project\CapstoneProjectTests\bin\Release\Castle.Core.dll
+C:\Users\Will\Source\Repos\capstone-project\CapstoneProjectTests\bin\Release\Moq.dll
+C:\Users\Will\Source\Repos\capstone-project\CapstoneProjectTests\bin\Release\Castle.Core.xml
+C:\Users\Will\Source\Repos\capstone-project\CapstoneProjectTests\bin\Release\Moq.xml
