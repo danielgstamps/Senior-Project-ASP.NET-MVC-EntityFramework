@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Collections.Generic;
+using System.Net;
 using System.Web.Mvc;
 using CapstoneProject.DAL;
 using CapstoneProject.Models;
@@ -25,7 +26,7 @@ namespace CapstoneProject.Controllers
         // GET: Evaluations
         public ActionResult Index()
         {
-            /*var eval = new Evaluation();
+            var eval = new Evaluation();
 
             var questions = new List<Question>();
             var q1 = new Question { QuestionID = 1, QuestionText = "I am never late for work." };
@@ -43,10 +44,10 @@ namespace CapstoneProject.Controllers
                 question.Answers.Add(new Answer { AnswerText = "Agree" });
                 question.Answers.Add(new Answer { AnswerText = "Strongly Agree" });
                 eval.Questions.Add(question);
-            }*/
+            }
             //var evaluations = db.Evaluations.Include(e => e.Employee);
             var evaluations = unitOfWork.EvaluationRepository.Get();
-            return View("Index", evaluations);
+            return View(eval);
         }
 
         /*[HttpPost]
