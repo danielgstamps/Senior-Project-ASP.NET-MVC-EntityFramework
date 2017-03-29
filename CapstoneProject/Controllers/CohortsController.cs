@@ -11,12 +11,24 @@ namespace CapstoneProject.Controllers
 {
     public class CohortsController : Controller
     {
-        private UnitOfWork unitOfWork = new UnitOfWork();
+        private IUnitOfWork unitOfWork = new UnitOfWork();
+
+        public IUnitOfWork UnitOfWork
+        {
+            get
+            {
+                return this.unitOfWork;
+            }
+            set
+            {
+                this.unitOfWork = value;
+            }
+        }
 
         // GET: Cohorts
         public ActionResult Index()
         {
-            return View(this.unitOfWork.CohortRepository.Get());
+            return View("Index", this.unitOfWork.CohortRepository.Get());
         }
 
         // GET: Cohorts/Details/5

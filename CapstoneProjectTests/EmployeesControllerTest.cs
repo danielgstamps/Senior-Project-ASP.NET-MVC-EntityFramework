@@ -1,12 +1,8 @@
-﻿using System.Security.Principal;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using CapstoneProject.Controllers;
 using CapstoneProject.Models;
-using CapstoneProjectTests.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CapstoneProject.DAL;
-using System.Web.Routing;
 using Moq;
 using System.Collections.Generic;
 
@@ -73,16 +69,6 @@ namespace CapstoneProjectTests
             this.mockUnitOfWork.Setup(m => m.EmployeeRepository.GetByID(0)).Returns(employees[0]);
             var result = this.controller.Details(0) as ViewResult;
             Assert.AreEqual("Details", result.ViewName);
-        }
-
-        [TestMethod]
-        public void TestUpdate()
-        {
-            var employee = employees[1];
-            employee.LastName = "Schrute";
-            this.mockUnitOfWork.Setup(m => m.EmployeeRepository.GetByID(1)).Returns(employees[1]);
-            var result = this.mockUnitOfWork.Object.EmployeeRepository.GetByID(1);
-            Assert.AreEqual("Schrute", result.LastName);
         }
     }
 }
