@@ -16,29 +16,36 @@ namespace CapstoneProject.Controllers
     [HandleError]
     public class EmployeesController : Controller
     {
-        private UnitOfWork unitOfWork = new UnitOfWork();
+        private IUnitOfWork unitOfWork = new UnitOfWork();
         private DataTable csvTable = new DataTable();
         private ApplicationDbContext dbUser = new ApplicationDbContext();
         private ApplicationUserManager _userManager;
         private ApplicationSignInManager _signInManager;
+        private IEmployeeRepository mockRepo;
+
+        public IUnitOfWork UnitOfWork {
+            get
+            {
+                return this.unitOfWork;
+            }
+            set
+            {
+                this.unitOfWork = value;
+            }
+        }
 
         /// <summary>
         /// Use this for unit tests
         /// </summary>
         /// <param name="mockEmployeeRepository">The mock employee repository.</param>
-        /*public EmployeesController(IEmployeeRepository mockEmployeeRepository)
+        public EmployeesController(IEmployeeRepository mockRepo)
         {
-            this.employeeRepo = mockEmployeeRepository;
-        }*/
+            this.mockRepo = mockRepo;
+        }
 
         public EmployeesController()
         {
 
-        }
-
-        public EmployeesController(UnitOfWork unitOfWork)
-        {
-            this.unitOfWork = unitOfWork;
         }
 
         public EmployeesController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)

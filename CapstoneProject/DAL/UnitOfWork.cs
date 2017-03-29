@@ -4,7 +4,7 @@ using Type = CapstoneProject.Models.Type;
 
 namespace CapstoneProject.DAL
 {
-    public class UnitOfWork : IDisposable
+    public class UnitOfWork : IUnitOfWork, IDisposable
     {
         private DataContext context = new DataContext();
 
@@ -19,7 +19,7 @@ namespace CapstoneProject.DAL
 
         private bool disposed = false;
 
-        public GenericRepository<Answer> AnsweRepository
+        public GenericRepository<Answer> AnswerRepository
         {
             get
             {

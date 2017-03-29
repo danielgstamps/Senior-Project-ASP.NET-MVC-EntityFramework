@@ -7,124 +7,48 @@ using CapstoneProjectTests.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CapstoneProject.DAL;
 using System.Web.Routing;
+using Moq;
+using System.Collections.Generic;
 
 namespace CapstoneProjectTests
 {
     [TestClass]
     public class EmployeesControllerTest
     {
+        private Mock<IUnitOfWork> mockUnitOfWork;
         private EmployeesController controller;
-        private InMemoryEmployeeRepository repo;
-
-        /*private static EmployeesController GetEmployeesController(IEmployeeRepository repository)
-        {
-            EmployeesController controller = new EmployeesController(repository);
-
-            controller.ControllerContext = new ControllerContext()
-            {
-                Controller = controller,
-                RequestContext = new RequestContext(new MockHttpContext(), new RouteData())
-            };
-            return controller;
-        }
-
-        /*private static EmployeesController GetEmployeesController(GenericRepository<Employee> repository)
-        {
-            EmployeesController controller = new EmployeesController(repository);
-
-            controller.ControllerContext = new ControllerContext()
-            {
-                Controller = controller,
-                RequestContext = new RequestContext(new MockHttpContext(), new RouteData())
-            };
-
-            return controller;
-        }*/
-
-
-        private class MockHttpContext : HttpContextBase
-        {
-            private readonly IPrincipal _user = new GenericPrincipal(
-                     new GenericIdentity("someUser"), null /* roles */);
-
-            public override IPrincipal User
-            {
-                get
-                {
-                    return _user;
-                }
-                set
-                {
-                    base.User = value;
-                }
-            }
-        }
 
         [TestInitialize]
-        public void Initialize()
+        public void Setup()
         {
-            //Arrange
-            repo = new InMemoryEmployeeRepository();
-            //controller = GetEmployeesController(repo);
-            controller.Create(new Employee()
+            var employees = new List<Employee>()
             {
-                EmployeeID = 1,
-                FirstName = "Angela",
-                LastName = "Martin",
-                Email = "amartin@mailinator.com",
-                Address = "123 Scranton Ave, New York, NY 123456",
-                Phone = "(770) 123-1234",
-                CohortID = null,
-                Cohort = null,
-                SupervisorID = null,
-                Supervisor = null,
-                ManagerID = null,
-                Manager = null,
-                Evaluations = null
-            });
+                new Employee()
+                {
+                    EmployeeID = 1,
+                    FirstName = "Dwight",
+                    LastName = "Schrute"
+                },
+                new Employee()
+                {
+                    EmployeeID = 2,
+                    FirstName = "Angela",
+                    LastName = "Martin"
+                }
+            };
+            this.mockUnitOfWork = new Mock<IUnitOfWork>();
+            this.mockUnitOfWork.Setup(m => m.EmployeeRepository.Get(null, null, "")).Returns(employees as List<Employee>);
+            this.controller = new EmployeesController();
+            this.controller.UnitOfWork = mockUnitOfWork.Object;
+            this.mockUnitOfWork.Object.EmployeeRepository.Insert(employees[0]);
+            this.mockUnitOfWork.Object.EmployeeRepository.Insert(employees[1]);
         }
 
         [TestMethod]
-        public void TestCreate()
+        public void TestIndex()
         {
-            controller.ModelState.AddModelError("", "Invalid model state");
-            ViewResult result = controller.Create() as ViewResult;
-            Assert.AreEqual("Create", result.ViewName);
-        }
-
-        [TestMethod]
-        public void TestReturnCorrectEmployee()
-        {
-            var employee = repo.GetEmployeeByID(1);
-            Assert.AreEqual("Angela", employee.FirstName);
-        }
-
-        [TestMethod]
-        public void TestEmployeesIndex()
-        {
-            ViewResult result = controller.Index() as ViewResult;
-            Assert.AreEqual("Index", result.ViewName);
-        }
-
-        [TestMethod]
-        public void TestEmployeesDetails()
-        {
-            ViewResult result = controller.Details(1) as ViewResult;
-            Assert.AreEqual("Details", result.ViewName);
-        }
-
-        [TestMethod]
-        public void TestEmployeesEdit()
-        {
-            ViewResult result = controller.Edit(1) as ViewResult;
-            Assert.AreEqual("Edit", result.ViewName);
-        }
-
-        [TestMethod]
-        public void TestEmployeesDelete()
-        {
-            ViewResult result = controller.Delete(1) as ViewResult;
-            Assert.AreEqual("Delete", result.ViewName);
+            var index = this.mockUnitOfWork.Object.EmployeeRepository.Get() as List<Employee>;
+            Assert.AreEqual("Dwight", index[0].FirstName);
         }
     }
 }
