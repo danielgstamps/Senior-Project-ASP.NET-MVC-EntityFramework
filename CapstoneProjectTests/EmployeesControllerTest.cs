@@ -1,12 +1,12 @@
 ﻿using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Routing;
 using CapstoneProject.Controllers;
-using CapstoneProject.DAL;
 using CapstoneProject.Models;
 using CapstoneProjectTests.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using CapstoneProject.DAL;
+using System.Web.Routing;
 
 namespace CapstoneProjectTests
 {
@@ -28,7 +28,7 @@ namespace CapstoneProjectTests
             return controller;
         }
 
-        private static EmployeesController GetEmployeesController(GenericRepository<Employee> repository)
+        /*private static EmployeesController GetEmployeesController(GenericRepository<Employee> repository)
         {
             EmployeesController controller = new EmployeesController(repository);
 

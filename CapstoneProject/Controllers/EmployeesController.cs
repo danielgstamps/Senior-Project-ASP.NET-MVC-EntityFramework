@@ -16,8 +16,7 @@ namespace CapstoneProject.Controllers
     [HandleError]
     public class EmployeesController : Controller
     {
-        private UnitOfWork unitOfWork;
-        private GenericRepository<Employee> employeeRepo;
+        private UnitOfWork unitOfWork = new UnitOfWork();
         private DataTable csvTable = new DataTable();
         private ApplicationDbContext dbUser = new ApplicationDbContext();
         private ApplicationUserManager _userManager;
@@ -32,6 +31,11 @@ namespace CapstoneProject.Controllers
             this.employeeRepo = mockEmployeeRepository;
         }*/
 
+        public EmployeesController()
+        {
+
+        }
+
         public EmployeesController(UnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
@@ -41,8 +45,6 @@ namespace CapstoneProject.Controllers
         {
             UserManager = userManager;
             SignInManager = signInManager;
-            this.unitOfWork = new UnitOfWork();
-            this.employeeRepo = unitOfWork.EmployeeRepository;
         }
 
         public ApplicationUserManager UserManager
@@ -60,7 +62,7 @@ namespace CapstoneProject.Controllers
         // GET: Employees
         public ActionResult Index()
         {
-            var employees = this.employeeRepo.Get();
+            var employees = this.unitOfWork.EmployeeRepository.Get();
             return View("Index", employees.ToList());
         }
 
@@ -71,7 +73,7 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var employee = this.employeeRepo.GetByID(id);
+            var employee = this.unitOfWork.EmployeeRepository.GetByID(id);
             if (employee == null)
             {
                 return HttpNotFound();
@@ -124,7 +126,7 @@ namespace CapstoneProject.Controllers
                 var address = csvTable.Rows[i][3].ToString();
                 var phone = csvTable.Rows[i][4].ToString();
 
-                if (unitOfWork.EmployeeRepository.Get().Any(e => e.Email.Equals(email)) ||
+                if (this.unitOfWork.EmployeeRepository.Get().Any(e => e.Email.Equals(email)) ||
                     dbUser.Users.Any(u => u.Email.Equals(email)))
                 {
                     isDuplicate = true;
@@ -196,7 +198,7 @@ namespace CapstoneProject.Controllers
             {
                 //this.employeeRepo.InsertEmployee(employee);
                 //this.employeeRepo.Save();
-                this.employeeRepo.Insert(employee);
+                this.unitOfWork.EmployeeRepository.Insert(employee);
                 this.unitOfWork.Save();
                 return RedirectToAction("Index");
             }
@@ -214,7 +216,7 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var employee = this.employeeRepo.GetByID(id);
+            var employee = this.unitOfWork.EmployeeRepository.GetByID(id);
             if (employee == null)
             {
                 return HttpNotFound();
@@ -236,7 +238,7 @@ namespace CapstoneProject.Controllers
             {
                 //this.employeeRepo.UpdateEmployee(employee);
                 //this.employeeRepo.Save();
-                this.employeeRepo.Update(employee);
+                this.unitOfWork.EmployeeRepository.Update(employee);
                 this.unitOfWork.Save();
                 return RedirectToAction("Index");
             }
@@ -253,7 +255,7 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var employee = this.employeeRepo.GetByID(id);
+            var employee = this.unitOfWork.EmployeeRepository.GetByID(id);
             if (employee == null)
             {
                 return HttpNotFound();
