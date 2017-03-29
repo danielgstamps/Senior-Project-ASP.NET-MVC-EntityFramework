@@ -15,23 +15,23 @@ namespace CapstoneProjectTests
             Assert.AreEqual(name, category.Name);
         }
 
-        [TestMethod]
-        public void TestCategoryReferencesEvaluation()
-        {
-            var category = new Category();
-            var evaluation = new Evaluation();
-            //category.Evaluation = evaluation;
-            //Assert.AreSame(evaluation, category.Evaluation);
-        }
+        //[TestMethod]
+        //public void TestCategoryReferencesEvaluation()
+        //{
+        //    var category = new Category();
+        //    var evaluation = new Evaluation();
+        //    category.Evaluation = evaluation;
+        //    Assert.AreSame(evaluation, category.Evaluation);
+        //}
 
-        [TestMethod]
-        public void TestCategoryDoesNotReferenceEvaluation()
-        {
-            var category = new Category();
-            var referencedEvaluation = new Evaluation();
-            var nonReferencedEvaluation = new Evaluation();
-            //category.Evaluation = referencedEvaluation;
-            //Assert.AreNotSame(nonReferencedEvaluation, category.Evaluation);
-        }
+        //[TestMethod]
+        //public void TestCategoryDoesNotReferenceEvaluation()
+        //{
+        //    var category = new Category();
+        //    var referencedEvaluation = new Evaluation();
+        //    var nonReferencedEvaluation = new Evaluation();
+        //    category.Evaluation = referencedEvaluation;
+        //    Assert.AreNotSame(nonReferencedEvaluation, category.Evaluation);
+        //}
     }
 }
