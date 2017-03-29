@@ -9,11 +9,15 @@ namespace CapstoneProject.DAL
 {
     public interface IUnitOfWork
     {
+        GenericRepository<Category> CategoryRepository { get; }
+
         GenericRepository<Employee> EmployeeRepository { get; }
 
         GenericRepository<Evaluation> EvaluationRepository { get; }
 
         GenericRepository<Cohort> CohortRepository { get; }
+
+        GenericRepository<Question> QuestionRepository { get; }
 
         void Save();
 

@@ -1,10 +1,6 @@
 ﻿using CapstoneProject.DAL;
 using CapstoneProject.Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Web;
 using System.Web.Mvc;
 
 namespace CapstoneProject.Controllers
@@ -12,12 +8,24 @@ namespace CapstoneProject.Controllers
     [Authorize(Roles = "Admin")]
     public class QuestionsController : Controller
     {
-        private UnitOfWork unitOfWork = new UnitOfWork();
+        private IUnitOfWork unitOfWork = new UnitOfWork();
+
+        public IUnitOfWork UnitOfWork
+        {
+            get
+            {
+                return this.unitOfWork;
+            }
+            set
+            {
+                this.unitOfWork = value;
+            }
+        }
 
         // GET: Questions
         public ActionResult Index()
         {
-            return View(unitOfWork.QuestionRepository.Get());
+            return View("Index", unitOfWork.QuestionRepository.Get());
         }
 
         // GET: Questions/Details/5
