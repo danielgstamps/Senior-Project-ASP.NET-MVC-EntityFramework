@@ -61,6 +61,7 @@ namespace CapstoneProjectTests
             Assert.AreEqual("Accounting", result.Name);
         }
 
+        [TestMethod]
         public void TestDetails()
         {
             this.mockUnitOfWork.Setup(m => m.CohortRepository.GetByID(0)).Returns(cohorts[0]);

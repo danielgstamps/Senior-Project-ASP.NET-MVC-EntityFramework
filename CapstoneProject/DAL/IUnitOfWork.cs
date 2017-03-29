@@ -11,6 +11,8 @@ namespace CapstoneProject.DAL
     {
         GenericRepository<Employee> EmployeeRepository { get; }
 
+        GenericRepository<Evaluation> EvaluationRepository { get; }
+
         GenericRepository<Cohort> CohortRepository { get; }
 
         void Save();

@@ -8,7 +8,19 @@ namespace CapstoneProject.Controllers
     [Authorize]
     public class EvaluationsController : Controller
     {
-        private UnitOfWork unitOfWork = new UnitOfWork();
+        private IUnitOfWork unitOfWork = new UnitOfWork();
+
+        public IUnitOfWork UnitOfWork
+        {
+            get
+            {
+                return this.unitOfWork;
+            }
+            set
+            {
+                this.unitOfWork = value;
+            }
+        }
 
         // GET: Evaluations
         public ActionResult Index()
@@ -34,7 +46,7 @@ namespace CapstoneProject.Controllers
             }*/
             //var evaluations = db.Evaluations.Include(e => e.Employee);
             var evaluations = unitOfWork.EvaluationRepository.Get();
-            return View(evaluations);
+            return View("Index", evaluations);
         }
 
         /*[HttpPost]
@@ -72,7 +84,7 @@ namespace CapstoneProject.Controllers
             {
                 return HttpNotFound();
             }
-            return View(evaluation);
+            return View("Details", evaluation);
         }
 
         // GET: Evaluations/Create
