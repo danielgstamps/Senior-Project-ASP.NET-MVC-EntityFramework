@@ -1,4 +1,5 @@
 ﻿using CapstoneProject.DAL;
+using CapstoneProject.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,28 +12,28 @@ namespace CapstoneProject.Controllers
     [Authorize(Roles = "Admin")]
     public class QuestionsController : Controller
     {
-        private DataContext db = new DataContext();
+        private UnitOfWork unitOfWork = new UnitOfWork();
 
         // GET: Questions
         public ActionResult Index()
         {
-            return View(db.Questions.ToList());
+            return View(unitOfWork.QuestionRepository.Get());
         }
 
         // GET: Questions/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            var question = db.Questions.Find(id);
-            if (question == null)
-            {
-                return HttpNotFound();
-            }
-            return View("Details", question);
-        }
+        //public ActionResult Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    var question = db.Questions.Find(id);
+        //    if (question == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View("Details", question);
+        //}
 
         // GET: Questions/Create
         public ActionResult Create()
@@ -42,18 +43,17 @@ namespace CapstoneProject.Controllers
 
         // POST: Questions/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "QuestionText,Category")] Question question)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add insert logic here
-
+                this.unitOfWork.QuestionRepository.Insert(question);
+                this.unitOfWork.Save();
                 return RedirectToAction("Index");
             }
-            catch
-            {
-                return View();
-            }
+
+            return View(question);
         }
 
         // GET: Questions/Edit/5

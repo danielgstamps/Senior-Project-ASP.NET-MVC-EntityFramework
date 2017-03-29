@@ -235,6 +235,10 @@
     <Compile Include="DataMigrations\201703282028367_removeEvalFromCategory.Designer.cs">
       <DependentUpon>201703282028367_removeEvalFromCategory.cs</DependentUpon>
     </Compile>
+    <Compile Include="DataMigrations\201703290251384_QuestionNowHasOneCategory.cs" />
+    <Compile Include="DataMigrations\201703290251384_QuestionNowHasOneCategory.Designer.cs">
+      <DependentUpon>201703290251384_QuestionNowHasOneCategory.cs</DependentUpon>
+    </Compile>
     <Compile Include="DataMigrations\DataConfig.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -330,6 +334,7 @@
     <Content Include="Views\Questions\Index.cshtml" />
     <Content Include="Views\Questions\Details.cshtml" />
     <Content Include="Views\Questions\Edit.cshtml" />
+    <Content Include="Views\Questions\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -360,6 +365,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DataMigrations\201703282028367_removeEvalFromCategory.resx">
       <DependentUpon>201703282028367_removeEvalFromCategory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataMigrations\201703290251384_QuestionNowHasOneCategory.resx">
+      <DependentUpon>201703290251384_QuestionNowHasOneCategory.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserMigrations\201702202104105_Initial.resx">
       <DependentUpon>201702202104105_Initial.cs</DependentUpon>

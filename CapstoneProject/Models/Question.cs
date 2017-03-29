@@ -19,7 +19,8 @@ namespace CapstoneProject.Models
 
         public string SelectedAnswer { get; set; }
 
-        public ICollection<Category> Categories { get; set; }
+        //public ICollection<Category> Categories { get; set; }
+        public Category Category { get; set; }
 
         public ICollection<Answer> Answers { get; set; }
 
