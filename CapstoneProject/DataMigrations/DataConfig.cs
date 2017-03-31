@@ -105,7 +105,9 @@ namespace CapstoneProject.DataMigrations
                     context.Questions.Add(question);
                 }
             }
-            context.SaveChanges();*/
+            context.SaveChanges();
+             
+             */
         }
     }
 }

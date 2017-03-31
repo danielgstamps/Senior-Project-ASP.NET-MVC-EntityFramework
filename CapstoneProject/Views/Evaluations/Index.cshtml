@@ -1,63 +1,18 @@
-﻿@model IEnumerable<CapstoneProject.Models.Evaluation>
+﻿@model CapstoneProject.Models.Evaluation
 
 <h2>Evaluations: Administrator View</h2>
+<p>Please rate how much you agree with each statement</p>
 <br />
 <div>
-    @*@foreach (var q in Model.Questions)
+    @using (Html.BeginForm())
     {
-            <h4>@q.QuestionID. @q.QuestionText</h4>
-            foreach (var ans in q.Answers)
-            {
-                <p>
-                    @Html.RadioButtonFor(b => q.SelectedAnswer, ans.AnswerID) @ans.AnswerText
-
-                </p>
-            }
-            <br />
-    }*@
-    <table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Type)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Stages)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Employee)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Comment)
-            </th>
-            <th></th>
-        </tr>
-
-        @foreach (var item in Model){
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Type)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Stages)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Employee)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Comment)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new {id = item.EvaluationID})
-                    @Html.ActionLink("Details", "Details", new {id = item.EvaluationID})
-                    @Html.ActionLink("Delete", "Delete", new {id = item.EvaluationID})
-                </td>
-            </tr>
-        }
-    </table>
+        @Html.EditorFor(x => x.Questions)
+        @Html.DisplayNameFor(c => c.Comment)
+        <br/>
+        @Html.TextAreaFor(c => c.Comment)
+        <br />
+        <input type="submit" />
+    }
 </div>
-
-
-
-
 
 
