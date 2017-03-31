@@ -28,9 +28,9 @@ namespace CapstoneProject.Controllers
         public ActionResult Index()
         {
             var eval = new Evaluation();
-            
+
             var q1 = new Question { QuestionID = 1, QuestionText = "I am never late for work." };
-            q1.Answers.Add(new Answer {AnswerID =  1, AnswerText = "Strongly Disagree" });
+            q1.Answers.Add(new Answer { AnswerID = 1, AnswerText = "Strongly Disagree" });
             q1.Answers.Add(new Answer { AnswerID = 2, AnswerText = "Disagree" });
             q1.Answers.Add(new Answer { AnswerID = 3, AnswerText = "Neutral" });
             q1.Answers.Add(new Answer { AnswerID = 4, AnswerText = "Agree" });
@@ -53,27 +53,27 @@ namespace CapstoneProject.Controllers
             q3.Answers.Add(new Answer { AnswerID = 15, AnswerText = "Strongly Agree" });
             eval.Questions.Add(q3);
 
-            //var evaluations = unitOfWork.EvaluationRepository.Get();
+           // var evals = unitOfWork.EvaluationRepository.Get();
             return View("Index", eval);
         }
 
-        [HttpPost]
-        public ActionResult Index(Evaluation model)
-        {
-            if (ModelState.IsValid)
-            {
-                foreach (var q in model.Questions)
-                {
-                    var qId = q.QuestionID;
-                    var selectedAnswer = q.SelectedAnswer;
+        //[HttpPost]
+        //public ActionResult Index(Evaluation model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        foreach (var q in model.Questions)
+        //        {
+        //            var qId = q.QuestionID;
+        //            var selectedAnswer = q.SelectedAnswer;
 
-                    // Save the data 
-                }
-                return RedirectToAction("ThankYou"); //Should be changed to a send evaluation link
-            }
-            //to do : reload questions and answers
-            return View(model);
-        }
+        //            // Save the data 
+        //        }
+        //        return RedirectToAction("ThankYou"); //Should be changed to a send evaluation link
+        //    }
+        //    //to do : reload questions and answers
+        //    return View(model);
+        //}
 
         // GET: Evaluations/Details/5
         public ActionResult Details(int? id)

@@ -245,6 +245,10 @@
     <Compile Include="DataMigrations\201703290251384_QuestionNowHasOneCategory.Designer.cs">
       <DependentUpon>201703290251384_QuestionNowHasOneCategory.cs</DependentUpon>
     </Compile>
+    <Compile Include="DataMigrations\201703312222350_QuestionRemoveSelectedAnswer.cs" />
+    <Compile Include="DataMigrations\201703312222350_QuestionRemoveSelectedAnswer.Designer.cs">
+      <DependentUpon>201703312222350_QuestionRemoveSelectedAnswer.cs</DependentUpon>
+    </Compile>
     <Compile Include="DataMigrations\DataConfig.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -376,6 +380,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DataMigrations\201703290251384_QuestionNowHasOneCategory.resx">
       <DependentUpon>201703290251384_QuestionNowHasOneCategory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataMigrations\201703312222350_QuestionRemoveSelectedAnswer.resx">
+      <DependentUpon>201703312222350_QuestionRemoveSelectedAnswer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserMigrations\201702202104105_Initial.resx">
       <DependentUpon>201702202104105_Initial.cs</DependentUpon>

@@ -2,10 +2,12 @@
 <div>
     @Html.HiddenFor(x => x.QuestionID)
     <h3> @Model.QuestionID. @Model.QuestionText </h3>
-    @foreach (var a in Model.Answers)
+    @*@foreach (var a in Model.Answers)
     {
+        Need to rework this. Questions don't need a SelectedAnswer. It needs to be stored in a new table, with the employee who took it. 
+        We'll talk about it when we're all together.
         <p>
             @Html.RadioButtonFor(b => b.SelectedAnswer, a.AnswerID)  @a.AnswerText
         </p>
-    }
+    }*@
 </div>
