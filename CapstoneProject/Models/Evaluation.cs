@@ -6,8 +6,6 @@ namespace CapstoneProject.Models
     public class Evaluation
     { 
         private const int MAX_LENGTH = 500;
-        private const int TYPE_ONE = 1;
-        private const int TYPE_TWO = 2;
 
         [Display(Name = "Evaluation ID")]
         [Range(0, int.MaxValue, ErrorMessage = "ID must be a non-negative whole number")]

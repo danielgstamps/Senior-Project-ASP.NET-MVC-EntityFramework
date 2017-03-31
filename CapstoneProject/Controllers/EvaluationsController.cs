@@ -27,31 +27,37 @@ namespace CapstoneProject.Controllers
         // GET: Evaluations
         public ActionResult Index()
         {
-            //var eval = new Evaluation();
+            var eval = new Evaluation();
+            
+            var q1 = new Question { QuestionID = 1, QuestionText = "I am never late for work." };
+            q1.Answers.Add(new Answer {AnswerID =  1, AnswerText = "Strongly Disagree" });
+            q1.Answers.Add(new Answer { AnswerID = 2, AnswerText = "Disagree" });
+            q1.Answers.Add(new Answer { AnswerID = 3, AnswerText = "Neutral" });
+            q1.Answers.Add(new Answer { AnswerID = 4, AnswerText = "Agree" });
+            q1.Answers.Add(new Answer { AnswerID = 5, AnswerText = "Strongly Agree" });
+            eval.Questions.Add(q1);
 
-            //var questions = new List<Question>();
-            //var q1 = new Question { QuestionID = 1, QuestionText = "I am never late for work." };
-            //var q2 = new Question { QuestionID = 2, QuestionText = "I get along with my coworkers." };
-            //var q3 = new Question { QuestionID = 3, QuestionText = "I complete projects early." };
-            //questions.Add(q1);
-            //questions.Add(q2);
-            //questions.Add(q3);
+            var q2 = new Question { QuestionID = 2, QuestionText = "I get along with my coworkers." };
+            q2.Answers.Add(new Answer { AnswerID = 6, AnswerText = "Strongly Disagree" });
+            q2.Answers.Add(new Answer { AnswerID = 7, AnswerText = "Disagree" });
+            q2.Answers.Add(new Answer { AnswerID = 8, AnswerText = "Neutral" });
+            q2.Answers.Add(new Answer { AnswerID = 9, AnswerText = "Agree" });
+            q2.Answers.Add(new Answer { AnswerID = 10, AnswerText = "Strongly Agree" });
+            eval.Questions.Add(q2);
 
-            //foreach (var question in questions)
-            //{
-            //    question.Answers.Add(new Answer { AnswerText = "Strongly Disagree" });
-            //    question.Answers.Add(new Answer { AnswerText = "Disagree" });
-            //    question.Answers.Add(new Answer { AnswerText = "Neutral" });
-            //    question.Answers.Add(new Answer { AnswerText = "Agree" });
-            //    question.Answers.Add(new Answer { AnswerText = "Strongly Agree" });
-            //    eval.Questions.Add(question);
-            //}
-            //var evaluations = db.Evaluations.Include(e => e.Employee);
-            var evaluations = unitOfWork.EvaluationRepository.Get();
-            return View("Index", evaluations.ToList());
+            var q3 = new Question { QuestionID = 3, QuestionText = "I complete projects early." };
+            q3.Answers.Add(new Answer { AnswerID = 11, AnswerText = "Strongly Disagree" });
+            q3.Answers.Add(new Answer { AnswerID = 12, AnswerText = "Disagree" });
+            q3.Answers.Add(new Answer { AnswerID = 13, AnswerText = "Neutral" });
+            q3.Answers.Add(new Answer { AnswerID = 14, AnswerText = "Agree" });
+            q3.Answers.Add(new Answer { AnswerID = 15, AnswerText = "Strongly Agree" });
+            eval.Questions.Add(q3);
+
+            //var evaluations = unitOfWork.EvaluationRepository.Get();
+            return View("Index", eval);
         }
 
-        /*[HttpPost]
+        [HttpPost]
         public ActionResult Index(Evaluation model)
         {
             if (ModelState.IsValid)
@@ -60,19 +66,14 @@ namespace CapstoneProject.Controllers
                 {
                     var qId = q.QuestionID;
                     var selectedAnswer = q.SelectedAnswer;
-                    db.Questions.Add(new Question
-                    {
-                        QuestionID = qId,
-                        SelectedAnswer = selectedAnswer
-                    });
-                    
+
                     // Save the data 
                 }
-                return RedirectToAction("Index"); //Should be changed to a send evaluation link
+                return RedirectToAction("ThankYou"); //Should be changed to a send evaluation link
             }
             //to do : reload questions and answers
             return View(model);
-        }*/
+        }
 
         // GET: Evaluations/Details/5
         public ActionResult Details(int? id)
@@ -180,6 +181,11 @@ namespace CapstoneProject.Controllers
                 this.unitOfWork.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public ActionResult ThankYou()
+        {
+            return Content("Thank You");
         }
     }
 }
