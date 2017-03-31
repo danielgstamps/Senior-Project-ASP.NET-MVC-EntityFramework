@@ -51,7 +51,7 @@ namespace CapstoneProjectTests
         public void TestIndex()
         {
             var result = this.controller.Index() as ViewResult;
-            Assert.AreEqual("Index", result.ViewName);
+            Assert.AreEqual("Ix", result.ViewName);
         }
 
         [TestMethod]
