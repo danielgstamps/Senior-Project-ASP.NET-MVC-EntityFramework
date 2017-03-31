@@ -1,9 +1,9 @@
-﻿@model CapstoneProject.Models.Evaluation
+﻿@model IEnumerable<CapstoneProject.Models.Evaluation>
 
 <h2>Evaluations: Admin View</h2>
 <br />
 <div>
-    @foreach (var q in Model.Questions)
+    @*@foreach (var q in Model.Questions)
     {
             <h4>@q.QuestionID. @q.QuestionText</h4>
             foreach (var ans in q.Answers)
@@ -14,7 +14,46 @@
                 </p>
             }
             <br />
-    }
+    }*@
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Stages)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Employee)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Comment)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model){
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Type)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Stages)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Employee)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Comment)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new {id = item.EvaluationID})
+                    @Html.ActionLink("Details", "Details", new {id = item.EvaluationID})
+                    @Html.ActionLink("Delete", "Delete", new {id = item.EvaluationID})
+                </td>
+            </tr>
+        }
+    </table>
     <input type="submit" />
 </div>
 
