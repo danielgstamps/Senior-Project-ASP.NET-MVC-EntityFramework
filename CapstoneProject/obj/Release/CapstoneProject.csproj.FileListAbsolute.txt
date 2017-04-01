@@ -548,3 +548,4 @@ C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.cspro
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.dll
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.pdb
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.QuestionRemoveSelectedAnswer.resources
+C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.ChangedALotOfStuffTake2.resources

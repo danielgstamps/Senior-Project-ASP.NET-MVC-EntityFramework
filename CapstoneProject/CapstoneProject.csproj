@@ -249,12 +249,15 @@
     <Compile Include="DataMigrations\201703312222350_QuestionRemoveSelectedAnswer.Designer.cs">
       <DependentUpon>201703312222350_QuestionRemoveSelectedAnswer.cs</DependentUpon>
     </Compile>
+    <Compile Include="DataMigrations\201704012124405_ChangedALotOfStuffTake2.cs" />
+    <Compile Include="DataMigrations\201704012124405_ChangedALotOfStuffTake2.Designer.cs">
+      <DependentUpon>201704012124405_ChangedALotOfStuffTake2.cs</DependentUpon>
+    </Compile>
     <Compile Include="DataMigrations\DataConfig.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\Answer.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Cohort.cs" />
     <Compile Include="Models\Employee.cs" />
@@ -262,6 +265,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Question.cs" />
+    <Compile Include="Models\Rater.cs" />
     <Compile Include="Models\Stage.cs" />
     <Compile Include="Models\Type.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -383,6 +387,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DataMigrations\201703312222350_QuestionRemoveSelectedAnswer.resx">
       <DependentUpon>201703312222350_QuestionRemoveSelectedAnswer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataMigrations\201704012124405_ChangedALotOfStuffTake2.resx">
+      <DependentUpon>201704012124405_ChangedALotOfStuffTake2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserMigrations\201702202104105_Initial.resx">
       <DependentUpon>201702202104105_Initial.cs</DependentUpon>

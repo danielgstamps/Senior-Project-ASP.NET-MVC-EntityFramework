@@ -25,37 +25,37 @@ namespace CapstoneProject.Controllers
         }
 
         // GET: Evaluations
-        public ActionResult Index()
-        {
-            var eval = new Evaluation();
+       // public ActionResult Index()
+       // {
+            //var eval = new Evaluation();
 
-            var q1 = new Question { QuestionID = 1, QuestionText = "I am never late for work." };
-            q1.Answers.Add(new Answer { AnswerID = 1, AnswerText = "Strongly Disagree" });
-            q1.Answers.Add(new Answer { AnswerID = 2, AnswerText = "Disagree" });
-            q1.Answers.Add(new Answer { AnswerID = 3, AnswerText = "Neutral" });
-            q1.Answers.Add(new Answer { AnswerID = 4, AnswerText = "Agree" });
-            q1.Answers.Add(new Answer { AnswerID = 5, AnswerText = "Strongly Agree" });
-            eval.Questions.Add(q1);
+            //var q1 = new Question { QuestionID = 1, QuestionText = "I am never late for work." };
+            //q1.Answers.Add(new Answer { AnswerID = 1, AnswerText = "Strongly Disagree" });
+            //q1.Answers.Add(new Answer { AnswerID = 2, AnswerText = "Disagree" });
+            //q1.Answers.Add(new Answer { AnswerID = 3, AnswerText = "Neutral" });
+            //q1.Answers.Add(new Answer { AnswerID = 4, AnswerText = "Agree" });
+            //q1.Answers.Add(new Answer { AnswerID = 5, AnswerText = "Strongly Agree" });
+            //eval.Questions.Add(q1);
 
-            var q2 = new Question { QuestionID = 2, QuestionText = "I get along with my coworkers." };
-            q2.Answers.Add(new Answer { AnswerID = 6, AnswerText = "Strongly Disagree" });
-            q2.Answers.Add(new Answer { AnswerID = 7, AnswerText = "Disagree" });
-            q2.Answers.Add(new Answer { AnswerID = 8, AnswerText = "Neutral" });
-            q2.Answers.Add(new Answer { AnswerID = 9, AnswerText = "Agree" });
-            q2.Answers.Add(new Answer { AnswerID = 10, AnswerText = "Strongly Agree" });
-            eval.Questions.Add(q2);
+            //var q2 = new Question { QuestionID = 2, QuestionText = "I get along with my coworkers." };
+            //q2.Answers.Add(new Answer { AnswerID = 6, AnswerText = "Strongly Disagree" });
+            //q2.Answers.Add(new Answer { AnswerID = 7, AnswerText = "Disagree" });
+            //q2.Answers.Add(new Answer { AnswerID = 8, AnswerText = "Neutral" });
+            //q2.Answers.Add(new Answer { AnswerID = 9, AnswerText = "Agree" });
+            //q2.Answers.Add(new Answer { AnswerID = 10, AnswerText = "Strongly Agree" });
+            //eval.Questions.Add(q2);
 
-            var q3 = new Question { QuestionID = 3, QuestionText = "I complete projects early." };
-            q3.Answers.Add(new Answer { AnswerID = 11, AnswerText = "Strongly Disagree" });
-            q3.Answers.Add(new Answer { AnswerID = 12, AnswerText = "Disagree" });
-            q3.Answers.Add(new Answer { AnswerID = 13, AnswerText = "Neutral" });
-            q3.Answers.Add(new Answer { AnswerID = 14, AnswerText = "Agree" });
-            q3.Answers.Add(new Answer { AnswerID = 15, AnswerText = "Strongly Agree" });
-            eval.Questions.Add(q3);
+            //var q3 = new Question { QuestionID = 3, QuestionText = "I complete projects early." };
+            //q3.Answers.Add(new Answer { AnswerID = 11, AnswerText = "Strongly Disagree" });
+            //q3.Answers.Add(new Answer { AnswerID = 12, AnswerText = "Disagree" });
+            //q3.Answers.Add(new Answer { AnswerID = 13, AnswerText = "Neutral" });
+            //q3.Answers.Add(new Answer { AnswerID = 14, AnswerText = "Agree" });
+            //q3.Answers.Add(new Answer { AnswerID = 15, AnswerText = "Strongly Agree" });
+            //eval.Questions.Add(q3);
 
            // var evals = unitOfWork.EvaluationRepository.Get();
-            return View("Index", eval);
-        }
+            // return View("Index", eval);
+       // }
 
         //[HttpPost]
         //public ActionResult Index(Evaluation model)

@@ -8,7 +8,6 @@ namespace CapstoneProject.DAL
     {
         private DataContext context = new DataContext();
 
-        private GenericRepository<Answer> answerRepository;
         private GenericRepository<Category> categoryRepository;
         private GenericRepository<Cohort> cohortRepository;
         private GenericRepository<Employee> employeeRepository;
@@ -18,18 +17,6 @@ namespace CapstoneProject.DAL
         private GenericRepository<Models.Type> typeRepository; // Type's namespace must be explicitly called to avoid ambiguity with System.Type
 
         private bool disposed = false;
-
-        public GenericRepository<Answer> AnswerRepository
-        {
-            get
-            {
-                if (this.answerRepository == null)
-                {
-                    this.answerRepository = new GenericRepository<Answer>(this.context);
-                }
-                return this.answerRepository;
-            }
-        }
 
         public GenericRepository<Category> CategoryRepository
         {

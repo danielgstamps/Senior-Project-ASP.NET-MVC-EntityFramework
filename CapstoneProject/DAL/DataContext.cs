@@ -19,8 +19,8 @@ namespace CapstoneProject.DAL
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
-            modelBuilder.Entity<Employee>().HasOptional(e => e.Supervisor).WithMany().HasForeignKey(e => e.SupervisorID);
-            modelBuilder.Entity<Employee>().HasOptional(e => e.Manager).WithMany().HasForeignKey(e => e.ManagerID);
+          //  modelBuilder.Entity<Employee>().HasOptional(e => e.Supervisor).WithMany().HasForeignKey(e => e.SupervisorID);
+         //   modelBuilder.Entity<Employee>().HasOptional(e => e.Manager).WithMany().HasForeignKey(e => e.ManagerID);
         } 
     }
 }

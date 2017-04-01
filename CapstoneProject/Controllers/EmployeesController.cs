@@ -211,8 +211,8 @@ namespace CapstoneProject.Controllers
             }
 
             ViewBag.CohortID = new SelectList(this.unitOfWork.CohortRepository.Get(), "CohortID", "Name", employee.CohortID);
-            ViewBag.ManagerID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", employee.ManagerID);
-            ViewBag.SupervisorID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", employee.SupervisorID);
+          //  ViewBag.ManagerID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", employee.ManagerID);
+         //   ViewBag.SupervisorID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", employee.SupervisorID);
             return View(employee);
         }
 
@@ -229,8 +229,8 @@ namespace CapstoneProject.Controllers
                 return HttpNotFound();
             }
             ViewBag.CohortID = new SelectList(this.unitOfWork.CohortRepository.Get(), "CohortID", "Name", employee.CohortID);
-            ViewBag.ManagerID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", employee.ManagerID);
-            ViewBag.SupervisorID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", employee.SupervisorID);
+          //  ViewBag.ManagerID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", employee.ManagerID);
+          //  ViewBag.SupervisorID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", employee.SupervisorID);
             return View("Edit", employee);
         }
 
@@ -239,7 +239,7 @@ namespace CapstoneProject.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "EmployeeID,FirstName,LastName,Email,Address,Phone,CohortID,SupervisorID,ManagerID")] Employee employee)
+        public ActionResult Edit([Bind(Include = "EmployeeID,FirstName,LastName,Email,Address,Phone,CohortID")] Employee employee)
         {
             if (ModelState.IsValid)
             {
@@ -250,8 +250,8 @@ namespace CapstoneProject.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.CohortID = new SelectList(this.unitOfWork.CohortRepository.Get(), "CohortID", "Name", employee.CohortID);
-            ViewBag.ManagerID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", employee.ManagerID);
-            ViewBag.SupervisorID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", employee.SupervisorID);
+            //ViewBag.ManagerID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", employee.ManagerID);
+            //ViewBag.SupervisorID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", employee.SupervisorID);
             return View("Edit", employee);
         }
 

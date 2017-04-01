@@ -18,5 +18,9 @@ namespace CapstoneProject.Models
         public string Name { get; set; }
 
         public virtual ICollection<Employee> Employees { get; set; }
+
+        public bool Type1Assigned { get; set; }
+
+        public bool Type2Assigned { get; set; }
     }
 }

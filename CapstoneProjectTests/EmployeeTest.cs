@@ -21,8 +21,8 @@ namespace CapstoneProjectTests
             createDwightSchrute();
             addEmployeesToCollection();
             createCohort();
-            setManagers();
-            setSupervisors();
+            //setManagers();
+            //setSupervisors();
         }
 
         private void createJimHalpert()
@@ -58,21 +58,21 @@ namespace CapstoneProjectTests
             dwightSchrute.Phone = "(345) 678-9012";
         }
 
-        private void setSupervisors()
-        {
-            jimHalpert.SupervisorID = michaelScott.EmployeeID;
-            jimHalpert.Supervisor = michaelScott;
-            dwightSchrute.SupervisorID = jimHalpert.EmployeeID;
-            dwightSchrute.Supervisor = jimHalpert;
-        }
+        //private void setSupervisors()
+        //{
+        //    jimHalpert.SupervisorID = michaelScott.EmployeeID;
+        //    jimHalpert.Supervisor = michaelScott;
+        //    dwightSchrute.SupervisorID = jimHalpert.EmployeeID;
+        //    dwightSchrute.Supervisor = jimHalpert;
+        //}
 
-        private void setManagers()
-        {
-            jimHalpert.ManagerID = michaelScott.EmployeeID;
-            jimHalpert.Manager = michaelScott;
-            dwightSchrute.ManagerID = michaelScott.EmployeeID;
-            dwightSchrute.Manager = michaelScott;
-        }
+        //private void setManagers()
+        //{
+        //    jimHalpert.ManagerID = michaelScott.EmployeeID;
+        //    jimHalpert.Manager = michaelScott;
+        //    dwightSchrute.ManagerID = michaelScott.EmployeeID;
+        //    dwightSchrute.Manager = michaelScott;
+        //}
 
         private void addEmployeesToCollection()
         {
@@ -108,28 +108,28 @@ namespace CapstoneProjectTests
             Assert.AreSame(cohort, jimHalpert.Cohort);
         }
 
-        [TestMethod]
-        public void TestJimHalpertHasMichaelScottAsSupervisor()
-        {
-            Assert.AreSame(this.michaelScott, this.jimHalpert.Supervisor);
-        }
+        //[TestMethod]
+        //public void TestJimHalpertHasMichaelScottAsSupervisor()
+        //{
+        //    Assert.AreSame(this.michaelScott, this.jimHalpert.Supervisor);
+        //}
 
-        [TestMethod]
-        public void TestJimHalpertSupervisorIDIsMichaelScottEmployeeID()
-        {
-            Assert.AreEqual(michaelScott.EmployeeID, jimHalpert.SupervisorID);
-        }
+        //[TestMethod]
+        //public void TestJimHalpertSupervisorIDIsMichaelScottEmployeeID()
+        //{
+        //    Assert.AreEqual(michaelScott.EmployeeID, jimHalpert.SupervisorID);
+        //}
 
-        [TestMethod]
-        public void TestJimHalpertManagerIsMichaelScott()
-        {
-            Assert.AreSame(this.michaelScott, this.jimHalpert.Manager);
-        }
+        //[TestMethod]
+        //public void TestJimHalpertManagerIsMichaelScott()
+        //{
+        //    Assert.AreSame(this.michaelScott, this.jimHalpert.Manager);
+        //}
 
-        [TestMethod]
-        public void TestJimHalpertManagerIDIsMichaelScottEmployeeID()
-        {
-            Assert.AreEqual(jimHalpert.ManagerID, michaelScott.EmployeeID);
-        }
+        //[TestMethod]
+        //public void TestJimHalpertManagerIDIsMichaelScottEmployeeID()
+        //{
+        //    Assert.AreEqual(jimHalpert.ManagerID, michaelScott.EmployeeID);
+        //}
     }
 }

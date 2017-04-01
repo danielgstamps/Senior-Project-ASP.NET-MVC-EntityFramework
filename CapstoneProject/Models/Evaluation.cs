@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace CapstoneProject.Models
@@ -16,19 +18,24 @@ namespace CapstoneProject.Models
 
         public virtual Type Type { get; set; }
 
-        [Display(Name = "Comment")]
-        [StringLength(MAX_LENGTH)]
-        public string Comment { get; set; }
+        //[Display(Name = "Comment")]
+        //[StringLength(MAX_LENGTH)]
+        //public string Comment { get; set; }
+
+        public int EmployeeID { get; set; }
 
         public virtual Employee Employee { get; set; }
 
-        public ICollection<Stage> Stages { get; set; }
+        public int StageID { get; set; }
 
-        public ICollection<Question> Questions { get; set; }
+        public virtual Stage Stage { get; set; }
 
-        public Evaluation()
-        {
-            Questions = new List<Question>();
-        }
+        public DateTime OpenDate { get; set; }
+
+        public DateTime ClosedDate { get; set; }
+
+        public List<int> SelfAnswers { get; set; }
+
+        public virtual ICollection<Rater> Raters { get; set; }
     }
 }

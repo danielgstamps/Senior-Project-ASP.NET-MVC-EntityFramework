@@ -19,12 +19,5 @@ namespace CapstoneProject.Models
 
         //public ICollection<Category> Categories { get; set; }
         public virtual Category Category { get; set; }
-
-        public ICollection<Answer> Answers { get; set; }
-
-        public Question()
-        {
-            Answers = new List<Answer>();
-        }
     }
 }
