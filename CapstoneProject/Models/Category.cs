@@ -25,8 +25,8 @@ namespace CapstoneProject.Models
 
         public virtual ICollection<Question> Questions { get; set; }
 
-        public int TypeID { get; set; }
+        public int AbstractTypeID { get; set; }
 
-        public Type Type { get; set; }
+        public AbstractType AbstractType { get; set; }
     }
 }

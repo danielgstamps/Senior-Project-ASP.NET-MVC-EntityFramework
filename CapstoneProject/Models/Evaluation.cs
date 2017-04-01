@@ -14,9 +14,9 @@ namespace CapstoneProject.Models
         [Required(ErrorMessage = "Evaluation ID required")]
         public int EvaluationID { get; set; }
 
-        public int TypeID { get; set; }
+        public int AbstractTypeID { get; set; }
 
-        public virtual Type Type { get; set; }
+        public virtual AbstractType Type { get; set; }
 
         //[Display(Name = "Comment")]
         //[StringLength(MAX_LENGTH)]

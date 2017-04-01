@@ -56,14 +56,14 @@ namespace CapstoneProject.DataMigrations
 
             var evaluationList = new List<Evaluation>
             {
-                new Evaluation {EvaluationID = 1, EmployeeID = 1, Stage = "1", Type = 1, Categories = new List<Category>()},
-                new Evaluation {EvaluationID = 2, EmployeeID = 2, Stage = "2", Type = 1, Categories = new List<Category>()},
-                new Evaluation {EvaluationID = 3, EmployeeID = 3, Stage = "3", Type = 1, Categories = new List<Category>()},
-                new Evaluation {EvaluationID = 4, EmployeeID = 4, Stage = "4", Type = 1, Categories = new List<Category>()},
-                new Evaluation {EvaluationID = 5, EmployeeID = 5, Stage = "5", Type = 1, Categories = new List<Category>()},
-                new Evaluation {EvaluationID = 6, EmployeeID = 6, Stage = "6", Type = 1, Categories = new List<Category>()},
-                new Evaluation {EvaluationID = 7, EmployeeID = 7, Stage = "7", Type = 1, Categories = new List<Category>()},
-                new Evaluation {EvaluationID = 8, EmployeeID = 8, Stage = "8", Type = 1, Categories = new List<Category>()},
+                new Evaluation {EvaluationID = 1, EmployeeID = 1, Stage = "1", AbstractType = 1, Categories = new List<Category>()},
+                new Evaluation {EvaluationID = 2, EmployeeID = 2, Stage = "2", AbstractType = 1, Categories = new List<Category>()},
+                new Evaluation {EvaluationID = 3, EmployeeID = 3, Stage = "3", AbstractType = 1, Categories = new List<Category>()},
+                new Evaluation {EvaluationID = 4, EmployeeID = 4, Stage = "4", AbstractType = 1, Categories = new List<Category>()},
+                new Evaluation {EvaluationID = 5, EmployeeID = 5, Stage = "5", AbstractType = 1, Categories = new List<Category>()},
+                new Evaluation {EvaluationID = 6, EmployeeID = 6, Stage = "6", AbstractType = 1, Categories = new List<Category>()},
+                new Evaluation {EvaluationID = 7, EmployeeID = 7, Stage = "7", AbstractType = 1, Categories = new List<Category>()},
+                new Evaluation {EvaluationID = 8, EmployeeID = 8, Stage = "8", AbstractType = 1, Categories = new List<Category>()},
             };
             //evaluationList.ForEach(s => context.Evaluations.Add(s));
             foreach (var eval in evaluationList)

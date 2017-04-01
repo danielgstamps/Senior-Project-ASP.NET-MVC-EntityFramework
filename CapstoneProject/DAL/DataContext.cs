@@ -15,6 +15,9 @@ namespace CapstoneProject.DAL
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Evaluation> Evaluations { get; set; }
         public DbSet<Question> Questions { get; set; }
+        public DbSet<AbstractType> Types { get; set; }
+        public DbSet<Rater> Raters { get; set; }
+        public DbSet<Stage> Stages { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

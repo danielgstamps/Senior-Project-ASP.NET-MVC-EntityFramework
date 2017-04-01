@@ -17,7 +17,7 @@ namespace CapstoneProject.DataMigrations
                 .PrimaryKey(t => t.StageID);
             
             CreateTable(
-                "dbo.Type",
+                "dbo.AbstractType",
                 c => new
                     {
                         TypeID = c.Int(nullable: false, identity: true),
@@ -63,18 +63,18 @@ namespace CapstoneProject.DataMigrations
             AddColumn("dbo.Evaluation", "TypeID", c => c.Int(nullable: false));
             CreateIndex("dbo.Category", "TypeID");
             CreateIndex("dbo.Evaluation", "TypeID");
-            AddForeignKey("dbo.Evaluation", "TypeID", "dbo.Type", "TypeID", cascadeDelete: true);
-            AddForeignKey("dbo.Category", "TypeID", "dbo.Type", "TypeID", cascadeDelete: true);
-            DropColumn("dbo.Evaluation", "Type");
+            AddForeignKey("dbo.Evaluation", "TypeID", "dbo.AbstractType", "TypeID", cascadeDelete: true);
+            AddForeignKey("dbo.Category", "TypeID", "dbo.AbstractType", "TypeID", cascadeDelete: true);
+            DropColumn("dbo.Evaluation", "AbstractType");
         }
         
         public override void Down()
         {
-            AddColumn("dbo.Evaluation", "Type", c => c.Int(nullable: false));
-            DropForeignKey("dbo.Category", "TypeID", "dbo.Type");
+            AddColumn("dbo.Evaluation", "AbstractType", c => c.Int(nullable: false));
+            DropForeignKey("dbo.Category", "TypeID", "dbo.AbstractType");
             DropForeignKey("dbo.AnswerQuestion", "Question_QuestionID", "dbo.Question");
             DropForeignKey("dbo.AnswerQuestion", "Answer_AnswerID", "dbo.Answer");
-            DropForeignKey("dbo.Evaluation", "TypeID", "dbo.Type");
+            DropForeignKey("dbo.Evaluation", "TypeID", "dbo.AbstractType");
             DropForeignKey("dbo.StageEvaluation", "Evaluation_EvaluationID", "dbo.Evaluation");
             DropForeignKey("dbo.StageEvaluation", "Stage_StageID", "dbo.Stage");
             DropIndex("dbo.AnswerQuestion", new[] { "Question_QuestionID" });
@@ -88,7 +88,7 @@ namespace CapstoneProject.DataMigrations
             DropTable("dbo.AnswerQuestion");
             DropTable("dbo.StageEvaluation");
             DropTable("dbo.Answer");
-            DropTable("dbo.Type");
+            DropTable("dbo.AbstractType");
             DropTable("dbo.Stage");
         }
     }

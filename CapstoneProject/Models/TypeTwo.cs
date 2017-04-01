@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
 namespace CapstoneProject.Models
 {
-    public class Type
+    public class TypeTwo : AbstractType
     {
+        public ICollection<Category> Categories { get; set; }
+
         public int TypeID { get; set; }
 
-        [Display(Name = "Type")]
         public string TypeName { get; set; }
     }
 }

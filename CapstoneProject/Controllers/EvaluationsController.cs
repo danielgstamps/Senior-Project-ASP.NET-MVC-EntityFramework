@@ -102,7 +102,7 @@ namespace CapstoneProject.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "EvaluationID,Stage,Type,EmployeeID")] Evaluation evaluation)
+        public ActionResult Create([Bind(Include = "EvaluationID,Stage,AbstractType,EmployeeID")] Evaluation evaluation)
         {
             if (ModelState.IsValid)
             {
@@ -136,7 +136,7 @@ namespace CapstoneProject.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "EvaluationID,Stage,Type,EmployeeID")] Evaluation evaluation)
+        public ActionResult Edit([Bind(Include = "EvaluationID,Stage,AbstractType,EmployeeID")] Evaluation evaluation)
         {
             if (ModelState.IsValid)
             {

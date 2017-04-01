@@ -1,6 +1,5 @@
 ﻿using System;
 using CapstoneProject.Models;
-using Type = CapstoneProject.Models.Type;
 
 namespace CapstoneProject.DAL
 {
@@ -14,7 +13,7 @@ namespace CapstoneProject.DAL
         private GenericRepository<Evaluation> evaluationRepository;
         private GenericRepository<Question> questionRepository;
         private GenericRepository<Stage> stageRepository;
-        private GenericRepository<Models.Type> typeRepository; // Type's namespace must be explicitly called to avoid ambiguity with System.Type
+        private GenericRepository<AbstractType> typeRepository; // AbstractType's namespace must be explicitly called to avoid ambiguity with System.AbstractType
 
         private bool disposed = false;
 
@@ -90,13 +89,13 @@ namespace CapstoneProject.DAL
             }
         }
 
-        public GenericRepository<Type> TypeRepository
+        public GenericRepository<AbstractType> TypeRepository
         {
             get
             {
                 if (this.typeRepository == null)
                 {
-                    this.typeRepository = new GenericRepository<Type>(this.context);
+                    this.typeRepository = new GenericRepository<AbstractType>(this.context);
                 }
                 return this.typeRepository;
             }

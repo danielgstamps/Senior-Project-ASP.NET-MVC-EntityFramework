@@ -253,6 +253,10 @@
     <Compile Include="DataMigrations\201704012124405_ChangedALotOfStuffTake2.Designer.cs">
       <DependentUpon>201704012124405_ChangedALotOfStuffTake2.cs</DependentUpon>
     </Compile>
+    <Compile Include="DataMigrations\201704012210432_Type.cs" />
+    <Compile Include="DataMigrations\201704012210432_Type.Designer.cs">
+      <DependentUpon>201704012210432_Type.cs</DependentUpon>
+    </Compile>
     <Compile Include="DataMigrations\DataConfig.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -263,11 +267,13 @@
     <Compile Include="Models\Employee.cs" />
     <Compile Include="Models\Evaluation.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\AbstractType.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Question.cs" />
     <Compile Include="Models\Rater.cs" />
     <Compile Include="Models\Stage.cs" />
-    <Compile Include="Models\Type.cs" />
+    <Compile Include="Models\TypeOne.cs" />
+    <Compile Include="Models\TypeTwo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="UserMigrations\201702202104105_Initial.cs" />
@@ -390,6 +396,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DataMigrations\201704012124405_ChangedALotOfStuffTake2.resx">
       <DependentUpon>201704012124405_ChangedALotOfStuffTake2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataMigrations\201704012210432_Type.resx">
+      <DependentUpon>201704012210432_Type.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserMigrations\201702202104105_Initial.resx">
       <DependentUpon>201702202104105_Initial.cs</DependentUpon>
