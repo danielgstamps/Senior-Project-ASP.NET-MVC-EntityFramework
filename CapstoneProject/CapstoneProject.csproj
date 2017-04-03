@@ -257,6 +257,10 @@
     <Compile Include="DataMigrations\201704012210432_Type.Designer.cs">
       <DependentUpon>201704012210432_Type.cs</DependentUpon>
     </Compile>
+    <Compile Include="DataMigrations\201704030427460_CorrectingType.cs" />
+    <Compile Include="DataMigrations\201704030427460_CorrectingType.Designer.cs">
+      <DependentUpon>201704030427460_CorrectingType.cs</DependentUpon>
+    </Compile>
     <Compile Include="DataMigrations\DataConfig.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -399,6 +403,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DataMigrations\201704012210432_Type.resx">
       <DependentUpon>201704012210432_Type.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataMigrations\201704030427460_CorrectingType.resx">
+      <DependentUpon>201704030427460_CorrectingType.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserMigrations\201702202104105_Initial.resx">
       <DependentUpon>201702202104105_Initial.cs</DependentUpon>

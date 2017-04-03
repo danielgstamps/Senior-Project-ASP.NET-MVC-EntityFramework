@@ -42,6 +42,8 @@ namespace CapstoneProject.Models
 
         public virtual Cohort Cohort { get; set; }
 
+        public virtual ICollection<Evaluation> Evaluations { get; set; }
+
         //public int? SupervisorID { get; set; }
 
         //[ForeignKey("SupervisorID")]

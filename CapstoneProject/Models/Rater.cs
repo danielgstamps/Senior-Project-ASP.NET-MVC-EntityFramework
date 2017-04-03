@@ -26,6 +26,8 @@ namespace CapstoneProject.Models
 
         public List<int> Answers { get; set; }
 
+        public int EvaluationID { get; set; }
+
         public virtual Evaluation Evaluation { get; set; }
     }
 }
