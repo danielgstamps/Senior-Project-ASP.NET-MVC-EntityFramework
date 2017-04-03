@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using CapstoneProject.DAL;
 using CapstoneProject.Models;
+using CapstoneProject.ViewModels;
 
 namespace CapstoneProject.Controllers
 {
@@ -91,10 +93,40 @@ namespace CapstoneProject.Controllers
         }
 
         // GET: Evaluations/Create
-        public ActionResult Create()
+        public ActionResult Create(int? cohortId)
         {
-            //ViewBag.EmployeeID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName");
-            return View("Create");
+            if (cohortId == null)
+            {
+                //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                throw new Exception("cohortID not passed");
+            }
+
+            var cohort = this.unitOfWork.CohortRepository.GetByID(cohortId);
+            if (cohort == null)
+            {
+                return HttpNotFound();
+            }
+            if (cohort.Employees.Count == 0)
+            {
+                // Write "cannot evaluate empty cohort" on page
+                //Redirect back to cohorts
+            }
+
+            EvaluationCreateViewModel model = new EvaluationCreateViewModel();
+            model.CohortToEvaluate = cohort;
+            model.TypeList = unitOfWork.TypeRepository.dbSet.Select(t => new SelectListItem()
+            {
+                Value = t.AbstractTypeID.ToString(),
+                Text = t.TypeName
+            });
+
+            model.StageList = unitOfWork.StageRepository.dbSet.Select(t => new SelectListItem()
+            {
+                Value = t.StageID.ToString(),
+                Text = t.StageName
+            });
+
+            return View("Create", model);
         }
 
         // POST: Evaluations/Create

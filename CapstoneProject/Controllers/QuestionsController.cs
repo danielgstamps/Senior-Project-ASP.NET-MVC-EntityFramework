@@ -2,6 +2,7 @@
 using CapstoneProject.Models;
 using System.Linq;
 using System.Web.Mvc;
+using CapstoneProject.ViewModels;
 
 namespace CapstoneProject.Controllers
 {

@@ -25,10 +25,10 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.CohortID }) |
-                @Html.ActionLink("Details", "Details", new { id = item.CohortID }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.CohortID })
-                @Html.ActionLink("Evaluate", "Create", "Evaluations")
+                @Html.ActionLink("Evaluate", "Create", "Evaluations", new { cohortId = item.CohortID }, null)
+                @Html.ActionLink("Edit", "Edit", new {id = item.CohortID}) |
+                @Html.ActionLink("Details", "Details", new {id = item.CohortID}) |
+                @Html.ActionLink("Delete", "Delete", new {id = item.CohortID})
             </td>
         </tr>
     }
