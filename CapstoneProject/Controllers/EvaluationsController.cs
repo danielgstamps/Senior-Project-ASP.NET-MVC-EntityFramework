@@ -93,7 +93,7 @@ namespace CapstoneProject.Controllers
         // GET: Evaluations/Create
         public ActionResult Create()
         {
-            ViewBag.EmployeeID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName");
+            //ViewBag.EmployeeID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName");
             return View("Create");
         }
 

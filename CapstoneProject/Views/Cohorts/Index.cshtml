@@ -1,4 +1,5 @@
-﻿@model IEnumerable<CapstoneProject.Models.Cohort>
+﻿@using CapstoneProject.Controllers
+@model IEnumerable<CapstoneProject.Models.Cohort>
 
 @{
     ViewBag.Title = "Index";
@@ -7,7 +8,7 @@
 <h2>Cohorts</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("New Cohort", "Create")
 </p>
 <table class="table">
     <tr>
@@ -27,6 +28,7 @@
                 @Html.ActionLink("Edit", "Edit", new { id = item.CohortID }) |
                 @Html.ActionLink("Details", "Details", new { id = item.CohortID }) |
                 @Html.ActionLink("Delete", "Delete", new { id = item.CohortID })
+                @Html.ActionLink("Evaluate", "Create", "Evaluations")
             </td>
         </tr>
     }
