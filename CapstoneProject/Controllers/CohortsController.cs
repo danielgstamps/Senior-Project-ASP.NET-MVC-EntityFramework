@@ -2,13 +2,17 @@
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using CapstoneProject.DAL;
 using CapstoneProject.Models;
 using CapstoneProject.ViewModels;
+using Microsoft.AspNet.Identity.Owin;
 
 namespace CapstoneProject.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CohortsController : Controller
     {
         private IUnitOfWork unitOfWork = new UnitOfWork();
@@ -59,7 +63,7 @@ namespace CapstoneProject.Controllers
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CohortID,TypeName")] Cohort cohort)
+        public ActionResult Create([Bind(Include = "CohortID,Name")] Cohort cohort)
         {
             if (ModelState.IsValid)
             {
@@ -114,7 +118,7 @@ namespace CapstoneProject.Controllers
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int? id, string[] selectedEmployees/*[Bind(Include = "CohortID,TypeName")] Cohort cohort*/)
+        public ActionResult Edit(int? id, string[] selectedEmployees/*[Bind(Include = "CohortID,Name")] Cohort cohort*/)
         {
             if (id == null)
             {
@@ -122,7 +126,7 @@ namespace CapstoneProject.Controllers
             }
             var cohortToUpdate = this.unitOfWork.CohortRepository.GetByID(id);
             if (TryUpdateModel(cohortToUpdate, "",
-               new string[] { "TypeName" }))
+               new string[] { "Name" }))
             {
                 try
                 {
@@ -221,6 +225,8 @@ namespace CapstoneProject.Controllers
             this.unitOfWork.Save();
             return RedirectToAction("Index");
         }
+
+        
 
         protected override void Dispose(bool disposing)
         {
