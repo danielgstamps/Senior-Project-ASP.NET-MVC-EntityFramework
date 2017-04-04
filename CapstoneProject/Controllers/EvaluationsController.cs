@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using CapstoneProject.DAL;
 using CapstoneProject.Models;
 using CapstoneProject.ViewModels;
+using Microsoft.AspNet.Identity.Owin;
 
 namespace CapstoneProject.Controllers
 {
@@ -13,6 +16,8 @@ namespace CapstoneProject.Controllers
     public class EvaluationsController : Controller
     {
         private IUnitOfWork unitOfWork = new UnitOfWork();
+        private ApplicationDbContext userDB = new ApplicationDbContext();
+        private ApplicationUserManager _userManager;
 
         public IUnitOfWork UnitOfWork
         {
@@ -136,6 +141,7 @@ namespace CapstoneProject.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "EvaluationID,Stage,Type,EmployeeID")] Evaluation evaluation)
         {
+            //this.sendEvaluationEmail(cohortID);
             if (ModelState.IsValid)
             {
                 this.unitOfWork.EvaluationRepository.Insert(evaluation);
@@ -145,6 +151,35 @@ namespace CapstoneProject.Controllers
 
             ViewBag.EmployeeID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", evaluation.Employee);
             return View("Create", evaluation);
+        }
+
+        public ApplicationUserManager UserManager
+        {
+            get { return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
+            private set { _userManager = value; }
+        }
+
+        private async Task sendEvaluationEmail(int cohortID)
+        {
+            var cohort = this.unitOfWork.CohortRepository.GetByID(cohortID);
+            var employees = cohort.Employees.ToList();
+            var userAccounts = userDB.Users.ToList();
+            foreach (var employee in employees)
+            {
+                var userAccount = userAccounts.Find(u => u.Email == employee.Email);
+                var userEmail = userAccount.Email;
+
+                // TODO Specify EvaluationsController Action in first string param
+                var callbackUrl = Url.Action("CompleteEvaluation", "Evaluations", new { userId = userAccount.Id, email = userEmail }, protocol: Request.Url.Scheme);
+
+                await UserManager.SendEmailAsync(userAccount.Id, "New Evaluation",
+                "Click <a href=\"" + callbackUrl + "\">here</a> to complete your evaluation.");
+            }
+        }
+
+        public ActionResult CompleteEvaluation()
+        {
+            return null;
         }
 
         // GET: Evaluations/Edit/5
