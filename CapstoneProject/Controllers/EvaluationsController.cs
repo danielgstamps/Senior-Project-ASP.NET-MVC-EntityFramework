@@ -97,19 +97,13 @@ namespace CapstoneProject.Controllers
         {
             if (cohortId == null)
             {
-                //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-                throw new Exception("cohortID not passed");
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var cohort = this.unitOfWork.CohortRepository.GetByID(cohortId);
+            var cohort = unitOfWork.CohortRepository.GetByID(cohortId);
             if (cohort == null)
             {
                 return HttpNotFound();
-            }
-            if (cohort.Employees.Count == 0)
-            {
-                // Write "cannot evaluate empty cohort" on page
-                //Redirect back to cohorts
             }
 
             EvaluationCreateViewModel model = new EvaluationCreateViewModel();
@@ -117,8 +111,18 @@ namespace CapstoneProject.Controllers
             model.TypeList = unitOfWork.TypeRepository.dbSet.Select(t => new SelectListItem()
             {
                 Value = t.TypeID.ToString(),
-                Text = t.TypeName
+                Text = t.TypeName,
             });
+
+            if (model.CohortToEvaluate.Type1Assigned)
+            {
+                model.TypeList.ToList().Remove(model.TypeList.First());
+            }
+
+            if (model.CohortToEvaluate.Type2Assigned)
+            {
+                model.TypeList.Last().Disabled = true;
+            }
 
             model.StageList = unitOfWork.StageRepository.dbSet.Select(t => new SelectListItem()
             {

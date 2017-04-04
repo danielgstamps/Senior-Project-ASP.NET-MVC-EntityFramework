@@ -635,7 +635,6 @@ C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\Microsoft.Owin.Security.OAuth
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\Microsoft.Owin.Security.Google.xml
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\Microsoft.Owin.Security.Twitter.xml
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
-C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.csprojResolveAssemblyReference.cache
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.Init.resources
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.CohortsNullable.resources
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.EvaluationRefactor.resources
@@ -647,10 +646,10 @@ C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataM
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.ChangedALotOfStuffTake2.resources
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.Type.resources
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.CorrectingType.resources
+C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.RevertToSimpleType.resources
+C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.ReAddTypeToEval.resources
+C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.ReAddTypeToEval1.resources
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.UserMigrations.Initial.resources
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.csproj.GenerateResource.Cache
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.dll
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.pdb
-C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.RevertToSimpleType.resources
-C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.ReAddTypeToEval.resources
-C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.ReAddTypeToEval1.resources
