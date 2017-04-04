@@ -22,8 +22,14 @@ namespace CapstoneProject.ViewModels
 
         public IEnumerable<SelectListItem> StageList { get; set; }
 
-        public DateTime OpenTime { get; set; }
+        [Required]
+        [DataType(DataType.Date)]
+        [Display(Name = "Open Date")]
+        public DateTime OpenDate { get; set; }
 
-        public DateTime CloseTime { get; set; }
+        [Required]
+        [DataType(DataType.Date)]
+        [Display(Name = "Close Date")]
+        public DateTime CloseDate { get; set; }
     }
 }
