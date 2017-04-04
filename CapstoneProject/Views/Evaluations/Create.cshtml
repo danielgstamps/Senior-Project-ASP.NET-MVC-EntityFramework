@@ -47,6 +47,36 @@
                 @Html.ValidationMessageFor(model => model.CloseDate, "", new { @class = "text-danger" })
             </div>
         </div>
+        
+        <div class="form-group">
+            <label class = "control-label col-md-2">Optional Raters</label>
+            <div class="col-md-10">
+                <div class="input-group">
+                    <table>
+                        <tr>
+                            <td>@Html.CheckBoxFor(m => m.RaterOptions[0])</td>
+                            <td>@Html.Label("Supervisor", htmlAttributes: new { @class = "control-label col-md-12" })</td>
+                        </tr>
+                        <tr>
+                            <td>@Html.CheckBoxFor(m => m.RaterOptions[1])</td>
+                            <td>@Html.Label("Coworker 1", htmlAttributes: new { @class = "control-label col-md-12" })</td>
+                        </tr>
+                        <tr>
+                            <td>@Html.CheckBoxFor(m => m.RaterOptions[2])</td>
+                            <td>@Html.Label("Coworker 2", htmlAttributes: new { @class = "control-label col-md-12" })</td>
+                        </tr>
+                        <tr>
+                            <td>@Html.CheckBoxFor(m => m.RaterOptions[3])</td>
+                            <td>@Html.Label("Supervisee 1", htmlAttributes: new { @class = "control-label col-md-12" })</td>
+                        </tr>
+                        <tr>
+                            <td>@Html.CheckBoxFor(m => m.RaterOptions[4])</td>
+                            <td>@Html.Label("Supervisee 2", htmlAttributes: new { @class = "control-label col-md-12" })</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">

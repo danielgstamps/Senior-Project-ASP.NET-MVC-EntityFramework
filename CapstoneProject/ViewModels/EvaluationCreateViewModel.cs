@@ -31,5 +31,7 @@ namespace CapstoneProject.ViewModels
         [DataType(DataType.Date)]
         [Display(Name = "Close Date")]
         public DateTime CloseDate { get; set; }
+
+        public bool[] RaterOptions { get; set; }
     }
 }

@@ -96,6 +96,8 @@ namespace CapstoneProject.Controllers
                 Text = t.StageName
             });
 
+            model.RaterOptions = new bool[]{ true, true, true, true, true };
+
             return View("Create", model);
         }
 
