@@ -25,9 +25,12 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.ActionLink("Evaluate", "Create", "Evaluations", new { cohortId = item.CohortID }, null)
+                @if (item.Employees.Count != 0 && !(item.Type1Assigned && item.Type2Assigned))
+                {
+                    @Html.ActionLink("Evaluate", "Create", "Evaluations", new { cohortId = item.CohortID }, null)
+                    <label> | </label>
+                }
                 @Html.ActionLink("Edit", "Edit", new {id = item.CohortID}) |
-                @Html.ActionLink("Details", "Details", new {id = item.CohortID}) |
                 @Html.ActionLink("Delete", "Delete", new {id = item.CohortID})
             </td>
         </tr>

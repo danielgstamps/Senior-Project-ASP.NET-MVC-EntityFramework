@@ -12,7 +12,7 @@ using Microsoft.AspNet.Identity.Owin;
 
 namespace CapstoneProject.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles="Admin")]
     public class CohortsController : Controller
     {
         private IUnitOfWork unitOfWork = new UnitOfWork();
