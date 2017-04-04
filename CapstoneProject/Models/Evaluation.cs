@@ -28,7 +28,7 @@ namespace CapstoneProject.Models
 
         public DateTime? OpenDate { get; set; }
 
-        public DateTime? ClosedDate { get; set; }
+        public DateTime? CloseDate { get; set; }
 
         public string SelfAnswers { get; set; }
 

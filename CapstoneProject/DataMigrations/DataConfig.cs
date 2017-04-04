@@ -37,7 +37,7 @@ namespace CapstoneProject.DataMigrations
                     StageName = "Summative"
                 }
             };
-            stageList.ForEach(s => context.Stages.Add(s));
+           // stageList.ForEach(s => context.Stages.Add(s));
             //foreach (var stage in stageList)
             //{
             //    if (!context.Stages.Any(s => s.StageID == stage.StageID))
@@ -54,7 +54,7 @@ namespace CapstoneProject.DataMigrations
                     TypeID = 1,
                     StageID = 1,
                     OpenDate = new DateTime(2017, 04, 03),
-                    ClosedDate = new DateTime(2017, 12, 31),
+                    CloseDate = new DateTime(2017, 12, 31),
                     SelfAnswers = "1,2,3,4,5"
                 },
                 new Evaluation
@@ -64,7 +64,7 @@ namespace CapstoneProject.DataMigrations
                     TypeID = 2,
                     StageID = 2,
                     OpenDate = new DateTime(2017, 04, 03),
-                    ClosedDate = new DateTime(2017, 12, 31),
+                    CloseDate = new DateTime(2017, 12, 31),
                     SelfAnswers = "1,2,3,4,5,6,7,8,9,10"
                 },
                 new Evaluation
@@ -74,7 +74,7 @@ namespace CapstoneProject.DataMigrations
                     TypeID = 1,
                     StageID = 2,
                     OpenDate = new DateTime(2017, 04, 03),
-                    ClosedDate = new DateTime(2017, 12, 31)
+                    CloseDate = new DateTime(2017, 12, 31)
                 }
             };
             evaluationList.ForEach(s => context.Evaluations.Add(s));
@@ -174,7 +174,7 @@ namespace CapstoneProject.DataMigrations
                     TypeID = 2
                 }
             };
-            categories.ForEach(s => context.Categories.Add(s));
+           // categories.ForEach(s => context.Categories.Add(s));
             //foreach (var cat in categoryList)
             //{
             //    if (!context.Categories.Any(c => c.CategoryID == cat.CategoryID))

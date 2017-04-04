@@ -273,6 +273,10 @@
     <Compile Include="DataMigrations\201704042104472_LiterallyJustChangedADisplayTag.Designer.cs">
       <DependentUpon>201704042104472_LiterallyJustChangedADisplayTag.cs</DependentUpon>
     </Compile>
+    <Compile Include="DataMigrations\201704042139229_RenamedClosedDateToCloseDate.cs" />
+    <Compile Include="DataMigrations\201704042139229_RenamedClosedDateToCloseDate.Designer.cs">
+      <DependentUpon>201704042139229_RenamedClosedDateToCloseDate.cs</DependentUpon>
+    </Compile>
     <Compile Include="DataMigrations\DataConfig.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -427,6 +431,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DataMigrations\201704042104472_LiterallyJustChangedADisplayTag.resx">
       <DependentUpon>201704042104472_LiterallyJustChangedADisplayTag.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataMigrations\201704042139229_RenamedClosedDateToCloseDate.resx">
+      <DependentUpon>201704042139229_RenamedClosedDateToCloseDate.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserMigrations\201702202104105_Initial.resx">
       <DependentUpon>201702202104105_Initial.cs</DependentUpon>

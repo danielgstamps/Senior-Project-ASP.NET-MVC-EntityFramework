@@ -19,6 +19,11 @@ namespace CapstoneProject.ViewModels
         public int StageID { get; set; }
 
         public IEnumerable<SelectListItem> TypeList { get; set; }
+
         public IEnumerable<SelectListItem> StageList { get; set; }
+
+        public DateTime OpenTime { get; set; }
+
+        public DateTime CloseTime { get; set; }
     }
 }
