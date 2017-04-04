@@ -89,6 +89,7 @@ namespace CapstoneProject.Controllers
             }
             model.TypeList = itemList;
 
+            // Get all stages. TODO: Enforce stage logic.
             model.StageList = unitOfWork.StageRepository.dbSet.Select(t => new SelectListItem()
             {
                 Value = t.StageID.ToString(),

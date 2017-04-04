@@ -269,6 +269,10 @@
     <Compile Include="DataMigrations\201704041855377_ReAddTypeToEval1.Designer.cs">
       <DependentUpon>201704041855377_ReAddTypeToEval1.cs</DependentUpon>
     </Compile>
+    <Compile Include="DataMigrations\201704042104472_LiterallyJustChangedADisplayTag.cs" />
+    <Compile Include="DataMigrations\201704042104472_LiterallyJustChangedADisplayTag.Designer.cs">
+      <DependentUpon>201704042104472_LiterallyJustChangedADisplayTag.cs</DependentUpon>
+    </Compile>
     <Compile Include="DataMigrations\DataConfig.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -420,6 +424,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DataMigrations\201704041855377_ReAddTypeToEval1.resx">
       <DependentUpon>201704041855377_ReAddTypeToEval1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataMigrations\201704042104472_LiterallyJustChangedADisplayTag.resx">
+      <DependentUpon>201704042104472_LiterallyJustChangedADisplayTag.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserMigrations\201702202104105_Initial.resx">
       <DependentUpon>201702202104105_Initial.cs</DependentUpon>
