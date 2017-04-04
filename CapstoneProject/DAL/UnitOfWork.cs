@@ -13,7 +13,7 @@ namespace CapstoneProject.DAL
         private GenericRepository<Evaluation> evaluationRepository;
         private GenericRepository<Question> questionRepository;
         private GenericRepository<Stage> stageRepository;
-        private GenericRepository<AbstractType> typeRepository; // AbstractType's namespace must be explicitly called to avoid ambiguity with System.AbstractType
+        private GenericRepository<Models.Type> typeRepository;
 
         private bool disposed = false;
 
@@ -89,13 +89,13 @@ namespace CapstoneProject.DAL
             }
         }
 
-        public GenericRepository<AbstractType> TypeRepository
+        public GenericRepository<Models.Type> TypeRepository
         {
             get
             {
                 if (this.typeRepository == null)
                 {
-                    this.typeRepository = new GenericRepository<AbstractType>(this.context);
+                    this.typeRepository = new GenericRepository<Models.Type>(this.context);
                 }
                 return this.typeRepository;
             }

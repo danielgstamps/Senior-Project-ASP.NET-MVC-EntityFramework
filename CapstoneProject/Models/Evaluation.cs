@@ -14,17 +14,13 @@ namespace CapstoneProject.Models
         [Required(ErrorMessage = "Evaluation ID required")]
         public int EvaluationID { get; set; }
 
-        public int AbstractTypeID { get; set; }
-
-        public virtual AbstractType Type { get; set; }
-
-        //[Display(Name = "Comment")]
-        //[StringLength(MAX_LENGTH)]
-        //public string Comment { get; set; }
-
         public int EmployeeID { get; set; }
 
         public virtual Employee Employee { get; set; }
+
+        public int TypeID { get; set; }
+
+        public virtual Type Type { get; set; }
 
         public int StageID { get; set; }
 
@@ -34,7 +30,7 @@ namespace CapstoneProject.Models
 
         public DateTime ClosedDate { get; set; }
 
-        public List<int> SelfAnswers { get; set; }
+        public string SelfAnswers { get; set; }
 
         public virtual ICollection<Rater> Raters { get; set; }
     }

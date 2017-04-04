@@ -13,7 +13,7 @@ namespace CapstoneProject.Models
         [Required(ErrorMessage = "Category ID required")]
         public int CategoryID { get; set; }
 
-        [Display(Name = "Category Name")]
+        [Display(Name = "Category TypeName")]
         [StringLength(MAX_NAME_LENGTH)]
         [Required(ErrorMessage = "Category name required")]
         public string Name { get; set; }
@@ -25,8 +25,8 @@ namespace CapstoneProject.Models
 
         public virtual ICollection<Question> Questions { get; set; }
 
-        public int AbstractTypeID { get; set; }
+        public int TypeID { get; set; }
 
-        public AbstractType AbstractType { get; set; }
+        public virtual Type Type { get; set; }
     }
 }
