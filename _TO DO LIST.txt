@@ -1,5 +1,12 @@
 CLONE URL: https://wudsco.visualstudio.com/_git/WUDSCO
 
+Daniel:
+Check each cohort for any employees with open evals. If there are any, remove edit/delete button
+on submite create eval:
+create eval for each employee
+set TypeXAssigned for cohort
+
+
 Eval breakdown:
 3 stages: baseline -> formative -> summative
 2 types: Type1 and Type2
