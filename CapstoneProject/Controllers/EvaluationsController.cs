@@ -184,10 +184,10 @@ namespace CapstoneProject.Controllers
                 "Type: " + evaluation.Type.TypeName + 
                 "\r\n\r\n" + 
                 "Stage: " + evaluation.Stage.StageName + 
-                "\r\n\r\n" + 
-                "Open Date: " + evaluation.OpenDate + 
-                "\r\n\r\n" + 
-                "Close Date: " + evaluation.ClosedDate + 
+                //"\r\n\r\n" + 
+                //"Open Date: " + evaluation.OpenDate + 
+                //"\r\n\r\n" + 
+                //"Close Date: " + evaluation.ClosedDate + 
                 "\r\n\r\n" + 
                 "Click <a href=\"" + callbackUrl + "\">here</a> to complete your evaluation.";
 
