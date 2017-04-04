@@ -113,21 +113,25 @@ namespace CapstoneProject.Controllers
 
             EvaluationCreateViewModel model = new EvaluationCreateViewModel();
             model.CohortToEvaluate = cohort;
+
+            // Get all types.
             model.TypeList = unitOfWork.TypeRepository.dbSet.Select(t => new SelectListItem()
             {
                 Value = t.TypeID.ToString(),
                 Text = t.TypeName,
             });
 
+            // Remove types if the cohort already has them assigned.
+            var itemList = model.TypeList.ToList();
             if (model.CohortToEvaluate.Type1Assigned)
             {
-                model.TypeList.ToList().Remove(model.TypeList.First());
+                itemList.RemoveAt(0);
             }
-
             if (model.CohortToEvaluate.Type2Assigned)
             {
-                model.TypeList.Last().Disabled = true;
+                itemList.RemoveAt(1);
             }
+            model.TypeList = itemList;
 
             model.StageList = unitOfWork.StageRepository.dbSet.Select(t => new SelectListItem()
             {
