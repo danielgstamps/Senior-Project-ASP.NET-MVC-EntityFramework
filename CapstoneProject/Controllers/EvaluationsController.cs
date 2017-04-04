@@ -141,11 +141,12 @@ namespace CapstoneProject.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "EvaluationID,Stage,Type,EmployeeID")] Evaluation evaluation)
         {
-            //this.sendEvaluationEmail(cohortID);
             if (ModelState.IsValid)
             {
                 this.unitOfWork.EvaluationRepository.Insert(evaluation);
                 this.unitOfWork.Save();
+                var cohortID = ViewBag.CohortID;
+                this.sendEvaluationEmail(cohortID, evaluation);
                 return RedirectToAction("Index");
             }
 
@@ -159,7 +160,7 @@ namespace CapstoneProject.Controllers
             private set { _userManager = value; }
         }
 
-        private async Task sendEvaluationEmail(int cohortID)
+        private async Task sendEvaluationEmail(int cohortID, Evaluation evaluation)
         {
             var cohort = this.unitOfWork.CohortRepository.GetByID(cohortID);
             var employees = cohort.Employees.ToList();
@@ -172,8 +173,21 @@ namespace CapstoneProject.Controllers
                 // TODO Specify EvaluationsController Action in first string param
                 var callbackUrl = Url.Action("CompleteEvaluation", "Evaluations", new { userId = userAccount.Id, email = userEmail }, protocol: Request.Url.Scheme);
 
-                await UserManager.SendEmailAsync(userAccount.Id, "New Evaluation",
-                "Click <a href=\"" + callbackUrl + "\">here</a> to complete your evaluation.");
+                var emailSubject = "New Evaluation";
+                var emailBody =
+                "You have a new evaluation to complete. Here are the details: " +
+                "\r\n\r\n" +
+                "Type: " + evaluation.Type.TypeName + 
+                "\r\n\r\n" + 
+                "Stage: " + evaluation.Stage.StageName + 
+                "\r\n\r\n" + 
+                "Open Date: " + evaluation.OpenDate + 
+                "\r\n\r\n" + 
+                "Close Date: " + evaluation.ClosedDate + 
+                "\r\n\r\n" + 
+                "Click <a href=\"" + callbackUrl + "\">here</a> to complete your evaluation.";
+
+                await UserManager.SendEmailAsync(userAccount.Id, emailSubject, emailBody);
             }
         }
 
