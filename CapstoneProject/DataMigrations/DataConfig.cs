@@ -54,7 +54,8 @@ namespace CapstoneProject.DataMigrations
                     TypeID = 1,
                     StageID = 1,
                     OpenDate = new DateTime(2017, 04, 03),
-                    ClosedDate = new DateTime(2017, 12, 31)
+                    ClosedDate = new DateTime(2017, 12, 31),
+                    SelfAnswers = "1,2,3,4,5"
                 },
                 new Evaluation
                 {
@@ -63,7 +64,8 @@ namespace CapstoneProject.DataMigrations
                     TypeID = 2,
                     StageID = 2,
                     OpenDate = new DateTime(2017, 04, 03),
-                    ClosedDate = new DateTime(2017, 12, 31)
+                    ClosedDate = new DateTime(2017, 12, 31),
+                    SelfAnswers = "1,2,3,4,5,6,7,8,9,10"
                 },
                 new Evaluation
                 {

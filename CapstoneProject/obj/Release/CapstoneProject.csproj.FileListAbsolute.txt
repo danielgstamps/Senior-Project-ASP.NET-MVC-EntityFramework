@@ -635,7 +635,6 @@ C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\Microsoft.Owin.Security.OAuth
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\Microsoft.Owin.Security.Google.xml
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\Microsoft.Owin.Security.Twitter.xml
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
-C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.csprojResolveAssemblyReference.cache
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.Init.resources
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.CohortsNullable.resources
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.EvaluationRefactor.resources
@@ -753,3 +752,6 @@ C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\bin\Microsoft.Owin.Security.
 C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.RevertToSimpleType.resources
 C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.ReAddTypeToEval.resources
 C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.ReAddTypeToEval1.resources
+C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.RevertToSimpleType.resources
+C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.ReAddTypeToEval.resources
+C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.ReAddTypeToEval1.resources
