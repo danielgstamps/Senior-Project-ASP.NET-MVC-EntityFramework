@@ -31,56 +31,12 @@ namespace CapstoneProject.Controllers
             }
         }
 
-        // GET: Evaluations
-       // public ActionResult Index()
-       // {
-            //var eval = new Evaluation();
-
-            //var q1 = new Question { QuestionID = 1, QuestionText = "I am never late for work." };
-            //q1.Answers.Add(new Answer { AnswerID = 1, AnswerText = "Strongly Disagree" });
-            //q1.Answers.Add(new Answer { AnswerID = 2, AnswerText = "Disagree" });
-            //q1.Answers.Add(new Answer { AnswerID = 3, AnswerText = "Neutral" });
-            //q1.Answers.Add(new Answer { AnswerID = 4, AnswerText = "Agree" });
-            //q1.Answers.Add(new Answer { AnswerID = 5, AnswerText = "Strongly Agree" });
-            //eval.Questions.Add(q1);
-
-            //var q2 = new Question { QuestionID = 2, QuestionText = "I get along with my coworkers." };
-            //q2.Answers.Add(new Answer { AnswerID = 6, AnswerText = "Strongly Disagree" });
-            //q2.Answers.Add(new Answer { AnswerID = 7, AnswerText = "Disagree" });
-            //q2.Answers.Add(new Answer { AnswerID = 8, AnswerText = "Neutral" });
-            //q2.Answers.Add(new Answer { AnswerID = 9, AnswerText = "Agree" });
-            //q2.Answers.Add(new Answer { AnswerID = 10, AnswerText = "Strongly Agree" });
-            //eval.Questions.Add(q2);
-
-            //var q3 = new Question { QuestionID = 3, QuestionText = "I complete projects early." };
-            //q3.Answers.Add(new Answer { AnswerID = 11, AnswerText = "Strongly Disagree" });
-            //q3.Answers.Add(new Answer { AnswerID = 12, AnswerText = "Disagree" });
-            //q3.Answers.Add(new Answer { AnswerID = 13, AnswerText = "Neutral" });
-            //q3.Answers.Add(new Answer { AnswerID = 14, AnswerText = "Agree" });
-            //q3.Answers.Add(new Answer { AnswerID = 15, AnswerText = "Strongly Agree" });
-            //eval.Questions.Add(q3);
-
-           // var evals = unitOfWork.EvaluationRepository.Get();
-            // return View("Index", eval);
-       // }
-
-        //[HttpPost]
-        //public ActionResult Index(Evaluation model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        foreach (var q in model.Questions)
-        //        {
-        //            var qId = q.QuestionID;
-        //            var selectedAnswer = q.SelectedAnswer;
-
-        //            // Save the data 
-        //        }
-        //        return RedirectToAction("ThankYou"); //Should be changed to a send evaluation link
-        //    }
-        //    //to do : reload questions and answers
-        //    return View(model);
-        //}
+        //GET: Evaluations
+        public ActionResult Index()
+        {
+            var evaluations = unitOfWork.EvaluationRepository.Get();
+            return View("Index", evaluations);
+        }
 
         // GET: Evaluations/Details/5
         public ActionResult Details(int? id)
@@ -149,11 +105,12 @@ namespace CapstoneProject.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "EvaluationID,Stage,Type,EmployeeID")] Evaluation evaluation)
         {
-            //this.sendEvaluationEmail(cohortID);
             if (ModelState.IsValid)
             {
                 this.unitOfWork.EvaluationRepository.Insert(evaluation);
                 this.unitOfWork.Save();
+                var cohortID = ViewBag.CohortID;
+                this.sendEvaluationEmail(cohortID, evaluation);
                 return RedirectToAction("Index");
             }
 
@@ -167,7 +124,7 @@ namespace CapstoneProject.Controllers
             private set { _userManager = value; }
         }
 
-        private async Task sendEvaluationEmail(int cohortID)
+        private async Task sendEvaluationEmail(int cohortID, Evaluation evaluation)
         {
             var cohort = this.unitOfWork.CohortRepository.GetByID(cohortID);
             var employees = cohort.Employees.ToList();
@@ -180,8 +137,21 @@ namespace CapstoneProject.Controllers
                 // TODO Specify EvaluationsController Action in first string param
                 var callbackUrl = Url.Action("CompleteEvaluation", "Evaluations", new { userId = userAccount.Id, email = userEmail }, protocol: Request.Url.Scheme);
 
-                await UserManager.SendEmailAsync(userAccount.Id, "New Evaluation",
-                "Click <a href=\"" + callbackUrl + "\">here</a> to complete your evaluation.");
+                var emailSubject = "New Evaluation";
+                var emailBody =
+                "You have a new evaluation to complete. Here are the details: " +
+                "\r\n\r\n" +
+                "Type: " + evaluation.Type.TypeName + 
+                "\r\n\r\n" + 
+                "Stage: " + evaluation.Stage.StageName + 
+                //"\r\n\r\n" + 
+                //"Open Date: " + evaluation.OpenDate + 
+                //"\r\n\r\n" + 
+                //"Close Date: " + evaluation.ClosedDate + 
+                "\r\n\r\n" + 
+                "Click <a href=\"" + callbackUrl + "\">here</a> to complete your evaluation.";
+
+                await UserManager.SendEmailAsync(userAccount.Id, emailSubject, emailBody);
             }
         }
 
