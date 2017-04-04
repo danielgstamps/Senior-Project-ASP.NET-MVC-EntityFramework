@@ -9,6 +9,7 @@ using CapstoneProject.ViewModels;
 
 namespace CapstoneProject.Controllers
 {
+    [Authorize(Roles="admin")]
     public class CohortsController : Controller
     {
         private IUnitOfWork unitOfWork = new UnitOfWork();
