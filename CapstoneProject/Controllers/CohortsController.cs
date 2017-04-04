@@ -59,7 +59,7 @@ namespace CapstoneProject.Controllers
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CohortID,Name")] Cohort cohort)
+        public ActionResult Create([Bind(Include = "CohortID,TypeName")] Cohort cohort)
         {
             if (ModelState.IsValid)
             {
@@ -114,7 +114,7 @@ namespace CapstoneProject.Controllers
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int? id, string[] selectedEmployees/*[Bind(Include = "CohortID,Name")] Cohort cohort*/)
+        public ActionResult Edit(int? id, string[] selectedEmployees/*[Bind(Include = "CohortID,TypeName")] Cohort cohort*/)
         {
             if (id == null)
             {
@@ -122,7 +122,7 @@ namespace CapstoneProject.Controllers
             }
             var cohortToUpdate = this.unitOfWork.CohortRepository.GetByID(id);
             if (TryUpdateModel(cohortToUpdate, "",
-               new string[] { "Name" }))
+               new string[] { "TypeName" }))
             {
                 try
                 {

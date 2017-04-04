@@ -116,7 +116,7 @@ namespace CapstoneProject.Controllers
             model.CohortToEvaluate = cohort;
             model.TypeList = unitOfWork.TypeRepository.dbSet.Select(t => new SelectListItem()
             {
-                Value = t.AbstractTypeID.ToString(),
+                Value = t.TypeID.ToString(),
                 Text = t.TypeName
             });
 
@@ -134,7 +134,7 @@ namespace CapstoneProject.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "EvaluationID,Stage,AbstractType,EmployeeID")] Evaluation evaluation)
+        public ActionResult Create([Bind(Include = "EvaluationID,Stage,Type,EmployeeID")] Evaluation evaluation)
         {
             if (ModelState.IsValid)
             {
@@ -168,7 +168,7 @@ namespace CapstoneProject.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "EvaluationID,Stage,AbstractType,EmployeeID")] Evaluation evaluation)
+        public ActionResult Edit([Bind(Include = "EvaluationID,Stage,Type,EmployeeID")] Evaluation evaluation)
         {
             if (ModelState.IsValid)
             {

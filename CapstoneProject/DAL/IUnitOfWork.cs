@@ -19,9 +19,10 @@ namespace CapstoneProject.DAL
 
         GenericRepository<Question> QuestionRepository { get; }
 
-        GenericRepository<AbstractType> TypeRepository { get; }
+        GenericRepository<Models.Type> TypeRepository { get; }
 
         GenericRepository<Stage> StageRepository { get; }
+
         void Save();
 
         void Dispose();

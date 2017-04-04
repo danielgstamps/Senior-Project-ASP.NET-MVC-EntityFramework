@@ -16,5 +16,7 @@ namespace CapstoneProject.Models
         [StringLength(MAX_STAGE_NAME_LENGTH)]
         [Required(ErrorMessage = "Stage name required")]
         public string StageName { get; set; }
+
+        public virtual ICollection<Evaluation> Evals { get; set; }
     }
 }
