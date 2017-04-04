@@ -2,16 +2,21 @@
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using CapstoneProject.DAL;
 using CapstoneProject.Models;
 using CapstoneProject.ViewModels;
+using Microsoft.AspNet.Identity.Owin;
 
 namespace CapstoneProject.Controllers
 {
     public class CohortsController : Controller
     {
         private IUnitOfWork unitOfWork = new UnitOfWork();
+        private ApplicationDbContext userDB = new ApplicationDbContext();
+        private ApplicationUserManager _userManager;
 
         public IUnitOfWork UnitOfWork
         {
@@ -220,6 +225,30 @@ namespace CapstoneProject.Controllers
             this.unitOfWork.CohortRepository.Delete(cohort);
             this.unitOfWork.Save();
             return RedirectToAction("Index");
+        }
+
+        public ApplicationUserManager UserManager
+        {
+            get { return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
+            private set { _userManager = value; }
+        }
+
+        public async Task SendEvaluationEmail(int cohortID)
+        {
+            var cohort = this.unitOfWork.CohortRepository.GetByID(cohortID);
+            var employees = cohort.Employees.ToList();
+            var userAccounts = userDB.Users.ToList();
+            foreach (var employee in employees)
+            {
+                var userAccount = userAccounts.Find(u => u.Email == employee.Email);
+                var userEmail = userAccount.Email;
+
+                // TODO Specify EvaluationsController Action in first string param
+                var callbackUrl = Url.Action("", "Evaluations", new { userId = userAccount.Id, email = userEmail }, protocol: Request.Url.Scheme);
+
+                await UserManager.SendEmailAsync(userAccount.Id, "New Evaluation",
+                "Click <a href=\"" + callbackUrl + "\">here</a> to complete your evaluation.");
+            }
         }
 
         protected override void Dispose(bool disposing)
