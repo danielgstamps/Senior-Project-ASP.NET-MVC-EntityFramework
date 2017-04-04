@@ -253,10 +253,6 @@
     <Compile Include="DataMigrations\201704012124405_ChangedALotOfStuffTake2.Designer.cs">
       <DependentUpon>201704012124405_ChangedALotOfStuffTake2.cs</DependentUpon>
     </Compile>
-    <Compile Include="DataMigrations\201704012210432_Type.cs" />
-    <Compile Include="DataMigrations\201704012210432_Type.Designer.cs">
-      <DependentUpon>201704012210432_Type.cs</DependentUpon>
-    </Compile>
     <Compile Include="DataMigrations\201704030427460_CorrectingType.cs" />
     <Compile Include="DataMigrations\201704030427460_CorrectingType.Designer.cs">
       <DependentUpon>201704030427460_CorrectingType.cs</DependentUpon>
@@ -412,9 +408,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DataMigrations\201704012124405_ChangedALotOfStuffTake2.resx">
       <DependentUpon>201704012124405_ChangedALotOfStuffTake2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="DataMigrations\201704012210432_Type.resx">
-      <DependentUpon>201704012210432_Type.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DataMigrations\201704030427460_CorrectingType.resx">
       <DependentUpon>201704030427460_CorrectingType.cs</DependentUpon>
