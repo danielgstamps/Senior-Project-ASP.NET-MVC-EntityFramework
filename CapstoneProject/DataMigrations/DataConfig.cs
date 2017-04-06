@@ -37,7 +37,7 @@ namespace CapstoneProject.DataMigrations
                     StageName = "Summative"
                 }
             };
-           // stageList.ForEach(s => context.Stages.Add(s));
+            stageList.ForEach(s => context.Stages.Add(s));
             //foreach (var stage in stageList)
             //{
             //    if (!context.Stages.Any(s => s.StageID == stage.StageID))
@@ -52,7 +52,7 @@ namespace CapstoneProject.DataMigrations
                     EvaluationID = 1,
                     EmployeeID = 130,
                     TypeID = 1,
-                    StageID = 1,
+                    StageID = 20,
                     OpenDate = new DateTime(2017, 04, 03),
                     CloseDate = new DateTime(2017, 12, 31),
                     SelfAnswers = "1,2,3,4,5"
@@ -62,19 +62,20 @@ namespace CapstoneProject.DataMigrations
                     EvaluationID = 2,
                     EmployeeID = 129,
                     TypeID = 2,
-                    StageID = 2,
+                    StageID = 20,
                     OpenDate = new DateTime(2017, 04, 03),
                     CloseDate = new DateTime(2017, 12, 31),
-                    SelfAnswers = "1,2,3,4,5,6,7,8,9,10"
+                    SelfAnswers = "1,2,3,4,5,6,7,8,9,10",
                 },
                 new Evaluation
                 {
                     EvaluationID = 3,
                     EmployeeID = 158,
                     TypeID = 1,
-                    StageID = 2,
+                    StageID = 20,
                     OpenDate = new DateTime(2017, 04, 03),
-                    CloseDate = new DateTime(2017, 12, 31)
+                    CloseDate = new DateTime(2017, 12, 31),
+                    SelfAnswers = "1,2,3,4,5"
                 }
             };
             evaluationList.ForEach(s => context.Evaluations.Add(s));

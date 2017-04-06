@@ -15,26 +15,15 @@ namespace CapstoneProject.Controllers
     [Authorize]
     public class EvaluationsController : Controller
     {
-        private IUnitOfWork unitOfWork = new UnitOfWork();
         private ApplicationDbContext userDB = new ApplicationDbContext();
         private ApplicationUserManager _userManager;
 
-        public IUnitOfWork UnitOfWork
-        {
-            get
-            {
-                return this.unitOfWork;
-            }
-            set
-            {
-                this.unitOfWork = value;
-            }
-        }
+        public IUnitOfWork UnitOfWork { get; set; } = new UnitOfWork();
 
         //GET: Evaluations
         public ActionResult Index()
         {
-            var evaluations = unitOfWork.EvaluationRepository.Get();
+            var evaluations = UnitOfWork.EvaluationRepository.Get();
             return View("Index", evaluations);
         }
 
@@ -45,7 +34,7 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var evaluation = unitOfWork.EvaluationRepository.GetByID(id);
+            var evaluation = UnitOfWork.EvaluationRepository.GetByID(id);
             if (evaluation == null)
             {
                 return HttpNotFound();
@@ -61,7 +50,7 @@ namespace CapstoneProject.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var cohort = unitOfWork.CohortRepository.GetByID(cohortId);
+            var cohort = UnitOfWork.CohortRepository.GetByID(cohortId);
             if (cohort == null)
             {
                 return HttpNotFound();
@@ -71,7 +60,7 @@ namespace CapstoneProject.Controllers
             model.CohortToEvaluate = cohort;
 
             // Get all types.
-            model.TypeList = unitOfWork.TypeRepository.dbSet.Select(t => new SelectListItem()
+            model.TypeList = UnitOfWork.TypeRepository.dbSet.Select(t => new SelectListItem()
             {
                 Value = t.TypeID.ToString(),
                 Text = t.TypeName,
@@ -90,7 +79,7 @@ namespace CapstoneProject.Controllers
             model.TypeList = itemList;
 
             // Get all stages. TODO: Enforce stage logic.
-            model.StageList = unitOfWork.StageRepository.dbSet.Select(t => new SelectListItem()
+            model.StageList = UnitOfWork.StageRepository.dbSet.Select(t => new SelectListItem()
             {
                 Value = t.StageID.ToString(),
                 Text = t.StageName
@@ -110,14 +99,14 @@ namespace CapstoneProject.Controllers
         {
             if (ModelState.IsValid)
             {
-                this.unitOfWork.EvaluationRepository.Insert(evaluation);
-                this.unitOfWork.Save();
+                this.UnitOfWork.EvaluationRepository.Insert(evaluation);
+                this.UnitOfWork.Save();
                 var cohortID = ViewBag.CohortID;
                 this.sendEvaluationEmail(cohortID, evaluation);
                 return RedirectToAction("Index");
             }
 
-            ViewBag.EmployeeID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", evaluation.Employee);
+            ViewBag.EmployeeID = new SelectList(this.UnitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", evaluation.Employee);
             return View("Create", evaluation);
         }
 
@@ -129,7 +118,7 @@ namespace CapstoneProject.Controllers
 
         private async Task sendEvaluationEmail(int cohortID, Evaluation evaluation)
         {
-            var cohort = this.unitOfWork.CohortRepository.GetByID(cohortID);
+            var cohort = this.UnitOfWork.CohortRepository.GetByID(cohortID);
             var employees = cohort.Employees.ToList();
             var userAccounts = userDB.Users.ToList();
             foreach (var employee in employees)
@@ -170,12 +159,12 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var evaluation = unitOfWork.EvaluationRepository.GetByID(id);
+            var evaluation = UnitOfWork.EvaluationRepository.GetByID(id);
             if (evaluation == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.EmployeeID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", evaluation.Employee);
+            ViewBag.EmployeeID = new SelectList(this.UnitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", evaluation.Employee);
             return View("Edit", evaluation);
         }
 
@@ -188,11 +177,11 @@ namespace CapstoneProject.Controllers
         {
             if (ModelState.IsValid)
             {
-                this.unitOfWork.EvaluationRepository.Update(evaluation);
-                this.unitOfWork.Save();
+                this.UnitOfWork.EvaluationRepository.Update(evaluation);
+                this.UnitOfWork.Save();
                 return RedirectToAction("Index");
             }
-            ViewBag.EmployeeID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", evaluation.Employee);
+            ViewBag.EmployeeID = new SelectList(this.UnitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", evaluation.Employee);
             return View(evaluation);
         }
 
@@ -203,7 +192,7 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var evaluation = this.unitOfWork.EvaluationRepository.GetByID(id);
+            var evaluation = this.UnitOfWork.EvaluationRepository.GetByID(id);
             if (evaluation == null)
             {
                 return HttpNotFound();
@@ -216,9 +205,9 @@ namespace CapstoneProject.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            var evaluation = unitOfWork.EvaluationRepository.GetByID(id);
-            this.unitOfWork.EvaluationRepository.Delete(evaluation);
-            this.unitOfWork.Save();
+            var evaluation = UnitOfWork.EvaluationRepository.GetByID(id);
+            this.UnitOfWork.EvaluationRepository.Delete(evaluation);
+            this.UnitOfWork.Save();
             return RedirectToAction("Index");
         }
 
@@ -226,7 +215,7 @@ namespace CapstoneProject.Controllers
         {
             if (disposing)
             {
-                this.unitOfWork.Dispose();
+                this.UnitOfWork.Dispose();
             }
             base.Dispose(disposing);
         }
