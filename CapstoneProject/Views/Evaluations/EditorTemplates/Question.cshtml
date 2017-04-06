@@ -1,13 +1,28 @@
 ﻿@model CapstoneProject.Models.Question
 <div>
     @Html.HiddenFor(x => x.QuestionID)
-    <h3> @Model.QuestionID. @Model.QuestionText </h3>
-    @*@foreach (var a in Model.Answers)
+    <p> @Model.QuestionID. @Model.QuestionText </p>
+
+    @if (Model.Category.TypeID == 1)
     {
-        Need to rework this. Questions don't need a SelectedAnswer. It needs to be stored in a new table, with the employee who took it. 
-        We'll talk about it when we're all together.
-        <p>
-            @Html.RadioButtonFor(b => b.SelectedAnswer, a.AnswerID)  @a.AnswerText
-        </p>
-    }*@
+        for (var i = 0; i < 5; i++)
+        {
+            @Html.RadioButton(i.ToString(), i)
+        }
+    }
+    @if (Model.Category.TypeID == 2)
+    {
+        for (var i = 0; i < 10; i++)
+        {
+            @Html.RadioButton(i.ToString(), i)
+        }
+    }
+    @*@foreach (var a in Model.Answers)
+        {
+            Need to rework this. Questions don't need a SelectedAnswer. It needs to be stored in a new table, with the employee who took it.
+            We'll talk about it when we're all together.
+            <p>
+                @Html.RadioButtonFor(b => b.SelectedAnswer, a.AnswerID)  @a.AnswerText
+            </p>
+        }*@
 </div>
