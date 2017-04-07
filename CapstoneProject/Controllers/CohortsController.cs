@@ -224,9 +224,7 @@ namespace CapstoneProject.Controllers
             this.unitOfWork.CohortRepository.Delete(cohort);
             this.unitOfWork.Save();
             return RedirectToAction("Index");
-        }
-
-        
+        }     
 
         protected override void Dispose(bool disposing)
         {

@@ -95,19 +95,22 @@ namespace CapstoneProject.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "EvaluationID,Stage,Type,EmployeeID")] Evaluation evaluation)
+        public ActionResult Create(EvaluationCreateViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                this.UnitOfWork.EvaluationRepository.Insert(evaluation);
-                this.UnitOfWork.Save();
-                var cohortID = ViewBag.CohortID;
-                this.sendEvaluationEmail(cohortID, evaluation);
-                return RedirectToAction("Index");
+                throw new Exception("model invalid");
+                // return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            if (model.OpenDate > model.CloseDate)
+            {
+                ViewBag.DateError = "The Open Date must come before the Close Date.";
+                RedirectToAction("Create", model);
             }
 
-            ViewBag.EmployeeID = new SelectList(this.UnitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", evaluation.Employee);
-            return View("Create", evaluation);
+           // this.SendEvaluationEmail(cohortID, evaluation);
+            //ViewBag.EmployeeID = new SelectList(this.UnitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", evaluation.Employee);
+            return RedirectToAction("Index", "Cohorts");
         }
 
         public ApplicationUserManager UserManager
@@ -116,7 +119,7 @@ namespace CapstoneProject.Controllers
             private set { _userManager = value; }
         }
 
-        private async Task sendEvaluationEmail(int cohortID, Evaluation evaluation)
+        private async Task SendEvaluationEmail(int cohortID, Evaluation evaluation)
         {
             var cohort = this.UnitOfWork.CohortRepository.GetByID(cohortID);
             var employees = cohort.Employees.ToList();

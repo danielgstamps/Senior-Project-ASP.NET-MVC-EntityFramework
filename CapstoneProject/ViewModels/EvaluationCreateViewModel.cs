@@ -23,7 +23,7 @@ namespace CapstoneProject.ViewModels
         public IEnumerable<SelectListItem> StageList { get; set; }
 
         [Required]
-        [DataType(DataType.Date)]
+        [DataType(DataType.Date)]     
         [Display(Name = "Open Date")]
         public DateTime OpenDate { get; set; }
 
