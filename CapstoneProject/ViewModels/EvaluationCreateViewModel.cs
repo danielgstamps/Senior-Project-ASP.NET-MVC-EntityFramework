@@ -10,7 +10,7 @@ namespace CapstoneProject.ViewModels
 {
     public class EvaluationCreateViewModel : IValidatableObject
     {
-        public Cohort CohortToEvaluate { get; set; }
+        public int CohortID { get; set; }
 
         [Display(Name = "Type")]
         public int TypeID { get; set; }

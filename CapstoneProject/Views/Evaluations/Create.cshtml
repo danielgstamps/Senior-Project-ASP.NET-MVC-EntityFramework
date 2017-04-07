@@ -1,11 +1,12 @@
-﻿@using Castle.Core.Internal
+﻿@using CapstoneProject.DAL
+@using Castle.Core.Internal
 @model CapstoneProject.ViewModels.EvaluationCreateViewModel
 
 @{
     ViewBag.Title = "Create";
 }
 
-<h2>Evaluate Cohort: @Html.DisplayFor(model => model.CohortToEvaluate.Name) </h2>
+<h2>Evaluate Cohort: @TempData["CohortName"] </h2>
 
 @using (Html.BeginForm())
 {

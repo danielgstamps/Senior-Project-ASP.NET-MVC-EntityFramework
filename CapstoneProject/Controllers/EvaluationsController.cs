@@ -61,16 +61,17 @@ namespace CapstoneProject.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            TempData["CohortID"] = cohortId;
-
             var cohort = UnitOfWork.CohortRepository.GetByID(cohortId);
             if (cohort == null)
             {
                 return HttpNotFound();
             }
 
+            TempData["CohortID"] = cohortId;
+            TempData["CohortName"] = cohort.Name;
+
             EvaluationCreateViewModel model = new EvaluationCreateViewModel();
-            model.CohortToEvaluate = cohort;
+            model.CohortID = (int)cohortId;
 
             // Get all types.
             model.TypeList = UnitOfWork.TypeRepository.dbSet.Select(t => new SelectListItem()
@@ -81,11 +82,11 @@ namespace CapstoneProject.Controllers
 
             // Remove types if the cohort already has them assigned.
             var itemList = model.TypeList.ToList();
-            if (model.CohortToEvaluate.Type1Assigned)
+            if (cohort.Type1Assigned)
             {
                 itemList.RemoveAt(0);
             }
-            if (model.CohortToEvaluate.Type2Assigned)
+            if (cohort.Type2Assigned)
             {
                 itemList.RemoveAt(1);
             }
@@ -116,25 +117,34 @@ namespace CapstoneProject.Controllers
                 return RedirectToAction("Create", new { cohortId = (int)TempData["CohortID"] });
             }
 
-            var cohort = UnitOfWork.CohortRepository.GetByID(model.CohortToEvaluate.CohortID);
-            var employees = cohort.Employees;
-            System.Diagnostics.Debug.WriteLine(employees.Count);
+            var cohort = UnitOfWork.CohortRepository.GetByID(model.CohortID);
 
-            foreach (var emp in employees)
+            foreach (var emp in cohort.Employees)
             {
-                //Evaluation eval = new Evaluation
-                //{
-                //    //Employee = emp,
-                //    //Type = UnitOfWork.TypeRepository.GetByID(model.TypeID),
-                //    //Stage = UnitOfWork.StageRepository.GetByID(model.StageID),
-                //    //OpenDate = model.OpenDate,
-                //    //CloseDate = model.CloseDate,
-                //    //SelfAnswers = "123",
-                //    //Raters = new List<Rater>() // GenerateRaterList(model.RaterOptions)
-                //};
+                Evaluation eval = new Evaluation
+                {
+                    Employee = emp,
+                    Type = UnitOfWork.TypeRepository.GetByID(model.TypeID),
+                    Stage = UnitOfWork.StageRepository.GetByID(model.StageID),
+                    OpenDate = model.OpenDate,
+                    CloseDate = model.CloseDate,
+                    SelfAnswers = "",
+                    Raters = GenerateRaterList(model.RaterOptions)
+            };
 
-                //UnitOfWork.EvaluationRepository.Insert(eval);
-                //UnitOfWork.Save();
+                UnitOfWork.EvaluationRepository.Insert(eval);
+                UnitOfWork.Save();
+            }
+
+            if (model.TypeID == 1)
+            {
+                cohort.Type1Assigned = true;
+                UnitOfWork.Save();
+            }
+            if (model.TypeID == 2)
+            {
+                cohort.Type2Assigned = true;
+                UnitOfWork.Save();
             }
 
             // this.SendEvaluationEmail(cohortID, evaluation);
@@ -144,14 +154,37 @@ namespace CapstoneProject.Controllers
 
         private List<Rater> GenerateRaterList(bool[] raterBools)
         {
-            List<Rater> raters = new List<Rater>();
+            var raters = new List<Rater>();
+
             // Order: Supervisor, coworker1, coworker2, supervisee1, supervisee2.
             if (raterBools[0])
             {
-                Rater supervisor = new Rater()
-                {
+                var supervisor = new Rater{Role = "Supervisor", Email = "temp@temp.com"};
+                raters.Add(supervisor);
+            }
 
-                };
+            if (raterBools[1])
+            {
+                var coworker1 = new Rater { Role = "Coworker 1", Email = "temp@temp.com" };
+                raters.Add(coworker1);
+            }
+
+            if (raterBools[2])
+            {
+                var coworker2 = new Rater { Role = "Coworker 2", Email = "temp@temp.com" };
+                raters.Add(coworker2);
+            }
+
+            if (raterBools[3])
+            {
+                var supervisee1 = new Rater { Role = "Supervisee 1", Email = "temp@temp.com" };
+                raters.Add(supervisee1);
+            }
+
+            if (raterBools[4])
+            {
+                var supervisee2 = new Rater { Role = "Supervisee 2", Email = "temp@temp.com" };
+                raters.Add(supervisee2);
             }
 
             return raters;
