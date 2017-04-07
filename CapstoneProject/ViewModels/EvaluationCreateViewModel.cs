@@ -8,7 +8,7 @@ using CapstoneProject.Models;
 
 namespace CapstoneProject.ViewModels
 {
-    public class EvaluationCreateViewModel
+    public class EvaluationCreateViewModel : IValidatableObject
     {
         public Cohort CohortToEvaluate { get; set; }
 
@@ -33,5 +33,18 @@ namespace CapstoneProject.ViewModels
         public DateTime CloseDate { get; set; }
 
         public bool[] RaterOptions { get; set; }
+
+        IEnumerable<ValidationResult> IValidatableObject.Validate(ValidationContext validationContext)
+        {
+            if (CloseDate <= OpenDate)
+            {
+                yield return new ValidationResult("The Open Date must come before the Close Date");
+            }
+
+            if (OpenDate < DateTime.Today)
+            {
+                yield return new ValidationResult("The Open Date cannot be in the past.");
+            }
+        }
     }
 }
