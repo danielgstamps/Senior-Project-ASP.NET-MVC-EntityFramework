@@ -50,6 +50,8 @@ namespace CapstoneProject.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
+            TempData["CohortID"] = cohortId;
+
             var cohort = UnitOfWork.CohortRepository.GetByID(cohortId);
             if (cohort == null)
             {
@@ -99,7 +101,8 @@ namespace CapstoneProject.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return RedirectToAction("Create", new { cohortId = 1 });
+                TempData["DateError"] = "Open Date cannot be in the past, and must come before Close Date.";
+                return RedirectToAction("Create", new { cohortId = (int)TempData["CohortID"] });
             }
 
             // this.SendEvaluationEmail(cohortID, evaluation);
