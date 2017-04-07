@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<CapstoneProject.Models.Evaluation>
 
-<h2>Evaluations: Administrator View</h2>
+<h2> Evaluations: Administrator View</h2>
 <p>Please rate how much you agree with each statement</p>
 <br/>
 <div>
@@ -13,7 +13,6 @@
                 @Html.EditorFor(x=>cat.Questions)
             }
         }
-        <br/>
-        <input type="submit" />
+        <input type="submit" value="Submit Evaluation" />
     }
 </div>  

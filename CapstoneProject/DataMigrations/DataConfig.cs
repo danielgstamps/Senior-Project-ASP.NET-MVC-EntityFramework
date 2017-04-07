@@ -75,7 +75,7 @@ namespace CapstoneProject.DataMigrations
                     StageID = 20,
                     OpenDate = new DateTime(2017, 04, 03),
                     CloseDate = new DateTime(2017, 12, 31),
-                    SelfAnswers = "1,2,3,4,5"
+                    SelfAnswers = "12345"
                 }
             };
             evaluationList.ForEach(s => context.Evaluations.Add(s));

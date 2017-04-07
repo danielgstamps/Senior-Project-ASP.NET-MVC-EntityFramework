@@ -33,7 +33,7 @@ namespace CapstoneProject.Controllers
         {
             if (ModelState.IsValid)
             {
-               
+
             }
             return View("Send", model);
         }
@@ -98,7 +98,7 @@ namespace CapstoneProject.Controllers
                 Text = t.StageName
             });
 
-            model.RaterOptions = new bool[]{ true, true, true, true, true };
+            model.RaterOptions = new[]{ true, true, true, true, true };
 
             return View("Create", model);
         }
@@ -199,62 +199,14 @@ namespace CapstoneProject.Controllers
             return null;
         }
 
-        // GET: Evaluations/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            var evaluation = UnitOfWork.EvaluationRepository.GetByID(id);
-            if (evaluation == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.EmployeeID = new SelectList(this.UnitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", evaluation.Employee);
-            return View("Edit", evaluation);
-        }
-
-        // POST: Evaluations/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "EvaluationID,Stage,Type,EmployeeID")] Evaluation evaluation)
-        {
-            if (ModelState.IsValid)
-            {
-                this.UnitOfWork.EvaluationRepository.Update(evaluation);
-                this.UnitOfWork.Save();
-                return RedirectToAction("Index");
-            }
-            ViewBag.EmployeeID = new SelectList(this.UnitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", evaluation.Employee);
-            return View(evaluation);
-        }
-
-        // GET: Evaluations/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            var evaluation = this.UnitOfWork.EvaluationRepository.GetByID(id);
-            if (evaluation == null)
-            {
-                return HttpNotFound();
-            }
-            return View(evaluation);
-        }
-
         // POST: Evaluations/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
             var evaluation = UnitOfWork.EvaluationRepository.GetByID(id);
-            this.UnitOfWork.EvaluationRepository.Delete(evaluation);
-            this.UnitOfWork.Save();
+            UnitOfWork.EvaluationRepository.Delete(evaluation);
+            UnitOfWork.Save();
             return RedirectToAction("Index");
         }
 
