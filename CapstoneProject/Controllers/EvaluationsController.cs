@@ -109,17 +109,11 @@ namespace CapstoneProject.Controllers
         {
             if (!ModelState.IsValid)
             {
-                throw new Exception("model invalid");
-                // return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            if (model.OpenDate > model.CloseDate)
-            {
-                ViewBag.DateError = "The Open Date must come before the Close Date.";
-                RedirectToAction("Create", model);
+                return RedirectToAction("Create", new { cohortId = 1 });
             }
 
-           // this.SendEvaluationEmail(cohortID, evaluation);
-            //ViewBag.EmployeeID = new SelectList(this.UnitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", evaluation.Employee);
+            // this.SendEvaluationEmail(cohortID, evaluation);
+            //throw new Exception("model invalid");
             return RedirectToAction("Index", "Cohorts");
         }
 
