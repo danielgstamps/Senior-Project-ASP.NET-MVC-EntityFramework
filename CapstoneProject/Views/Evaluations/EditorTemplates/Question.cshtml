@@ -2,27 +2,20 @@
 <div>
     @Html.HiddenFor(x => x.QuestionID)
     <p> @Model.QuestionID. @Model.QuestionText </p>
-
+    @Html.Label("Disagree")
     @if (Model.Category.TypeID == 1)
     {
         for (var i = 0; i < 5; i++)
         {
-            @Html.RadioButton(i.ToString(), i)
+            @Html.RadioButtonFor(model => model.QuestionText, i)
         }
     }
     @if (Model.Category.TypeID == 2)
     {
         for (var i = 0; i < 10; i++)
         {
-            @Html.RadioButton(i.ToString(), i)
+            @Html.RadioButtonFor(model => model.QuestionText, i)
         }
     }
-    @*@foreach (var a in Model.Answers)
-        {
-            Need to rework this. Questions don't need a SelectedAnswer. It needs to be stored in a new table, with the employee who took it.
-            We'll talk about it when we're all together.
-            <p>
-                @Html.RadioButtonFor(b => b.SelectedAnswer, a.AnswerID)  @a.AnswerText
-            </p>
-        }*@
+    @Html.Label("Agree")
 </div>

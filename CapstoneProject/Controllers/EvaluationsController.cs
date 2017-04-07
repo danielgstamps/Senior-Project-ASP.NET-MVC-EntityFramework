@@ -27,6 +27,16 @@ namespace CapstoneProject.Controllers
             return View("Index", evaluations);
         }
 
+        [HttpPost]
+        public ActionResult Index(IEnumerable<Evaluation> model)
+        {
+            if (ModelState.IsValid)
+            {
+               
+            }
+            return View("Send", model);
+        }
+
         // GET: Evaluations/Details/5
         public ActionResult Details(int? id)
         {
