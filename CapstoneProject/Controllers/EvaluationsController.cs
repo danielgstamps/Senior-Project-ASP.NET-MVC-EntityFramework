@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using CapstoneProject.DAL;
 using CapstoneProject.Models;
 using CapstoneProject.ViewModels;
+using Castle.Components.DictionaryAdapter.Xml;
 using Microsoft.AspNet.Identity.Owin;
 
 namespace CapstoneProject.Controllers
@@ -115,9 +116,45 @@ namespace CapstoneProject.Controllers
                 return RedirectToAction("Create", new { cohortId = (int)TempData["CohortID"] });
             }
 
+            var cohort = UnitOfWork.CohortRepository.GetByID(model.CohortToEvaluate.CohortID);
+            var employees = cohort.Employees;
+            System.Diagnostics.Debug.WriteLine(employees.Count);
+
+            foreach (var emp in employees)
+            {
+                //Evaluation eval = new Evaluation
+                //{
+                //    //Employee = emp,
+                //    //Type = UnitOfWork.TypeRepository.GetByID(model.TypeID),
+                //    //Stage = UnitOfWork.StageRepository.GetByID(model.StageID),
+                //    //OpenDate = model.OpenDate,
+                //    //CloseDate = model.CloseDate,
+                //    //SelfAnswers = "123",
+                //    //Raters = new List<Rater>() // GenerateRaterList(model.RaterOptions)
+                //};
+
+                //UnitOfWork.EvaluationRepository.Insert(eval);
+                //UnitOfWork.Save();
+            }
+
             // this.SendEvaluationEmail(cohortID, evaluation);
             //throw new Exception("model invalid");
             return RedirectToAction("Index", "Cohorts");
+        }
+
+        private List<Rater> GenerateRaterList(bool[] raterBools)
+        {
+            List<Rater> raters = new List<Rater>();
+            // Order: Supervisor, coworker1, coworker2, supervisee1, supervisee2.
+            if (raterBools[0])
+            {
+                Rater supervisor = new Rater()
+                {
+
+                };
+            }
+
+            return raters;
         }
 
         public ApplicationUserManager UserManager
