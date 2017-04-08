@@ -41,10 +41,10 @@ namespace CapstoneProject.ViewModels
                 yield return new ValidationResult("The Open Date must come before the Close Date");
             }
 
-            if (OpenDate < DateTime.Today)
-            {
-                yield return new ValidationResult("The Open Date cannot be in the past.");
-            }
+            //if (OpenDate < DateTime.Today)
+            //{
+            //    yield return new ValidationResult("The Open Date cannot be in the past.");
+            //}
         }
     }
 }

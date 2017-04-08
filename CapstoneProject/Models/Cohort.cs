@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace CapstoneProject.Models
 {
@@ -22,5 +24,33 @@ namespace CapstoneProject.Models
         public bool Type1Assigned { get; set; }
 
         public bool Type2Assigned { get; set; }
+
+        public bool HasOpenEval(int typeId)
+        {
+            try
+            {
+                var firstEmployee = Employees.First();
+                var allEvalsOfType = firstEmployee.Evaluations.Where(eval => eval.TypeID == typeId);
+                return allEvalsOfType.First().OpenDate <= DateTime.Today.Date;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public string EvalOpenDate(int typeId)
+        {
+            try
+            {
+                var firstEmployee = Employees.First();
+                var allEvalsOfType = firstEmployee.Evaluations.Where(eval => eval.TypeID == typeId);
+                return allEvalsOfType.First().OpenDate.GetValueOrDefault().ToString("d");
+            }
+            catch (Exception)
+            {
+                return "0/0/0000";
+            }
+        }
     }
 }

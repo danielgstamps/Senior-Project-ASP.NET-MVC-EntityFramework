@@ -148,7 +148,7 @@ namespace CapstoneProject.Controllers
                 UnitOfWork.Save();
             }
 
-            TempData["Success"] = "Successfully created evaluations for " + cohort.Name + ".";
+            TempData["Success"] = "Successfully created evaluation for " + cohort.Name + ".";
             return RedirectToAction("Index", "Cohorts");
         }
 

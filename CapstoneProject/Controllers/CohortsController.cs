@@ -148,6 +148,23 @@ namespace CapstoneProject.Controllers
             return View(cohortToUpdate);
         }
 
+        private bool CohortHasOpenEval(int cohortId)
+        {
+            var cohort = UnitOfWork.CohortRepository.GetByID(cohortId);
+            var firstEmployee = cohort.Employees.First();
+            if (firstEmployee == null)
+            {
+                return false;
+            }
+            var firstEval = firstEmployee.Evaluations.First();
+            if (firstEval == null)
+            {
+                return false;
+            }
+
+            return firstEval.OpenDate < DateTime.Today && firstEval.CloseDate > DateTime.Today;
+        }
+
         private void updateCohortEmployees(string[] selectedEmployees, Cohort cohortToUpdate)
         {
             if (selectedEmployees == null)
