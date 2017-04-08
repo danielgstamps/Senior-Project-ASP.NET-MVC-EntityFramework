@@ -15,11 +15,11 @@ namespace CapstoneProject.Controllers
         {
             get
             {
-                return this.unitOfWork;
+                return unitOfWork;
             }
             set
             {
-                this.unitOfWork = value;
+                unitOfWork = value;
             }
         }
 

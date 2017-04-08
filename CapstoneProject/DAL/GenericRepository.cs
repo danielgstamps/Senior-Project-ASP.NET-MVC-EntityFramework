@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace CapstoneProject.DAL
 {
-    public class GenericRepository<TEntity> : IGenericRepository where TEntity : class
+    public class GenericRepository<TEntity> where TEntity : class
     {
         internal DataContext context;
         internal DbSet<TEntity> dbSet;

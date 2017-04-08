@@ -94,7 +94,6 @@
     <Compile Include="EmployeesControllerTest.cs" />
     <Compile Include="EvaluationsControllerTest.cs" />
     <Compile Include="EvaluationTest.cs" />
-    <Compile Include="Models\InMemoryEmployeeRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CohortTest.cs" />
     <Compile Include="EmployeeTest.cs" />

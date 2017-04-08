@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace CapstoneProject.Models
 {
@@ -18,8 +17,7 @@ namespace CapstoneProject.Models
         public string QuestionText { get; set; }
 
         public int CategoryID { get; set; }
-
-        //public ICollection<Category> Categories { get; set; }
+        
         public virtual Category Category { get; set; }
     }
 }

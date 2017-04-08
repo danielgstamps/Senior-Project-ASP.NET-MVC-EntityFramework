@@ -305,10 +305,5 @@ namespace CapstoneProject.Controllers
             }
             base.Dispose(disposing);
         }
-
-        public ActionResult ThankYou()
-        {
-            return Content("Thank You");
-        }
     }
 }
