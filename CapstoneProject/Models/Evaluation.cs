@@ -33,5 +33,23 @@ namespace CapstoneProject.Models
         public string SelfAnswers { get; set; }
 
         public virtual ICollection<Rater> Raters { get; set; }
+
+        public bool IsComplete()
+        {
+            if (string.IsNullOrEmpty(SelfAnswers))
+            {
+                return false;
+            }
+
+            foreach (var rater in Raters)
+            {
+                if (string.IsNullOrEmpty(rater.Answers))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 }

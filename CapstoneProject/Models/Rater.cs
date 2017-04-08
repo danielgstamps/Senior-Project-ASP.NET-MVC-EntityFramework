@@ -24,7 +24,7 @@ namespace CapstoneProject.Models
         [EmailAddress(ErrorMessage = "Invalid Email Address")]
         public string Email { get; set; }
 
-        public List<int> Answers { get; set; }
+        public string Answers { get; set; }
 
         public int EvaluationID { get; set; }
 

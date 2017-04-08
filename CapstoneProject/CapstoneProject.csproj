@@ -277,6 +277,10 @@
     <Compile Include="DataMigrations\201704042139229_RenamedClosedDateToCloseDate.Designer.cs">
       <DependentUpon>201704042139229_RenamedClosedDateToCloseDate.cs</DependentUpon>
     </Compile>
+    <Compile Include="DataMigrations\201704082055346_changedRaterAnswersToString.cs" />
+    <Compile Include="DataMigrations\201704082055346_changedRaterAnswersToString.Designer.cs">
+      <DependentUpon>201704082055346_changedRaterAnswersToString.cs</DependentUpon>
+    </Compile>
     <Compile Include="DataMigrations\DataConfig.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -435,6 +439,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DataMigrations\201704042139229_RenamedClosedDateToCloseDate.resx">
       <DependentUpon>201704042139229_RenamedClosedDateToCloseDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataMigrations\201704082055346_changedRaterAnswersToString.resx">
+      <DependentUpon>201704082055346_changedRaterAnswersToString.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserMigrations\201702202104105_Initial.resx">
       <DependentUpon>201702202104105_Initial.cs</DependentUpon>
