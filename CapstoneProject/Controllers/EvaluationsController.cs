@@ -134,6 +134,7 @@ namespace CapstoneProject.Controllers
 
                 UnitOfWork.EvaluationRepository.Insert(eval);
                 UnitOfWork.Save();
+                SendEvaluationEmail(emp.EmployeeID, eval);
             }
 
             if (model.TypeID == 1)
@@ -147,8 +148,7 @@ namespace CapstoneProject.Controllers
                 UnitOfWork.Save();
             }
 
-            // this.SendEvaluationEmail(cohortID, evaluation);
-            TempData["Success"] = "Successfully created evaluations.";
+            TempData["Success"] = "Successfully created evaluations for " + cohort.Name + ".";
             return RedirectToAction("Index", "Cohorts");
         }
 
@@ -196,35 +196,37 @@ namespace CapstoneProject.Controllers
             private set { _userManager = value; }
         }
 
-        private async Task SendEvaluationEmail(int cohortID, Evaluation evaluation)
+        private async Task SendEvaluationEmail(int employeeID, Evaluation evaluation)
         {
-            var cohort = this.UnitOfWork.CohortRepository.GetByID(cohortID);
-            var employees = cohort.Employees.ToList();
-            var userAccounts = userDB.Users.ToList();
-            foreach (var employee in employees)
-            {
-                var userAccount = userAccounts.Find(u => u.Email == employee.Email);
-                var userEmail = userAccount.Email;
+           // var cohort = this.UnitOfWork.CohortRepository.GetByID(cohortID);
+           // var employees = cohort.Employees.ToList();
+           // var userAccounts = userDB.Users.ToList();
+           // foreach (var employee in employees)
+           // {
 
-                // TODO Specify EvaluationsController Action in first string param
-                var callbackUrl = Url.Action("CompleteEvaluation", "Evaluations", new { userId = userAccount.Id, email = userEmail }, protocol: Request.Url.Scheme);
+            var employee = UnitOfWork.EmployeeRepository.GetByID(employeeID);
+            var userAccount = userDB.Users.ToList().Find(u => u.Email == employee.Email);
+            var userEmail = userAccount.Email;
 
-                var emailSubject = "New Evaluation";
-                var emailBody =
-                "You have a new evaluation to complete. Here are the details: " +
-                "\r\n\r\n" +
-                "Type: " + evaluation.Type.TypeName + 
-                "\r\n\r\n" + 
-                "Stage: " + evaluation.Stage.StageName + 
-                //"\r\n\r\n" + 
-                //"Open Date: " + evaluation.OpenDate + 
-                //"\r\n\r\n" + 
-                //"Close Date: " + evaluation.ClosedDate + 
-                "\r\n\r\n" + 
-                "Click <a href=\"" + callbackUrl + "\">here</a> to complete your evaluation.";
+            // TODO Specify EvaluationsController Action in first string param
+            var callbackUrl = Url.Action("CompleteEvaluation", "Evaluations", new { userId = userAccount.Id, email = userEmail }, protocol: Request.Url.Scheme);
 
-                await UserManager.SendEmailAsync(userAccount.Id, emailSubject, emailBody);
-            }
+            var emailSubject = "New Evaluation";
+            var emailBody =
+            "You have a new evaluation to complete. Here are the details: " +
+            "\r\n\r\n" +
+            "Type: " + evaluation.Type.TypeName + 
+            "\r\n\r\n" + 
+            "Stage: " + evaluation.Stage.StageName + 
+            "\r\n\r\n" + 
+            "Open Date: " + evaluation.OpenDate + 
+            "\r\n\r\n" + 
+            "Close Date: " + evaluation.CloseDate + 
+            "\r\n\r\n" + 
+            "Click <a href=\"" + callbackUrl + "\">here</a> to complete your evaluation.";
+
+            await UserManager.SendEmailAsync(userAccount.Id, emailSubject, emailBody);
+           // }
         }
 
         public ActionResult CompleteEvaluation()

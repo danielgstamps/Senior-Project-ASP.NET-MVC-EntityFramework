@@ -6,6 +6,7 @@
 }
 
 <h2>Cohorts</h2>
+<h4 class="alert-success">@TempData["Success"]</h4>
 
 <p>
     @Html.ActionLink("New Cohort", "Create")
@@ -28,6 +29,11 @@
                 @if (item.Employees.Count != 0 && !(item.Type1Assigned && item.Type2Assigned))
                 {
                     @Html.ActionLink("Evaluate", "Create", "Evaluations", new { cohortId = item.CohortID }, null)
+                    <label> | </label>
+                }
+                @if (item.Employees.Count == 0)
+                {
+                    <label class="alert-warning">This cohort is empty.</label>
                     <label> | </label>
                 }
                 @Html.ActionLink("Edit", "Edit", new {id = item.CohortID}) |
