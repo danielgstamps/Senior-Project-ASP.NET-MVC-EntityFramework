@@ -19,25 +19,6 @@ namespace CapstoneProject.DataMigrations
 
         protected override void Seed(DataContext context)
         {
-            var stageList = new List<Stage>
-            {
-                new Stage
-                {
-                    StageID = 1,
-                    StageName = "Baseline"
-                },
-                new Stage
-                {
-                    StageID = 2,
-                    StageName = "Formative"
-                },
-                new Stage
-                {
-                    StageID = 3,
-                    StageName = "Summative"
-                }
-            };
-            stageList.ForEach(s => context.Stages.Add(s));
             //foreach (var stage in stageList)
             //{
             //    if (!context.Stages.Any(s => s.StageID == stage.StageID))
