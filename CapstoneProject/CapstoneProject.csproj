@@ -211,10 +211,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\QuestionsController.cs" />
     <Compile Include="DAL\DataContext.cs" />
-    <Compile Include="DAL\EmployeeRepository.cs" />
     <Compile Include="DAL\GenericRepository.cs" />
-    <Compile Include="DAL\IEmployeeRepository.cs" />
-    <Compile Include="DAL\IGenericRepository.cs" />
     <Compile Include="DAL\IUnitOfWork.cs" />
     <Compile Include="DAL\UnitOfWork.cs" />
     <Compile Include="DataMigrations\201702202211339_Init.cs" />
@@ -364,7 +361,6 @@
     <Content Include="Views\Cohorts\Details.cshtml" />
     <Content Include="Views\Cohorts\Edit.cshtml" />
     <Content Include="Views\Cohorts\Index.cshtml" />
-    <Content Include="Views\Employees\Create.cshtml" />
     <Content Include="Views\Employees\Delete.cshtml" />
     <Content Include="Views\Employees\Details.cshtml" />
     <Content Include="Views\Employees\Edit.cshtml" />
@@ -381,6 +377,7 @@
     <Content Include="Views\Questions\Create.cshtml" />
     <Content Include="Views\Evaluations\EditorTemplates\Question.cshtml" />
     <Content Include="Views\Evaluations\Send.cshtml" />
+    <Content Include="test.csv" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
