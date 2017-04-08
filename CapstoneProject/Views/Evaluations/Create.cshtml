@@ -26,6 +26,7 @@
             <div class="col-md-10">
                 @Html.DropDownListFor(model => model.StageID, Model.StageList, new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.StageID, "", new { @class = "text-danger" })
+                <label class="text-danger control-label">@TempData["StageError"]</label>
             </div>
         </div>
         

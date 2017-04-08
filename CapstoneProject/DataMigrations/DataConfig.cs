@@ -477,7 +477,7 @@ namespace CapstoneProject.DataMigrations
                     Category = categories[11]
                 }
             };
-            questionList.ForEach(s => context.Questions.Add(s));
+           // questionList.ForEach(s => context.Questions.Add(s));
             //foreach (var question in questionList)
             //{
             //    if (!context.Questions.Any(q => q.QuestionID == question.QuestionID))

@@ -52,5 +52,31 @@ namespace CapstoneProject.Models
                 return "0/0/0000";
             }
         }
+
+        public bool IsStageComplete(string stageName, int typeId)
+        {
+            try
+            {
+                foreach (var emp in Employees)
+                {
+                    var evalsOfType = emp.Evaluations.Where(eval => eval.TypeID.Equals(typeId));
+                    var evalsOfTypeAndStage = evalsOfType.Where(eval => eval.Stage.StageName.Equals(stageName));
+                    if (!evalsOfTypeAndStage.Any())
+                    {
+                        return false;
+                    }
+
+                    if (evalsOfTypeAndStage.All(eval => eval.IsComplete()))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
     }
 }

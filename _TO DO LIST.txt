@@ -1,5 +1,15 @@
 CLONE URL: https://wudsco.visualstudio.com/_git/WUDSCO
 
+- stage logic
+	- if all employees in the cohort have complete baseline (for type), formative is available.
+	- if all employees in the cohort have complete formative (for type), baseline is available.
+
+- edit eval before it opens
+- edit cohort logic
+- delete cohort logic
+
+
+
 Eval breakdown:
 3 stages: baseline -> formative -> summative
 2 types: Type1 and Type2

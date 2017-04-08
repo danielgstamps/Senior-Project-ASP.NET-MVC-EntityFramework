@@ -40,11 +40,15 @@
                 }
                 @if (item.HasOpenEval(1))
                 {
-                    <label class="alert-warning">Type 1 in progress</label>
+                    <label class="alert-warning">Type 1 evaluation in progress</label>
+                    if (item.HasOpenEval(2))
+                    {
+                        <label> | </label>
+                    }
                 }
                 @if (item.HasOpenEval(2))
                 {
-                    <label class="alert-warning">Type 2 in progress</label>
+                    <label class="alert-warning">Type 2 evaluation in progress</label>
                 }
 
                 @if (item.Employees.Count == 0)

@@ -92,12 +92,28 @@ namespace CapstoneProject.Controllers
             }
             model.TypeList = itemList;
 
-            // Get all stages. TODO: Enforce stage logic.
+            // Get all stages.
             model.StageList = UnitOfWork.StageRepository.dbSet.Select(t => new SelectListItem()
             {
                 Value = t.StageID.ToString(),
                 Text = t.StageName
             });
+
+            //// Remove formative & summative if baseline isn't complete for either type.
+            //if (!cohort.IsStageComplete("Baseline", 1) && !cohort.IsStageComplete("Baseline", 2))
+            //{
+            //    var stageList = model.StageList.ToList();
+            //    stageList.RemoveAt(2);
+            //    stageList.RemoveAt(1); 
+            //    model.StageList = stageList;
+            //}
+            //// Remove summative if formative isn't complete for either type.
+            //else if (!(cohort.IsStageComplete("Formative", 1) || cohort.IsStageComplete("Formative", 2)))
+            //{
+            //    var stageList = model.StageList.ToList();
+            //    stageList.RemoveAt(2);
+            //    model.StageList = stageList;
+            //}
 
             model.RaterOptions = new[]{ true, true, true, true, true };
 
@@ -119,9 +135,23 @@ namespace CapstoneProject.Controllers
 
             var cohort = UnitOfWork.CohortRepository.GetByID(model.CohortID);
 
+            // Stage order enforcement
+            var selectedStageName = UnitOfWork.StageRepository.GetByID(model.StageID).StageName;
+            if (selectedStageName.Equals("Formative") && !cohort.IsStageComplete("Baseline", model.TypeID))
+            {
+                TempData["StageError"] = "Formative can only be selected after Baseline is completed.";
+                return RedirectToAction("Create", new { cohortId = (int)TempData["CohortID"] });
+            }
+            if (selectedStageName.Equals("Summative") && !cohort.IsStageComplete("Formative", model.TypeID))
+            {
+                TempData["StageError"] = "Summative can only be selected after Formative is completed.";
+                return RedirectToAction("Create", new { cohortId = (int)TempData["CohortID"] });
+            }
+
+
             foreach (var emp in cohort.Employees)
             {
-                Evaluation eval = new Evaluation
+                var eval = new Evaluation
                 {
                     Employee = emp,
                     Type = UnitOfWork.TypeRepository.GetByID(model.TypeID),
@@ -228,6 +258,28 @@ namespace CapstoneProject.Controllers
             await UserManager.SendEmailAsync(userAccount.Id, emailSubject, emailBody);
            // }
         }
+
+        //private bool IsStageComplete(string stageName, int cohortId, int typeId)
+        //{
+        //    var cohort = UnitOfWork.CohortRepository.GetByID(cohortId);
+        //    try
+        //    {
+        //        foreach (var emp in cohort.Employees)
+        //        {
+        //            var evalsOfType = emp.Evaluations.Where(eval => eval.TypeID.Equals(typeId));
+        //            var evalsOfTypeAndStage = evalsOfType.Where(eval => eval.Stage.StageName.Equals(stageName));
+        //            if (evalsOfTypeAndStage.All(eval => eval.IsComplete()))
+        //            {
+        //                return true;
+        //            }
+        //        }
+        //        return false;
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return false;
+        //    }
+        //}
 
         public ActionResult CompleteEvaluation()
         {
