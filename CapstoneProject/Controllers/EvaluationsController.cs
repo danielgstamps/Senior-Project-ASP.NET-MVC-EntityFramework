@@ -130,7 +130,7 @@ namespace CapstoneProject.Controllers
                     CloseDate = model.CloseDate,
                     SelfAnswers = "",
                     Raters = GenerateRaterList(model.RaterOptions)
-            };
+                };
 
                 UnitOfWork.EvaluationRepository.Insert(eval);
                 UnitOfWork.Save();
@@ -148,7 +148,7 @@ namespace CapstoneProject.Controllers
             }
 
             // this.SendEvaluationEmail(cohortID, evaluation);
-            //throw new Exception("model invalid");
+            TempData["Success"] = "Successfully created evaluations.";
             return RedirectToAction("Index", "Cohorts");
         }
 
