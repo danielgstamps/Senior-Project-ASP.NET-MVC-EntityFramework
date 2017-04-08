@@ -2,7 +2,7 @@
 <div>
     @Html.HiddenFor(x => x.QuestionID)
     <p> @Model.QuestionID. @Model.QuestionText </p>
-    <b>@Html.Label("Disagree")</b>
+    <strong>@Html.Label("Disagree")</strong>
     @if (Model.Category.TypeID == 1)
     {
         for (var i = 0; i < 5; i++)
@@ -14,8 +14,8 @@
     {
         for (var i = 0; i < 10; i++)
         {
-            @Html.RadioButtonFor(model => model.Category, i)
+            @Html.RadioButtonFor(model => model.QuestionText, i)
         }
     }
-    <b>@Html.Label("Agree")</b>
+    <strong>@Html.Label("Agree")</strong>
 </div>
