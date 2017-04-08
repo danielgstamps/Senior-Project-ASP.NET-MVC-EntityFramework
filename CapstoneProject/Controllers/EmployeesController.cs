@@ -188,7 +188,7 @@ namespace CapstoneProject.Controllers
         // GET: Employees/Create
         public ActionResult Create()
         {
-            ViewBag.CohortID = new SelectList(this.unitOfWork.CohortRepository.Get(), "CohortID", "TypeName");
+            ViewBag.CohortID = new SelectList(this.unitOfWork.CohortRepository.Get(), "CohortID", "Name");
             ViewBag.ManagerID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName");
             ViewBag.SupervisorID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName");
             return View("Create");
@@ -210,7 +210,7 @@ namespace CapstoneProject.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.CohortID = new SelectList(this.unitOfWork.CohortRepository.Get(), "CohortID", "TypeName", employee.CohortID);
+            ViewBag.CohortID = new SelectList(this.unitOfWork.CohortRepository.Get(), "CohortID", "Name", employee.CohortID);
           //  ViewBag.ManagerID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", employee.ManagerID);
          //   ViewBag.SupervisorID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", employee.SupervisorID);
             return View(employee);
@@ -228,7 +228,7 @@ namespace CapstoneProject.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.CohortID = new SelectList(this.unitOfWork.CohortRepository.Get(), "CohortID", "TypeName", employee.CohortID);
+            ViewBag.CohortID = new SelectList(this.unitOfWork.CohortRepository.Get(), "CohortID", "Name", employee.CohortID);
           //  ViewBag.ManagerID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", employee.ManagerID);
           //  ViewBag.SupervisorID = new SelectList(this.unitOfWork.EmployeeRepository.Get(), "EmployeeID", "FirstName", employee.SupervisorID);
             return View("Edit", employee);

@@ -759,3 +759,4 @@ C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.pdb
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.csprojResolveAssemblyReference.cache
 C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.LiterallyJustChangedADisplayTag.resources
 C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.RenamedClosedDateToCloseDate.resources
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.changedRaterAnswersToString.resources
