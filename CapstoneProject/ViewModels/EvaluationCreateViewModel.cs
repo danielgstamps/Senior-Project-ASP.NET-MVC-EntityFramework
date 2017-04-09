@@ -23,13 +23,13 @@ namespace CapstoneProject.ViewModels
         [DataType(DataType.Date)]     
         [Display(Name = "Open Date")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime OpenDate { get; set; }
+        public DateTime? OpenDate { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Close Date")]
-        public DateTime CloseDate { get; set; }
+        public DateTime? CloseDate { get; set; }
 
         public bool[] RaterOptions { get; set; }
 

@@ -155,8 +155,8 @@ namespace CapstoneProject.Controllers
                     Employee = emp,
                     Type = UnitOfWork.TypeRepository.GetByID(model.TypeID),
                     Stage = UnitOfWork.StageRepository.GetByID(model.StageID),
-                    OpenDate = model.OpenDate,
-                    CloseDate = model.CloseDate,
+                    OpenDate = model.OpenDate.Value,
+                    CloseDate = model.CloseDate.Value,
                     SelfAnswers = "",
                     Raters = GenerateRaterList(model.RaterOptions)
                 };
@@ -177,7 +177,7 @@ namespace CapstoneProject.Controllers
                 UnitOfWork.Save();
             }
 
-            TempData["Success"] = "Successfully created evaluation for " + cohort.Name + ".";
+            TempData["CreateSuccess"] = "Successfully created evaluation for " + cohort.Name + ".";
             return RedirectToAction("Index", "Cohorts");
         }
 
@@ -198,31 +198,42 @@ namespace CapstoneProject.Controllers
 
             TempData["CohortID"] = cohortId;
             TempData["TypeID"] = typeId;
+            TempData["TypeDisplay"] = typeId;
             TempData["CohortName"] = cohort.Name;
 
             EvaluationCreateViewModel model = new EvaluationCreateViewModel();
-            model.CohortID = (int)cohortId;
 
-            // Get first employee in the cohort with at least 1 eval.
-            var employee = cohort.Employees.First(e => e.Evaluations.Count != 0);
-            if (employee == null)
+            // Get all Types.
+            model.TypeList = UnitOfWork.TypeRepository.dbSet.Select(t => new SelectListItem()
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+                Value = t.TypeID.ToString(),
+                Text = t.TypeName,
+            });
 
-            // Get employee's first eval that isn't complete, and is of the type being edited.
-            var eval = employee.Evaluations.First(e => !e.IsComplete() && e.TypeID == typeId);
-            if (eval == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            // Get all stages and select the one the sample eval has.
+            // Get all Stages.
             model.StageList = UnitOfWork.StageRepository.dbSet.Select(t => new SelectListItem()
             {
                Value = t.StageID.ToString(),
                Text = t.StageName,
             });
+
+            // Get the first employee in the cohort with at least 1 eval.
+            var employee = cohort.Employees.First(e => e.Evaluations.Count != 0);
+            if (employee == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
+
+            // Get the first eval that isn't complete, of this type.
+            var eval = employee.Evaluations.First(e => !e.IsComplete() && e.TypeID == typeId);
+            if (eval == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
+
+            model.CohortID = (int)cohortId;
+            model.TypeID = typeId.Value;
+
             model.StageID = eval.StageID;
             model.OpenDate = eval.OpenDate;
             model.CloseDate = eval.CloseDate;
@@ -242,12 +253,62 @@ namespace CapstoneProject.Controllers
         // POST: Evaluations/Edit?cohortId=x&typeId=1,2
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit()
+        public ActionResult Edit(EvaluationCreateViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                TempData["DateError"] = "Open Date cannot be in the past, and must come before Close Date.";
+                return RedirectToAction("Edit", new { cohortId = (int)TempData["CohortID"], typeId = (int)TempData["TypeID"] });
+            }
 
+            var cohort = UnitOfWork.CohortRepository.GetByID(model.CohortID);
+            if (cohort == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
 
+            // Stage order enforcement
+            var selectedStageName = UnitOfWork.StageRepository.GetByID(model.StageID).StageName;
+            if (selectedStageName.Equals("Formative") && !cohort.IsStageComplete("Baseline", model.TypeID))
+            {
+                TempData["StageError"] = "Formative can only be selected after Baseline is completed.";
+                return RedirectToAction("Edit", new { cohortId = (int)TempData["CohortID"], typeId = (int)TempData["TypeID"] });
+            }
+            if (selectedStageName.Equals("Summative") && !cohort.IsStageComplete("Formative", model.TypeID))
+            {
+                TempData["StageError"] = "Summative can only be selected after Formative is completed.";
+                return RedirectToAction("Edit", new { cohortId = (int)TempData["CohortID"], typeId = (int)TempData["TypeID"] });
+            }
 
-            TempData["Success"] = "Successfully updated evaluation.";
+            // Remove target evals
+            foreach (var emp in cohort.Employees)
+            {
+                // If this throws an exception, that means an employee has more than 1 eval of the same type. Which it shouldn't. That'd be bad.
+                var eval = emp.Evaluations.Single(e => !e.IsComplete() && e.TypeID == model.TypeID);
+                UnitOfWork.EvaluationRepository.Delete(eval.EvaluationID);
+                UnitOfWork.Save();
+            }
+
+            // Recreate evals (I remove/recreate so the emails re-send, and the Rater logic is cleaner).
+            foreach (var emp in cohort.Employees)
+            {
+                var eval = new Evaluation
+                {
+                    Employee = emp,
+                    Type = UnitOfWork.TypeRepository.GetByID(model.TypeID),
+                    Stage = UnitOfWork.StageRepository.GetByID(model.StageID),
+                    OpenDate = model.OpenDate.Value, // This "PossibleInvalidOperation" will never happen. It'd break way up there^ if the dates were null.
+                    CloseDate = model.CloseDate.Value,
+                    SelfAnswers = "",
+                    Raters = GenerateRaterList(model.RaterOptions)
+                };
+
+                UnitOfWork.EvaluationRepository.Insert(eval);
+                UnitOfWork.Save();
+                SendEvaluationEmail(emp.EmployeeID, eval); // Don't await this.
+            }
+
+            TempData["EditSuccess"] = "Successfully updated evaluation.";
             return RedirectToAction("Index", "Cohorts");
         }
 

@@ -6,7 +6,7 @@
     ViewBag.Title = "Edit";
 }
 
-<h2>Edit Type @TempData["TypeID"] Evaluation for @TempData["CohortName"] </h2>
+<h2>Editing Type @TempData["TypeDisplay"] Evaluation for @TempData["CohortName"] </h2>
 
 @using (Html.BeginForm())
 {
@@ -77,7 +77,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Edit" class="btn btn-default" />
+                <input type="submit" value="Save" class="btn btn-default" />
             </div>
         </div>
     </div>
