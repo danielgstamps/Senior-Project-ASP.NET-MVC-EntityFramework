@@ -25,9 +25,9 @@ namespace CapstoneProject.Models
 
         public virtual Stage Stage { get; set; }
 
-        public DateTime? OpenDate { get; set; }
+        public DateTime OpenDate { get; set; }
 
-        public DateTime? CloseDate { get; set; }
+        public DateTime CloseDate { get; set; }
 
         public string SelfAnswers { get; set; }
 

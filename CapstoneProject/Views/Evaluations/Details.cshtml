@@ -19,39 +19,12 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Stages)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Stages)
-        </dd>
-
-        <dt>
             @Html.DisplayNameFor(model => model.Employee)
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.Employee)
         </dd>
-        
-        <dt>
-            @Html.DisplayNameFor(model => model.Comment)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Comment)
-        </dd>
-        
-        <dt>
-            @Html.DisplayNameFor(model => model.Questions)
-        </dt>
-        
-        @foreach (var question in Model.Questions)
-        {
-            <dd>
-                @question.QuestionText  @question.Categories
-            </dd>
-        }
 
     </dl>
 </div>

@@ -45,7 +45,7 @@ namespace CapstoneProject.Models
             {
                 var firstEmployee = Employees.First();
                 var allEvalsOfType = firstEmployee.Evaluations.Where(eval => eval.TypeID == typeId);
-                return allEvalsOfType.First().OpenDate.GetValueOrDefault().ToString("d");
+                return allEvalsOfType.First().OpenDate.ToString("d");
             }
             catch (Exception)
             {

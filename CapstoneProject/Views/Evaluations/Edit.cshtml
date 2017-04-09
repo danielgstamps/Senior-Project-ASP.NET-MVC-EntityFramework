@@ -1,0 +1,88 @@
+﻿@using CapstoneProject.DAL
+@using Castle.Core.Internal
+@model CapstoneProject.ViewModels.EvaluationCreateViewModel
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit Type @TempData["TypeID"] Evaluation for @TempData["CohortName"] </h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+
+        @Html.HiddenFor(model => model.TypeID)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.StageID, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.StageID, Model.StageList, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.StageID, "", new { @class = "text-danger" })
+                <label class="text-danger control-label">@TempData["StageError"]</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.OpenDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="input-group" id="datetimepicker">
+                    @Html.EditorFor(model => model.OpenDate, new { htmlAttributes = new { @class = "form-control" } })
+                    <label class="text-danger control-label">@TempData["DateError"]</label>
+                </div>
+                @Html.ValidationMessageFor(model => model.OpenDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CloseDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="input-group" id="datetimepicker">
+                    @Html.EditorFor(model => model.CloseDate, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                @Html.ValidationMessageFor(model => model.CloseDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2">Optional Raters</label>
+            <div class="col-md-10">
+                <div class="input-group">
+                    <table>
+                        <tr>
+                            <td>@Html.CheckBoxFor(m => m.RaterOptions[0])</td>
+                            <td>@Html.Label("Supervisor", htmlAttributes: new { @class = "control-label col-md-12" })</td>
+                        </tr>
+                        <tr>
+                            <td>@Html.CheckBoxFor(m => m.RaterOptions[1])</td>
+                            <td>@Html.Label("Coworker 1", htmlAttributes: new { @class = "control-label col-md-12" })</td>
+                        </tr>
+                        <tr>
+                            <td>@Html.CheckBoxFor(m => m.RaterOptions[2])</td>
+                            <td>@Html.Label("Coworker 2", htmlAttributes: new { @class = "control-label col-md-12" })</td>
+                        </tr>
+                        <tr>
+                            <td>@Html.CheckBoxFor(m => m.RaterOptions[3])</td>
+                            <td>@Html.Label("Supervisee 1", htmlAttributes: new { @class = "control-label col-md-12" })</td>
+                        </tr>
+                        <tr>
+                            <td>@Html.CheckBoxFor(m => m.RaterOptions[4])</td>
+                            <td>@Html.Label("Supervisee 2", htmlAttributes: new { @class = "control-label col-md-12" })</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Edit" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Cancel", "Index", "Cohorts")
+</div>

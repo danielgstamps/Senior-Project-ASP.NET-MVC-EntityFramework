@@ -148,7 +148,6 @@ namespace CapstoneProject.Controllers
                 return RedirectToAction("Create", new { cohortId = (int)TempData["CohortID"] });
             }
 
-
             foreach (var emp in cohort.Employees)
             {
                 var eval = new Evaluation
@@ -180,6 +179,81 @@ namespace CapstoneProject.Controllers
 
             TempData["Success"] = "Successfully created evaluation for " + cohort.Name + ".";
             return RedirectToAction("Index", "Cohorts");
+        }
+
+        // GET: Evaluations/Edit?cohortId=x&typeId=1,2
+        public ActionResult Edit(int? cohortId, int? typeId)
+        {
+            if (cohortId == null || typeId == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var cohort = UnitOfWork.CohortRepository.GetByID(cohortId);
+            var type = UnitOfWork.TypeRepository.GetByID(typeId);
+            if (cohort == null || type == null)
+            {
+                return HttpNotFound();
+            }
+
+            TempData["CohortID"] = cohortId;
+            TempData["TypeID"] = typeId;
+            TempData["CohortName"] = cohort.Name;
+
+            EvaluationCreateViewModel model = new EvaluationCreateViewModel();
+            model.CohortID = (int)cohortId;
+
+            // Get first employee in the cohort with at least 1 eval.
+            var employee = cohort.Employees.First(e => e.Evaluations.Count != 0);
+            if (employee == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            // Get employee's first eval that isn't complete, and is of the type being edited.
+            var eval = employee.Evaluations.First(e => !e.IsComplete() && e.TypeID == typeId);
+            if (eval == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            // Get all stages and select the one the sample eval has.
+            model.StageList = UnitOfWork.StageRepository.dbSet.Select(t => new SelectListItem()
+            {
+               Value = t.StageID.ToString(),
+               Text = t.StageName,
+            });
+            model.StageID = eval.StageID;
+            model.OpenDate = eval.OpenDate;
+            model.CloseDate = eval.CloseDate;
+
+            model.RaterOptions = new[]
+            {
+                RaterExists(eval, "Supervisor"),
+                RaterExists(eval, "Coworker 1"),
+                RaterExists(eval, "Coworker 2"),
+                RaterExists(eval, "Supervisee 1"),
+                RaterExists(eval, "Supervisee 2")
+            };
+        
+            return View("Edit", model);
+        }
+
+        // POST: Evaluations/Edit?cohortId=x&typeId=1,2
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit()
+        {
+
+
+
+            TempData["Success"] = "Successfully updated evaluation.";
+            return RedirectToAction("Index", "Cohorts");
+        }
+
+        private bool RaterExists(Evaluation eval, string role)
+        {
+            return eval.Raters.Any(r => r.Role.Equals(role));
         }
 
         private List<Rater> GenerateRaterList(bool[] raterBools)

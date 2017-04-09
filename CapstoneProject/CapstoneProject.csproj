@@ -278,6 +278,10 @@
     <Compile Include="DataMigrations\201704082055346_changedRaterAnswersToString.Designer.cs">
       <DependentUpon>201704082055346_changedRaterAnswersToString.cs</DependentUpon>
     </Compile>
+    <Compile Include="DataMigrations\201704091932363_OpenDateCloseDateNotNullable.cs" />
+    <Compile Include="DataMigrations\201704091932363_OpenDateCloseDateNotNullable.Designer.cs">
+      <DependentUpon>201704091932363_OpenDateCloseDateNotNullable.cs</DependentUpon>
+    </Compile>
     <Compile Include="DataMigrations\DataConfig.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -378,6 +382,7 @@
     <Content Include="Views\Evaluations\EditorTemplates\Question.cshtml" />
     <Content Include="Views\Evaluations\Send.cshtml" />
     <Content Include="test.csv" />
+    <Content Include="Views\Evaluations\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -439,6 +444,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DataMigrations\201704082055346_changedRaterAnswersToString.resx">
       <DependentUpon>201704082055346_changedRaterAnswersToString.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataMigrations\201704091932363_OpenDateCloseDateNotNullable.resx">
+      <DependentUpon>201704091932363_OpenDateCloseDateNotNullable.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserMigrations\201702202104105_Initial.resx">
       <DependentUpon>201702202104105_Initial.cs</DependentUpon>
