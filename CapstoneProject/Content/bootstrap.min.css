@@ -1373,7 +1373,7 @@ mark {
     color: #eee8d5
 }
 .text-primary {
-    color: #16545b
+    color: #b58900
 }
 a.text-primary:focus,
 a.text-primary:hover {
@@ -4481,7 +4481,7 @@ fieldset[disabled] .navbar-default .btn-link:hover {
     color: #fff
 }
 .navbar-inverse {
-    background-color: #b58900;
+    background-color: #16545b;
     border-color: #826200
 }
 .navbar-inverse .navbar-brand:focus,
