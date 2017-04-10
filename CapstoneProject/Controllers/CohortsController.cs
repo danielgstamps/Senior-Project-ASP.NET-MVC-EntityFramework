@@ -232,14 +232,34 @@ namespace CapstoneProject.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            var cohort = this.unitOfWork.CohortRepository.GetByID(id);
+            var cohort = unitOfWork.CohortRepository.GetByID(id);
+            var evalsToDelete = new List<Evaluation>();
+
+            // Remove all cohort's employees from the cohort.
             foreach (var employee in cohort.Employees)
             {
                 employee.CohortID = null;
                 employee.Cohort = null;
+
+                // Gather each employee's incomplete evals into evalsToDelete.
+                foreach (var eval in employee.Evaluations)
+                {
+                    if (!eval.IsComplete())
+                    {
+                        evalsToDelete.Add(eval);
+                    }
+                }
             }
-            this.unitOfWork.CohortRepository.Delete(cohort);
-            this.unitOfWork.Save();
+
+            // Delete each eval in evalsToDelete
+            foreach (var eval in evalsToDelete)
+            {
+                unitOfWork.EvaluationRepository.Delete(eval);
+                unitOfWork.Save();
+            }
+
+            unitOfWork.CohortRepository.Delete(cohort);
+            unitOfWork.Save();
             return RedirectToAction("Index");
         }     
 
