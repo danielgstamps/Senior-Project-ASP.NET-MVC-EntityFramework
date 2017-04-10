@@ -12,12 +12,12 @@ namespace CapstoneProject.Models
         [Required(ErrorMessage = "Employee must have ID")]
         public int EmployeeID { get; set; }
 
-        [Display(Name = "First TypeName")]
+        [Display(Name = "First Name")]
         [StringLength(MAX_NAME_LENGTH)]
         [Required(ErrorMessage = "Employee must have first name")]
         public string FirstName { get; set; }
 
-        [Display(Name = "Last TypeName")]
+        [Display(Name = "Last Name")]
         [StringLength(MAX_NAME_LENGTH)]
         [Required(ErrorMessage = "Employee must have last name")]
         public string LastName { get; set; }

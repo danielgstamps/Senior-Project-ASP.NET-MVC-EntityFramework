@@ -167,6 +167,7 @@ namespace CapstoneProject.Controllers
             if (selectedEmployees == null)
             {
                 cohortToUpdate.Employees = new List<Employee>();
+                cohortToUpdate.Employees.Clear();
                 return;
             }
 
