@@ -22,13 +22,13 @@ namespace CapstoneProject.Controllers
         public IUnitOfWork UnitOfWork { get; set; } = new UnitOfWork();
 
         //GET: Evaluations/TakeEvaluation/5
-        public ActionResult TakeEvaluation(int? evalutationId)
+        public ActionResult TakeEvaluation(int? id)
         {
-            if (evalutationId == null)
+            if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.ExpectationFailed);
             }
-            var evaluation = UnitOfWork.EvaluationRepository.GetByID(evalutationId);
+            var evaluation = UnitOfWork.EvaluationRepository.GetByID(id);
             if (evaluation == null)
             {
                 return HttpNotFound();

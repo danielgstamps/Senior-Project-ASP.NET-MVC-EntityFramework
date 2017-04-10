@@ -197,3 +197,4 @@ C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.dll
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.pdb
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.DataMigrations.changedRaterAnswersToString.resources
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.DataMigrations.OpenDateCloseDateNotNullable.resources
+C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.csprojResolveAssemblyReference.cache
