@@ -7,15 +7,15 @@
     {
         for (var i = 0; i < 5; i++)
         {
-            @Html.RadioButtonFor(model => model.QuestionText, i)
+            @Html.RadioButton("Radio", Model.QuestionID)
         }
     }
     @if (Model.Category.TypeID == 2)
     {
         for (var i = 0; i < 10; i++)
         {
-            @Html.RadioButtonFor(model => model.QuestionText, i)
+            @Html.RadioButton(i.ToString(), Model.QuestionID)
         }
     }
     <strong>@Html.Label("Agree")</strong>
-</div>
+</div> 

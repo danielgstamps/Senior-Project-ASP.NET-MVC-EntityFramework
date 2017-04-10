@@ -21,21 +21,30 @@ namespace CapstoneProject.Controllers
 
         public IUnitOfWork UnitOfWork { get; set; } = new UnitOfWork();
 
-        //GET: Evaluations
-        public ActionResult Index()
+        //GET: Evaluations/TakeEvaluation/5
+        public ActionResult TakeEvaluation(int? evalutationId)
         {
-            var evaluations = UnitOfWork.EvaluationRepository.Get();
-            return View("Index", evaluations);
+            if (evalutationId == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.ExpectationFailed);
+            }
+            var evaluation = UnitOfWork.EvaluationRepository.GetByID(evalutationId);
+            if (evaluation == null)
+            {
+                return HttpNotFound();
+            }
+            return View("TakeEvaluation", evaluation);
         }
 
         [HttpPost]
-        public ActionResult Index(IEnumerable<Evaluation> model)
+        public ActionResult TakeEvaluation(FormCollection form)
         {
             if (ModelState.IsValid)
             {
-
+                int selectedChoice = Convert.ToInt32(form["Radio"]);
+                
             }
-            return View("Send", model);
+            return View("Send");
         }
 
         // GET: Evaluations/Details/5

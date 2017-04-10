@@ -371,7 +371,7 @@
     <Content Include="Views\Employees\Index.cshtml" />
     <Content Include="Views\Evaluations\Create.cshtml" />
     <Content Include="Views\Evaluations\Details.cshtml" />
-    <Content Include="Views\Evaluations\Index.cshtml" />
+    <Content Include="Views\Evaluations\TakeEvaluation.cshtml" />
     <Content Include="Views\Employees\UploadData.cshtml" />
     <Content Include="Views\Account\CreatePassword.cshtml" />
     <Content Include="Views\Account\CreatePasswordConfirmation.cshtml" />
