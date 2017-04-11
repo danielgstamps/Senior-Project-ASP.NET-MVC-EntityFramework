@@ -1,21 +1,25 @@
 ﻿@model CapstoneProject.Models.Question
 <div>
     @Html.HiddenFor(x => x.QuestionID)
-    <p> @Model.QuestionID. @Model.QuestionText </p>
-    <strong>@Html.Label("Disagree")</strong>
-    @if (Model.Category.TypeID == 1)
+    @{
+        var i = (int)TempData["i"];
+        var number = Model.QuestionID - (Model.QuestionID - 1) + i;
+    }
+    <p> @number. @Model.QuestionText </p>
+    @*<strong>@Html.Label("Disagree")</strong>*@
+    @*@if (Model.Category.TypeID == 1)
     {
         for (var i = 0; i < 5; i++)
         {
-            @Html.RadioButton("Radio", Model.QuestionID)
+            @Html.RadioButton(i.ToString(), Model.QuestionID)
         }
-    }
-    @if (Model.Category.TypeID == 2)
+    }*@
+    @*@if (Model.Category.TypeID == 2)
     {
         for (var i = 0; i < 10; i++)
         {
             @Html.RadioButton(i.ToString(), Model.QuestionID)
         }
-    }
-    <strong>@Html.Label("Agree")</strong>
+    }*@
+    @*<strong>@Html.Label("Agree")</strong>*@
 </div> 
