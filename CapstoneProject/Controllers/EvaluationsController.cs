@@ -42,7 +42,7 @@ namespace CapstoneProject.Controllers
         {
             if (ModelState.IsValid)
             {
-                int selectedChoice = Convert.ToInt32(form["Radio"]);
+                var selectedChoice = Convert.ToInt32(form["Radio"]);
                 
             }
             return View("Send");
@@ -80,15 +80,17 @@ namespace CapstoneProject.Controllers
             TempData["CohortID"] = cohortId;
             TempData["CohortName"] = cohort.Name;
 
-            EvaluationCreateViewModel model = new EvaluationCreateViewModel();
-            model.CohortID = (int)cohortId;
+            var model = new EvaluationCreateViewModel
+            {
+                CohortID = (int) cohortId,
+                TypeList = UnitOfWork.TypeRepository.dbSet.Select(t => new SelectListItem()
+                {
+                    Value = t.TypeID.ToString(),
+                    Text = t.TypeName,
+                })
+            };
 
             // Get all types.
-            model.TypeList = UnitOfWork.TypeRepository.dbSet.Select(t => new SelectListItem()
-            {
-                Value = t.TypeID.ToString(),
-                Text = t.TypeName,
-            });
 
             // Remove types if the cohort already has them assigned.
             var itemList = model.TypeList.ToList();

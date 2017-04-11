@@ -5,31 +5,44 @@
         var numberOffset = (int)TempData["numberOffset"];
         var number = Model.QuestionID - (Model.QuestionID - 1) + numberOffset;
     }
+
     <p> @number. @Model.QuestionText </p>
-    @{
-        string[] radioButtonLabels;
-    }
+    @Html.Label("Disagree")
+    <br/>
     @if (Model.Category.TypeID == 1)
     {
-        radioButtonLabels = new string[]
+        var typeOneRadioButtonLabels = new[]
         {
-            "Strongly Agree",
-            "Agree",
-            "Neutral",
-            "Disagree",
-            "Strongly Disagree"
+            "1",
+            "2",
+            "3",
+            "4",
+            "5"
         };
         for (var i = 0; i < 5; i++)
         {
-            @Html.RadioButton(i.ToString(), Model.QuestionID) @: @Html.Label(radioButtonLabels[i]) <br>
+            @Html.RadioButton(i.ToString(), Model.QuestionID) @: @Html.Label(typeOneRadioButtonLabels[i]) <br>
         }
     }
-    @*@if (Model.Category.TypeID == 2)
+    @if (Model.Category.TypeID == 2)
     {
+        var typeTwoRadioButtonLabels = new[]
+        {
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10"
+        };
         for (var i = 0; i < 10; i++)
         {
-            @Html.RadioButton(i.ToString(), Model.QuestionID)
+            @Html.RadioButton(i.ToString(), Model.QuestionID) @: @Html.Label(typeTwoRadioButtonLabels[i]) <br>
         }
-    }*@
-    @*<strong>@Html.Label("Agree")</strong>*@
+    }
+    @Html.Label("Agree")
 </div> 
