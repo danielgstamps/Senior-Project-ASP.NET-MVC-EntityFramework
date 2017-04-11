@@ -1,4 +1,7 @@
-﻿<div class="navbar navbar-inverse navbar-fixed-top">
+﻿@using CapstoneProject.Controllers
+@using CapstoneProject.DAL
+@using Microsoft.AspNet.Identity
+<div class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -13,8 +16,8 @@
                 <li>@Html.ActionLink("Home", "Index", "Home")</li>
 
                 @if (User.Identity.IsAuthenticated && !User.IsInRole("Admin")) 
-                {
-                   <!-- <li>@Html.ActionLink("My Evaluations", "EmployeeIndex", "Evaluations")</li> -->
+                {                   
+                    @Html.ActionLink("My Evaluations", "EmployeeEvalsIndex", "Evaluations", new { id = User.Identity.GetUserId() })
                 }
 
                 @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
