@@ -21,7 +21,7 @@
         };
         for (var i = 0; i < 5; i++)
         {
-            @Html.RadioButton("radioButton1", Model.QuestionID, true) @: @Html.Label(typeOneRadioButtonLabels[i]) <br>
+            @Html.RadioButton(Model.QuestionID.ToString(), Model.QuestionID) @: @Html.Label(typeOneRadioButtonLabels[i]) <br>
         }
     }
     @if (Model.Category.TypeID == 2)
@@ -41,7 +41,7 @@
         };
         for (var i = 0; i < 10; i++)
         {
-            @Html.RadioButton("radioButton2", Model.QuestionID, true) @: @Html.Label(typeTwoRadioButtonLabels[i]) <br>
+            @Html.RadioButton(Model.QuestionID.ToString(), Model.QuestionID) @: @Html.Label(typeTwoRadioButtonLabels[i]) <br>
         }
     }
     @Html.Label("Agree")
