@@ -9,6 +9,7 @@ using CapstoneProject.DAL;
 using CapstoneProject.Models;
 using CapstoneProject.ViewModels;
 using Castle.Components.DictionaryAdapter.Xml;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 
 namespace CapstoneProject.Controllers
@@ -319,6 +320,24 @@ namespace CapstoneProject.Controllers
 
             TempData["EditSuccess"] = "Successfully updated evaluation.";
             return RedirectToAction("Index", "Cohorts");
+        }
+
+        [Authorize]
+        public ActionResult EmployeeEvalsIndex(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var employee = UnitOfWork.EmployeeRepository.GetByID(id);
+            if (employee == null || !employee.Email.Equals(User.Identity.GetUserName()))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+            }
+
+            var employeeEvals = employee.Evaluations;
+            return View(employeeEvals);
         }
 
         private bool RaterExists(Evaluation eval, string role)

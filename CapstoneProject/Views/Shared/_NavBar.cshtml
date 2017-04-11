@@ -16,8 +16,10 @@
                 <li>@Html.ActionLink("Home", "Index", "Home")</li>
 
                 @if (User.Identity.IsAuthenticated && !User.IsInRole("Admin")) 
-                {                   
-                    @Html.ActionLink("My Evaluations", "EmployeeEvalsIndex", "Evaluations", new { id = User.Identity.GetUserId() })
+                {                  
+                    var unitOfWork = new UnitOfWork();
+                    var employee = unitOfWork.EmployeeRepository.Get().Single(e => e.Email.Equals(User.Identity.GetUserName()));
+                    <li>@Html.ActionLink("My Evaluations", "EmployeeEvalsIndex", "Evaluations", new { id = employee.EmployeeID}, new {})</li>
                 }
 
                 @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))

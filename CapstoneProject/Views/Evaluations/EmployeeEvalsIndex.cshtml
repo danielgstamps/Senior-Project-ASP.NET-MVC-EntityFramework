@@ -1,9 +1,72 @@
 ﻿@model IEnumerable<CapstoneProject.Models.Evaluation>
 
 @{
-    ViewBag.Title = "EmployeeEvalsIndex";
+    ViewBag.Title = "My Evaluations";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Evaluations for @User.Identity.Name</h2>
 
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Type)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Stage)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OpenDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CloseDate)
+        </th>
+        <th>
+            <label>Status</label>
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type.TypeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Stage.StageName)
+            </td>
+            <td>
+                <label>@item.OpenDate.Date.ToString("d")</label>
+            </td>
+            <td>
+                <label>@item.CloseDate.Date.ToString("d")</label>
+            </td>
+            <td>
+                @if (item.IsComplete())
+                {
+                    <label class="alert-success">Complete</label>
+                }
+                else if (item.OpenDate <= DateTime.Today && !item.IsComplete())
+                {
+                    @Html.ActionLink("Start Evaluation", "TakeEvaluation", new { id = item.EvaluationID })
+                    <label> | </label>
+                    <label class="alert-success">Open</label>
+                    <label> | </label>
+                    <label class="alert-warning">Closes @item.CloseDate.Date.ToString("d")</label>
+                }
+                else if (item.OpenDate > DateTime.Today)
+                {
+                    <label class="alert-info">Opens @item.OpenDate.Date.ToString("d")</label>
+                }
+                else if (item.CloseDate < DateTime.Today)
+                {
+                    <label class="alert-danger">Closed @item.CloseDate.Date.ToString("d")</label>
+                }
+            </td>
+            <td>
+            </td>
+        </tr>
+    }
+
+</table>
