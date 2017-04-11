@@ -1,16 +1,19 @@
 ﻿@model CapstoneProject.Models.Evaluation
 
-<h2> Evaluations: Administrator View</h2>
+<h2> Evaluation</h2>
 <p>Please rate how much you agree with each statement</p>
 <br />
 <div>
     @using (Html.BeginForm())
     {
-        TempData["i"] = 0;
+        TempData["numberOffset"] = 0;
         foreach (var category in Model.Type.Categories)
         {
-            @Html.EditorFor(x => category.Questions)
-            TempData["i"] = (int)TempData["i"] + 1;
+            foreach (var question in category.Questions)
+            {
+                @Html.EditorFor(e => question)
+                TempData["numberOffset"] = (int)TempData["numberOffset"] + 1;
+            }
         }
         <input type="submit" />
     }

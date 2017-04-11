@@ -2,8 +2,8 @@
 <div>
     @Html.HiddenFor(x => x.QuestionID)
     @{
-        var i = (int)TempData["i"];
-        var number = Model.QuestionID - (Model.QuestionID - 1) + i;
+        var numberOffset = (int)TempData["numberOffset"];
+        var number = Model.QuestionID - (Model.QuestionID - 1) + numberOffset;
     }
     <p> @number. @Model.QuestionText </p>
     @*<strong>@Html.Label("Disagree")</strong>*@
