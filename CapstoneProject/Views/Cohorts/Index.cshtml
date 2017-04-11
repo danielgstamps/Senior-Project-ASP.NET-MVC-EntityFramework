@@ -9,9 +9,9 @@
 <h4 class="alert-success">@TempData["CreateSuccess"]</h4>
 <h4 class="alert-success">@TempData["EditSuccess"]</h4>
 
-<p>
-    @Html.ActionLink("New Cohort", "Create")
-</p>
+
+@Html.ActionLink("Add New Cohort", "Create")
+
 <table class="table">
     <tr>
         <th>
@@ -27,17 +27,20 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
+                @Html.ActionLink("View", "Details", new { id = item.CohortID })
+                <label> | </label>
+
                 @if (item.Employees.Count != 0 && !(item.Type1Assigned && item.Type2Assigned))
                 {
-                    @Html.ActionLink("Evaluate", "Create", "Evaluations", new { cohortId = item.CohortID }, null)
+                    @Html.ActionLink("Evaluate", "Create", "Evaluations", new {cohortId = item.CohortID}, null)
                     <label> | </label>
                 }
-                
+
                 @if (!item.HasOpenEval(1) && !item.HasOpenEval(2))
                 {
-                    @Html.ActionLink("Edit", "Edit", new { id = item.CohortID })
+                    @Html.ActionLink("Edit", "Edit", new {id = item.CohortID})
                     <label> | </label>
-                    @Html.ActionLink("Delete", "Delete", new { id = item.CohortID })
+                    @Html.ActionLink("Delete", "Delete", new {id = item.CohortID})
                 }
                 @if (item.HasOpenEval(1))
                 {
@@ -62,14 +65,14 @@
                 {
                     <label> | </label>
                     <label class="alert-info">Type 1 opens @item.EvalOpenDate(1)</label>
-                    @Html.ActionLink("(Change)", "Edit", "Evaluations", new { cohortId = item.CohortID, typeId = 1 }, null)
+                    @Html.ActionLink("(Change)", "Edit", "Evaluations", new {cohortId = item.CohortID, typeId = 1}, null)
                 }
 
                 @if (item.Type2Assigned && !item.HasOpenEval(2))
                 {
                     <label> | </label>
                     <label class="alert-info">Type 2 opens @item.EvalOpenDate(2)</label>
-                    @Html.ActionLink("(Change)", "Edit", "Evaluations", new { cohortId = item.CohortID, typeId = 2 }, null)
+                    @Html.ActionLink("(Change)", "Edit", "Evaluations", new {cohortId = item.CohortID, typeId = 2}, null)
                 }
             </td>
         </tr>
