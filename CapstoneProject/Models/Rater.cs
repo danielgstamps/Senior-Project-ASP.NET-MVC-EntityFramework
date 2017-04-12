@@ -6,10 +6,10 @@ namespace CapstoneProject.Models
     {
         public int RaterID { get; set; }
 
-        [Display(Name = "First TypeName")]
+        [Display(Name = "First Name")]
         public string FirstName { get; set; }
 
-        [Display(Name = "Last TypeName")]
+        [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
         public string Role { get; set; }

@@ -1,0 +1,46 @@
+﻿@model ICollection<CapstoneProject.Models.Rater>
+@{
+    ViewBag.Title = "Assign Raters";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Assign Your Raters</h2>
+<h4>The administrator has assigned the following raters to evaluate you:</h4>
+<br />
+
+@foreach (var rater in Model)
+{
+    <h4>@rater.Role:</h4>
+
+    <div class="form-group">
+        @Html.LabelFor(model => rater.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => rater.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => rater.FirstName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => rater.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => rater.LastName, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => rater.LastName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => rater.Email, htmlAttributes: new {@class = "control-label col-md-2"})
+        <div class="col-md-10">
+            @Html.EditorFor(model => rater.Email, new {htmlAttributes = new {@class = "form-control"}})
+            @Html.ValidationMessageFor(model => rater.Email, "", new {@class = "text-danger"})
+        </div>
+    </div>
+}
+
+<br/>
+
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+        <input type="submit" value="Submit" class="btn btn-default" />
+    </div>
+</div>

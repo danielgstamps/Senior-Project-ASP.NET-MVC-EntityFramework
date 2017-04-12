@@ -45,7 +45,34 @@ namespace CapstoneProject.Controllers
                 var selectedChoice = Convert.ToInt32(form["Radio"]);
                 
             }
-            return View("Send");
+            return View("AssignRaters");
+        }
+
+        public ActionResult AssignRaters(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var eval = UnitOfWork.EvaluationRepository.GetByID(id);
+            if (eval == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            //if (eval.Raters.Count == 0)
+            //{
+            //    return View("something else");
+            //}
+
+            var raterList = eval.Raters;
+            foreach (var rater in raterList)
+            {
+                rater.Email = "";
+            }
+
+            return View("AssignRaters", raterList);
         }
 
         // GET: Evaluations/Details/5

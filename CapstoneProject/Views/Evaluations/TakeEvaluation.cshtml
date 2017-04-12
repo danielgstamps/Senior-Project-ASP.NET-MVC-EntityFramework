@@ -15,6 +15,7 @@
                 TempData["numberOffset"] = (int)TempData["numberOffset"] + 1;
             }
         }
-        <input type="submit" />
+        @*<input type="submit" />*@
+        @Html.ActionLink("Next", "AssignRaters", new { id = Model.EvaluationID})
     }
 </div>

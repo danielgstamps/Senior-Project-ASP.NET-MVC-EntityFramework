@@ -385,6 +385,7 @@
     <Content Include="test.csv" />
     <Content Include="Views\Evaluations\Edit.cshtml" />
     <Content Include="Views\Evaluations\EmployeeEvalsIndex.cshtml" />
+    <Content Include="Views\Evaluations\AssignRaters.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
