@@ -175,7 +175,7 @@ namespace CapstoneProject.Controllers
 
                 UnitOfWork.EvaluationRepository.Insert(eval);
                 UnitOfWork.Save();
-                // SendEvaluationEmail(emp.EmployeeID, eval); Commenting this out for now, it rustles Microsoft's jimmies.
+                SendEvaluationEmail(emp.EmployeeID, eval); // Commenting this out for now, it rustles Microsoft's jimmies.
             }
 
             if (model.TypeID == 1)
@@ -317,7 +317,7 @@ namespace CapstoneProject.Controllers
 
                 UnitOfWork.EvaluationRepository.Insert(eval);
                 UnitOfWork.Save();
-                // SendEvaluationEmail(emp.EmployeeID, eval); // Don't await this. Commenting this out for now, it rustles Microsoft's jimmies.
+                SendEvaluationEmail(emp.EmployeeID, eval); // Don't await this. Commenting this out for now, it rustles Microsoft's jimmies.
             }
 
             TempData["EditSuccess"] = "Successfully updated evaluation.";
