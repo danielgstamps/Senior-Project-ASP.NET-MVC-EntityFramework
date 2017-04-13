@@ -1,0 +1,54 @@
+﻿@model CapstoneProject.Models.Evaluation
+
+@{
+    ViewBag.Title = "Delete Evaluation";
+}
+
+<h2>Delete Evaluation</h2>
+
+<h4>Are you sure? All employees in the cohort will be affected.</h4>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Type)
+        </dt>
+        
+        <dd>
+            @Html.DisplayFor(model => model.Type.TypeName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Stage)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Stage.StageName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OpenDate)
+        </dt>
+
+        <dd>
+            @Model.OpenDate.ToString("d")
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CloseDate)
+        </dt>
+
+        <dd>
+            @Model.CloseDate.ToString("d")
+        </dd>
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div>
+            @Html.ActionLink("Cancel", "Index", "Cohorts") | 
+            <input type="submit" value="Delete" class="btn btn-default"/>
+        </div>
+    }
+</div>
