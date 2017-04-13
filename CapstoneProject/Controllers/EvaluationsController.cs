@@ -138,23 +138,9 @@ namespace CapstoneProject.Controllers
                 Text = t.StageName
             });
 
-            //// Remove formative & summative if baseline isn't complete for either type.
-            //if (!cohort.IsStageComplete("Baseline", 1) && !cohort.IsStageComplete("Baseline", 2))
-            //{
-            //    var stageList = model.StageList.ToList();
-            //    stageList.RemoveAt(2);
-            //    stageList.RemoveAt(1); 
-            //    model.StageList = stageList;
-            //}
-            //// Remove summative if formative isn't complete for either type.
-            //else if (!(cohort.IsStageComplete("Formative", 1) || cohort.IsStageComplete("Formative", 2)))
-            //{
-            //    var stageList = model.StageList.ToList();
-            //    stageList.RemoveAt(2);
-            //    model.StageList = stageList;
-            //}
-
-            model.RaterOptions = new[]{ true, true, true, true, true };
+            model.NumberOfSupervisors = 0;
+            model.NumberOfCoworkers = 0;
+            model.NumberOfSupervisees = 0;
 
             return View("Create", model);
         }
@@ -197,12 +183,12 @@ namespace CapstoneProject.Controllers
                     OpenDate = model.OpenDate.Value,
                     CloseDate = model.CloseDate.Value,
                     SelfAnswers = "",
-                    Raters = GenerateRaterList(model.RaterOptions)
+                    Raters = GenerateRaterList(model.NumberOfSupervisors, model.NumberOfCoworkers, model.NumberOfSupervisees)
                 };
 
                 UnitOfWork.EvaluationRepository.Insert(eval);
                 UnitOfWork.Save();
-                SendEvaluationEmail(emp.EmployeeID, eval); // Commenting this out for now, it rustles Microsoft's jimmies.
+               // SendEvaluationEmail(emp.EmployeeID, eval); // Commenting this out for now, it rustles Microsoft's jimmies.
             }
 
             if (model.TypeID == 1)
@@ -277,15 +263,19 @@ namespace CapstoneProject.Controllers
             model.OpenDate = eval.OpenDate;
             model.CloseDate = eval.CloseDate;
 
-            model.RaterOptions = new[]
-            {
-                RaterExists(eval, "Supervisor"),
-                RaterExists(eval, "Coworker 1"),
-                RaterExists(eval, "Coworker 2"),
-                RaterExists(eval, "Supervisee 1"),
-                RaterExists(eval, "Supervisee 2")
-            };
-        
+            model.NumberOfSupervisors = NumberOfRatersWithRole(eval, "Supervisor");
+            model.NumberOfCoworkers = NumberOfRatersWithRole(eval, "Coworker");
+            model.NumberOfSupervisees = NumberOfRatersWithRole(eval, "Supervisee");
+
+            //model.RaterOptions = new[]
+            //{
+            //    RaterExists(eval, "Supervisor"),
+            //    RaterExists(eval, "Coworker 1"),
+            //    RaterExists(eval, "Coworker 2"),
+            //    RaterExists(eval, "Supervisee 1"),
+            //    RaterExists(eval, "Supervisee 2")
+            //};
+
             return View("Edit", model);
         }
 
@@ -339,12 +329,12 @@ namespace CapstoneProject.Controllers
                     OpenDate = model.OpenDate.Value, // This "PossibleInvalidOperation" will never happen. It'd break way up there^ if the dates were null.
                     CloseDate = model.CloseDate.Value,
                     SelfAnswers = "",
-                    Raters = GenerateRaterList(model.RaterOptions)
+                    Raters = GenerateRaterList(model.NumberOfSupervisors, model.NumberOfCoworkers, model.NumberOfSupervisees)
                 };
 
                 UnitOfWork.EvaluationRepository.Insert(eval);
                 UnitOfWork.Save();
-                SendEvaluationEmail(emp.EmployeeID, eval); // Don't await this. Commenting this out for now, it rustles Microsoft's jimmies.
+               // SendEvaluationEmail(emp.EmployeeID, eval); // Don't await this. Commenting this out for now, it rustles Microsoft's jimmies.
             }
 
             TempData["EditSuccess"] = "Successfully updated evaluation.";
@@ -369,44 +359,36 @@ namespace CapstoneProject.Controllers
             return View(employeeEvals);
         }
 
-        private bool RaterExists(Evaluation eval, string role)
+        private int NumberOfRatersWithRole(Evaluation eval, string role)
         {
-            return eval.Raters.Any(r => r.Role.Equals(role));
+            return eval.Raters.Count(r => r.Role.Equals(role));
         }
 
-        private List<Rater> GenerateRaterList(bool[] raterBools)
+        private List<Rater> GenerateRaterList(int numSupervisors, int numCoworkers, int numSupervisees)
         {
             var raters = new List<Rater>();
-
-            // Order: Supervisor, coworker1, coworker2, supervisee1, supervisee2.
-            if (raterBools[0])
+            for(var i = 0; i < numSupervisors; i++)
             {
-                var supervisor = new Rater{Role = "Supervisor", Email = "temp@temp.com"};
-                raters.Add(supervisor);
+                raters.Add(new Rater()
+                {
+                    Role = "Supervisor"
+                });
             }
 
-            if (raterBools[1])
+            for (var i = 0; i < numCoworkers; i++)
             {
-                var coworker1 = new Rater { Role = "Coworker 1", Email = "temp@temp.com" };
-                raters.Add(coworker1);
+                raters.Add(new Rater()
+                {
+                    Role = "Coworker"
+                });
             }
 
-            if (raterBools[2])
+            for (var i = 0; i < numSupervisees; i++)
             {
-                var coworker2 = new Rater { Role = "Coworker 2", Email = "temp@temp.com" };
-                raters.Add(coworker2);
-            }
-
-            if (raterBools[3])
-            {
-                var supervisee1 = new Rater { Role = "Supervisee 1", Email = "temp@temp.com" };
-                raters.Add(supervisee1);
-            }
-
-            if (raterBools[4])
-            {
-                var supervisee2 = new Rater { Role = "Supervisee 2", Email = "temp@temp.com" };
-                raters.Add(supervisee2);
+                raters.Add(new Rater()
+                {
+                    Role = "Supervisee"
+                });
             }
 
             return raters;

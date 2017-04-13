@@ -1,8 +1,9 @@
 CLONE URL: https://wudsco.visualstudio.com/_git/WUDSCO
 
+- change raters from checkboxes to "enter a number"
 - delete? eval before it opens
 - edit cohort logic
-- delete cohort logic
+- raters can be edited/disabled if they haven't completed eval
 
 
 

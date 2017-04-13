@@ -31,7 +31,13 @@ namespace CapstoneProject.ViewModels
         [Display(Name = "Close Date")]
         public DateTime? CloseDate { get; set; }
 
-        public bool[] RaterOptions { get; set; }
+      //  public bool[] RaterOptions { get; set; }
+        public int NumberOfSupervisors { get; set; }
+
+        public int NumberOfCoworkers { get; set; }
+
+        public int NumberOfSupervisees { get; set; }
+
 
         IEnumerable<ValidationResult> IValidatableObject.Validate(ValidationContext validationContext)
         {
