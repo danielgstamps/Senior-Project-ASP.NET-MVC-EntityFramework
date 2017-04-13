@@ -65,14 +65,22 @@
                 {
                     <label> | </label>
                     <label class="alert-info">Type 1 opens @item.EvalOpenDate(1)</label>
-                    @Html.ActionLink("(Change)", "Edit", "Evaluations", new {cohortId = item.CohortID, typeId = 1}, null)
+                    <label>(</label>
+                    @Html.ActionLink("Change", "Edit", "Evaluations", new {cohortId = item.CohortID, typeId = 1}, null)
+                    <label> | </label>
+                    @Html.ActionLink("Delete", "Delete", "Evaluations", new { cohortId = item.CohortID, typeId = 1 }, null)
+                    <label>)</label>
                 }
 
                 @if (item.Type2Assigned && !item.HasOpenEval(2))
                 {
                     <label> | </label>
                     <label class="alert-info">Type 2 opens @item.EvalOpenDate(2)</label>
-                    @Html.ActionLink("(Change)", "Edit", "Evaluations", new {cohortId = item.CohortID, typeId = 2}, null)
+                    <label>(</label>
+                    @Html.ActionLink("Change", "Edit", "Evaluations", new {cohortId = item.CohortID, typeId = 2}, null)
+                    <label> | </label>
+                    @Html.ActionLink("Delete", "Delete", "Evaluations", new { cohortId = item.CohortID, typeId = 2 }, null)
+                    <label>)</label>
                 }
             </td>
         </tr>

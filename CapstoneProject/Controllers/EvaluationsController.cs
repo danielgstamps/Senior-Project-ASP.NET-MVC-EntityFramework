@@ -332,6 +332,52 @@ namespace CapstoneProject.Controllers
             return RedirectToAction("Index", "Cohorts");
         }
 
+        // GET: Evaluations/Delete/
+        public ActionResult Delete(int? cohortId, int? typeId)
+        {
+            if (cohortId == null || typeId == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var emp = UnitOfWork.EmployeeRepository.Get().First(e => e.CohortID == cohortId);
+            var eval = emp.Evaluations.Single(e => e.TypeID == typeId && !e.IsComplete());
+            return View("Delete", eval);
+        }
+
+        // POST: Evaluations/Delete/
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int cohortId, int typeId)
+        {
+            var cohort = UnitOfWork.CohortRepository.GetByID(cohortId);
+            if (cohort == null || cohort.Employees.Count == 0)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var employees = cohort.Employees;
+            foreach (var emp in employees)
+            {
+                UnitOfWork.EvaluationRepository.Delete(emp.Evaluations.Single(e => e.TypeID == typeId && !e.IsComplete()));
+                UnitOfWork.Save();
+            }
+
+            switch (typeId)
+            {
+                case 1:
+                    cohort.Type1Assigned = false;
+                    UnitOfWork.Save();
+                    break;
+                case 2:
+                    cohort.Type2Assigned = false;
+                    UnitOfWork.Save();
+                    break;
+            }
+
+            return RedirectToAction("Index", "Cohorts");
+        }
+
         [Authorize]
         public ActionResult EmployeeEvalsIndex(int? id)
         {
@@ -427,42 +473,9 @@ namespace CapstoneProject.Controllers
            // }
         }
 
-        //private bool IsStageComplete(string stageName, int cohortId, int typeId)
-        //{
-        //    var cohort = UnitOfWork.CohortRepository.GetByID(cohortId);
-        //    try
-        //    {
-        //        foreach (var emp in cohort.Employees)
-        //        {
-        //            var evalsOfType = emp.Evaluations.Where(eval => eval.TypeID.Equals(typeId));
-        //            var evalsOfTypeAndStage = evalsOfType.Where(eval => eval.Stage.StageName.Equals(stageName));
-        //            if (evalsOfTypeAndStage.All(eval => eval.IsComplete()))
-        //            {
-        //                return true;
-        //            }
-        //        }
-        //        return false;
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return false;
-        //    }
-        //}
-
         public ActionResult CompleteEvaluation()
         {
             return null;
-        }
-
-        // POST: Evaluations/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            var evaluation = UnitOfWork.EvaluationRepository.GetByID(id);
-            UnitOfWork.EvaluationRepository.Delete(evaluation);
-            UnitOfWork.Save();
-            return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)
