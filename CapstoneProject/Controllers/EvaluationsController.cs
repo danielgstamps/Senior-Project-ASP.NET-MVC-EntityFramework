@@ -265,16 +265,7 @@ namespace CapstoneProject.Controllers
 
             model.NumberOfSupervisors = NumberOfRatersWithRole(eval, "Supervisor");
             model.NumberOfCoworkers = NumberOfRatersWithRole(eval, "Coworker");
-            model.NumberOfSupervisees = NumberOfRatersWithRole(eval, "Supervisee");
-
-            //model.RaterOptions = new[]
-            //{
-            //    RaterExists(eval, "Supervisor"),
-            //    RaterExists(eval, "Coworker 1"),
-            //    RaterExists(eval, "Coworker 2"),
-            //    RaterExists(eval, "Supervisee 1"),
-            //    RaterExists(eval, "Supervisee 2")
-            //};
+            model.NumberOfSupervisees = NumberOfRatersWithRole(eval, "Supervisee");;
 
             return View("Edit", model);
         }
@@ -371,7 +362,8 @@ namespace CapstoneProject.Controllers
             {
                 raters.Add(new Rater()
                 {
-                    Role = "Supervisor"
+                    Role = "Supervisor",
+                    Email = "temp@temp.com"
                 });
             }
 
@@ -379,7 +371,8 @@ namespace CapstoneProject.Controllers
             {
                 raters.Add(new Rater()
                 {
-                    Role = "Coworker"
+                    Role = "Coworker",
+                    Email = "temp@temp.com"
                 });
             }
 
@@ -387,7 +380,8 @@ namespace CapstoneProject.Controllers
             {
                 raters.Add(new Rater()
                 {
-                    Role = "Supervisee"
+                    Role = "Supervisee",
+                    Email = "temp@temp.com"
                 });
             }
 

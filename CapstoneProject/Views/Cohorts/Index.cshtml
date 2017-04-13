@@ -27,14 +27,14 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.ActionLink("View", "Details", new { id = item.CohortID })
-                <label> | </label>
-
                 @if (item.Employees.Count != 0 && !(item.Type1Assigned && item.Type2Assigned))
                 {
                     @Html.ActionLink("Evaluate", "Create", "Evaluations", new {cohortId = item.CohortID}, null)
                     <label> | </label>
                 }
+                
+                @Html.ActionLink("View", "Details", new { id = item.CohortID })
+                <label> | </label>
 
                 @if (!item.HasOpenEval(1) && !item.HasOpenEval(2))
                 {
