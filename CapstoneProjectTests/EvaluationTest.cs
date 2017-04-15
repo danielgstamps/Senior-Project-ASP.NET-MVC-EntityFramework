@@ -1,5 +1,8 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CapstoneProject.Models;
+using Type = CapstoneProject.Models.Type;
 
 namespace CapstoneProjectTests
 {
@@ -8,42 +11,117 @@ namespace CapstoneProjectTests
     {
         private Evaluation evaluation;
         private Employee employee;
+        private Type type;
+        private Stage stage;
+        private ICollection<Rater> raters;
 
         [TestInitialize]
-        public void TestInitialize()
+        public void Setup()
         {
-            this.evaluation = new Evaluation();
-            this.evaluation.EvaluationID = 1;
-            this.employee = new Employee();
-            this.employee.EmployeeID = 2;
+            this.raters = new List<Rater>
+            {
+                new Rater
+                {
+                    RaterID = 1
+                },
+                new Rater
+                {
+                    RaterID = 2
+                },
+                new Rater
+                {
+                    RaterID = 3
+                }
+            };
+            this.stage = new Stage
+            {
+                StageID = 4
+            };
+            this.type = new Type
+            {
+                TypeID = 5
+            };
+            this.employee = new Employee
+            {
+                EmployeeID = 6
+            };
+            this.evaluation = new Evaluation
+            {
+                EvaluationID = 7,
+                EmployeeID = this.employee.EmployeeID,
+                Employee = this.employee,
+                TypeID = this.type.TypeID,
+                Type = this.type,
+                StageID = this.stage.StageID,
+                Stage = this.stage,
+                OpenDate = new DateTime(2017, 12, 21),
+                CloseDate = new DateTime(2017, 12, 31),
+                SelfAnswers = "1,2,3",
+                Raters = this.raters
+            };
         }
 
         [TestMethod]
-        public void TestEvaluationHasEmployeeID()
+        public void TestEvaluationID()
         {
-            /*this.evaluation.EmployeeID = 2;
-            Assert.AreEqual(employee.EmployeeID, this.evaluation.EmployeeID);*/
+            Assert.AreEqual(7, this.evaluation.EvaluationID);
         }
 
         [TestMethod]
-        public void TestEvaluationHasEmployee()
+        public void TestEmployeeID()
         {
-            this.evaluation.Employee = this.employee;
-            Assert.AreEqual(this.employee, this.evaluation.Employee);
+            Assert.AreEqual(this.employee.EmployeeID, this.evaluation.EmployeeID);
         }
 
         [TestMethod]
-        public void TestEvaluationDoesNotHaveEmployeeID()
+        public void TestTypeID()
         {
-            /*this.evaluation.EmployeeID = 3;
-            Assert.AreNotEqual(this.employee.EmployeeID, this.evaluation.EmployeeID);*/
+            Assert.AreEqual(this.type.TypeID, this.evaluation.TypeID);
         }
 
         [TestMethod]
-        public void TestEvaluationDoesNotHaveEmployee()
+        public void TestStageID()
         {
-            this.evaluation.Employee = new Employee();
-            Assert.AreNotSame(this.employee, this.evaluation.Employee);
+            Assert.AreEqual(this.stage.StageID, this.evaluation.StageID);
+        }
+
+        [TestMethod]
+        public void TestOpenDate()
+        {
+            Assert.AreEqual(2017, this.evaluation.OpenDate.Year);
+            Assert.AreEqual(12, this.evaluation.OpenDate.Month);
+            Assert.AreEqual(21, this.evaluation.OpenDate.Day);
+        }
+
+        [TestMethod]
+        public void TestCloseDate()
+        {
+            Assert.AreEqual(2017, this.evaluation.CloseDate.Year);
+            Assert.AreEqual(12, this.evaluation.CloseDate.Month);
+            Assert.AreEqual(31, this.evaluation.CloseDate.Day);
+        }
+
+        [TestMethod]
+        public void TestSelfAnswers()
+        {
+            var answers = this.evaluation.SelfAnswers.Split(',');
+            var testAnswer = 1;
+            foreach (var answer in answers)
+            {
+                Assert.AreEqual(testAnswer, int.Parse(answer));
+                testAnswer++;
+            }
+        }
+
+        [TestMethod]
+        public void TestRaters()
+        {
+            var ID = 1;
+            foreach (var rater in this.evaluation.Raters)
+            {
+                Assert.AreEqual(ID, rater.RaterID);
+                ID++;
+            }
         }
     }
 }
