@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using CapstoneProject.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -7,129 +8,98 @@ namespace CapstoneProjectTests
     [TestClass]
     public class EmployeeTest
     {
-        private Employee jimHalpert;
-        private Employee michaelScott;
-        private Employee dwightSchrute;
-        private ICollection<Employee> employees;
+        private Employee employee;
         private Cohort cohort;
+        private ICollection<Evaluation> evaluations;
 
         [TestInitialize]
-        public void TestInitialize()
+        public void Setup()
         {
-            createJimHalpert();
-            createMichaelScott();
-            createDwightSchrute();
-            addEmployeesToCollection();
-            createCohort();
-            //setManagers();
-            //setSupervisors();
-        }
-
-        private void createJimHalpert()
-        {
-            jimHalpert = new Employee();
-            jimHalpert.EmployeeID = 0;
-            jimHalpert.FirstName = "Jim";
-            jimHalpert.LastName = "Halpert";
-            jimHalpert.Address = "123 Columbia Drive, New York, NY 123456";
-            jimHalpert.Email = "jhalpert@dundermifflin.com";
-            jimHalpert.Phone = "(123) 456-780";
-        }
-
-        private void createMichaelScott()
-        {
-            michaelScott = new Employee();
-            michaelScott.EmployeeID = 1;
-            michaelScott.FirstName = "Michael";
-            michaelScott.LastName = "Scott";
-            michaelScott.Address = "234 Sunshine Avenue, New York, NY 234567";
-            michaelScott.Email = "mscott@dundermifflin.com";
-            michaelScott.Phone = "(234) 567-8901";
-        }
-
-        private void createDwightSchrute()
-        {
-            dwightSchrute = new Employee();
-            dwightSchrute.EmployeeID = 2;
-            dwightSchrute.FirstName = "Dwight";
-            dwightSchrute.LastName = "Schrute";
-            dwightSchrute.Address = "345 Moonlight Drive, New York, NY 345678";
-            dwightSchrute.Email = "dschrute@dundermifflin.com";
-            dwightSchrute.Phone = "(345) 678-9012";
-        }
-
-        //private void setSupervisors()
-        //{
-        //    jimHalpert.SupervisorID = michaelScott.EmployeeID;
-        //    jimHalpert.Supervisor = michaelScott;
-        //    dwightSchrute.SupervisorID = jimHalpert.EmployeeID;
-        //    dwightSchrute.Supervisor = jimHalpert;
-        //}
-
-        //private void setManagers()
-        //{
-        //    jimHalpert.ManagerID = michaelScott.EmployeeID;
-        //    jimHalpert.Manager = michaelScott;
-        //    dwightSchrute.ManagerID = michaelScott.EmployeeID;
-        //    dwightSchrute.Manager = michaelScott;
-        //}
-
-        private void addEmployeesToCollection()
-        {
-            employees = new List<Employee>();
-            employees.Add(jimHalpert);
-            employees.Add(michaelScott);
-            employees.Add(dwightSchrute);
-        }
-
-        private void createCohort()
-        {
-            cohort = new Cohort();
-            cohort.CohortID = 0;
-            cohort.Name = "Cohort 0";
-            cohort.Employees = employees;
-            jimHalpert.CohortID = cohort.CohortID;
-            jimHalpert.Cohort = cohort;
-            michaelScott.CohortID = cohort.CohortID;
-            michaelScott.Cohort = cohort;
-            dwightSchrute.CohortID = cohort.CohortID;
-            dwightSchrute.Cohort = cohort;
+            this.cohort = new Cohort
+            {
+                CohortID = 2
+            };
+            this.evaluations = new List<Evaluation>
+            {
+                new Evaluation
+                {
+                    EvaluationID = 1
+                },
+                new Evaluation
+                {
+                    EvaluationID = 2
+                },
+                new Evaluation
+                {
+                    EvaluationID = 3
+                }
+            };
+            this.employee = new Employee
+            {
+                EmployeeID = 1,
+                FirstName = "Saul",
+                LastName = "Goodman",
+                Email = "sgoodman@mailinator.com",
+                Address = "123 Killian Ln, Albuquerque, NM 123456",
+                Phone = "(123) 123-1234",
+                CohortID = this.cohort.CohortID,
+                Cohort = this.cohort,
+                Evaluations = this.evaluations
+            };
         }
 
         [TestMethod]
-        public void TestEmployeeHasCohortID()
+        public void TestEmployeeID()
         {
-            Assert.AreEqual(cohort.CohortID, jimHalpert.CohortID);
+            Assert.AreEqual(1, this.employee.EmployeeID);
         }
 
         [TestMethod]
-        public void TestEmployeeHasCohort()
+        public void TestEmployeeFirstname()
         {
-            Assert.AreSame(cohort, jimHalpert.Cohort);
+            Assert.AreEqual("Saul", this.employee.FirstName);
         }
 
-        //[TestMethod]
-        //public void TestJimHalpertHasMichaelScottAsSupervisor()
-        //{
-        //    Assert.AreSame(this.michaelScott, this.jimHalpert.Supervisor);
-        //}
+        [TestMethod]
+        public void TestEmployeeLastName()
+        {
+            Assert.AreEqual("Goodman", this.employee.LastName);
+        }
 
-        //[TestMethod]
-        //public void TestJimHalpertSupervisorIDIsMichaelScottEmployeeID()
-        //{
-        //    Assert.AreEqual(michaelScott.EmployeeID, jimHalpert.SupervisorID);
-        //}
+        [TestMethod]
+        public void TestEmployeeEmail()
+        {
+            Assert.AreEqual("sgoodman@mailinator.com", this.employee.Email);
+        }
 
-        //[TestMethod]
-        //public void TestJimHalpertManagerIsMichaelScott()
-        //{
-        //    Assert.AreSame(this.michaelScott, this.jimHalpert.Manager);
-        //}
+        [TestMethod]
+        public void TestEmployeeAddress()
+        {
+            Assert.AreEqual("123 Killian Ln, Albuquerque, NM 123456", this.employee.Address);
+        }
 
-        //[TestMethod]
-        //public void TestJimHalpertManagerIDIsMichaelScottEmployeeID()
-        //{
-        //    Assert.AreEqual(jimHalpert.ManagerID, michaelScott.EmployeeID);
-        //}
+        [TestMethod]
+        public void TestEmployeePhone()
+        {
+            Assert.AreEqual("(123) 123-1234", this.employee.Phone);
+        }
+
+        [TestMethod]
+        public void TestEmployeeCohort()
+        {
+            Assert.AreEqual(2, this.employee.CohortID);
+        }
+
+        [TestMethod]
+        public void TestEmployeeEvaluations()
+        {
+            var ID = 1;
+            foreach (var evaluation in this.employee.Evaluations)
+            {
+                Assert.AreEqual(ID, evaluation.EvaluationID);
+                ID++;
+            }
+        }
+
     }
 }
