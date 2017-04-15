@@ -29,22 +29,48 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.ExpectationFailed);
             }
-            var evaluation = UnitOfWork.EvaluationRepository.GetByID(id);
-            if (evaluation == null)
+
+            var eval = UnitOfWork.EvaluationRepository.GetByID(id);
+            if (eval == null)
             {
                 return HttpNotFound();
             }
-            return View("TakeEvaluation", evaluation);
+
+            var questionViewModels = new List<QuestionViewModel>();
+
+            int count = 0;
+            foreach (var category in eval.Type.Categories)
+            {
+                foreach (var question in category.Questions)
+                {
+                    questionViewModels.Add(new QuestionViewModel()
+                    {
+                        QuestionText = question.QuestionText,
+                        TypeId = question.Category.TypeID,
+                        Id = count
+                    });
+
+                    count++;
+                }
+            }
+
+            return View("TakeEvaluation", questionViewModels);
         }
 
         [HttpPost]
         public ActionResult TakeEvaluation(FormCollection form)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var selectedChoice = Convert.ToInt32(form["Radio"]);
-                
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
+            var answer1 = form["0"];
+            var answer2 = form["1"];
+            var answer3 = form["2"];
+            var answer4 = form["3"];
+            var answer5 = form["4"];;
+
             return View("AssignRaters");
         }
 

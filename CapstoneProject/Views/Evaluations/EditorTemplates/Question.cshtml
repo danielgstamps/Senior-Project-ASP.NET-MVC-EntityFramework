@@ -1,47 +1,36 @@
-﻿@model CapstoneProject.Models.Question
+﻿@model CapstoneProject.ViewModels.QuestionViewModel
 <div>
-    @Html.HiddenFor(x => x.QuestionID)
+    @Html.HiddenFor(x => x.Id)
     @{
         var numberOffset = (int)TempData["numberOffset"];
-        var number = Model.QuestionID - (Model.QuestionID - 1) + numberOffset;
+        var number = Model.Id - (Model.Id - 1) + numberOffset;
     }
 
-    <p> @number. @Model.QuestionText </p>
+    <label> @number. @Model.QuestionText </label>
+
+    <br/>
     @Html.Label("Disagree")
     <br/>
-    @if (Model.Category.TypeID == 1)
+
+    @if (Model.TypeId == 1)
     {
-        var typeOneRadioButtonLabels = new[]
-        {
-            "1",
-            "2",
-            "3",
-            "4",
-            "5"
-        };
+        var typeOneRadioButtonLabels = new[]{ "1", "2", "3", "4", "5" };
         for (var i = 0; i < 5; i++)
-        {
-            @Html.RadioButton(Model.QuestionID.ToString(), Model.QuestionID) @: @Html.Label(typeOneRadioButtonLabels[i]) <br>
+        { 
+            @Html.RadioButtonFor(m => Model.Answer, i, new { id = Model.Id })
+            @Html.Label(typeOneRadioButtonLabels[i]) 
+            <br>
         }
     }
-    @if (Model.Category.TypeID == 2)
+
+    else if (Model.TypeId == 2)
     {
-        var typeTwoRadioButtonLabels = new[]
-        {
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6",
-            "7",
-            "8",
-            "9",
-            "10"
-        };
+        var typeTwoRadioButtonLabels = new[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" };
         for (var i = 0; i < 10; i++)
         {
-            @Html.RadioButton(Model.QuestionID.ToString(), Model.QuestionID) @: @Html.Label(typeTwoRadioButtonLabels[i]) <br>
+            @Html.RadioButton(Model.Id.ToString(), i)
+            @*@Html.RadioButtonFor(m => Model.Answer, Model.Id, new { id = i })*@
+            @: @Html.Label(typeTwoRadioButtonLabels[i]) <br>
         }
     }
     @Html.Label("Agree")

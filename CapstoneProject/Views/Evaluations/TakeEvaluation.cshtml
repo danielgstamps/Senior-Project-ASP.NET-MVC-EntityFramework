@@ -1,21 +1,45 @@
-﻿@model CapstoneProject.Models.Evaluation
+﻿@model ICollection<CapstoneProject.ViewModels.QuestionViewModel>
 
-<h2> Evaluation</h2>
-<p>Please rate how much you agree with each statement</p>
-<br />
+<h2>Evaluation</h2>
+
+<h4>Please rate how much you agree with each statement</h4>
+
 <div>
     @using (Html.BeginForm())
     {
         TempData["numberOffset"] = 0;
-        foreach (var category in Model.Type.Categories)
+        foreach (var question in Model)
         {
-            foreach (var question in category.Questions)
-            {
-                @Html.EditorFor(e => question)
-                TempData["numberOffset"] = (int)TempData["numberOffset"] + 1;
-            }
+            @Html.EditorFor(m => question, "Question")
+            TempData["numberOffset"] = (int)TempData["numberOffset"] + 1;
         }
-        @*<input type="submit" />*@
-        @Html.ActionLink("Next", "AssignRaters", new { id = Model.EvaluationID})
+
+
+
+        @*foreach (var category in Model.Type.Categories)
+        {
+            foreach (var quest in category.Questions)
+            {
+                var viewModel = new QuestionViewModel()
+                {
+                    Id = count,
+                    QuestionText = quest.QuestionText,
+                    TypeId = quest.Category.TypeID
+                };
+
+                @Html.EditorFor(m => viewModel, "Question")
+
+                TempData["numberOffset"] = (int)TempData["numberOffset"] + 1;
+                count++;
+            }
+        }*@
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Submit" class="btn btn-default" />
+            </div>
+        </div>
+
+        @*@Html.ActionLink("Next", "AssignRaters", new { id = Model.EvaluationID})*@
     }
 </div>

@@ -307,7 +307,6 @@
     <Compile Include="ViewModels\AssignedEmployeeData.cs" />
     <Compile Include="ViewModels\EvaluationCreateViewModel.cs" />
     <Compile Include="ViewModels\QuestionViewModel.cs" />
-    <Compile Include="ViewModels\SelectedQuestionAnswer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />

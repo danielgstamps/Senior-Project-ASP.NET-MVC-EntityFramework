@@ -45,37 +45,37 @@ namespace CapstoneProject.Controllers
         //}
 
         // GET: Questions/Create
-        public ActionResult Create()
-        {
-            QuestionViewModel model = new QuestionViewModel();
-            model.CategoryList = unitOfWork.CategoryRepository.dbSet.Select(c => new SelectListItem()
-            {
-                Value = c.CategoryID.ToString(),
-                Text = c.Name
-            });
-            return View(model);
-        }
+        //public ActionResult Create()
+        //{
+        //    QuestionViewModel model = new QuestionViewModel();
+        //    model.CategoryList = unitOfWork.CategoryRepository.dbSet.Select(c => new SelectListItem()
+        //    {
+        //        Value = c.CategoryID.ToString(),
+        //        Text = c.Name
+        //    });
+        //    return View(model);
+        //}
 
         // POST: Questions/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "QuestionText,CategoryID")] QuestionViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                Question question = new Question()
-                {
-                    QuestionText = model.QuestionText,
-                    Category = unitOfWork.CategoryRepository.GetByID(model.CategoryID)
-                };
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Create([Bind(Include = "QuestionText,CategoryID")] QuestionViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        Question question = new Question()
+        //        {
+        //            QuestionText = model.QuestionText,
+        //            Category = unitOfWork.CategoryRepository.GetByID(model.CategoryID)
+        //        };
 
-                unitOfWork.QuestionRepository.Insert(question);
-                unitOfWork.Save();
-                return RedirectToAction("Index");
-            }
+        //        unitOfWork.QuestionRepository.Insert(question);
+        //        unitOfWork.Save();
+        //        return RedirectToAction("Index");
+        //    }
 
-            return View(model);
-        }
+        //    return View(model);
+        //}
 
         // GET: Questions/Edit/5
         public ActionResult Edit(int id)
@@ -100,10 +100,10 @@ namespace CapstoneProject.Controllers
         }
 
         // GET: Questions/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
+        //public ActionResult Delete(int id)
+        //{
+        //    return View();
+        //}
 
         // POST: Questions/Delete/5
         [HttpPost]
