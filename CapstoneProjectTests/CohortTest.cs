@@ -1,4 +1,5 @@
-﻿using CapstoneProject.Models;
+﻿using System.Collections.Generic;
+using CapstoneProject.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CapstoneProjectTests
@@ -6,23 +7,84 @@ namespace CapstoneProjectTests
     [TestClass]
     public class CohortTest
     {
-        [TestMethod]
-        public void TestCohortHasName()
+        private Cohort cohort;
+        private ICollection<Employee> employees;
+
+        [TestInitialize]
+        public void Setup()
         {
-            var cohort = new Cohort();
-            var name = "My Cohort";
-            cohort.Name = name;
-            Assert.AreEqual(name, cohort.Name);
+            this.employees = new List<Employee>
+            {
+                new Employee
+                {
+                    EmployeeID = 1
+                },
+                new Employee
+                {
+                    EmployeeID = 2
+                },
+                new Employee
+                {
+                    EmployeeID = 3
+                }
+            };
+            this.cohort = new Cohort
+            {
+                CohortID = 1,
+                Name = "Sales Team",
+                Employees = this.employees,
+                Type1Assigned = false,
+                Type2Assigned = false
+            };
         }
 
         [TestMethod]
-        public void TestCohortDoesNotHaveName()
+        public void TestCohortID()
         {
-            var cohort = new Cohort();
-            var name = "My Cohort";
-            var wrongName = "The Cohort";
-            cohort.Name = name;
-            Assert.AreNotEqual(wrongName, cohort.Name);
+            Assert.AreEqual(1, cohort.CohortID);
+        }
+
+        [TestMethod]
+        public void TestCohortName()
+        {
+            Assert.AreEqual("Sales Team", this.cohort.Name);
+        }
+
+        [TestMethod]
+        public void TestCohortEmployees()
+        {
+            var ID = 1;
+            foreach (var employee in this.cohort.Employees)
+            {
+                Assert.AreEqual(ID, employee.EmployeeID);
+                ID++;
+            }
+        }
+
+        [TestMethod]
+        public void TestCohortType1AssignedFalse()
+        {
+            Assert.IsFalse(this.cohort.Type1Assigned);
+        }
+
+        [TestMethod]
+        public void TestCohortType1AssignedTrue()
+        {
+            this.cohort.Type1Assigned = true;
+            Assert.IsTrue(this.cohort.Type1Assigned);
+        }
+
+        [TestMethod]
+        public void TestCohortType2AssignedFalse()
+        {
+            Assert.IsFalse(this.cohort.Type2Assigned);
+        }
+
+        [TestMethod]
+        public void TestCohortType2AssignedTrue()
+        {
+            this.cohort.Type2Assigned = true;
+            Assert.IsTrue(this.cohort.Type2Assigned);
         }
     }
 }
