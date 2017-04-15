@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using CapstoneProject.DAL;
 using CapstoneProject.Models;
 using CapstoneProject.ViewModels;
+using WebGrease.Css.Extensions;
 
 namespace CapstoneProject.Controllers
 {
@@ -122,22 +123,19 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var cohortToUpdate = this.unitOfWork.CohortRepository.GetByID(id);
+            var cohortToUpdate = unitOfWork.CohortRepository.GetByID(id);
             if (TryUpdateModel(cohortToUpdate, "",
                new string[] { "Name" }))
             {
                 try
                 {
-                    updateCohortEmployees(selectedEmployees, cohortToUpdate);
-
-                    this.unitOfWork.Save();
-
+                    UpdateCohortEmployees(selectedEmployees, cohortToUpdate);
+                    unitOfWork.Save();
                     return RedirectToAction("Index");
                 }
                 catch (RetryLimitExceededException /* dex */)
                 {
                     //Log the error (uncomment dex variable name and add a line here to write a log.
-                    //throw new Exception("here");
                     ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
                 }
             }
@@ -162,35 +160,55 @@ namespace CapstoneProject.Controllers
             return firstEval.OpenDate < DateTime.Today && firstEval.CloseDate > DateTime.Today;
         }
 
-        private void updateCohortEmployees(string[] selectedEmployees, Cohort cohortToUpdate)
+        private void UpdateCohortEmployees(string[] selectedEmployees, Cohort cohortToUpdate)
         {
+            // case: All employees (or last employee) removed.
             if (selectedEmployees == null)
             {
-                cohortToUpdate.Employees = new List<Employee>();
-                cohortToUpdate.Employees.Clear();
+                ResetCohort(cohortToUpdate);
                 return;
             }
 
             var selectedEmployeesHashSet = new HashSet<string>(selectedEmployees);
             var cohortEmployees = new HashSet<int>
                 (cohortToUpdate.Employees.Select(e => e.EmployeeID));
-            foreach (var employee in this.unitOfWork.EmployeeRepository.Get())
+
+            // case: An employee is added.
+            foreach (var employee in unitOfWork.EmployeeRepository.Get())
             {
                 if (selectedEmployeesHashSet.Contains(employee.EmployeeID.ToString()))
                 {
-                    if (!cohortEmployees.Contains(employee.EmployeeID))
-                    {
-                        cohortToUpdate.Employees.Add(employee);
-                    }
-                }
-                else
-                {
                     if (cohortEmployees.Contains(employee.EmployeeID))
                     {
-                        cohortToUpdate.Employees.Remove(employee);
+                        continue;
                     }
+
+                    cohortToUpdate.Employees.Add(employee);
+                    if (cohortToUpdate.Type1Assigned || cohortToUpdate.Type2Assigned)
+                    {
+                        CopyEvalToNewEmployee(cohortToUpdate, employee);
+                    }                    
                 }
-            }
+
+                // case: An employee is removed.
+                else
+                {
+                    if (!cohortEmployees.Contains(employee.EmployeeID))
+                    {
+                        continue;
+                    }
+
+                    cohortToUpdate.Employees.Remove(employee);
+                    unitOfWork.Save();
+
+                    var evalsToDelete = employee.Evaluations.Where(e => !e.IsComplete()).ToList();
+                    foreach (var eval in evalsToDelete)
+                    {
+                        unitOfWork.EvaluationRepository.Delete(eval);
+                        unitOfWork.Save();       
+                    }                    
+                }
+            }  
         }
 
         private void populateAssignedEmployees(Cohort cohort)
@@ -208,6 +226,42 @@ namespace CapstoneProject.Controllers
                     });
             }
             ViewBag.AssignedEmployees = assignedEmployees;
+        }
+
+        private void CopyEvalToNewEmployee(Cohort cohort, Employee employee)
+        {
+            var templateEvals = cohort.Employees.First().Evaluations.Where(e => !e.IsComplete());
+            foreach (var eval in templateEvals)
+            {
+                employee.Evaluations.Add(new Evaluation()
+                {
+                    Type = eval.Type,
+                    Stage = eval.Stage,
+                    OpenDate = eval.OpenDate,
+                    CloseDate = eval.CloseDate,
+                    SelfAnswers = ""
+                });
+            }
+            unitOfWork.Save();
+        }
+
+        private void ResetCohort(Cohort cohort)
+        {
+            var employees = cohort.Employees;
+            foreach (var employee in employees)
+            {
+                var evalsToDelete = employee.Evaluations.Where(e => !e.IsComplete()).ToList();
+                foreach (var eval in evalsToDelete)
+                {
+                    unitOfWork.EvaluationRepository.Delete(eval);
+                    unitOfWork.Save();
+                }
+            }
+
+            cohort.Employees.Clear();
+            cohort.Type1Assigned = false;
+            cohort.Type2Assigned = false;
+            unitOfWork.Save();
         }
 
         // GET: Cohorts/Delete/5
