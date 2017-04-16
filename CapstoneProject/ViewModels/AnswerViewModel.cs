@@ -7,16 +7,10 @@ using CapstoneProject.Models;
 
 namespace CapstoneProject.ViewModels
 {
-    public class QuestionViewModel
+    public class AnswerViewModel
     {
         public int Id { get; set; }
 
-        public int TypeId { get; set; }
-
-        public string QuestionText { get; set; }
-
-        public int? SelectedAnswer { get; set; }
-
-        public List<AnswerViewModel> PossibleAnswers { get; set; }
+        public int Answer { get; set; }
     }
 }

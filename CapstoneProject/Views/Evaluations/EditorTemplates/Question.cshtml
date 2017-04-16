@@ -17,7 +17,7 @@
         var typeOneRadioButtonLabels = new[]{ "1", "2", "3", "4", "5" };
         for (var i = 0; i < 5; i++)
         { 
-            @Html.RadioButtonFor(m => Model.Answer, i, new { id = Model.Id })
+            @Html.RadioButtonFor(m => Model.Answer, i, new { name = Model.Id })
             @Html.Label(typeOneRadioButtonLabels[i]) 
             <br>
         }

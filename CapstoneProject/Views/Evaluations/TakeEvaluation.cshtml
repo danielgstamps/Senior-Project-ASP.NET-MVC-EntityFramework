@@ -1,4 +1,5 @@
-﻿@model ICollection<CapstoneProject.ViewModels.QuestionViewModel>
+﻿@using Newtonsoft.Json.Linq
+@model ICollection<CapstoneProject.ViewModels.QuestionViewModel>
 
 <h2>Evaluation</h2>
 
@@ -7,32 +8,25 @@
 <div>
     @using (Html.BeginForm())
     {
-        TempData["numberOffset"] = 0;
-        foreach (var question in Model)
+        for (var i = 0; i < Model.Count; i++)
         {
-            @Html.EditorFor(m => question, "Question")
-            TempData["numberOffset"] = (int)TempData["numberOffset"] + 1;
-        }
+            <label>@Model.ElementAt(i).Id.</label>
+            <label>@Model.ElementAt(i).QuestionText</label>
+            <br />
 
+            @Html.Label("Disagree")
+            <label></label>
 
-
-        @*foreach (var category in Model.Type.Categories)
-        {
-            foreach (var quest in category.Questions)
+            for (var j = 1; j < Model.ElementAt(i).PossibleAnswers.Count + 1; j++)
             {
-                var viewModel = new QuestionViewModel()
-                {
-                    Id = count,
-                    QuestionText = quest.QuestionText,
-                    TypeId = quest.Category.TypeID
-                };
-
-                @Html.EditorFor(m => viewModel, "Question")
-
-                TempData["numberOffset"] = (int)TempData["numberOffset"] + 1;
-                count++;
+                <input type="radio" value=@j.ToString(), name=@Model.ElementAt(i).Id/>
+                <span>@j.ToString()</span>
             }
-        }*@
+
+            <label></label>
+            @Html.Label("Agree")
+            <br/> <br/>
+        }
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">

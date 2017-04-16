@@ -306,6 +306,7 @@
     <Compile Include="UserMigrations\UserConfig.cs" />
     <Compile Include="ViewModels\AssignedEmployeeData.cs" />
     <Compile Include="ViewModels\EvaluationCreateViewModel.cs" />
+    <Compile Include="ViewModels\AnswerViewModel.cs" />
     <Compile Include="ViewModels\QuestionViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -343,7 +344,9 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Views\Web.config" />
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />

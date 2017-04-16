@@ -38,7 +38,7 @@ namespace CapstoneProject.Controllers
 
             var questionViewModels = new List<QuestionViewModel>();
 
-            int count = 0;
+            var count = 1;
             foreach (var category in eval.Type.Categories)
             {
                 foreach (var question in category.Questions)
@@ -47,7 +47,8 @@ namespace CapstoneProject.Controllers
                     {
                         QuestionText = question.QuestionText,
                         TypeId = question.Category.TypeID,
-                        Id = count
+                        Id = count,
+                        PossibleAnswers = GeneratePossibleAnswers(question.Category.TypeID)
                     });
 
                     count++;
@@ -458,6 +459,21 @@ namespace CapstoneProject.Controllers
             }
 
             return raters;
+        }
+
+        private List<AnswerViewModel> GeneratePossibleAnswers(int type)
+        {
+            var list = new List<AnswerViewModel>();
+            var numberOfAnswers = type == 1 ? 5 : 10; // 5 if type is 1, 10 if type is 2.
+            for (var i = 0; i < numberOfAnswers; i++)
+            {
+                list.Add(new AnswerViewModel()
+                {
+                    Answer = i + 1
+                });
+            }
+
+            return list;
         }
 
         public ApplicationUserManager UserManager
