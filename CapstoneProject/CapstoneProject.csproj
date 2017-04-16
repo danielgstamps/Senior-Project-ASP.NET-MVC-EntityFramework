@@ -306,7 +306,7 @@
     <Compile Include="UserMigrations\UserConfig.cs" />
     <Compile Include="ViewModels\AssignedEmployeeData.cs" />
     <Compile Include="ViewModels\EvaluationCreateViewModel.cs" />
-    <Compile Include="ViewModels\AnswerViewModel.cs" />
+    <Compile Include="ViewModels\TakeEvalViewModel.cs" />
     <Compile Include="ViewModels\QuestionViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

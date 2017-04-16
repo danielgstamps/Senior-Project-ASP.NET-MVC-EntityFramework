@@ -36,40 +36,51 @@ namespace CapstoneProject.Controllers
                 return HttpNotFound();
             }
 
-            var questionViewModels = new List<QuestionViewModel>();
+            var model = new TakeEvalViewModel
+            {
+                AllQuestions = new List<QuestionViewModel>(),
+                TypeId = eval.TypeID
+            };
 
             var count = 1;
             foreach (var category in eval.Type.Categories)
             {
                 foreach (var question in category.Questions)
                 {
-                    questionViewModels.Add(new QuestionViewModel()
+                    model.AllQuestions.Add(new QuestionViewModel
                     {
-                        QuestionText = question.QuestionText,
-                        TypeId = question.Category.TypeID,
-                        Id = count,
-                        PossibleAnswers = GeneratePossibleAnswers(question.Category.TypeID)
+                        Text = question.QuestionText,
+                        Id = count
                     });
 
                     count++;
                 }
             }
 
-            return View("TakeEvaluation", questionViewModels);
+            return View("TakeEvaluation", model);
         }
 
         [HttpPost]
-        public ActionResult TakeEvaluation(ICollection<QuestionViewModel> model)
+        public ActionResult TakeEvaluation(TakeEvalViewModel model)
         {
             if (!ModelState.IsValid)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                throw new Exception("invalid");
+               // return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            if (model == null)
+            if (model.AllQuestions == null)
             {
                 throw new Exception("null");
+                //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
+            foreach (var question in model.AllQuestions)
+            {
+                Console.WriteLine(question.SelectedAnswer.ToString());
+            }
+
+            
 
 
             return RedirectToAction("Index", "Cohorts");
@@ -250,7 +261,7 @@ namespace CapstoneProject.Controllers
             }
 
             TempData["CohortID"] = cohortId;
-            TempData["TypeID"] = typeId;
+            TempData["TypeId"] = typeId;
             TempData["TypeDisplay"] = typeId;
             TempData["CohortName"] = cohort.Name;
 
@@ -306,7 +317,7 @@ namespace CapstoneProject.Controllers
             if (!ModelState.IsValid)
             {
                 TempData["DateError"] = "Open Date cannot be in the past, and must come before Close Date.";
-                return RedirectToAction("Edit", new { cohortId = (int)TempData["CohortID"], typeId = (int)TempData["TypeID"] });
+                return RedirectToAction("Edit", new { cohortId = (int)TempData["CohortID"], typeId = (int)TempData["TypeId"] });
             }
 
             var cohort = UnitOfWork.CohortRepository.GetByID(model.CohortID);
@@ -320,12 +331,12 @@ namespace CapstoneProject.Controllers
             if (selectedStageName.Equals("Formative") && !cohort.IsStageComplete("Baseline", model.TypeID))
             {
                 TempData["StageError"] = "Formative can only be selected after Baseline is completed.";
-                return RedirectToAction("Edit", new { cohortId = (int)TempData["CohortID"], typeId = (int)TempData["TypeID"] });
+                return RedirectToAction("Edit", new { cohortId = (int)TempData["CohortID"], typeId = (int)TempData["TypeId"] });
             }
             if (selectedStageName.Equals("Summative") && !cohort.IsStageComplete("Formative", model.TypeID))
             {
                 TempData["StageError"] = "Summative can only be selected after Formative is completed.";
-                return RedirectToAction("Edit", new { cohortId = (int)TempData["CohortID"], typeId = (int)TempData["TypeID"] });
+                return RedirectToAction("Edit", new { cohortId = (int)TempData["CohortID"], typeId = (int)TempData["TypeId"] });
             }
 
             // Remove target evals
@@ -462,20 +473,20 @@ namespace CapstoneProject.Controllers
             return raters;
         }
 
-        private List<AnswerViewModel> GeneratePossibleAnswers(int type)
-        {
-            var list = new List<AnswerViewModel>();
-            var numberOfAnswers = type == 1 ? 5 : 10; // 5 if type is 1, 10 if type is 2.
-            for (var i = 0; i < numberOfAnswers; i++)
-            {
-                list.Add(new AnswerViewModel()
-                {
-                    Answer = i + 1
-                });
-            }
+        //private List<AnswerViewModel> GeneratePossibleAnswers(int type)
+        //{
+        //    var list = new List<AnswerViewModel>();
+        //    var numberOfAnswers = type == 1 ? 5 : 10; // 5 if type is 1, 10 if type is 2.
+        //    for (var i = 0; i < numberOfAnswers; i++)
+        //    {
+        //        list.Add(new AnswerViewModel()
+        //        {
+        //            Answer = i + 1
+        //        });
+        //    }
 
-            return list;
-        }
+        //    return list;
+        //}
 
         public ApplicationUserManager UserManager
         {

@@ -1,5 +1,5 @@
 ﻿@using Newtonsoft.Json.Linq
-@model ICollection<CapstoneProject.ViewModels.QuestionViewModel>
+@model CapstoneProject.ViewModels.TakeEvalViewModel
 
 <h2>Evaluation</h2>
 
@@ -8,20 +8,24 @@
 <div>
     @using (Html.BeginForm())
     {
-        for (var i = 0; i < Model.Count; i++)
+        for (var i = 0; i < Model.AllQuestions.Count; i++)
         {
-            @Html.HiddenFor(m => m.ElementAt(i).Id)
-            @Html.HiddenFor(m => m.ElementAt(i).TypeId)
-            <label>@Model.ElementAt(i).Id</label>
-            <label>@Model.ElementAt(i).QuestionText</label>
+            @Html.HiddenFor(m => m.TypeId)
+
+            <label>@Model.AllQuestions[i].Id</label>
+            <label>@Model.AllQuestions[i].Text</label>
             <br />
 
             @Html.Label("Disagree")
             <label></label>
 
-            for (var j = 1; j < Model.ElementAt(i).PossibleAnswers.Count + 1; j++)
+            var numberOfAnswers = Model.TypeId == 1 ? 5 : 10;
+            for (var j = 1; j < numberOfAnswers + 1; j++)
             {
-                @Html.RadioButtonFor(m => m.ElementAt(i).SelectedAnswer, j, new {@Name = i})
+                @Html.HiddenFor(m => m.AllQuestions[i].Id)
+                @Html.HiddenFor(m => m.AllQuestions[i].Text)
+                @Html.HiddenFor(m => m.AllQuestions[i].SelectedAnswer)
+                @Html.RadioButtonFor(m => m.AllQuestions[i].SelectedAnswer, j, new {Name = "AllQuestions["+i+"].SelectedAnswer"})
                 @*<input type="radio" value=@j.ToString(), name=@Model.ElementAt(i).Id/>
                 <span>@j.ToString()</span>*@
             }
@@ -29,7 +33,7 @@
             <label></label>
             @Html.Label("Agree")
             <br />
-            @Html.ValidationMessageFor(model => model.ElementAt(i).SelectedAnswer, "", new { @class = "text-danger" })
+            @Html.ValidationMessageFor(model => model.AllQuestions[i].SelectedAnswer, "", new { @class = "text-danger" })
             <br/>
         }
 

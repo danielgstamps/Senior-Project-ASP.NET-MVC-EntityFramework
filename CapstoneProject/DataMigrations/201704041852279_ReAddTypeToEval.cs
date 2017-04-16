@@ -9,20 +9,20 @@ namespace CapstoneProject.DataMigrations
         {
             DropForeignKey("dbo.Evaluation", "Type_TypeID", "dbo.Type");
             DropIndex("dbo.Evaluation", new[] { "Type_TypeID" });
-            RenameColumn(table: "dbo.Evaluation", name: "Type_TypeID", newName: "TypeID");
-            AlterColumn("dbo.Evaluation", "TypeID", c => c.Int(nullable: false));
-            CreateIndex("dbo.Evaluation", "TypeID");
-            AddForeignKey("dbo.Evaluation", "TypeID", "dbo.Type", "TypeID", cascadeDelete: true);
+            RenameColumn(table: "dbo.Evaluation", name: "Type_TypeID", newName: "TypeId");
+            AlterColumn("dbo.Evaluation", "TypeId", c => c.Int(nullable: false));
+            CreateIndex("dbo.Evaluation", "TypeId");
+            AddForeignKey("dbo.Evaluation", "TypeId", "dbo.Type", "TypeId", cascadeDelete: true);
         }
         
         public override void Down()
         {
-            DropForeignKey("dbo.Evaluation", "TypeID", "dbo.Type");
-            DropIndex("dbo.Evaluation", new[] { "TypeID" });
-            AlterColumn("dbo.Evaluation", "TypeID", c => c.Int());
-            RenameColumn(table: "dbo.Evaluation", name: "TypeID", newName: "Type_TypeID");
+            DropForeignKey("dbo.Evaluation", "TypeId", "dbo.Type");
+            DropIndex("dbo.Evaluation", new[] { "TypeId" });
+            AlterColumn("dbo.Evaluation", "TypeId", c => c.Int());
+            RenameColumn(table: "dbo.Evaluation", name: "TypeId", newName: "Type_TypeID");
             CreateIndex("dbo.Evaluation", "Type_TypeID");
-            AddForeignKey("dbo.Evaluation", "Type_TypeID", "dbo.Type", "TypeID");
+            AddForeignKey("dbo.Evaluation", "Type_TypeID", "dbo.Type", "TypeId");
         }
     }
 }

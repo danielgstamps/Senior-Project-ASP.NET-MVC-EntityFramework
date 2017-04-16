@@ -25,14 +25,14 @@ namespace CapstoneProject.DataMigrations
             AddForeignKey("dbo.AbstractType", "TypeTwoID", "dbo.AbstractType", "AbstractTypeID");
             AddForeignKey("dbo.Question", "CategoryID", "dbo.Category", "CategoryID", cascadeDelete: true);
             AddForeignKey("dbo.Rater", "EvaluationID", "dbo.Evaluation", "EvaluationID", cascadeDelete: true);
-            DropColumn("dbo.AbstractType", "TypeID");
+            DropColumn("dbo.AbstractType", "TypeId");
             DropColumn("dbo.AbstractType", "TypeID1");
         }
         
         public override void Down()
         {
             AddColumn("dbo.AbstractType", "TypeID1", c => c.Int());
-            AddColumn("dbo.AbstractType", "TypeID", c => c.Int());
+            AddColumn("dbo.AbstractType", "TypeId", c => c.Int());
             DropForeignKey("dbo.Rater", "EvaluationID", "dbo.Evaluation");
             DropForeignKey("dbo.Question", "CategoryID", "dbo.Category");
             DropForeignKey("dbo.AbstractType", "TypeTwoID", "dbo.AbstractType");

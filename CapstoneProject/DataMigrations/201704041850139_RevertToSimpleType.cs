@@ -26,14 +26,14 @@ namespace CapstoneProject.DataMigrations
                     })
                 .PrimaryKey(t => t.TypeID);
             
-            AddColumn("dbo.Category", "TypeID", c => c.Int(nullable: false));
+            AddColumn("dbo.Category", "TypeId", c => c.Int(nullable: false));
             AddColumn("dbo.Evaluation", "Type_TypeID", c => c.Int());
             AlterColumn("dbo.Stage", "StageID", c => c.Int(nullable: false, identity: true));
             AddPrimaryKey("dbo.Stage", "StageID");
-            CreateIndex("dbo.Category", "TypeID");
+            CreateIndex("dbo.Category", "TypeId");
             CreateIndex("dbo.Evaluation", "Type_TypeID");
-            AddForeignKey("dbo.Category", "TypeID", "dbo.Type", "TypeID", cascadeDelete: true);
-            AddForeignKey("dbo.Evaluation", "Type_TypeID", "dbo.Type", "TypeID");
+            AddForeignKey("dbo.Category", "TypeId", "dbo.Type", "TypeId", cascadeDelete: true);
+            AddForeignKey("dbo.Evaluation", "Type_TypeID", "dbo.Type", "TypeId");
             AddForeignKey("dbo.Evaluation", "StageID", "dbo.Stage", "StageID", cascadeDelete: true);
             DropColumn("dbo.Category", "AbstractTypeID");
             DropColumn("dbo.Evaluation", "AbstractTypeID");
@@ -58,13 +58,13 @@ namespace CapstoneProject.DataMigrations
             AddColumn("dbo.Category", "AbstractTypeID", c => c.Int(nullable: false));
             DropForeignKey("dbo.Evaluation", "StageID", "dbo.Stage");
             DropForeignKey("dbo.Evaluation", "Type_TypeID", "dbo.Type");
-            DropForeignKey("dbo.Category", "TypeID", "dbo.Type");
+            DropForeignKey("dbo.Category", "TypeId", "dbo.Type");
             DropIndex("dbo.Evaluation", new[] { "Type_TypeID" });
-            DropIndex("dbo.Category", new[] { "TypeID" });
+            DropIndex("dbo.Category", new[] { "TypeId" });
             DropPrimaryKey("dbo.Stage");
             AlterColumn("dbo.Stage", "StageID", c => c.Int(nullable: false));
             DropColumn("dbo.Evaluation", "Type_TypeID");
-            DropColumn("dbo.Category", "TypeID");
+            DropColumn("dbo.Category", "TypeId");
             DropTable("dbo.Type");
             AddPrimaryKey("dbo.Stage", "StageID");
             CreateIndex("dbo.Evaluation", "AbstractTypeID");

@@ -59,13 +59,13 @@ namespace CapstoneProject.Controllers
         // POST: Questions/Create
         //[HttpPost]
         //[ValidateAntiForgeryToken]
-        //public ActionResult Create([Bind(Include = "QuestionText,CategoryID")] QuestionViewModel model)
+        //public ActionResult Create([Bind(Include = "Text,CategoryID")] QuestionViewModel model)
         //{
         //    if (ModelState.IsValid)
         //    {
         //        Question question = new Question()
         //        {
-        //            QuestionText = model.QuestionText,
+        //            Text = model.Text,
         //            Category = unitOfWork.CategoryRepository.GetByID(model.CategoryID)
         //        };
 

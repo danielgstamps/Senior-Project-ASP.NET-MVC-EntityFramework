@@ -59,32 +59,32 @@ namespace CapstoneProject.DataMigrations
                 .Index(t => t.Answer_AnswerID)
                 .Index(t => t.Question_QuestionID);
             
-            AddColumn("dbo.Category", "TypeID", c => c.Int(nullable: false));
-            AddColumn("dbo.Evaluation", "TypeID", c => c.Int(nullable: false));
-            CreateIndex("dbo.Category", "TypeID");
-            CreateIndex("dbo.Evaluation", "TypeID");
-            AddForeignKey("dbo.Evaluation", "TypeID", "dbo.AbstractType", "TypeID", cascadeDelete: true);
-            AddForeignKey("dbo.Category", "TypeID", "dbo.AbstractType", "TypeID", cascadeDelete: true);
+            AddColumn("dbo.Category", "TypeId", c => c.Int(nullable: false));
+            AddColumn("dbo.Evaluation", "TypeId", c => c.Int(nullable: false));
+            CreateIndex("dbo.Category", "TypeId");
+            CreateIndex("dbo.Evaluation", "TypeId");
+            AddForeignKey("dbo.Evaluation", "TypeId", "dbo.AbstractType", "TypeId", cascadeDelete: true);
+            AddForeignKey("dbo.Category", "TypeId", "dbo.AbstractType", "TypeId", cascadeDelete: true);
             DropColumn("dbo.Evaluation", "AbstractType");
         }
         
         public override void Down()
         {
             AddColumn("dbo.Evaluation", "AbstractType", c => c.Int(nullable: false));
-            DropForeignKey("dbo.Category", "TypeID", "dbo.AbstractType");
+            DropForeignKey("dbo.Category", "TypeId", "dbo.AbstractType");
             DropForeignKey("dbo.AnswerQuestion", "Question_QuestionID", "dbo.Question");
             DropForeignKey("dbo.AnswerQuestion", "Answer_AnswerID", "dbo.Answer");
-            DropForeignKey("dbo.Evaluation", "TypeID", "dbo.AbstractType");
+            DropForeignKey("dbo.Evaluation", "TypeId", "dbo.AbstractType");
             DropForeignKey("dbo.StageEvaluation", "Evaluation_EvaluationID", "dbo.Evaluation");
             DropForeignKey("dbo.StageEvaluation", "Stage_StageID", "dbo.Stage");
             DropIndex("dbo.AnswerQuestion", new[] { "Question_QuestionID" });
             DropIndex("dbo.AnswerQuestion", new[] { "Answer_AnswerID" });
             DropIndex("dbo.StageEvaluation", new[] { "Evaluation_EvaluationID" });
             DropIndex("dbo.StageEvaluation", new[] { "Stage_StageID" });
-            DropIndex("dbo.Evaluation", new[] { "TypeID" });
-            DropIndex("dbo.Category", new[] { "TypeID" });
-            DropColumn("dbo.Evaluation", "TypeID");
-            DropColumn("dbo.Category", "TypeID");
+            DropIndex("dbo.Evaluation", new[] { "TypeId" });
+            DropIndex("dbo.Category", new[] { "TypeId" });
+            DropColumn("dbo.Evaluation", "TypeId");
+            DropColumn("dbo.Category", "TypeId");
             DropTable("dbo.AnswerQuestion");
             DropTable("dbo.StageEvaluation");
             DropTable("dbo.Answer");
