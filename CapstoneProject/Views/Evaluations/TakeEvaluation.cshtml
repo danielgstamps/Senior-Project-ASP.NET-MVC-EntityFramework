@@ -19,8 +19,9 @@
 
             for (var j = 1; j < Model.ElementAt(i).PossibleAnswers.Count + 1; j++)
             {
-                <input type="radio" value=@j.ToString(), name=@Model.ElementAt(i).Id/>
-                <span>@j.ToString()</span>
+                @Html.RadioButtonFor(m => m.ElementAt(i).SelectedAnswer, j, new {@Name = i})
+                @*<input type="radio" value=@j.ToString(), name=@Model.ElementAt(i).Id/>
+                <span>@j.ToString()</span>*@
             }
 
             <label></label>

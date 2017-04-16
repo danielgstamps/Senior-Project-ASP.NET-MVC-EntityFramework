@@ -66,12 +66,6 @@ namespace CapstoneProject.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var answer1 = form["0"];
-            var answer2 = form["1"];
-            var answer3 = form["2"];
-            var answer4 = form["3"];
-            var answer5 = form["4"];;
-
             return View("AssignRaters");
         }
 
