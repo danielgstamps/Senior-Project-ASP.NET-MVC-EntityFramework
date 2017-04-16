@@ -59,14 +59,21 @@ namespace CapstoneProject.Controllers
         }
 
         [HttpPost]
-        public ActionResult TakeEvaluation(FormCollection form)
+        public ActionResult TakeEvaluation(ICollection<QuestionViewModel> model)
         {
             if (!ModelState.IsValid)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            return View("AssignRaters");
+            if (model == null)
+            {
+                throw new Exception("null");
+            }
+
+
+            return RedirectToAction("Index", "Cohorts");
+           // return View("AssignRaters");
         }
 
         public ActionResult AssignRaters(int? id)

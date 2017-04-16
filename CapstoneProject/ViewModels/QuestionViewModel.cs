@@ -15,7 +15,8 @@ namespace CapstoneProject.ViewModels
 
         public string QuestionText { get; set; }
 
-        public int? SelectedAnswer { get; set; }
+        [Required(ErrorMessage = "An answer is required.")]
+        public int SelectedAnswer { get; set; }
 
         public List<AnswerViewModel> PossibleAnswers { get; set; }
     }
