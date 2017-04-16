@@ -282,6 +282,10 @@
     <Compile Include="DataMigrations\201704091932363_OpenDateCloseDateNotNullable.Designer.cs">
       <DependentUpon>201704091932363_OpenDateCloseDateNotNullable.cs</DependentUpon>
     </Compile>
+    <Compile Include="DataMigrations\201704162114102_AddCompletedDateToEvals.cs" />
+    <Compile Include="DataMigrations\201704162114102_AddCompletedDateToEvals.Designer.cs">
+      <DependentUpon>201704162114102_AddCompletedDateToEvals.cs</DependentUpon>
+    </Compile>
     <Compile Include="DataMigrations\DataConfig.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -453,6 +457,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DataMigrations\201704091932363_OpenDateCloseDateNotNullable.resx">
       <DependentUpon>201704091932363_OpenDateCloseDateNotNullable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataMigrations\201704162114102_AddCompletedDateToEvals.resx">
+      <DependentUpon>201704162114102_AddCompletedDateToEvals.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserMigrations\201702202104105_Initial.resx">
       <DependentUpon>201702202104105_Initial.cs</DependentUpon>

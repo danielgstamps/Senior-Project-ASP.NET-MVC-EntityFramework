@@ -39,7 +39,8 @@ namespace CapstoneProject.Controllers
             var model = new TakeEvalViewModel
             {
                 AllQuestions = new List<QuestionViewModel>(),
-                TypeId = eval.TypeID
+                TypeId = eval.TypeID,
+                EvalId = eval.EvaluationID
             };
 
             var count = 1;
@@ -68,18 +69,28 @@ namespace CapstoneProject.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            if (model.AllQuestions == null)
+            if (model.AllQuestions == null || model.AllQuestions.Count == 0)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
+            }
+
+            var eval = UnitOfWork.EvaluationRepository.GetByID(model.EvalId);
+            if (eval == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            foreach (var question in model.AllQuestions)
+            eval.SelfAnswers = ParseAnswers(model.AllQuestions);
+            eval.CompletedDate = DateTime.Now;
+            UnitOfWork.Save();
+
+            if (eval.Raters.Count > 1)
             {
-                Console.WriteLine(question.SelectedAnswer.ToString());
+                return View("AssignRaters", eval.Raters);
             }
 
-            return RedirectToAction("Index", "Cohorts");
-           // return View("AssignRaters");
+            var employee = UnitOfWork.EmployeeRepository.Get().Single(e => e.EmployeeID == eval.EmployeeID);
+            return RedirectToAction("EmployeeEvalsIndex", new { id = eval.EmployeeID });
         }
 
         public ActionResult AssignRaters(int? id)
@@ -433,6 +444,16 @@ namespace CapstoneProject.Controllers
         private int NumberOfRatersWithRole(Evaluation eval, string role)
         {
             return eval.Raters.Count(r => r.Role.Equals(role));
+        }
+
+        private string ParseAnswers(List<QuestionViewModel> questions)
+        {
+            var answerString = "";
+            foreach (var question in questions)
+            {
+                answerString += question.SelectedAnswer.ToString();                              
+            }
+            return answerString;
         }
 
         private List<Rater> GenerateRaterList(int numSupervisors, int numCoworkers, int numSupervisees)

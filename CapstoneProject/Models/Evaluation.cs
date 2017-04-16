@@ -31,6 +31,9 @@ namespace CapstoneProject.Models
         [Display(Name = "Close Date")]
         public DateTime CloseDate { get; set; }
 
+        [Display(Name = "Completed Date")]
+        public DateTime CompletedDate { get; set; }
+
         public string SelfAnswers { get; set; }
 
         public virtual ICollection<Rater> Raters { get; set; }

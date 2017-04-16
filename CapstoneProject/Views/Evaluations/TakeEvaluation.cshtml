@@ -12,6 +12,7 @@
         for (var i = 0; i < Model.AllQuestions.Count; i++)
         {
             @Html.HiddenFor(m => m.TypeId)
+            @Html.HiddenFor(m => m.EvalId)
 
             <label>@Model.AllQuestions[i].Id.</label>
             <label>@Model.AllQuestions[i].Text</label>
@@ -27,10 +28,7 @@
             {
                 @Html.HiddenFor(m => m.AllQuestions[i].Id)
                 @Html.HiddenFor(m => m.AllQuestions[i].Text)
-                @Html.HiddenFor(m => m.AllQuestions[i].SelectedAnswer)
                 @Html.RadioButtonFor(m => m.AllQuestions[i].SelectedAnswer, j, new {Name = "AllQuestions["+i+"].SelectedAnswer"})
-                @*<input type="radio" value=@j.ToString(), name=@Model.ElementAt(i).Id/>
-                <span>@j.ToString()</span>*@
             }
 
             <label></label>
@@ -45,7 +43,5 @@
                 <input type="submit" value="Submit" class="btn btn-default" />
             </div>
         </div>
-
-        @*@Html.ActionLink("Next", "AssignRaters", new { id = Model.EvaluationID})*@
     }
 </div>

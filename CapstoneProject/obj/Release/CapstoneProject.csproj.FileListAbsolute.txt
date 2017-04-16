@@ -740,6 +740,7 @@ C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\Microsoft.Owin.Security.OAuth
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\Microsoft.Owin.Security.Google.xml
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\Microsoft.Owin.Security.Twitter.xml
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.csprojResolveAssemblyReference.cache
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.Init.resources
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.CohortsNullable.resources
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.EvaluationRefactor.resources
@@ -757,6 +758,7 @@ C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataM
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.RenamedClosedDateToCloseDate.resources
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.changedRaterAnswersToString.resources
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.OpenDateCloseDateNotNullable.resources
+C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.AddCompletedDateToEvals.resources
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.UserMigrations.Initial.resources
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.csproj.GenerateResource.Cache
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.dll

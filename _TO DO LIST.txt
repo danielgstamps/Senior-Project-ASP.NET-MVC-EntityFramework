@@ -1,7 +1,8 @@
 CLONE URL: https://wudsco.visualstudio.com/_git/WUDSCO
 
-- edit eval fix
-- edit cohort logic
+- employee: view completed evals
+- fix CreateEvaluation email links.
+- raters
 - raters can be edited/disabled if they haven't completed eval
 
 
