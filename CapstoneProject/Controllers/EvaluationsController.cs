@@ -65,23 +65,18 @@ namespace CapstoneProject.Controllers
         {
             if (!ModelState.IsValid)
             {
-                throw new Exception("invalid");
-               // return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
             if (model.AllQuestions == null)
             {
-                throw new Exception("null");
-                //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
             foreach (var question in model.AllQuestions)
             {
                 Console.WriteLine(question.SelectedAnswer.ToString());
             }
-
-            
-
 
             return RedirectToAction("Index", "Cohorts");
            // return View("AssignRaters");

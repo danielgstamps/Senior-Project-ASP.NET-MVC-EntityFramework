@@ -13,7 +13,7 @@ namespace CapstoneProject.ViewModels
 
         public string Text { get; set; }
 
-        [Required(ErrorMessage = "An answer is required.")]
+        [Required(ErrorMessage = "***")]
         public int SelectedAnswer { get; set; }
     }
 }

@@ -3,7 +3,8 @@
 
 <h2>Evaluation</h2>
 
-<h4>Please rate how much you agree with each statement</h4>
+<h4>Please select a button for each question to indicate if you agree or disagree.</h4>
+<br/>
 
 <div>
     @using (Html.BeginForm())
@@ -12,11 +13,13 @@
         {
             @Html.HiddenFor(m => m.TypeId)
 
-            <label>@Model.AllQuestions[i].Id</label>
+            <label>@Model.AllQuestions[i].Id.</label>
             <label>@Model.AllQuestions[i].Text</label>
+
+            @Html.ValidationMessageFor(model => model.AllQuestions[i].SelectedAnswer, "", new { @class = "text-danger" })
             <br />
 
-            @Html.Label("Disagree")
+            @Html.Label("Disagree", new { @class = "text-warning" })
             <label></label>
 
             var numberOfAnswers = Model.TypeId == 1 ? 5 : 10;
@@ -31,9 +34,9 @@
             }
 
             <label></label>
-            @Html.Label("Agree")
-            <br />
-            @Html.ValidationMessageFor(model => model.AllQuestions[i].SelectedAnswer, "", new { @class = "text-danger" })
+            @Html.Label("Agree", new {@class="text-info"})
+            <br/>
+            <br/>
             <br/>
         }
 
