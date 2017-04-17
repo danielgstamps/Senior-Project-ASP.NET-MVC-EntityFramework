@@ -50,7 +50,7 @@
                         <label class="alert-success">Completed @item.CompletedDate.Value.ToString("MM/dd/yyyy h:mm tt")</label>
                     }
                     <label> | </label>
-                    @Html.ActionLink("View", "ViewCompletedEval", new { id = item.EvaluationID })
+                    @Html.ActionLink("View", "Details", new { id = item.EvaluationID })
                 }
                 else if (item.OpenDate <= DateTime.Today && !item.IsComplete())
                 {

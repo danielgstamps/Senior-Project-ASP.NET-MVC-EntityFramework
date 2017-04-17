@@ -9,6 +9,7 @@ using CapstoneProject.DAL;
 using CapstoneProject.Models;
 using CapstoneProject.ViewModels;
 using Castle.Components.DictionaryAdapter.Xml;
+using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 
@@ -80,7 +81,7 @@ namespace CapstoneProject.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            eval.SelfAnswers = ParseAnswers(model.AllQuestions);
+            eval.SelfAnswers = ConvertAnswersToString(model.AllQuestions);
             eval.CompletedDate = DateTime.Now;
             UnitOfWork.Save();
 
@@ -132,7 +133,26 @@ namespace CapstoneProject.Controllers
             {
                 return HttpNotFound();
             }
-            return View("Details", evaluation);
+
+            var questionList = new List<Question>();
+            var categories = evaluation.Type.Categories;
+            foreach (var cat in categories)
+            {
+                foreach (var question in cat.Questions)
+                {
+                    questionList.Add(question);
+                }
+            }
+
+            var answersList = ConvertAnswersToList(evaluation.SelfAnswers);
+            var model = new ViewEvalViewModel()
+            {
+                Eval = evaluation,
+                QuestionList = questionList,
+                Answers = answersList
+            };
+
+            return View("Details", model);
         }
 
         // GET: Evaluations/Create
@@ -447,7 +467,7 @@ namespace CapstoneProject.Controllers
             return eval.Raters.Count(r => r.Role.Equals(role));
         }
 
-        private string ParseAnswers(List<QuestionViewModel> questions)
+        private string ConvertAnswersToString(List<QuestionViewModel> questions)
         {
             var answerString = "";
             foreach (var question in questions)
@@ -455,6 +475,24 @@ namespace CapstoneProject.Controllers
                 answerString += question.SelectedAnswer.ToString();                              
             }
             return answerString;
+        }
+
+        private List<string> ConvertAnswersToList(string answers)
+        {
+            var list = new List<string>();
+            for (var i = 0; i < answers.Length; i++)
+            {
+                if (answers[i].Equals('0') && answers[i-1].Equals('1'))
+                {
+                    list.Add("10");
+                    continue;
+                }
+
+                list.Add(answers[i].ToString());
+
+            }
+
+            return list;
         }
 
         private List<Rater> GenerateRaterList(int numSupervisors, int numCoworkers, int numSupervisees)
