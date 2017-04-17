@@ -1,34 +1,66 @@
-﻿@model CapstoneProject.Models.Evaluation
+﻿@model CapstoneProject.ViewModels.ViewEvalViewModel
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "View Evaluation";
 }
 
-<h2>Details</h2>
+<h2>Evaluation Details</h2>
+
+<div>   
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Eval.Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Eval.Stage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Eval.OpenDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Eval.CloseDate)
+            </th>
+            <th>
+                <label>Status</label>
+            </th>
+            <th></th>
+        </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(model => model.Eval.Type.TypeName)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.Eval.Stage.StageName)
+            </td>
+            <td>
+                <label>@Model.Eval.OpenDate.ToString("d") </label>
+            </td>
+            <td>
+                <label>@Model.Eval.CloseDate.Date.ToString("d")</label>
+            </td>
+            <td>
+                @if (Model.Eval.CompletedDate.HasValue)
+                {
+                    <label class="alert-success">Completed @Model.Eval.CompletedDate.Value.ToString("MM/dd/yyyy h:mm tt")</label>
+                }
+            </td>
+        </tr>
+    </table>
+</div>
 
 <div>
-    <h4>Evaluation</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Type)
-        </dt>
+    <h4>Your Answers</h4>
+    @foreach (var answer in Model.Answers)
+    {
+        <label> @answer </label>
+    }
+    
+    
+    
+    
+    
 
-        <dd>
-            @Html.DisplayFor(model => model.Type)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Employee)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Employee)
-        </dd>
-
-    </dl>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.EvaluationID }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+
+

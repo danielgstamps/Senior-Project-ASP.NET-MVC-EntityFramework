@@ -4,6 +4,7 @@ CLONE URL: https://wudsco.visualstudio.com/_git/WUDSCO
 - fix CreateEvaluation email links.
 - raters
 - raters can be edited/disabled if they haven't completed eval
+- stages fix
 
 
 
