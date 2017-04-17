@@ -1,11 +1,12 @@
 CLONE URL: https://wudsco.visualstudio.com/_git/WUDSCO
 
-- employee: view completed evals
-- fix CreateEvaluation email links.
-- raters
+- assignRaters: Check for duplicates
+- fix CreateEval email links.
+- rater emails
+- rater takeEval
 - raters can be edited/disabled if they haven't completed eval
 - stages fix
-
+- reports
 
 
 Eval breakdown:

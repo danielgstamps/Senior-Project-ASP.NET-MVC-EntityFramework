@@ -94,12 +94,13 @@ namespace CapstoneProject.Controllers
 
             if (eval.Raters.Count > 1)
             {
-                return View("AssignRaters", eval.Raters);
+                return RedirectToAction("AssignRaters", new {id = eval.EvaluationID});
             }
 
             return RedirectToAction("EmployeeEvalsIndex", new { id = eval.EmployeeID });
         }
 
+        // GET
         public ActionResult AssignRaters(int? id)
         {
             if (id == null)
@@ -113,18 +114,60 @@ namespace CapstoneProject.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            //if (eval.Raters.Count == 0)
-            //{
-            //    return View("something else");
-            //}
-
-            var raterList = eval.Raters;
-            foreach (var rater in raterList)
+            var employee = UnitOfWork.EmployeeRepository.GetByID(eval.EmployeeID);
+            if (employee == null || !employee.Email.Equals(User.Identity.GetUserName()))
             {
+                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+            }
+
+            var model = new AssignRatersViewModel
+            {
+                EvalId = eval.EvaluationID,
+                Raters = eval.Raters.ToList()
+            };
+
+            foreach (var rater in model.Raters)
+            {
+                rater.FirstName = "";
+                rater.LastName = "";
                 rater.Email = "";
             }
 
-            return View("AssignRaters", raterList);
+            return View("AssignRaters", model);
+        }
+
+        // POST
+        [HttpPost]
+        public ActionResult AssignRaters(AssignRatersViewModel model)
+        {
+            if (model == null || model.Raters.Count == 0)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var eval = UnitOfWork.EvaluationRepository.GetByID(model.EvalId);
+            if (eval == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
+            }
+
+            if (eval.Raters.Count != model.Raters.Count)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
+            }
+
+            var i = 0;
+            foreach (var rater in eval.Raters)
+            {
+                rater.FirstName = model.Raters[i].FirstName;
+                rater.LastName = model.Raters[i].LastName;
+                rater.Email = model.Raters[i].Email;
+                UnitOfWork.Save();
+                i++;
+            }
+
+            TempData["TakeEvalSuccess"] = "Successfully completed evaluation.";
+            return RedirectToAction("EmployeeEvalsIndex", new { id = eval.EmployeeID });
         }
 
         // GET: Evaluations/Details/5
@@ -500,11 +543,8 @@ namespace CapstoneProject.Controllers
                     list.Add("10");
                     continue;
                 }
-
                 list.Add(answers[i].ToString());
-
             }
-
             return list;
         }
 
@@ -516,7 +556,9 @@ namespace CapstoneProject.Controllers
                 raters.Add(new Rater()
                 {
                     Role = "Supervisor",
-                    Email = "temp@temp.com"
+                    FirstName = "First Name",
+                    LastName = "Last Name",
+                    Email = "email@address.com"
                 });
             }
 
@@ -525,7 +567,9 @@ namespace CapstoneProject.Controllers
                 raters.Add(new Rater()
                 {
                     Role = "Coworker",
-                    Email = "temp@temp.com"
+                    FirstName = "First Name",
+                    LastName = "Last Name",
+                    Email = "email@address.com"
                 });
             }
 
@@ -534,7 +578,9 @@ namespace CapstoneProject.Controllers
                 raters.Add(new Rater()
                 {
                     Role = "Supervisee",
-                    Email = "temp@temp.com"
+                    FirstName = "First Name",
+                    LastName = "Last Name",
+                    Email = "email@address.com"
                 });
             }
 

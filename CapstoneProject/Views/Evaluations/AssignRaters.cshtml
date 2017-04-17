@@ -1,4 +1,4 @@
-﻿@model ICollection<CapstoneProject.Models.Rater>
+﻿@model CapstoneProject.ViewModels.AssignRatersViewModel
 @{
     ViewBag.Title = "Assign Raters";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -8,39 +8,43 @@
 <h4>The administrator has assigned the following raters to evaluate you:</h4>
 <br />
 
-@foreach (var rater in Model)
+@using (Html.BeginForm())
 {
-    <h4>@rater.Role:</h4>
+    @Html.HiddenFor(m => m.EvalId);
+    for(var i = 0; i < Model.Raters.Count; i++)
+    {
+        <h4>@Model.Raters[i].Role:</h4>
 
-    <div class="form-group">
-        @Html.LabelFor(model => rater.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => rater.FirstName, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => rater.FirstName, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => Model.Raters[i].FirstName, new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.EditorFor(model => Model.Raters[i].FirstName, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(model => Model.Raters[i].FirstName, "", new {@class = "text-danger"})
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => rater.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => rater.LastName, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => rater.LastName, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => Model.Raters[i].LastName, new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.EditorFor(model => Model.Raters[i].LastName, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(model => Model.Raters[i].LastName, "", new {@class = "text-danger"})
+            </div>
         </div>
-    </div>
 
+        <div class="form-group">
+            @Html.LabelFor(model => Model.Raters[i].Email, new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.EditorFor(model => Model.Raters[i].Email, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(model => Model.Raters[i].Email, "", new {@class = "text-danger"})
+            </div>
+        </div>
+        <label></label>
+    }
+
+    <br/><br/>
     <div class="form-group">
-        @Html.LabelFor(model => rater.Email, htmlAttributes: new {@class = "control-label col-md-2"})
-        <div class="col-md-10">
-            @Html.EditorFor(model => rater.Email, new {htmlAttributes = new {@class = "form-control"}})
-            @Html.ValidationMessageFor(model => rater.Email, "", new {@class = "text-danger"})
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Submit" class="btn btn-default"/>
         </div>
     </div>
 }
-
-<br/>
-
-<div class="form-group">
-    <div class="col-md-offset-2 col-md-10">
-        <input type="submit" value="Submit" class="btn btn-default" />
-    </div>
-</div>

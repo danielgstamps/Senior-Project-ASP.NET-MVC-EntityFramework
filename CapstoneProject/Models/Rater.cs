@@ -7,16 +7,18 @@ namespace CapstoneProject.Models
         public int RaterID { get; set; }
 
         [Display(Name = "First Name")]
+        [Required(ErrorMessage = "**")]
         public string FirstName { get; set; }
 
         [Display(Name = "Last Name")]
+        [Required(ErrorMessage = "**")]
         public string LastName { get; set; }
 
         public string Role { get; set; }
 
         [Display(Name = "Email Address")]
         [DataType(DataType.EmailAddress)]
-        [Required(ErrorMessage = "The email address is required")]
+        [Required(ErrorMessage = "**")]
         [EmailAddress(ErrorMessage = "Invalid Email Address")]
         public string Email { get; set; }
 

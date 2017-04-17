@@ -290,6 +290,10 @@
     <Compile Include="DataMigrations\201704171829327_CompletedDateNullable.Designer.cs">
       <DependentUpon>201704171829327_CompletedDateNullable.cs</DependentUpon>
     </Compile>
+    <Compile Include="DataMigrations\201704172129024_RequiredTagsAndErrorsForRaters.cs" />
+    <Compile Include="DataMigrations\201704172129024_RequiredTagsAndErrorsForRaters.Designer.cs">
+      <DependentUpon>201704172129024_RequiredTagsAndErrorsForRaters.cs</DependentUpon>
+    </Compile>
     <Compile Include="DataMigrations\DataConfig.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -313,6 +317,7 @@
     </Compile>
     <Compile Include="UserMigrations\UserConfig.cs" />
     <Compile Include="ViewModels\AssignedEmployeeData.cs" />
+    <Compile Include="ViewModels\AssignRatersViewModel.cs" />
     <Compile Include="ViewModels\EvaluationCreateViewModel.cs" />
     <Compile Include="ViewModels\TakeEvalViewModel.cs" />
     <Compile Include="ViewModels\QuestionViewModel.cs" />
@@ -469,6 +474,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DataMigrations\201704171829327_CompletedDateNullable.resx">
       <DependentUpon>201704171829327_CompletedDateNullable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataMigrations\201704172129024_RequiredTagsAndErrorsForRaters.resx">
+      <DependentUpon>201704172129024_RequiredTagsAndErrorsForRaters.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserMigrations\201702202104105_Initial.resx">
       <DependentUpon>201702202104105_Initial.cs</DependentUpon>

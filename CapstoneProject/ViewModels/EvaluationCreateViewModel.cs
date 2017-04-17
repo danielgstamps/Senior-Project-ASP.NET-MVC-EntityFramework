@@ -40,7 +40,6 @@ namespace CapstoneProject.ViewModels
         [Range(0, 100, ErrorMessage = "Must be between 0 and 100.")]
         public int NumberOfSupervisees { get; set; }
 
-
         IEnumerable<ValidationResult> IValidatableObject.Validate(ValidationContext validationContext)
         {
             if (CloseDate <= OpenDate)

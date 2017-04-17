@@ -60,12 +60,12 @@ namespace CapstoneProjectTests
         //    Assert.AreEqual("test0", result.Comment);
         //}
 
-        [TestMethod]
-        public void TestDetails()
-        {
-            this.mockUnitOfWork.Setup(m => m.EvaluationRepository.GetByID(1)).Returns(this.evaluations[1]);
-            var result = this.controller.Details(1) as ViewResult;
-            Assert.AreEqual("Details", result.ViewName);
-        }
+        //[TestMethod]
+        //public void TestDetails()
+        //{
+        //    this.mockUnitOfWork.Setup(m => m.EvaluationRepository.GetByID(1)).Returns(this.evaluations[1]);
+        //    var result = this.controller.Details(1) as ViewResult;
+        //    Assert.AreEqual("Details", result.ViewName);
+        //}
     }
 }
