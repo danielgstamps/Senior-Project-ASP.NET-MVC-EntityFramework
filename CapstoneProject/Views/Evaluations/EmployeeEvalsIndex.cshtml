@@ -43,11 +43,12 @@
                 <label>@item.CloseDate.Date.ToString("d")</label>
             </td>
             <td>
-                @if (item.IsComplete())
+                @if (!string.IsNullOrEmpty(item.SelfAnswers))
                 {
                     if (item.CompletedDate.HasValue)
                     {
                         <label class="alert-success">Completed @item.CompletedDate.Value.ToString("MM/dd/yyyy h:mm tt")</label>
+                        //Link to edit raters
                     }
                     <label> | </label>
                     @Html.ActionLink("View", "Details", new { id = item.EvaluationID })

@@ -37,6 +37,13 @@ namespace CapstoneProject.Controllers
                 return HttpNotFound();
             }
 
+            // Probably need different authentication for Raters
+            //var employee = UnitOfWork.EmployeeRepository.GetByID(eval.EmployeeID);
+            //if (employee == null || !employee.Email.Equals(User.Identity.GetUserName()))
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+            //}
+
             var model = new TakeEvalViewModel
             {
                 AllQuestions = new List<QuestionViewModel>(),
@@ -90,7 +97,6 @@ namespace CapstoneProject.Controllers
                 return View("AssignRaters", eval.Raters);
             }
 
-            var employee = UnitOfWork.EmployeeRepository.Get().Single(e => e.EmployeeID == eval.EmployeeID);
             return RedirectToAction("EmployeeEvalsIndex", new { id = eval.EmployeeID });
         }
 
@@ -128,10 +134,17 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             var evaluation = UnitOfWork.EvaluationRepository.GetByID(id);
             if (evaluation == null)
             {
                 return HttpNotFound();
+            }
+
+            var employee = UnitOfWork.EmployeeRepository.GetByID(evaluation.EmployeeID);
+            if (employee == null || !employee.Email.Equals(User.Identity.GetUserName()))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
             }
 
             var questionList = new List<Question>();

@@ -49,10 +49,10 @@
         </tr>
     </table>
 </div>
-
 <div>
     <h3>Your Answers:</h3>
     <h4>On a scale from 1-@maxAnswerOption, (1 meaning disagree, @maxAnswerOption meaning agree), you answered the following:</h4>
+    <br/>
     @for (var i = 1; i < Model.QuestionList.Count + 1; i++)
     {
         <label>@i.</label>
@@ -63,12 +63,7 @@
         <label>@Model.Answers[i - 1] / @maxAnswerOption</label>
         <br/><br/>
     }
-
-
-
-
-
-
+    @Html.ActionLink("Back to My Evaluations", "EmployeeEvalsIndex", new {id = Model.Eval.EmployeeID})
 </div>
 
 
