@@ -397,6 +397,7 @@
     <Content Include="Views\Evaluations\EmployeeEvalsIndex.cshtml" />
     <Content Include="Views\Evaluations\AssignRaters.cshtml" />
     <Content Include="Views\Evaluations\Delete.cshtml" />
+    <Content Include="Views\Evaluations\Results.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
