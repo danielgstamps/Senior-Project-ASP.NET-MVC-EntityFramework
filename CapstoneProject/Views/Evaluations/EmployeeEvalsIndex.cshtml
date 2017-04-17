@@ -45,7 +45,10 @@
             <td>
                 @if (item.IsComplete())
                 {
-                    <label class="alert-success">Completed @item.CompletedDate.ToString("MM/dd/yyyy h:mm tt")</label>
+                    if (item.CompletedDate.HasValue)
+                    {
+                        <label class="alert-success">Completed @item.CompletedDate.Value.ToString("MM/dd/yyyy h:mm tt")</label>
+                    }
                     <label> | </label>
                     @Html.ActionLink("View", "ViewCompletedEval", new { id = item.EvaluationID })
                 }

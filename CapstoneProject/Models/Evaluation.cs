@@ -32,7 +32,7 @@ namespace CapstoneProject.Models
         public DateTime CloseDate { get; set; }
 
         [Display(Name = "Completed Date")]
-        public DateTime CompletedDate { get; set; }
+        public DateTime? CompletedDate { get; set; }
 
         public string SelfAnswers { get; set; }
 

@@ -227,6 +227,7 @@ namespace CapstoneProject.Controllers
                     Stage = UnitOfWork.StageRepository.GetByID(model.StageID),
                     OpenDate = model.OpenDate.Value,
                     CloseDate = model.CloseDate.Value,
+                    CompletedDate = null,
                     SelfAnswers = "",
                     Raters = GenerateRaterList(model.NumberOfSupervisors, model.NumberOfCoworkers, model.NumberOfSupervisees)
                 };
