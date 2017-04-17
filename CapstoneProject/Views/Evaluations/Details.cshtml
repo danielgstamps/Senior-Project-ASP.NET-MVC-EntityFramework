@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "View Evaluation";
+    var maxAnswerOption = Model.Eval.TypeID == 1 ? 5 : 10;
 }
 
 <h2>Evaluation Details</h2>
@@ -50,16 +51,23 @@
 </div>
 
 <div>
-    <h4>Your Answers</h4>
-    @foreach (var answer in Model.Answers)
+    <h3>Your Answers:</h3>
+    <h4>On a scale from 1-@maxAnswerOption, (1 meaning disagree, @maxAnswerOption meaning agree), you answered the following:</h4>
+    @for (var i = 1; i < Model.QuestionList.Count + 1; i++)
     {
-        <label> @answer </label>
+        <label>@i.</label>
+        <label>@Model.QuestionList[i - 1].QuestionText</label>
+        <br/>
+
+        <label>You said: </label>
+        <label>@Model.Answers[i - 1] / @maxAnswerOption</label>
+        <br/><br/>
     }
-    
-    
-    
-    
-    
+
+
+
+
+
 
 </div>
 
