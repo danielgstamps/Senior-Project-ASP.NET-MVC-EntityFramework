@@ -7,6 +7,7 @@
 
 <h2>Evaluations for @User.Identity.Name</h2>
 <h4 class="alert-success">@TempData["TakeEvalSuccess"]</h4>
+<h4 class="alert-success">@TempData["EditRaterSuccess"]</h4>
 
 <table class="table">
     <tr>
@@ -51,13 +52,6 @@
                     <label class="alert-success">Completed @item.CompletedDate.Value.ToString("MM/dd/yyyy h:mm tt")</label>
                     <label> | </label>
                     @Html.ActionLink("View", "Details", new { id = item.EvaluationID })
-
-                    @*if (item.Raters.Any(r => string.IsNullOrEmpty(r.Answers)))
-                    {
-                        <label class="alert-info">Raters still evaluating</label>
-                        <label> | </label>
-                        @Html.ActionLink("Edit", "EditRaters", new { id = item.EvaluationID })
-                    }*@
                 }
                 else if (item.OpenDate <= DateTime.Today && !item.IsComplete())
                 {
@@ -77,9 +71,19 @@
                 }
             </td>
             <td>
-                @if (item.Raters.Any(r => string.IsNullOrEmpty(r.Answers)))
+                @if (item.Raters.Count == 0)
                 {
-                    <label class="alert-info">Raters still evaluating</label>
+                    <label>N/A (No raters)</label>
+                }
+                else if (item.Raters.Any(r => string.IsNullOrEmpty(r.Answers)))
+                {
+                    <label class="alert-warning">Rater evaluations in progress</label>
+                    <label> | </label>
+                    @Html.ActionLink("Edit", "EditRaters", new {id = item.EvaluationID})
+                }
+                else
+                {
+                    <label class="alert-success">Complete</label>
                     <label> | </label>
                     @Html.ActionLink("Edit", "EditRaters", new { id = item.EvaluationID })
                 }

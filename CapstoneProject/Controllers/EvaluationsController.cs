@@ -206,6 +206,37 @@ namespace CapstoneProject.Controllers
             return View("EditRaters", model);
         }
 
+        // POST: EditRaters
+        [HttpPost]
+        public ActionResult EditRaters(AssignRatersViewModel model)
+        {
+            if (model == null || model.Raters == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            if (model.Raters.DistinctBy(r => r.Email).Count() != model.Raters.Count)
+            {
+                TempData["DuplicateError"] = "Please enter a unique email address for each rater.";
+                return RedirectToAction("EditRaters", new { id = model.EvalId });
+            }
+
+            var eval = UnitOfWork.EvaluationRepository.GetByID(model.EvalId);
+
+            var i = 0;
+            foreach (var rater in eval.Raters)
+            {
+                rater.FirstName = model.Raters[i].FirstName;
+                rater.LastName = model.Raters[i].LastName;
+                rater.Email = model.Raters[i].Email;
+                UnitOfWork.Save();
+                i++;
+            }
+
+            TempData["EditRaterSuccess"] = "Successfully updated raters.";
+            return RedirectToAction("EmployeeEvalsIndex", new { id = eval.EmployeeID });
+        }
+
         // GET: Evaluations/Details/5
         public ActionResult Details(int? id)
         {
