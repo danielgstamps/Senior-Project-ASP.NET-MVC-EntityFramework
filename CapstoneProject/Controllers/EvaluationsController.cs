@@ -222,6 +222,10 @@ namespace CapstoneProject.Controllers
             }
 
             var eval = UnitOfWork.EvaluationRepository.GetByID(model.EvalId);
+            if (eval == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
 
             var i = 0;
             foreach (var rater in eval.Raters)
@@ -235,6 +239,41 @@ namespace CapstoneProject.Controllers
 
             TempData["EditRaterSuccess"] = "Successfully updated raters.";
             return RedirectToAction("EmployeeEvalsIndex", new { id = eval.EmployeeID });
+        }
+
+        public ActionResult ReplaceRater(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var raterToReplace = UnitOfWork.RaterRepository.GetByID(id);
+            if (raterToReplace == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var eval = UnitOfWork.EvaluationRepository.GetByID(raterToReplace.EvaluationID);
+            if (eval == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var employee = UnitOfWork.EmployeeRepository.GetByID(eval.EmployeeID);
+            if (employee == null || !employee.Email.Equals(User.Identity.GetUserName()))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+            }
+
+            var model = new ReplaceRaterViewModel()
+            {
+                EvalId = eval.EvaluationID,
+                RaterToReplace = raterToReplace,
+                NewRater = new Rater()
+            };
+
+            return View("ReplaceRater", model);
         }
 
         // GET: Evaluations/Details/5

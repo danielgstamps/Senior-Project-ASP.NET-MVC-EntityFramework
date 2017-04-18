@@ -23,6 +23,8 @@ namespace CapstoneProject.DAL
 
         GenericRepository<Stage> StageRepository { get; }
 
+        GenericRepository<Rater> RaterRepository { get; }
+
         void Save();
 
         void Dispose();

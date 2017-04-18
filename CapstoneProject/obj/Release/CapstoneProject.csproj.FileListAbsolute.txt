@@ -876,3 +876,4 @@ C:\Users\Will\Source\Repos\WUDSCO2\CapstoneProject\obj\Release\CapstoneProject.U
 C:\Users\Will\Source\Repos\WUDSCO2\CapstoneProject\obj\Release\CapstoneProject.csproj.GenerateResource.Cache
 C:\Users\Will\Source\Repos\WUDSCO2\CapstoneProject\obj\Release\CapstoneProject.dll
 C:\Users\Will\Source\Repos\WUDSCO2\CapstoneProject\obj\Release\CapstoneProject.pdb
+C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.csprojResolveAssemblyReference.cache
