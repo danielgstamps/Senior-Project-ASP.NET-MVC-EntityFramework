@@ -156,6 +156,13 @@ namespace CapstoneProject.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
             }
 
+            // Check for duplicate emails (Not using Unique tags because they don't need to be unique in the db).
+            if (model.Raters.DistinctBy(r => r.Email).Count() != model.Raters.Count)
+            {
+                TempData["DuplicateError"] = "Please enter a unique email address for each rater.";
+                return RedirectToAction("AssignRaters", new {id = model.EvalId});
+            }
+
             var i = 0;
             foreach (var rater in eval.Raters)
             {
