@@ -210,7 +210,7 @@ namespace CapstoneProject.Controllers
         [HttpPost]
         public ActionResult EditRaters(AssignRatersViewModel model)
         {
-            if (model == null || model.Raters == null)
+            if (model == null || model.Raters.Count == 0)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
@@ -241,6 +241,7 @@ namespace CapstoneProject.Controllers
             return RedirectToAction("EmployeeEvalsIndex", new { id = eval.EmployeeID });
         }
 
+        // GET: ReplaceRater
         public ActionResult ReplaceRater(int? id)
         {
             if (id == null)
@@ -270,10 +271,50 @@ namespace CapstoneProject.Controllers
             {
                 EvalId = eval.EvaluationID,
                 RaterToReplace = raterToReplace,
-                NewRater = new Rater()
+                NewRater = new Rater { Role = raterToReplace.Role}
             };
 
             return View("ReplaceRater", model);
+        }
+
+        // POST: ReplaceRater
+        [HttpPost]
+        public ActionResult ReplaceRater(ReplaceRaterViewModel model)
+        {
+            if (model == null || 
+                model.EvalId == null || 
+                model.RaterToReplace == null || 
+                model.NewRater == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
+            }
+
+            var eval = UnitOfWork.EvaluationRepository.GetByID(model.EvalId);
+            if (eval == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
+            }
+
+            if (eval.Raters.Any(r => r.Email.Equals(model.NewRater.Email)))
+            {
+                TempData["DuplicateError"] = "This evaluation already has a rater with that email.";
+                return RedirectToAction("ReplaceRater", new { id = model.RaterToReplace.RaterID });
+            }
+
+            var raterToDisable = UnitOfWork.RaterRepository.GetByID(model.RaterToReplace.RaterID);
+            if (raterToDisable == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
+            }
+
+            raterToDisable.Disabled = true;
+            UnitOfWork.Save();
+
+            eval.Raters.Add(model.NewRater);
+            UnitOfWork.Save();
+
+            TempData["ReplaceRaterSuccess"] = "Successfully replaced rater.";
+            return RedirectToAction("EditRaters", new { id = eval.EvaluationID });
         }
 
         // GET: Evaluations/Details/5
@@ -344,8 +385,6 @@ namespace CapstoneProject.Controllers
                     Text = t.TypeName,
                 })
             };
-
-            // Get all types.
 
             // Remove types if the cohort already has them assigned.
             var itemList = model.TypeList.ToList();
