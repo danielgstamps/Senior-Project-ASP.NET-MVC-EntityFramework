@@ -22,11 +22,11 @@
         if (raterHasFinishedEval)
         {
             <label class="alert-success">@Model.Raters[i].FirstName has completed their evaluation</label>
-            <br/>
-            @Html.ActionLink("Replace this rater", "DisableRater", new { id = Model.Raters[i].RaterID} )
+            <br/>  
             @Html.HiddenFor(m => m.Raters[i].FirstName)
             @Html.HiddenFor(m => m.Raters[i].LastName)
             @Html.HiddenFor(m => m.Raters[i].Email)
+            @Html.ActionLink("Replace this rater", "ReplaceRater", new { id = Model.Raters[i].RaterID })
             <br/><br/>
         }
         else
