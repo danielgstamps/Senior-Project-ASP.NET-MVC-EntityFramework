@@ -1,14 +1,9 @@
 CLONE URL: https://wudsco.visualstudio.com/_git/WUDSCO
 
-- createEval limit numbers to 2/1/1?
-- fix CreateEval email links.
 - rater emails / resend
 - rater takeEval
-- raters can be edited if they HAVEN'T finished eval
-- raters can be disabled&replaced if they HAVE finished eval.
 - stages fix
 - reports
-
 
 Eval breakdown:
 3 stages: baseline -> formative -> summative

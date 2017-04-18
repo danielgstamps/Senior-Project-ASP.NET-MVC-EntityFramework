@@ -413,8 +413,6 @@ namespace CapstoneProject.Controllers
         }
 
         // POST: Evaluations/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(EvaluationCreateViewModel model)
@@ -456,7 +454,7 @@ namespace CapstoneProject.Controllers
 
                 UnitOfWork.EvaluationRepository.Insert(eval);
                 UnitOfWork.Save();
-               // SendEvaluationEmail(emp.EmployeeID, eval); // Commenting this out for now, it rustles Microsoft's jimmies.
+                SendEvaluationEmail(emp.EmployeeID, eval); // Commenting this out for now, it rustles Microsoft's jimmies.
             }
 
             if (model.TypeID == 1)
@@ -735,21 +733,6 @@ namespace CapstoneProject.Controllers
             return raters;
         }
 
-        //private List<AnswerViewModel> GeneratePossibleAnswers(int type)
-        //{
-        //    var list = new List<AnswerViewModel>();
-        //    var numberOfAnswers = type == 1 ? 5 : 10; // 5 if type is 1, 10 if type is 2.
-        //    for (var i = 0; i < numberOfAnswers; i++)
-        //    {
-        //        list.Add(new AnswerViewModel()
-        //        {
-        //            Answer = i + 1
-        //        });
-        //    }
-
-        //    return list;
-        //}
-
         public ApplicationUserManager UserManager
         {
             get { return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
@@ -758,20 +741,14 @@ namespace CapstoneProject.Controllers
 
         private async Task SendEvaluationEmail(int employeeID, Evaluation evaluation)
         {
-           // var cohort = this.UnitOfWork.CohortRepository.GetByID(cohortID);
-           // var employees = cohort.Employees.ToList();
-           // var userAccounts = userDB.Users.ToList();
-           // foreach (var employee in employees)
-           // {
-
             var employee = UnitOfWork.EmployeeRepository.GetByID(employeeID);
             var userAccount = userDB.Users.ToList().Find(u => u.Email == employee.Email);
             var userEmail = userAccount.Email;
 
             // TODO Specify EvaluationsController Action in first string param
-            var callbackUrl = Url.Action("CompleteEvaluation", "Evaluations", new { userId = userAccount.Id, email = userEmail }, protocol: Request.Url.Scheme);
+            var callbackUrl = Url.Action("TakeEvaluation", "Evaluations", new { id = evaluation.EvaluationID }, protocol: Request.Url.Scheme);
 
-            var emailSubject = "New Evaluation";
+            var emailSubject = "New Evaluation Available";
             var emailBody =
             "You have a new evaluation to complete. Here are the details: " +
             "\r\n\r\n" +
@@ -786,7 +763,6 @@ namespace CapstoneProject.Controllers
             "Click <a href=\"" + callbackUrl + "\">here</a> to complete your evaluation.";
 
             await UserManager.SendEmailAsync(userAccount.Id, emailSubject, emailBody);
-           // }
         }
 
         public ActionResult CompleteEvaluation()
