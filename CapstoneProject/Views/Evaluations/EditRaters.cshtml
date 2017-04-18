@@ -1,0 +1,65 @@
+﻿@model CapstoneProject.ViewModels.AssignRatersViewModel
+
+@{
+    ViewBag.Title = "Edit Raters";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit Raters</h2>
+<h4>Update your raters' information, or replace them.</h4>
+<br/>
+
+@using (Html.BeginForm())
+{
+    <h4 class="alert-danger">@TempData["DuplicateError"]</h4>
+
+    @Html.HiddenFor(m => m.EvalId);
+    for (var i = 0; i < Model.Raters.Count; i++)
+    {
+        var raterHasFinishedEval = !string.IsNullOrEmpty(Model.Raters[i].Answers);
+        <h4>@Model.Raters[i].Role:</h4>
+
+        if (raterHasFinishedEval)
+        {
+            <label class="alert-info">@Model.Raters[i].FirstName has completed their evaluation.</label>
+            <br/>
+            @Html.ActionLink("Replace this rater", "DisableRater", new { id = Model.Raters[i].RaterID} )
+            <br/><br/>
+        }
+        else
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => Model.Raters[i].FirstName, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => Model.Raters[i].FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => Model.Raters[i].FirstName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => Model.Raters[i].LastName, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => Model.Raters[i].LastName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => Model.Raters[i].LastName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => Model.Raters[i].Email, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => Model.Raters[i].Email, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => Model.Raters[i].Email, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <label></label>
+        }
+    }
+
+    <br /><br />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Submit" class="btn btn-default" />
+        </div>
+    </div>
+}
+

@@ -197,7 +197,13 @@ namespace CapstoneProject.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
             }
 
-            return View("EditRaters", eval.Raters);
+            var model = new AssignRatersViewModel
+            {
+                EvalId = eval.EvaluationID,
+                Raters = eval.Raters.ToList()
+            };
+
+            return View("EditRaters", model);
         }
 
         // GET: Evaluations/Details/5

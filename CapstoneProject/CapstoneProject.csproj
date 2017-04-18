@@ -404,6 +404,7 @@
     <Content Include="Views\Evaluations\AssignRaters.cshtml" />
     <Content Include="Views\Evaluations\Delete.cshtml" />
     <Content Include="Views\Evaluations\Results.cshtml" />
+    <Content Include="Views\Evaluations\EditRaters.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
