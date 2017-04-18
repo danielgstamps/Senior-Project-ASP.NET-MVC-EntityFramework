@@ -23,9 +23,11 @@
             @Html.DisplayNameFor(model => model.CloseDate)
         </th>
         <th>
-            <label>Status</label>
+            <label>Self Status</label>
         </th>
-        <th></th>
+        <th>
+            <label>Rater Status</label>
+        </th>
     </tr>
 
     @foreach (var item in Model)
@@ -44,15 +46,18 @@
                 <label>@item.CloseDate.Date.ToString("d")</label>
             </td>
             <td>
-                @if (!string.IsNullOrEmpty(item.SelfAnswers))
+                @if (!string.IsNullOrEmpty(item.SelfAnswers) && item.CompletedDate.HasValue)
                 {
-                    if (item.CompletedDate.HasValue)
-                    {
-                        <label class="alert-success">Completed @item.CompletedDate.Value.ToString("MM/dd/yyyy h:mm tt")</label>
-                        //Link to edit raters
-                    }
+                    <label class="alert-success">Completed @item.CompletedDate.Value.ToString("MM/dd/yyyy h:mm tt")</label>
                     <label> | </label>
                     @Html.ActionLink("View", "Details", new { id = item.EvaluationID })
+
+                    @*if (item.Raters.Any(r => string.IsNullOrEmpty(r.Answers)))
+                    {
+                        <label class="alert-info">Raters still evaluating</label>
+                        <label> | </label>
+                        @Html.ActionLink("Edit", "EditRaters", new { id = item.EvaluationID })
+                    }*@
                 }
                 else if (item.OpenDate <= DateTime.Today && !item.IsComplete())
                 {
@@ -72,6 +77,12 @@
                 }
             </td>
             <td>
+                @if (item.Raters.Any(r => string.IsNullOrEmpty(r.Answers)))
+                {
+                    <label class="alert-info">Raters still evaluating</label>
+                    <label> | </label>
+                    @Html.ActionLink("Edit", "EditRaters", new { id = item.EvaluationID })
+                }
             </td>
         </tr>
     }

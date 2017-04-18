@@ -177,6 +177,29 @@ namespace CapstoneProject.Controllers
             return RedirectToAction("EmployeeEvalsIndex", new { id = eval.EmployeeID });
         }
 
+        // GET: EditRaters
+        public ActionResult EditRaters(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var eval = UnitOfWork.EvaluationRepository.GetByID(id);
+            if (eval == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var employee = UnitOfWork.EmployeeRepository.GetByID(eval.EmployeeID);
+            if (employee == null || !employee.Email.Equals(User.Identity.GetUserName()))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+            }
+
+            return View("EditRaters", eval.Raters);
+        }
+
         // GET: Evaluations/Details/5
         public ActionResult Details(int? id)
         {
@@ -219,6 +242,7 @@ namespace CapstoneProject.Controllers
         }
 
         // GET: Evaluations/Create
+        [Authorize(Roles = "Admin")]
         public ActionResult Create(int? cohortId)
         {
             if (cohortId == null)
@@ -336,6 +360,7 @@ namespace CapstoneProject.Controllers
         }
 
         // GET: Evaluations/Edit?cohortId=x&typeId=1,2
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int? cohortId, int? typeId)
         {
             if (cohortId == null || typeId == null)
@@ -462,6 +487,7 @@ namespace CapstoneProject.Controllers
         }
 
         // GET: Evaluations/Delete/
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? cohortId, int? typeId)
         {
             if (cohortId == null || typeId == null)
