@@ -99,6 +99,7 @@
     <Compile Include="EmployeeTest.cs" />
     <Compile Include="QuestionsControllerTest.cs" />
     <Compile Include="QuestionTest.cs" />
+    <Compile Include="RaterTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CapstoneProject\CapstoneProject.csproj">
