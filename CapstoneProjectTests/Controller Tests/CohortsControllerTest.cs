@@ -46,8 +46,7 @@ namespace CapstoneProjectTests
                 this.cohorts);
             foreach (var cohort in this.cohorts)
             {
-                this.mockUnitOfWork.Object.CohortRepository.Insert(
-                    cohort);
+                this.mockUnitOfWork.Object.CohortRepository.Insert(cohort);
             }
         }
 
@@ -84,20 +83,26 @@ namespace CapstoneProjectTests
             Assert.AreEqual("Details", result.ViewName);
         }
 
-        //[TestMethod]
-        //public void TestDeleteByID()
-        //{
-        //    var view = this.controller.Delete(2) as ViewResult;
-        //    this.mockUnitOfWork.Object.CohortRepository.Delete(2);
-        //    this.mockUnitOfWork.Verify(m => m.CohortRepository.Delete(2), Times.Once);
-        //    Assert.AreEqual("Delete", view.ViewName);
-        //}
+        [TestMethod]
+        public void TestDelete()
+        {
+            this.mockUnitOfWork.Setup(m => m.CohortRepository.Delete(2));
+            this.mockUnitOfWork.Object.CohortRepository.Insert(cohorts[2]);
+            
+            this.mockUnitOfWork.Object.CohortRepository.Delete(2);
+
+            this.mockUnitOfWork.Verify(u =>u.CohortRepository.Delete(2), Times.Once);
+        }
 
         [TestMethod]
-        public void TestDelteByEntity()
+        public void TestUpdate()
         {
-            var cohortToDelete = mockUnitOfWork.Object.CohortRepository.GetByID(2);
+            var cohortToUpdate = this.mockUnitOfWork.Object.CohortRepository.GetByID(0);
+            this.mockUnitOfWork.Setup(m => m.CohortRepository.Update(cohortToUpdate));
+            
+            this.mockUnitOfWork.Object.CohortRepository.Update(cohortToUpdate);
 
+            this.mockUnitOfWork.Verify(m => m.CohortRepository.Update(cohortToUpdate), Times.Once);
         }
     }
 }
