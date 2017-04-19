@@ -46,8 +46,7 @@ namespace CapstoneProjectTests
                 this.cohorts);
             foreach (var cohort in this.cohorts)
             {
-                this.mockUnitOfWork.Object.CohortRepository.Insert(
-                    cohort);
+                this.mockUnitOfWork.Object.CohortRepository.Insert(cohort);
             }
         }
 
@@ -87,7 +86,7 @@ namespace CapstoneProjectTests
         [TestMethod]
         public void TestDelete()
         {
-            this.mockUnitOfWork.Setup(u => u.CohortRepository.Delete(2));
+            this.mockUnitOfWork.Setup(m => m.CohortRepository.Delete(2));
             this.mockUnitOfWork.Object.CohortRepository.Insert(cohorts[2]);
             
             this.mockUnitOfWork.Object.CohortRepository.Delete(2);

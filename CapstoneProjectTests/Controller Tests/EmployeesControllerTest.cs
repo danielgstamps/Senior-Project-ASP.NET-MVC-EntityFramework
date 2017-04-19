@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CapstoneProject.DAL;
 using Moq;
 using System.Collections.Generic;
+using System.Web.UI.WebControls;
 
 namespace CapstoneProjectTests
 {
@@ -18,27 +19,37 @@ namespace CapstoneProjectTests
         [TestInitialize]
         public void Setup()
         {
-            this.employees = new List<Employee>()
+            this.employees = new List<Employee>
             {
-                new Employee()
+                new Employee
                 {
                     EmployeeID = 0,
                     FirstName = "Dwight",
                     LastName = "Schrute"
                 },
-                new Employee()
+                new Employee
                 {
                     EmployeeID = 1,
                     FirstName = "Angela",
                     LastName = "Martin"
+                },
+                new Employee
+                {
+                    EmployeeID = 2,
+                    FirstName = "Andrew",
+                    LastName = "Bernard"
                 }
             };
             this.mockUnitOfWork = new Mock<IUnitOfWork>();
-            this.mockUnitOfWork.Setup(m => m.EmployeeRepository.Get(null, null, "")).Returns(employees as List<Employee>);
             this.controller = new EmployeesController();
             this.controller.UnitOfWork = mockUnitOfWork.Object;
-            this.mockUnitOfWork.Object.EmployeeRepository.Insert(employees[0]);
-            this.mockUnitOfWork.Object.EmployeeRepository.Insert(employees[1]);
+            this.mockUnitOfWork.Setup(
+                m => m.EmployeeRepository.Get(null, null, "")).Returns(
+                employees);
+            foreach (var employee in this.employees)
+            {
+                this.mockUnitOfWork.Object.EmployeeRepository.Insert(employee);
+            }
         }
 
         [TestMethod]
@@ -69,6 +80,29 @@ namespace CapstoneProjectTests
             this.mockUnitOfWork.Setup(m => m.EmployeeRepository.GetByID(0)).Returns(employees[0]);
             var result = this.controller.Details(0) as ViewResult;
             Assert.AreEqual("Details", result.ViewName);
+        }
+
+
+
+        [TestMethod]
+        public void TestDelete()
+        {
+            this.mockUnitOfWork.Setup(m => m.EmployeeRepository.Delete(2));
+
+            this.mockUnitOfWork.Object.EmployeeRepository.Delete(2);
+
+            this.mockUnitOfWork.Verify(u => u.EmployeeRepository.Delete(2), Times.Once);
+        }
+
+        [TestMethod]
+        public void TestUpdate()
+        {
+            var employeeToUpdate = this.mockUnitOfWork.Object.EmployeeRepository.GetByID(0);
+            this.mockUnitOfWork.Setup(m => m.EmployeeRepository.Update(employeeToUpdate));
+
+            this.mockUnitOfWork.Object.EmployeeRepository.Update(employeeToUpdate);
+
+            this.mockUnitOfWork.Verify(m => m.EmployeeRepository.Update(employeeToUpdate), Times.Once);
         }
     }
 }
