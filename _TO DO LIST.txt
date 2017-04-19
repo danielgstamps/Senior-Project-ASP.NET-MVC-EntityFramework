@@ -1,6 +1,7 @@
 CLONE URL: https://wudsco.visualstudio.com/_git/WUDSCO
 
-- rater emails / resend
+- admin send emails to cohorts
+- rater emails / resend (INDIVIDUALLY)
 - rater takeEval
 - closeEval logic (cohort flags)
 - stages fix

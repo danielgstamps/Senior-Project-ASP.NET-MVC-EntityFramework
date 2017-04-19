@@ -17,7 +17,12 @@
         <th>
             @Html.DisplayNameFor(model => model.Name)
         </th>
-        <th></th>
+        <th>
+            <label>Available Actions</label>
+        </th>
+        <th>
+            <label>Status</label>
+        </th>
     </tr>
 
     @foreach (var item in Model)
@@ -29,58 +34,66 @@
             <td>
                 @if (item.Employees.Count != 0 && !(item.Type1Assigned && item.Type2Assigned))
                 {
-                    @Html.ActionLink("Evaluate", "Create", "Evaluations", new {cohortId = item.CohortID}, null)
+                    @Html.ActionLink("Evaluate", "Create", "Evaluations", new { cohortId = item.CohortID }, null)
                     <label> | </label>
                 }
-                
+
                 @Html.ActionLink("View", "Details", new { id = item.CohortID })
-                <label> | </label>
 
                 @if (!item.HasOpenEval(1) && !item.HasOpenEval(2))
                 {
-                    @Html.ActionLink("Edit", "Edit", new {id = item.CohortID})
                     <label> | </label>
-                    @Html.ActionLink("Delete", "Delete", new {id = item.CohortID})
-                }
-                @if (item.HasOpenEval(1))
-                {
-                    <label class="alert-warning">Type 1 evaluation in progress</label>
-                    if (item.HasOpenEval(2))
-                    {
-                        <label> | </label>
-                    }
-                }
-                @if (item.HasOpenEval(2))
-                {
-                    <label class="alert-warning">Type 2 evaluation in progress</label>
-                }
-
+                    @Html.ActionLink("Edit", "Edit", new { id = item.CohortID })
+                    <label> | </label>
+                    @Html.ActionLink("Delete", "Delete", new { id = item.CohortID })
+                }              
+            </td>
+            <td>
                 @if (item.Employees.Count == 0)
                 {
-                    <label> | </label>
-                    <label class="alert-warning">This cohort is empty</label>
-                }
+                    <label class="alert-warning">Empty</label>
+                } 
+
+                @if (item.HasOpenEval(1))
+                {
+                    <label class="alert-warning">Type 1 in progress</label>
+                    <label> ( </label>
+                    @Html.ActionLink("Remind Cohort", "SendEvalEmail", new {id = item.CohortID})
+                    <label> ) </label>
+                    if (item.Type2Assigned){ <br /> }
+                } 
 
                 @if (item.Type1Assigned && !item.HasOpenEval(1))
                 {
-                    <label> | </label>
                     <label class="alert-info">Type 1 opens @item.EvalOpenDate(1)</label>
-                    <label>(</label>
+                    <label> ( </label>
                     @Html.ActionLink("Change", "Edit", "Evaluations", new {cohortId = item.CohortID, typeId = 1}, null)
                     <label> | </label>
-                    @Html.ActionLink("Delete", "Delete", "Evaluations", new { cohortId = item.CohortID, typeId = 1 }, null)
-                    <label>)</label>
+                    @Html.ActionLink("Delete", "Delete", "Evaluations", new {cohortId = item.CohortID, typeId = 1}, null)
+                    <label> | </label>
+                    @Html.ActionLink("Notify Cohort", "SendEvalEmail", new {id = item.CohortID})
+                    <label> ) </label>
+                    if (item.Type2Assigned){ <br /> }
+                }
+                
+                @if (item.HasOpenEval(2))
+                {
+                    <label class="alert-warning">Type 2 in progress</label>
+                    <label> ( </label>
+                    @Html.ActionLink("Remind Cohort", "SendEvalEmail", new { id = item.CohortID })
+                    <label> ) </label>
                 }
 
                 @if (item.Type2Assigned && !item.HasOpenEval(2))
                 {
-                    <label> | </label>
                     <label class="alert-info">Type 2 opens @item.EvalOpenDate(2)</label>
-                    <label>(</label>
+                    <label> ( </label>
                     @Html.ActionLink("Change", "Edit", "Evaluations", new {cohortId = item.CohortID, typeId = 2}, null)
                     <label> | </label>
-                    @Html.ActionLink("Delete", "Delete", "Evaluations", new { cohortId = item.CohortID, typeId = 2 }, null)
-                    <label>)</label>
+                    @Html.ActionLink("Delete", "Delete", "Evaluations", new {cohortId = item.CohortID, typeId = 2}, null)
+                    <label> | </label>
+                    @Html.ActionLink("Notify Cohort", "SendEvalEmail", new {id = item.CohortID})
+                    <label> ) </label>
                 }
             </td>
         </tr>
