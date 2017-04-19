@@ -33,18 +33,22 @@ namespace CapstoneProjectTests
                     RaterID = 3
                 }
             };
+
             this.stage = new Stage
             {
                 StageID = 4
             };
+
             this.type = new Type
             {
                 TypeID = 5
             };
+
             this.employee = new Employee
             {
                 EmployeeID = 6
             };
+
             this.evaluation = new Evaluation
             {
                 EvaluationID = 7,
