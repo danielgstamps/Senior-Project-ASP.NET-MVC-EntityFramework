@@ -885,3 +885,4 @@ C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.
 C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.RaterEnabledDefaultsTrue.resources
 C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.ChangedRaterEnabledToDisabled.resources
 C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.csprojResolveAssemblyReference.cache
+C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.csprojResolveAssemblyReference.cache

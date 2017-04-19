@@ -178,24 +178,7 @@ namespace CapstoneProject.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    MailMessage mail = new MailMessage();
-                    mail.To.Add(rater.Email);
-                    mail.From = new MailAddress("admin@gmail.com");
-                    mail.Subject = "Evaluation";
-                    var Body = "";
-                    mail.Body = Body;
-                    mail.IsBodyHtml = true;
-                    var smtp = new SmtpClient
-                    {
-                        Host = "smtp.gmail.com",
-                        Port = 587,
-                        UseDefaultCredentials = false,
-                        Credentials = new NetworkCredential
-                            ("admin@gmail.com", "123123"),
-                        EnableSsl = true
-                    };
-                    // Enter seders User name and password
-                    smtp.Send(mail);
+                    SendRaterEvaluationEmail(rater.Evaluation.EmployeeID, eval, rater.Email);
                 }
 
                 UnitOfWork.Save();
@@ -262,6 +245,12 @@ namespace CapstoneProject.Controllers
                 rater.FirstName = model.Raters[i].FirstName;
                 rater.LastName = model.Raters[i].LastName;
                 rater.Email = model.Raters[i].Email;
+
+                if (ModelState.IsValid)
+                {
+                    SendRaterEvaluationEmail(rater.Evaluation.EmployeeID, eval, rater.Email);
+                }
+
                 UnitOfWork.Save();
                 i++;
             }
@@ -487,7 +476,7 @@ namespace CapstoneProject.Controllers
 
                         UnitOfWork.EvaluationRepository.Insert(eval);
                         UnitOfWork.Save();
-                        SendEvaluationEmail(emp.EmployeeID, eval); // Commenting this out for now, it rustles Microsoft's jimmies.
+                        SendEvaluationEmail(emp.EmployeeID, eval);
                     }
                 }
             }
@@ -783,7 +772,7 @@ namespace CapstoneProject.Controllers
             var userEmail = userAccount.Email;
 
             // TODO Specify EvaluationsController Action in first string param
-            var callbackUrl = Url.Action("TakeEvaluation", "Evaluations", new { id = evaluation.EvaluationID }, protocol: Request.Url.Scheme);
+            var callbackUrl = Url.Action("TakeEvaluation", "Evaluations", new { id = evaluation.EvaluationID }, Request.Url.Scheme);
 
             var emailSubject = "New Evaluation Available";
             var emailBody =
@@ -798,6 +787,32 @@ namespace CapstoneProject.Controllers
             "Close Date: " + evaluation.CloseDate +
             "\r\n\r\n" +
             "Click <a href=\"" + callbackUrl + "\">here</a> to complete your evaluation.";
+
+            await UserManager.SendEmailAsync(userAccount.Id, emailSubject, emailBody);
+        }
+
+        private async void SendRaterEvaluationEmail(int employeeID, Evaluation evaluation, string ratersEmail)
+        {
+            var employee = UnitOfWork.EmployeeRepository.GetByID(employeeID);
+            var userAccount = userDB.Users.ToList().Find(u => u.Email == ratersEmail);
+
+            // TODO Specify EvaluationsController Action in first string param
+            if (Request.Url == null) return;
+            var callbackUrl = Url.Action("TakeEvaluation", "Evaluations", new { id = evaluation.EvaluationID }, Request.Url.Scheme);
+
+            var emailSubject = "New Evaluation Available";
+            var emailBody =
+                "You have a new evaluation to complete. Here are the details: " +
+                "\r\n\r\n" +
+                "Type: " + evaluation.Type.TypeName +
+                "\r\n\r\n" +
+                "Stage: " + evaluation.Stage.StageName +
+                "\r\n\r\n" +
+                "Open Date: " + evaluation.OpenDate +
+                "\r\n\r\n" +
+                "Close Date: " + evaluation.CloseDate +
+                "\r\n\r\n" +
+                "Click <a href=\"" + callbackUrl + "\">here</a> to complete your evaluation.";
 
             await UserManager.SendEmailAsync(userAccount.Id, emailSubject, emailBody);
         }

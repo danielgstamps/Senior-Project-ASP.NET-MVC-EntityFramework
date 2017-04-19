@@ -410,13 +410,11 @@
     <Content Include="Views\Questions\Edit.cshtml" />
     <Content Include="Views\Questions\Create.cshtml" />
     <Content Include="Views\Evaluations\EditorTemplates\Question.cshtml" />
-    <Content Include="Views\Evaluations\Send.cshtml" />
     <Content Include="test.csv" />
     <Content Include="Views\Evaluations\Edit.cshtml" />
     <Content Include="Views\Evaluations\EmployeeEvalsIndex.cshtml" />
     <Content Include="Views\Evaluations\AssignRaters.cshtml" />
     <Content Include="Views\Evaluations\Delete.cshtml" />
-    <Content Include="Views\Evaluations\Results.cshtml" />
     <Content Include="Views\Evaluations\EditRaters.cshtml" />
     <Content Include="Views\Evaluations\ReplaceRater.cshtml" />
   </ItemGroup>
