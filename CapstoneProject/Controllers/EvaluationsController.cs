@@ -137,11 +137,33 @@ namespace CapstoneProject.Controllers
                 Raters = eval.Raters.ToList()
             };
 
-            foreach (var rater in model.Raters)
+            // If the employee has a previously completed eval (with raters), pull as much rater info from it as possible.
+            if (employee.Evaluations.Any(e => e.IsComplete() && e.Raters.Count != 0))
             {
-                rater.Name = "";
-                rater.Email = "";
+                var completedEval = employee.Evaluations.First(e => e.IsComplete() && e.Raters.Count != 0);
+                var previousRaters = completedEval.Raters.ToList();
+                foreach (var modelRater in model.Raters)
+                {
+                    foreach (var prevRater in previousRaters)
+                    {
+                        if (modelRater.Role.Equals(prevRater.Role) && // Roles are the same
+                            !model.Raters.Exists(r => r.Email.Equals(prevRater.Email))) // model didn't already use this rater.
+                        {
+                            modelRater.Name = prevRater.Name;
+                            modelRater.Email = prevRater.Email;
+                        }
+                    }
+                }
             }
+            // Otherwise, just initialize the rater fields as empty.
+            else
+            {
+                foreach (var rater in model.Raters)
+                {
+                    rater.Name = "";
+                    rater.Email = "";
+                }
+            }         
 
             return View("AssignRaters", model);
         }
