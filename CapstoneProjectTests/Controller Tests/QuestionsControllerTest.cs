@@ -72,11 +72,11 @@ namespace CapstoneProjectTests
         [TestMethod]
         public void TestDelete()
         {
-            this.mockUnitOfWork.Setup(m => m.QuestionRepository.Delete(2));
+            this.mockUnitOfWork.Setup(m => m.QuestionRepository.Delete(It.IsAny<Question>()));
 
             this.mockUnitOfWork.Object.QuestionRepository.Delete(2);
 
-            this.mockUnitOfWork.Verify(u => u.QuestionRepository.Delete(2), Times.Once);
+            this.mockUnitOfWork.Verify(u => u.QuestionRepository.Delete(2));
         }
 
         [TestMethod]

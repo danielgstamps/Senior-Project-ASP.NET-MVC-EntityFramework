@@ -22,6 +22,11 @@ namespace CapstoneProject.Controllers
         private readonly ApplicationDbContext userDB = new ApplicationDbContext();
         private readonly ApplicationUserManager _userManager;
 
+        public EvaluationsController()
+        {
+            
+        }
+
         public EvaluationsController(ApplicationUserManager userManager)
         {
             _userManager = userManager;
