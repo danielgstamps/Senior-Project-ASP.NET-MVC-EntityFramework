@@ -9,18 +9,23 @@ using System.Web.Mvc;
 using CapstoneProject.DAL;
 using CapstoneProject.Models;
 using CapstoneProject.ViewModels;
-using Castle.Components.DictionaryAdapter.Xml;
 using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+// ReSharper disable InconsistentNaming
 
 namespace CapstoneProject.Controllers
 {
     [Authorize]
     public class EvaluationsController : Controller
     {
-        private ApplicationDbContext userDB = new ApplicationDbContext();
-        private ApplicationUserManager _userManager;
+        private readonly ApplicationDbContext userDB = new ApplicationDbContext();
+        private readonly ApplicationUserManager _userManager;
+
+        public EvaluationsController(ApplicationUserManager userManager)
+        {
+            _userManager = userManager;
+        }
 
         public IUnitOfWork UnitOfWork { get; set; } = new UnitOfWork();
 
@@ -173,19 +178,24 @@ namespace CapstoneProject.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    var body = "<p>Email From: {0} ({1})</p><p>Message:</p><p>{2}</p>";
-                    var message = new MailMessage();
-                    message.To.Add(new MailAddress(rater.Email));
-                    message.From = new MailAddress("admin@gmail.com");
-                    message.Subject = "Evaluation";
-                    message.Body = string.Format(body);
-                    message.IsBodyHtml = true;
-
-                    using (var smtp = new SmtpClient())
+                    MailMessage mail = new MailMessage();
+                    mail.To.Add(rater.Email);
+                    mail.From = new MailAddress("admin@gmail.com");
+                    mail.Subject = "Evaluation";
+                    var Body = "";
+                    mail.Body = Body;
+                    mail.IsBodyHtml = true;
+                    var smtp = new SmtpClient
                     {
-                        await smtp.SendMailAsync(message);
-                        return RedirectToAction("Sent");
-                    }
+                        Host = "smtp.gmail.com",
+                        Port = 587,
+                        UseDefaultCredentials = false,
+                        Credentials = new NetworkCredential
+                            ("admin@gmail.com", "123123"),
+                        EnableSsl = true
+                    };
+                    // Enter seders User name and password
+                    smtp.Send(mail);
                 }
 
                 UnitOfWork.Save();
@@ -252,24 +262,6 @@ namespace CapstoneProject.Controllers
                 rater.FirstName = model.Raters[i].FirstName;
                 rater.LastName = model.Raters[i].LastName;
                 rater.Email = model.Raters[i].Email;
-
-                if (ModelState.IsValid)
-                {
-                    var body = "<p>Email From: {0} ({1})</p><p>Message:</p><p>{2}</p>";
-                    var message = new MailMessage();
-                    message.To.Add(new MailAddress(rater.Email));
-                    message.From = new MailAddress("admin@gmail.com");
-                    message.Subject = "Evaluation";
-                    message.Body = string.Format(body);
-                    message.IsBodyHtml = true;
-
-                    using (var smtp = new SmtpClient())
-                    {
-                        await smtp.SendMailAsync(message);
-                        return RedirectToAction("Sent");
-                    }
-                }
-
                 UnitOfWork.Save();
                 i++;
             }
@@ -622,18 +614,24 @@ namespace CapstoneProject.Controllers
             // Recreate evals (I remove/recreate so the emails re-send, and the Rater logic is cleaner).
             foreach (var emp in cohort.Employees)
             {
-                var eval = new Evaluation
+                if (model.OpenDate != null)
                 {
-                    Employee = emp,
-                    Type = UnitOfWork.TypeRepository.GetByID(model.TypeID),
-                    Stage = UnitOfWork.StageRepository.GetByID(model.StageID),
-                    OpenDate = model.OpenDate.Value, // This "PossibleInvalidOperation" will never happen. It'd break way up there^ if the dates were null.
-                    CloseDate = model.CloseDate.Value,
-                    SelfAnswers = "",
-                    Raters = GenerateRaterList(model.NumberOfSupervisors, model.NumberOfCoworkers, model.NumberOfSupervisees)
-                };
+                    if (model.CloseDate != null)
+                    {
+                        var eval = new Evaluation
+                        {
+                            Employee = emp,
+                            Type = UnitOfWork.TypeRepository.GetByID(model.TypeID),
+                            Stage = UnitOfWork.StageRepository.GetByID(model.StageID),
+                            OpenDate = model.OpenDate.Value, // This "PossibleInvalidOperation" will never happen. It'd break way up there^ if the dates were null.
+                            CloseDate = model.CloseDate.Value,
+                            SelfAnswers = "",
+                            Raters = GenerateRaterList(model.NumberOfSupervisors, model.NumberOfCoworkers, model.NumberOfSupervisees)
+                        };
 
-                UnitOfWork.EvaluationRepository.Insert(eval);
+                        UnitOfWork.EvaluationRepository.Insert(eval);
+                    }
+                }
                 UnitOfWork.Save();
                 // SendEvaluationEmail(emp.EmployeeID, eval); // Don't await this. Commenting this out for now, it rustles Microsoft's jimmies.
             }
@@ -776,13 +774,9 @@ namespace CapstoneProject.Controllers
             return raters;
         }
 
-        public ApplicationUserManager UserManager
-        {
-            get { return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
-            private set { _userManager = value; }
-        }
+        public ApplicationUserManager UserManager => _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
 
-        private async Task SendEvaluationEmail(int employeeID, Evaluation evaluation)
+        private async void SendEvaluationEmail(int employeeID, Evaluation evaluation)
         {
             var employee = UnitOfWork.EmployeeRepository.GetByID(employeeID);
             var userAccount = userDB.Users.ToList().Find(u => u.Email == employee.Email);
@@ -808,23 +802,13 @@ namespace CapstoneProject.Controllers
             await UserManager.SendEmailAsync(userAccount.Id, emailSubject, emailBody);
         }
 
-        public ActionResult CompleteEvaluation()
-        {
-            return null;
-        }
-
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                this.UnitOfWork.Dispose();
+                UnitOfWork.Dispose();
             }
             base.Dispose(disposing);
-        }
-
-        public ActionResult Sent()
-        {
-            return View();
         }
     }
 }
