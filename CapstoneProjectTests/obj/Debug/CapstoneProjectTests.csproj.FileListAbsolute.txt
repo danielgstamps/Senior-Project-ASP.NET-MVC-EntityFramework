@@ -58,3 +58,6 @@ C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProjectTests\bin\Debug\Microsoft.Owi
 C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProjectTests\obj\Debug\CapstoneProjectTests.csprojResolveAssemblyReference.cache
 C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProjectTests\obj\Debug\CapstoneProjectTests.dll
 C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProjectTests\obj\Debug\CapstoneProjectTests.pdb
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProjectTests\bin\Debug\WebGrease.dll
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProjectTests\bin\Debug\Antlr3.Runtime.dll
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProjectTests\bin\Debug\Antlr3.Runtime.pdb

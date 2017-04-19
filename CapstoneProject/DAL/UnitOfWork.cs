@@ -40,6 +40,7 @@ namespace CapstoneProject.DAL
                 }
                 return cohortRepository;
             }
+            set { this.cohortRepository = value; }
         }
 
         public GenericRepository<Employee> EmployeeRepository

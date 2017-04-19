@@ -635,7 +635,6 @@ C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\bin\Microsoft.Owin.Security.
 C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\bin\Microsoft.Owin.Security.Google.xml
 C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\bin\Microsoft.Owin.Security.Twitter.xml
 C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
-C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.csprojResolveAssemblyReference.cache
 C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.Init.resources
 C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.CohortsNullable.resources
 C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.EvaluationRefactor.resources
@@ -878,3 +877,10 @@ C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.pdb
 C:\Users\Will\Source\Repos\WUDSCO2\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.AddedEnabledFieldToRater.resources
 C:\Users\Will\Source\Repos\WUDSCO2\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.RaterEnabledDefaultsTrue.resources
 C:\Users\Will\Source\Repos\WUDSCO2\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.ChangedRaterEnabledToDisabled.resources
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.OpenDateCloseDateNotNullable.resources
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.AddCompletedDateToEvals.resources
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.CompletedDateNullable.resources
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.RequiredTagsAndErrorsForRaters.resources
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.AddedEnabledFieldToRater.resources
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.RaterEnabledDefaultsTrue.resources
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.ChangedRaterEnabledToDisabled.resources

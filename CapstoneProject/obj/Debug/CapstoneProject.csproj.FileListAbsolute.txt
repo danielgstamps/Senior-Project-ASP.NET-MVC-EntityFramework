@@ -215,3 +215,10 @@ C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.DataMig
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.DataMigrations.AddedEnabledFieldToRater.resources
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.DataMigrations.RaterEnabledDefaultsTrue.resources
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.DataMigrations.ChangedRaterEnabledToDisabled.resources
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.csprojResolveAssemblyReference.cache
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.DataMigrations.AddCompletedDateToEvals.resources
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.DataMigrations.CompletedDateNullable.resources
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.DataMigrations.RequiredTagsAndErrorsForRaters.resources
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.DataMigrations.AddedEnabledFieldToRater.resources
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.DataMigrations.RaterEnabledDefaultsTrue.resources
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.DataMigrations.ChangedRaterEnabledToDisabled.resources
