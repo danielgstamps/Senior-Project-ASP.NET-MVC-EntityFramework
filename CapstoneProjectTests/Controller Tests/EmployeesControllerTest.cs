@@ -81,9 +81,7 @@ namespace CapstoneProjectTests
             var result = this.controller.Details(0) as ViewResult;
             Assert.AreEqual("Details", result.ViewName);
         }
-
-
-
+        
         [TestMethod]
         public void TestDelete()
         {

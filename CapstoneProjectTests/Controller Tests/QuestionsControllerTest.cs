@@ -30,14 +30,21 @@ namespace CapstoneProjectTests
                 {
                     QuestionID = 1,
                     QuestionText = "xyz"
+                },
+                new Question
+                {
+                    CategoryID = 2,
+                    QuestionText = "lmn"
                 }
             };
             this.mockUnitOfWork = new Mock<IUnitOfWork>();
             this.mockUnitOfWork.Setup(m => m.QuestionRepository.Get(null, null, "")).Returns(this.questions);
             this.controller = new QuestionsController();
             this.controller.UnitOfWork = mockUnitOfWork.Object;
-            this.mockUnitOfWork.Object.QuestionRepository.Insert(questions[0]);
-            this.mockUnitOfWork.Object.QuestionRepository.Insert(questions[1]);
+            foreach (var question in this.questions)
+            {
+                this.mockUnitOfWork.Object.QuestionRepository.Insert(question);
+            }
         }
 
         [TestMethod]
@@ -61,5 +68,28 @@ namespace CapstoneProjectTests
             var result = this.mockUnitOfWork.Object.QuestionRepository.GetByID(1);
             Assert.AreEqual("xyz", result.QuestionText);
         }
+
+        [TestMethod]
+        public void TestDelete()
+        {
+            this.mockUnitOfWork.Setup(m => m.QuestionRepository.Delete(2));
+
+            this.mockUnitOfWork.Object.QuestionRepository.Delete(2);
+
+            this.mockUnitOfWork.Verify(u => u.QuestionRepository.Delete(2), Times.Once);
+        }
+
+        [TestMethod]
+        public void TestUpdate()
+        {
+            var questionToUpdate = this.mockUnitOfWork.Object.QuestionRepository.GetByID(0);
+            this.mockUnitOfWork.Setup(m => m.QuestionRepository.Update(questionToUpdate));
+
+            this.mockUnitOfWork.Object.QuestionRepository.Update(questionToUpdate);
+
+            this.mockUnitOfWork.Verify(m => m.QuestionRepository.Update(questionToUpdate), Times.Once);
+        }
+
+
     }
 }
