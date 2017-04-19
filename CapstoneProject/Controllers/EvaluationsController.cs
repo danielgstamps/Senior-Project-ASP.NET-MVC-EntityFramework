@@ -149,7 +149,7 @@ namespace CapstoneProject.Controllers
 
         // POST
         [HttpPost]
-        public async Task<ActionResult> AssignRaters(AssignRatersViewModel model)
+        public ActionResult AssignRaters(AssignRatersViewModel model)
         {
             if (model == null || model.Raters.Count == 0)
             {
@@ -181,27 +181,27 @@ namespace CapstoneProject.Controllers
                 rater.LastName = model.Raters[i].LastName;
                 rater.Email = model.Raters[i].Email;
 
-                if (ModelState.IsValid)
-                {
-                    MailMessage mail = new MailMessage();
-                    mail.To.Add(rater.Email);
-                    mail.From = new MailAddress("admin@gmail.com");
-                    mail.Subject = "Evaluation";
-                    var Body = "";
-                    mail.Body = Body;
-                    mail.IsBodyHtml = true;
-                    var smtp = new SmtpClient
-                    {
-                        Host = "smtp.gmail.com",
-                        Port = 587,
-                        UseDefaultCredentials = false,
-                        Credentials = new NetworkCredential
-                            ("admin@gmail.com", "123123"),
-                        EnableSsl = true
-                    };
-                    // Enter seders User name and password
-                    smtp.Send(mail);
-                }
+                //if (ModelState.IsValid)
+                //{
+                //    MailMessage mail = new MailMessage();
+                //    mail.To.Add(rater.Email);
+                //    mail.From = new MailAddress("admin@gmail.com");
+                //    mail.Subject = "Evaluation";
+                //    var Body = "";
+                //    mail.Body = Body;
+                //    mail.IsBodyHtml = true;
+                //    var smtp = new SmtpClient
+                //    {
+                //        Host = "smtp.gmail.com",
+                //        Port = 587,
+                //        UseDefaultCredentials = false,
+                //        Credentials = new NetworkCredential
+                //            ("admin@gmail.com", "123123"),
+                //        EnableSsl = true
+                //    };
+                //    // Enter seders User name and password
+                //    smtp.Send(mail);
+                //}
 
                 UnitOfWork.Save();
                 i++;
@@ -242,7 +242,7 @@ namespace CapstoneProject.Controllers
 
         // POST: EditRaters
         [HttpPost]
-        public async Task<ActionResult> EditRaters(AssignRatersViewModel model)
+        public ActionResult EditRaters(AssignRatersViewModel model)
         {
             if (model == null || model.Raters.Count == 0)
             {
@@ -439,9 +439,9 @@ namespace CapstoneProject.Controllers
                 Text = t.StageName
             });
 
-            model.NumberOfSupervisors = 0;
-            model.NumberOfCoworkers = 0;
-            model.NumberOfSupervisees = 0;
+            model.NumberOfSupervisors = 1;
+            model.NumberOfCoworkers = 2;
+            model.NumberOfSupervisees = 2;
 
             return View("Create", model);
         }
@@ -474,27 +474,21 @@ namespace CapstoneProject.Controllers
 
             foreach (var emp in cohort.Employees)
             {
-                if (model.OpenDate != null)
+                var eval = new Evaluation
                 {
-                    if (model.CloseDate != null)
-                    {
-                        var eval = new Evaluation
-                        {
-                            Employee = emp,
-                            Type = UnitOfWork.TypeRepository.GetByID(model.TypeID),
-                            Stage = UnitOfWork.StageRepository.GetByID(model.StageID),
-                            OpenDate = model.OpenDate.Value,
-                            CloseDate = model.CloseDate.Value,
-                            CompletedDate = null,
-                            SelfAnswers = "",
-                            Raters = GenerateRaterList(model.NumberOfSupervisors, model.NumberOfCoworkers, model.NumberOfSupervisees)
-                        };
+                    Employee = emp,
+                    Type = UnitOfWork.TypeRepository.GetByID(model.TypeID),
+                    Stage = UnitOfWork.StageRepository.GetByID(model.StageID),
+                    OpenDate = model.OpenDate.Value,
+                    CloseDate = model.CloseDate.Value,
+                    CompletedDate = null,
+                    SelfAnswers = "",
+                    Raters = GenerateRaterList(model.NumberOfSupervisors, model.NumberOfCoworkers, model.NumberOfSupervisees)
+                };
 
-                        UnitOfWork.EvaluationRepository.Insert(eval);
-                        UnitOfWork.Save();
-                        SendEvaluationEmail(emp.EmployeeID, eval); // Commenting this out for now, it rustles Microsoft's jimmies.
-                    }
-                }
+                UnitOfWork.EvaluationRepository.Insert(eval);
+                UnitOfWork.Save();
+               // SendEvaluationEmail(emp.EmployeeID, eval); // Commenting this out for now, it rustles Microsoft's jimmies.
             }
 
             if (model.TypeID == 1)
