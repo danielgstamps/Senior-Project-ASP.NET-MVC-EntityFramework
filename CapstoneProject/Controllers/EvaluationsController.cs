@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -94,7 +95,7 @@ namespace CapstoneProject.Controllers
 
             if (eval.Raters.Count > 1)
             {
-                return RedirectToAction("AssignRaters", new {id = eval.EvaluationID});
+                return RedirectToAction("AssignRaters", new { id = eval.EvaluationID });
             }
 
             return RedirectToAction("EmployeeEvalsIndex", new { id = eval.EmployeeID });
@@ -138,7 +139,7 @@ namespace CapstoneProject.Controllers
 
         // POST
         [HttpPost]
-        public ActionResult AssignRaters(AssignRatersViewModel model)
+        public async Task<ActionResult> AssignRaters(AssignRatersViewModel model)
         {
             if (model == null || model.Raters.Count == 0)
             {
@@ -160,7 +161,7 @@ namespace CapstoneProject.Controllers
             if (model.Raters.DistinctBy(r => r.Email).Count() != model.Raters.Count)
             {
                 TempData["DuplicateError"] = "Please enter a unique email address for each rater.";
-                return RedirectToAction("AssignRaters", new {id = model.EvalId});
+                return RedirectToAction("AssignRaters", new { id = model.EvalId });
             }
 
             var i = 0;
@@ -169,6 +170,24 @@ namespace CapstoneProject.Controllers
                 rater.FirstName = model.Raters[i].FirstName;
                 rater.LastName = model.Raters[i].LastName;
                 rater.Email = model.Raters[i].Email;
+
+                if (ModelState.IsValid)
+                {
+                    var body = "<p>Email From: {0} ({1})</p><p>Message:</p><p>{2}</p>";
+                    var message = new MailMessage();
+                    message.To.Add(new MailAddress(rater.Email));
+                    message.From = new MailAddress("admin@gmail.com");
+                    message.Subject = "Evaluation";
+                    message.Body = string.Format(body);
+                    message.IsBodyHtml = true;
+
+                    using (var smtp = new SmtpClient())
+                    {
+                        await smtp.SendMailAsync(message);
+                        return RedirectToAction("Sent");
+                    }
+                }
+
                 UnitOfWork.Save();
                 i++;
             }
@@ -208,7 +227,7 @@ namespace CapstoneProject.Controllers
 
         // POST: EditRaters
         [HttpPost]
-        public ActionResult EditRaters(AssignRatersViewModel model)
+        public async Task<ActionResult> EditRaters(AssignRatersViewModel model)
         {
             if (model == null || model.Raters.Count == 0)
             {
@@ -233,6 +252,24 @@ namespace CapstoneProject.Controllers
                 rater.FirstName = model.Raters[i].FirstName;
                 rater.LastName = model.Raters[i].LastName;
                 rater.Email = model.Raters[i].Email;
+
+                if (ModelState.IsValid)
+                {
+                    var body = "<p>Email From: {0} ({1})</p><p>Message:</p><p>{2}</p>";
+                    var message = new MailMessage();
+                    message.To.Add(new MailAddress(rater.Email));
+                    message.From = new MailAddress("admin@gmail.com");
+                    message.Subject = "Evaluation";
+                    message.Body = string.Format(body);
+                    message.IsBodyHtml = true;
+
+                    using (var smtp = new SmtpClient())
+                    {
+                        await smtp.SendMailAsync(message);
+                        return RedirectToAction("Sent");
+                    }
+                }
+
                 UnitOfWork.Save();
                 i++;
             }
@@ -271,7 +308,7 @@ namespace CapstoneProject.Controllers
             {
                 EvalId = eval.EvaluationID,
                 RaterToReplace = raterToReplace,
-                NewRater = new Rater { Role = raterToReplace.Role}
+                NewRater = new Rater { Role = raterToReplace.Role }
             };
 
             return View("ReplaceRater", model);
@@ -281,9 +318,9 @@ namespace CapstoneProject.Controllers
         [HttpPost]
         public ActionResult ReplaceRater(ReplaceRaterViewModel model)
         {
-            if (model == null || 
-                model.EvalId == null || 
-                model.RaterToReplace == null || 
+            if (model == null ||
+                model.EvalId == null ||
+                model.RaterToReplace == null ||
                 model.NewRater == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
@@ -378,7 +415,7 @@ namespace CapstoneProject.Controllers
 
             var model = new EvaluationCreateViewModel
             {
-                CohortID = (int) cohortId,
+                CohortID = (int)cohortId,
                 TypeList = UnitOfWork.TypeRepository.dbSet.Select(t => new SelectListItem()
                 {
                     Value = t.TypeID.ToString(),
@@ -440,21 +477,27 @@ namespace CapstoneProject.Controllers
 
             foreach (var emp in cohort.Employees)
             {
-                var eval = new Evaluation
+                if (model.OpenDate != null)
                 {
-                    Employee = emp,
-                    Type = UnitOfWork.TypeRepository.GetByID(model.TypeID),
-                    Stage = UnitOfWork.StageRepository.GetByID(model.StageID),
-                    OpenDate = model.OpenDate.Value,
-                    CloseDate = model.CloseDate.Value,
-                    CompletedDate = null,
-                    SelfAnswers = "",
-                    Raters = GenerateRaterList(model.NumberOfSupervisors, model.NumberOfCoworkers, model.NumberOfSupervisees)
-                };
+                    if (model.CloseDate != null)
+                    {
+                        var eval = new Evaluation
+                        {
+                            Employee = emp,
+                            Type = UnitOfWork.TypeRepository.GetByID(model.TypeID),
+                            Stage = UnitOfWork.StageRepository.GetByID(model.StageID),
+                            OpenDate = model.OpenDate.Value,
+                            CloseDate = model.CloseDate.Value,
+                            CompletedDate = null,
+                            SelfAnswers = "",
+                            Raters = GenerateRaterList(model.NumberOfSupervisors, model.NumberOfCoworkers, model.NumberOfSupervisees)
+                        };
 
-                UnitOfWork.EvaluationRepository.Insert(eval);
-                UnitOfWork.Save();
-                SendEvaluationEmail(emp.EmployeeID, eval); // Commenting this out for now, it rustles Microsoft's jimmies.
+                        UnitOfWork.EvaluationRepository.Insert(eval);
+                        UnitOfWork.Save();
+                        SendEvaluationEmail(emp.EmployeeID, eval); // Commenting this out for now, it rustles Microsoft's jimmies.
+                    }
+                }
             }
 
             if (model.TypeID == 1)
@@ -505,8 +548,8 @@ namespace CapstoneProject.Controllers
             // Get all Stages.
             model.StageList = UnitOfWork.StageRepository.dbSet.Select(t => new SelectListItem()
             {
-               Value = t.StageID.ToString(),
-               Text = t.StageName,
+                Value = t.StageID.ToString(),
+                Text = t.StageName,
             });
 
             // Get the first employee in the cohort with at least 1 eval.
@@ -532,7 +575,7 @@ namespace CapstoneProject.Controllers
 
             model.NumberOfSupervisors = NumberOfRatersWithRole(eval, "Supervisor");
             model.NumberOfCoworkers = NumberOfRatersWithRole(eval, "Coworker");
-            model.NumberOfSupervisees = NumberOfRatersWithRole(eval, "Supervisee");;
+            model.NumberOfSupervisees = NumberOfRatersWithRole(eval, "Supervisee"); ;
 
             return View("Edit", model);
         }
@@ -592,7 +635,7 @@ namespace CapstoneProject.Controllers
 
                 UnitOfWork.EvaluationRepository.Insert(eval);
                 UnitOfWork.Save();
-               // SendEvaluationEmail(emp.EmployeeID, eval); // Don't await this. Commenting this out for now, it rustles Microsoft's jimmies.
+                // SendEvaluationEmail(emp.EmployeeID, eval); // Don't await this. Commenting this out for now, it rustles Microsoft's jimmies.
             }
 
             TempData["EditSuccess"] = "Successfully updated evaluation.";
@@ -674,7 +717,7 @@ namespace CapstoneProject.Controllers
             var answerString = "";
             foreach (var question in questions)
             {
-                answerString += question.SelectedAnswer.ToString();                              
+                answerString += question.SelectedAnswer.ToString();
             }
             return answerString;
         }
@@ -684,7 +727,7 @@ namespace CapstoneProject.Controllers
             var list = new List<string>();
             for (var i = 0; i < answers.Length; i++)
             {
-                if (answers[i].Equals('0') && answers[i-1].Equals('1'))
+                if (answers[i].Equals('0') && answers[i - 1].Equals('1'))
                 {
                     list.Add("10");
                     continue;
@@ -697,7 +740,7 @@ namespace CapstoneProject.Controllers
         private List<Rater> GenerateRaterList(int numSupervisors, int numCoworkers, int numSupervisees)
         {
             var raters = new List<Rater>();
-            for(var i = 0; i < numSupervisors; i++)
+            for (var i = 0; i < numSupervisors; i++)
             {
                 raters.Add(new Rater()
                 {
@@ -752,14 +795,14 @@ namespace CapstoneProject.Controllers
             var emailBody =
             "You have a new evaluation to complete. Here are the details: " +
             "\r\n\r\n" +
-            "Type: " + evaluation.Type.TypeName + 
-            "\r\n\r\n" + 
-            "Stage: " + evaluation.Stage.StageName + 
-            "\r\n\r\n" + 
-            "Open Date: " + evaluation.OpenDate + 
-            "\r\n\r\n" + 
-            "Close Date: " + evaluation.CloseDate + 
-            "\r\n\r\n" + 
+            "Type: " + evaluation.Type.TypeName +
+            "\r\n\r\n" +
+            "Stage: " + evaluation.Stage.StageName +
+            "\r\n\r\n" +
+            "Open Date: " + evaluation.OpenDate +
+            "\r\n\r\n" +
+            "Close Date: " + evaluation.CloseDate +
+            "\r\n\r\n" +
             "Click <a href=\"" + callbackUrl + "\">here</a> to complete your evaluation.";
 
             await UserManager.SendEmailAsync(userAccount.Id, emailSubject, emailBody);
@@ -777,6 +820,11 @@ namespace CapstoneProject.Controllers
                 this.UnitOfWork.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public ActionResult Sent()
+        {
+            return View();
         }
     }
 }
