@@ -15,7 +15,7 @@ namespace CapstoneProject.DAL
 
         GenericRepository<Evaluation> EvaluationRepository { get; }
 
-        GenericRepository<Cohort> CohortRepository { get; set; }
+        GenericRepository<Cohort> CohortRepository { get; }
 
         GenericRepository<Question> QuestionRepository { get; }
 
