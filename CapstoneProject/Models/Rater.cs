@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace CapstoneProject.Models
 {
@@ -27,5 +28,7 @@ namespace CapstoneProject.Models
         public int EvaluationID { get; set; }
 
         public virtual Evaluation Evaluation { get; set; }
+
+        public bool Disabled { get; set; }
     }
 }

@@ -210,7 +210,7 @@ namespace CapstoneProject.Controllers
         [HttpPost]
         public ActionResult EditRaters(AssignRatersViewModel model)
         {
-            if (model == null || model.Raters == null)
+            if (model == null || model.Raters.Count == 0)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
@@ -222,6 +222,10 @@ namespace CapstoneProject.Controllers
             }
 
             var eval = UnitOfWork.EvaluationRepository.GetByID(model.EvalId);
+            if (eval == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
 
             var i = 0;
             foreach (var rater in eval.Raters)
@@ -235,6 +239,82 @@ namespace CapstoneProject.Controllers
 
             TempData["EditRaterSuccess"] = "Successfully updated raters.";
             return RedirectToAction("EmployeeEvalsIndex", new { id = eval.EmployeeID });
+        }
+
+        // GET: ReplaceRater
+        public ActionResult ReplaceRater(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var raterToReplace = UnitOfWork.RaterRepository.GetByID(id);
+            if (raterToReplace == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var eval = UnitOfWork.EvaluationRepository.GetByID(raterToReplace.EvaluationID);
+            if (eval == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var employee = UnitOfWork.EmployeeRepository.GetByID(eval.EmployeeID);
+            if (employee == null || !employee.Email.Equals(User.Identity.GetUserName()))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+            }
+
+            var model = new ReplaceRaterViewModel()
+            {
+                EvalId = eval.EvaluationID,
+                RaterToReplace = raterToReplace,
+                NewRater = new Rater { Role = raterToReplace.Role}
+            };
+
+            return View("ReplaceRater", model);
+        }
+
+        // POST: ReplaceRater
+        [HttpPost]
+        public ActionResult ReplaceRater(ReplaceRaterViewModel model)
+        {
+            if (model == null || 
+                model.EvalId == null || 
+                model.RaterToReplace == null || 
+                model.NewRater == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
+            }
+
+            var eval = UnitOfWork.EvaluationRepository.GetByID(model.EvalId);
+            if (eval == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
+            }
+
+            if (eval.Raters.Any(r => r.Email.Equals(model.NewRater.Email)))
+            {
+                TempData["DuplicateError"] = "This evaluation already has a rater with that email.";
+                return RedirectToAction("ReplaceRater", new { id = model.RaterToReplace.RaterID });
+            }
+
+            var raterToDisable = UnitOfWork.RaterRepository.GetByID(model.RaterToReplace.RaterID);
+            if (raterToDisable == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
+            }
+
+            raterToDisable.Disabled = true;
+            UnitOfWork.Save();
+
+            eval.Raters.Add(model.NewRater);
+            UnitOfWork.Save();
+
+            TempData["ReplaceRaterSuccess"] = "Successfully replaced rater.";
+            return RedirectToAction("EditRaters", new { id = eval.EvaluationID });
         }
 
         // GET: Evaluations/Details/5
@@ -306,8 +386,6 @@ namespace CapstoneProject.Controllers
                 })
             };
 
-            // Get all types.
-
             // Remove types if the cohort already has them assigned.
             var itemList = model.TypeList.ToList();
             if (cohort.Type1Assigned)
@@ -335,8 +413,6 @@ namespace CapstoneProject.Controllers
         }
 
         // POST: Evaluations/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(EvaluationCreateViewModel model)
@@ -378,7 +454,7 @@ namespace CapstoneProject.Controllers
 
                 UnitOfWork.EvaluationRepository.Insert(eval);
                 UnitOfWork.Save();
-               // SendEvaluationEmail(emp.EmployeeID, eval); // Commenting this out for now, it rustles Microsoft's jimmies.
+                SendEvaluationEmail(emp.EmployeeID, eval); // Commenting this out for now, it rustles Microsoft's jimmies.
             }
 
             if (model.TypeID == 1)
@@ -657,21 +733,6 @@ namespace CapstoneProject.Controllers
             return raters;
         }
 
-        //private List<AnswerViewModel> GeneratePossibleAnswers(int type)
-        //{
-        //    var list = new List<AnswerViewModel>();
-        //    var numberOfAnswers = type == 1 ? 5 : 10; // 5 if type is 1, 10 if type is 2.
-        //    for (var i = 0; i < numberOfAnswers; i++)
-        //    {
-        //        list.Add(new AnswerViewModel()
-        //        {
-        //            Answer = i + 1
-        //        });
-        //    }
-
-        //    return list;
-        //}
-
         public ApplicationUserManager UserManager
         {
             get { return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
@@ -680,20 +741,14 @@ namespace CapstoneProject.Controllers
 
         private async Task SendEvaluationEmail(int employeeID, Evaluation evaluation)
         {
-           // var cohort = this.UnitOfWork.CohortRepository.GetByID(cohortID);
-           // var employees = cohort.Employees.ToList();
-           // var userAccounts = userDB.Users.ToList();
-           // foreach (var employee in employees)
-           // {
-
             var employee = UnitOfWork.EmployeeRepository.GetByID(employeeID);
             var userAccount = userDB.Users.ToList().Find(u => u.Email == employee.Email);
             var userEmail = userAccount.Email;
 
             // TODO Specify EvaluationsController Action in first string param
-            var callbackUrl = Url.Action("CompleteEvaluation", "Evaluations", new { userId = userAccount.Id, email = userEmail }, protocol: Request.Url.Scheme);
+            var callbackUrl = Url.Action("TakeEvaluation", "Evaluations", new { id = evaluation.EvaluationID }, protocol: Request.Url.Scheme);
 
-            var emailSubject = "New Evaluation";
+            var emailSubject = "New Evaluation Available";
             var emailBody =
             "You have a new evaluation to complete. Here are the details: " +
             "\r\n\r\n" +
@@ -708,7 +763,6 @@ namespace CapstoneProject.Controllers
             "Click <a href=\"" + callbackUrl + "\">here</a> to complete your evaluation.";
 
             await UserManager.SendEmailAsync(userAccount.Id, emailSubject, emailBody);
-           // }
         }
 
         public ActionResult CompleteEvaluation()

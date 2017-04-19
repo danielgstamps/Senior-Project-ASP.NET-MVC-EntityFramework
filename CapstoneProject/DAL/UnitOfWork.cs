@@ -14,6 +14,7 @@ namespace CapstoneProject.DAL
         private GenericRepository<Question> questionRepository;
         private GenericRepository<Stage> stageRepository;
         private GenericRepository<Models.Type> typeRepository;
+        private GenericRepository<Rater> raterRepository;
 
         private bool disposed = false;
 
@@ -98,6 +99,18 @@ namespace CapstoneProject.DAL
                     this.typeRepository = new GenericRepository<Models.Type>(this.context);
                 }
                 return this.typeRepository;
+            }
+        }
+
+        public GenericRepository<Rater> RaterRepository
+        {
+            get
+            {
+                if (this.raterRepository == null)
+                {
+                    this.raterRepository = new GenericRepository<Rater>(this.context);
+                }
+                return this.raterRepository;
             }
         }
 

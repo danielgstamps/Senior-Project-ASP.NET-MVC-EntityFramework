@@ -75,6 +75,10 @@
                 {
                     <label>N/A (No raters)</label>
                 }
+                else if (!item.CompletedDate.HasValue)
+                {
+                    <label class="alert-info">Raters not yet assigned</label>
+                }
                 else if (item.Raters.Any(r => string.IsNullOrEmpty(r.Answers)))
                 {
                     <label class="alert-warning">Rater evaluations in progress</label>

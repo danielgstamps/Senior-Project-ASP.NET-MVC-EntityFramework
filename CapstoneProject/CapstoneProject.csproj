@@ -294,6 +294,18 @@
     <Compile Include="DataMigrations\201704172129024_RequiredTagsAndErrorsForRaters.Designer.cs">
       <DependentUpon>201704172129024_RequiredTagsAndErrorsForRaters.cs</DependentUpon>
     </Compile>
+    <Compile Include="DataMigrations\201704182011592_AddedEnabledFieldToRater.cs" />
+    <Compile Include="DataMigrations\201704182011592_AddedEnabledFieldToRater.Designer.cs">
+      <DependentUpon>201704182011592_AddedEnabledFieldToRater.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataMigrations\201704182017153_RaterEnabledDefaultsTrue.cs" />
+    <Compile Include="DataMigrations\201704182017153_RaterEnabledDefaultsTrue.Designer.cs">
+      <DependentUpon>201704182017153_RaterEnabledDefaultsTrue.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataMigrations\201704182021096_ChangedRaterEnabledToDisabled.cs" />
+    <Compile Include="DataMigrations\201704182021096_ChangedRaterEnabledToDisabled.Designer.cs">
+      <DependentUpon>201704182021096_ChangedRaterEnabledToDisabled.cs</DependentUpon>
+    </Compile>
     <Compile Include="DataMigrations\DataConfig.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -319,6 +331,7 @@
     <Compile Include="ViewModels\AssignedEmployeeData.cs" />
     <Compile Include="ViewModels\AssignRatersViewModel.cs" />
     <Compile Include="ViewModels\EvaluationCreateViewModel.cs" />
+    <Compile Include="ViewModels\ReplaceRaterViewModel.cs" />
     <Compile Include="ViewModels\TakeEvalViewModel.cs" />
     <Compile Include="ViewModels\QuestionViewModel.cs" />
     <Compile Include="ViewModels\ViewEvalViewModel.cs" />
@@ -405,6 +418,7 @@
     <Content Include="Views\Evaluations\Delete.cshtml" />
     <Content Include="Views\Evaluations\Results.cshtml" />
     <Content Include="Views\Evaluations\EditRaters.cshtml" />
+    <Content Include="Views\Evaluations\ReplaceRater.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -478,6 +492,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DataMigrations\201704172129024_RequiredTagsAndErrorsForRaters.resx">
       <DependentUpon>201704172129024_RequiredTagsAndErrorsForRaters.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataMigrations\201704182011592_AddedEnabledFieldToRater.resx">
+      <DependentUpon>201704182011592_AddedEnabledFieldToRater.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataMigrations\201704182017153_RaterEnabledDefaultsTrue.resx">
+      <DependentUpon>201704182017153_RaterEnabledDefaultsTrue.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataMigrations\201704182021096_ChangedRaterEnabledToDisabled.resx">
+      <DependentUpon>201704182021096_ChangedRaterEnabledToDisabled.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserMigrations\201702202104105_Initial.resx">
       <DependentUpon>201702202104105_Initial.cs</DependentUpon>

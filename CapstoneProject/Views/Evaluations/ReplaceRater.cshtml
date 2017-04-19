@@ -1,0 +1,63 @@
+﻿@model CapstoneProject.ViewModels.ReplaceRaterViewModel
+@{
+    ViewBag.Title = "Replace Rater";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.EvalId)
+    @Html.HiddenFor(m => m.RaterToReplace.RaterID)
+    @Html.HiddenFor(m => m.RaterToReplace.Role)
+    @Html.HiddenFor(m => m.NewRater.Role)
+
+    <h2>Replace Rater</h2>
+    <h4>This rater will be disabled and replaced by the new one you specify below:</h4>
+
+    <h4 class="alert-warning">Old @Model.RaterToReplace.Role:</h4>
+    <dl>
+        <dt>
+            @Html.DisplayNameFor(model => model.RaterToReplace.FirstName):
+            @Html.DisplayFor(model => model.RaterToReplace.FirstName)
+        </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.RaterToReplace.LastName):
+            @Html.DisplayFor(model => model.RaterToReplace.LastName)
+        </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.RaterToReplace.Email):
+            @Html.DisplayFor(model => model.RaterToReplace.Email)
+        </dt>
+    </dl>
+
+    <h4 class="alert-danger">@TempData["DuplicateError"]</h4>
+    <h4 class="alert-info">New @Model.RaterToReplace.Role:</h4>
+    <div class="form-group">
+        @Html.LabelFor(model => Model.NewRater.FirstName, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => Model.NewRater.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => Model.NewRater.LastName, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => Model.NewRater.LastName, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => Model.NewRater.Email, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => Model.NewRater.Email, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+
+    <label></label>
+    <br /><br />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Replace" class="btn btn-default" />
+        </div>
+    </div>
+}
