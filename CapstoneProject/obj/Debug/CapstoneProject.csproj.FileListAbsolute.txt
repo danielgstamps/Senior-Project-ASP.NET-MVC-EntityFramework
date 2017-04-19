@@ -222,3 +222,5 @@ C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.Da
 C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.DataMigrations.AddedEnabledFieldToRater.resources
 C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.DataMigrations.RaterEnabledDefaultsTrue.resources
 C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.DataMigrations.ChangedRaterEnabledToDisabled.resources
+C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.DataMigrations.RaterFirstLastNameNowJustName.resources
+C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.DataMigrations.ForgotToRemoveLastNameFromRater.resources

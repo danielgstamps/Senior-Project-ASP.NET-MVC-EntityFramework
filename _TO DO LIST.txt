@@ -2,6 +2,7 @@ CLONE URL: https://wudsco.visualstudio.com/_git/WUDSCO
 
 - rater emails / resend
 - rater takeEval
+- closeEval logic (cohort flags)
 - stages fix
 - reports
 
@@ -42,9 +43,8 @@ Employee taking an eval:
 Reports:
 - Only generatable by admin.
 	- Not sure exactly how they're supposed to be generated. 
-	- "given stage name, evaluation type, view user report by employeeid." <-- not a sentence.
+	- find employee by cohort? Type/Stage filter optional?
 	- "suppose the user chose to create a report for userid=3, stage=baseline, type=type1 on [date]."
-		- So does the admin have to know every single detail about an eval to create a report for it?
 	
 - pdf format, or "at least provide a view."
 - Shows:

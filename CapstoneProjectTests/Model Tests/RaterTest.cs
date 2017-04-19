@@ -20,8 +20,7 @@ namespace CapstoneProjectTests
             this.rater = new Rater
             {
                 RaterID = 2,
-                FirstName = "Michael",
-                LastName = "Scarn",
+                Name = "Michael Scarn",
                 Role = "Spy",
                 Email = "mscarn@mailinator.com",
                 Answers = "5,1,5",
@@ -37,16 +36,17 @@ namespace CapstoneProjectTests
         }
 
         [TestMethod]
-        public void TestRaterFirstName()
+        public void TestRaterName()
         {
-            Assert.AreEqual("Michael", this.rater.FirstName);
+            Assert.AreEqual("Michael Scarn", this.rater.Name);
         }
 
-        [TestMethod]
-        public void TestRaterLastname()
-        {
-            Assert.AreEqual("Scarn", this.rater.LastName);
-        }
+        // (first and last names have been combined to just 'Name')
+        //[TestMethod]
+        //public void TestRaterLastname()
+        //{
+        //    Assert.AreEqual("Scarn", this.rater.LastName);
+        //}
 
         [TestMethod]
         public void TestRaterRole()

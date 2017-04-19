@@ -31,13 +31,13 @@ namespace CapstoneProject.ViewModels
         [Display(Name = "Close Date")]
         public DateTime? CloseDate { get; set; }
 
-        [Range(1, 100, ErrorMessage="Must be at least 1.")] // please don't actually try 100. My poor wallet.
+        [Range(0, 100, ErrorMessage="Must be at least 1.")] // please don't actually try 100. My poor wallet.
         public int NumberOfSupervisors { get; set; }
 
-        [Range(2, 100, ErrorMessage = "Must be at least 2.")]
+        [Range(0, 100, ErrorMessage = "Must be at least 2.")]
         public int NumberOfCoworkers { get; set; }
 
-        [Range(2, 100, ErrorMessage = "Must be at least 2.")]
+        [Range(0, 100, ErrorMessage = "Must be at least 2.")]
         public int NumberOfSupervisees { get; set; }
 
         IEnumerable<ValidationResult> IValidatableObject.Validate(ValidationContext validationContext)

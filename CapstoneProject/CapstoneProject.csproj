@@ -306,6 +306,14 @@
     <Compile Include="DataMigrations\201704182021096_ChangedRaterEnabledToDisabled.Designer.cs">
       <DependentUpon>201704182021096_ChangedRaterEnabledToDisabled.cs</DependentUpon>
     </Compile>
+    <Compile Include="DataMigrations\201704192026455_RaterFirstLastNameNowJustName.cs" />
+    <Compile Include="DataMigrations\201704192026455_RaterFirstLastNameNowJustName.Designer.cs">
+      <DependentUpon>201704192026455_RaterFirstLastNameNowJustName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataMigrations\201704192029005_ForgotToRemoveLastNameFromRater.cs" />
+    <Compile Include="DataMigrations\201704192029005_ForgotToRemoveLastNameFromRater.Designer.cs">
+      <DependentUpon>201704192029005_ForgotToRemoveLastNameFromRater.cs</DependentUpon>
+    </Compile>
     <Compile Include="DataMigrations\DataConfig.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -499,6 +507,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DataMigrations\201704182021096_ChangedRaterEnabledToDisabled.resx">
       <DependentUpon>201704182021096_ChangedRaterEnabledToDisabled.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataMigrations\201704192026455_RaterFirstLastNameNowJustName.resx">
+      <DependentUpon>201704192026455_RaterFirstLastNameNowJustName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataMigrations\201704192029005_ForgotToRemoveLastNameFromRater.resx">
+      <DependentUpon>201704192029005_ForgotToRemoveLastNameFromRater.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserMigrations\201702202104105_Initial.resx">
       <DependentUpon>201702202104105_Initial.cs</DependentUpon>

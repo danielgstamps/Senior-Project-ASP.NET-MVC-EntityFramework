@@ -139,8 +139,7 @@ namespace CapstoneProject.Controllers
 
             foreach (var rater in model.Raters)
             {
-                rater.FirstName = "";
-                rater.LastName = "";
+                rater.Name = "";
                 rater.Email = "";
             }
 
@@ -177,8 +176,7 @@ namespace CapstoneProject.Controllers
             var i = 0;
             foreach (var rater in eval.Raters)
             {
-                rater.FirstName = model.Raters[i].FirstName;
-                rater.LastName = model.Raters[i].LastName;
+                rater.Name = model.Raters[i].Name;
                 rater.Email = model.Raters[i].Email;
 
                 //if (ModelState.IsValid)
@@ -264,8 +262,7 @@ namespace CapstoneProject.Controllers
             var i = 0;
             foreach (var rater in eval.Raters)
             {
-                rater.FirstName = model.Raters[i].FirstName;
-                rater.LastName = model.Raters[i].LastName;
+                rater.Name = model.Raters[i].Name;
                 rater.Email = model.Raters[i].Email;
                 UnitOfWork.Save();
                 i++;
@@ -413,10 +410,22 @@ namespace CapstoneProject.Controllers
             var model = new EvaluationCreateViewModel
             {
                 CohortID = (int)cohortId,
+                NumberOfSupervisors = 1,
+                NumberOfCoworkers = 2,
+                NumberOfSupervisees = 2,
+                OpenDate = DateTime.Today.Date,
+                CloseDate = DateTime.Today.AddDays(1).Date,
+
                 TypeList = UnitOfWork.TypeRepository.dbSet.Select(t => new SelectListItem()
                 {
                     Value = t.TypeID.ToString(),
                     Text = t.TypeName,
+                }),
+
+                StageList = UnitOfWork.StageRepository.dbSet.Select(t => new SelectListItem()
+                {
+                    Value = t.StageID.ToString(),
+                    Text = t.StageName
                 })
             };
 
@@ -431,17 +440,6 @@ namespace CapstoneProject.Controllers
                 itemList.RemoveAt(1);
             }
             model.TypeList = itemList;
-
-            // Get all stages.
-            model.StageList = UnitOfWork.StageRepository.dbSet.Select(t => new SelectListItem()
-            {
-                Value = t.StageID.ToString(),
-                Text = t.StageName
-            });
-
-            model.NumberOfSupervisors = 1;
-            model.NumberOfCoworkers = 2;
-            model.NumberOfSupervisees = 2;
 
             return View("Create", model);
         }
@@ -742,8 +740,7 @@ namespace CapstoneProject.Controllers
                 raters.Add(new Rater()
                 {
                     Role = "Supervisor",
-                    FirstName = "First Name",
-                    LastName = "Last Name",
+                    Name = "Name",
                     Email = "email@address.com"
                 });
             }
@@ -753,8 +750,7 @@ namespace CapstoneProject.Controllers
                 raters.Add(new Rater()
                 {
                     Role = "Coworker",
-                    FirstName = "First Name",
-                    LastName = "Last Name",
+                    Name = "Name",
                     Email = "email@address.com"
                 });
             }
@@ -764,8 +760,7 @@ namespace CapstoneProject.Controllers
                 raters.Add(new Rater()
                 {
                     Role = "Supervisee",
-                    FirstName = "First Name",
-                    LastName = "Last Name",
+                    Name = "Name",
                     Email = "email@address.com"
                 });
             }

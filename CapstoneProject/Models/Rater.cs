@@ -7,13 +7,9 @@ namespace CapstoneProject.Models
     {
         public int RaterID { get; set; }
 
-        [Display(Name = "First Name")]
+        [Display(Name = "Name")]
         [Required(ErrorMessage = "**")]
-        public string FirstName { get; set; }
-
-        [Display(Name = "Last Name")]
-        [Required(ErrorMessage = "**")]
-        public string LastName { get; set; }
+        public string Name { get; set; }
 
         public string Role { get; set; }
 

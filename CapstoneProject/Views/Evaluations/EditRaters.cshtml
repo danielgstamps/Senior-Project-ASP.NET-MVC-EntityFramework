@@ -18,20 +18,19 @@
     {
         var raterHasFinishedEval = !string.IsNullOrEmpty(Model.Raters[i].Answers);
         <h4>@Model.Raters[i].Role:</h4>
-        @Html.HiddenFor(m => m.Raters[i].FirstName)
-        @Html.HiddenFor(m => m.Raters[i].LastName)
-        @Html.HiddenFor(m => m.Raters[i].Email)
 
         if (raterHasFinishedEval)
         {
+            @Html.HiddenFor(m => m.Raters[i].Name)
+            @Html.HiddenFor(m => m.Raters[i].Email)
             if (Model.Raters[i].Disabled)
             {
-                <label class="alert-warning">@Model.Raters[i].FirstName has been disabled.</label>
+                <label class="alert-warning">@Model.Raters[i].Name has been disabled.</label>
                 <br /><br />
             }
             else
             {
-                <label class="alert-success">@Model.Raters[i].FirstName has completed their evaluation</label>
+                <label class="alert-success">@Model.Raters[i].Name has completed their evaluation</label>
                 <br />
                 @Html.ActionLink("Replace this rater", "ReplaceRater", new { id = Model.Raters[i].RaterID })
                 <br /><br />
@@ -40,18 +39,10 @@
         else
         {
             <div class="form-group">
-                @Html.LabelFor(model => Model.Raters[i].FirstName, new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => Model.Raters[i].Name, new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => Model.Raters[i].FirstName, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => Model.Raters[i].FirstName, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => Model.Raters[i].LastName, new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => Model.Raters[i].LastName, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => Model.Raters[i].LastName, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => Model.Raters[i].Name, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => Model.Raters[i].Name, "", new { @class = "text-danger" })
                 </div>
             </div>
 
