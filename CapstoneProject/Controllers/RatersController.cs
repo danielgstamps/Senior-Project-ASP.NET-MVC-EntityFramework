@@ -34,6 +34,7 @@ namespace CapstoneProject.Controllers
 
             var rater = UnitOfWork.RaterRepository.GetByID(raterId);
             var evalId = rater.Evaluation.EvaluationID;
+            SendRaterEmail(raterId.Value, evalId);
 
             TempData["EmailSuccess"] = "Sent notification email to " + rater.Name;
             return RedirectToAction("EditRaters", "Evaluations", new { id = evalId });
@@ -41,25 +42,32 @@ namespace CapstoneProject.Controllers
 
         private void SendRaterEmail(int raterId, int evalId)
         {
-            var rater = UnitOfWork.EmployeeRepository.GetByID(raterId);
+            var rater = UnitOfWork.RaterRepository.GetByID(raterId);
             var userAccount = GenerateTemporaryRaterAccount(raterId);
             var evaluation = UnitOfWork.EvaluationRepository.GetByID(evalId);
+            var empFirstName = rater.Evaluation.Employee.FirstName;
+            var empLastName = rater.Evaluation.Employee.LastName;
 
             var callbackUrl = Url.Action("TakeEvaluation", "Evaluations", new { id = evaluation.EvaluationID }, Request.Url.Scheme);
-            var emailSubject = "Rater Email";
+            var emailSubject = "Evaluate Your Fellow Employee";
 
             var emailBody =
-            "You have a new evaluation to complete: " +
+            "Hello " + rater.Name + "! You have been selected by " +
+            empFirstName + " " + empLastName +
+            " as a Rater for one of their evaluations. Please click the link below to complete the " +
+            "following evaluation before the close date:" +
             "\r\n\r\n" +
+            "Employee: " + empFirstName + " " + empLastName +
+            "\r\n" +
             "Type: " + evaluation.Type.TypeName +
-            "\r\n\r\n" +
+            "\r\n" +
             "Stage: " + evaluation.Stage.StageName +
+            "\r\n" +
+            "Open Date: " + evaluation.OpenDate.Date.ToString("d") +
+            "\r\n" +
+            "Close Date: " + evaluation.CloseDate.Date.ToString("d") +
             "\r\n\r\n" +
-            "Open Date: " + evaluation.OpenDate +
-            "\r\n\r\n" +
-            "Close Date: " + evaluation.CloseDate +
-            "\r\n\r\n" +
-            "Click <a href=\"" + callbackUrl + "\">here</a> to complete your evaluation.";
+            "Click <a href=\"" + callbackUrl + "\">here</a> to evaluate " + empFirstName + " " + empLastName + ".";
 
             UserManager.SendEmail(userAccount.Id, emailSubject, emailBody);
         }
@@ -67,6 +75,11 @@ namespace CapstoneProject.Controllers
         private ApplicationUser GenerateTemporaryRaterAccount(int raterId)
         {
             var rater = UnitOfWork.RaterRepository.GetByID(raterId);
+            if (UserManager.Users.Any(u => u.UserName.Equals(rater.Email)))
+            {
+                return UserManager.FindByEmail(rater.Email);               
+            }
+
             var user = new ApplicationUser
             {
                 UserName = rater.Email,
@@ -74,9 +87,7 @@ namespace CapstoneProject.Controllers
                 EmailConfirmed = true
             };
 
-            const string userPwd = "123123"; // If they do have to log in, change this to randomly generated string.
-
-            // Write user to DB.
+            const string userPwd = "123123"; // If they do have to log in, change this to randomly generated string?
             UserManager.Create(user, userPwd);
             return user;
         }

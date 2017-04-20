@@ -227,16 +227,16 @@ namespace CapstoneProject.Controllers
             var callbackUrl = Url.Action("TakeEvaluation", "Evaluations", new { id = evaluation.EvaluationID }, Request.Url.Scheme);
             var emailSubject = "New Evaluation Available";
 
-            var emailBody =
+            var emailBody = "Hello " + employee.FirstName + " " + employee.LastName + ". " + 
             "You have a new evaluation to complete: " +
             "\r\n\r\n" +
             "Type: " + evaluation.Type.TypeName +
-            "\r\n\r\n" +
+            "\r\n" +
             "Stage: " + evaluation.Stage.StageName +
-            "\r\n\r\n" +
-            "Open Date: " + evaluation.OpenDate +
-            "\r\n\r\n" +
-            "Close Date: " + evaluation.CloseDate +
+            "\r\n" +
+            "Open Date: " + evaluation.OpenDate.Date.ToString("d") +
+            "\r\n" +
+            "Close Date: " + evaluation.CloseDate.Date.ToString("d") +
             "\r\n\r\n" +
             "Click <a href=\"" + callbackUrl + "\">here</a> to complete your evaluation.";
 
