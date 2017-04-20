@@ -7,6 +7,7 @@
 
 <h2>Edit Raters</h2>
 <h4>Update your raters' information, or replace them.</h4>
+<h4 class="alert-success">@TempData["EmailSuccess"]</h4>
 <br/>
 
 @using (Html.BeginForm())
@@ -51,6 +52,7 @@
                 <div class="col-md-10">
                     @Html.EditorFor(model => Model.Raters[i].Email, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => Model.Raters[i].Email, "", new { @class = "text-danger" })
+                    @Html.ActionLink("Send Notification Email", "NotifyRater", "Raters", new { raterId = Model.Raters[i].RaterID }, null)
                 </div>
             </div>
             <label></label>

@@ -230,7 +230,7 @@ namespace CapstoneProject.Controllers
         }
 
         // GET: EditRaters
-        public ActionResult EditRaters(int? id)
+        public ActionResult EditRaters(int? id) //evalID
         {
             if (id == null)
             {
