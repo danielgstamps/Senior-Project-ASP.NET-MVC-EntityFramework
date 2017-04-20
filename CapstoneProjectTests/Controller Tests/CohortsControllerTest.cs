@@ -68,20 +68,20 @@ namespace CapstoneProjectTests
             Assert.AreEqual("Sales", result.Name);
         }
 
-        [TestMethod]
-        public void TestIndex()
-        {
-            var result = this.controller.Index() as ViewResult;
-            Assert.AreEqual("Index", result.ViewName);
-        }
+        //[TestMethod]
+        //public void TestIndex()
+        //{
+        //    var result = this.controller.Index() as ViewResult;
+        //    Assert.AreEqual("Index", result.ViewName);
+        //}
 
-        [TestMethod]
-        public void TestDetails()
-        {
-            this.mockUnitOfWork.Setup(m => m.CohortRepository.GetByID(0)).Returns(cohorts[0]);
-            var result = this.controller.Details(0) as ViewResult;
-            Assert.AreEqual("Details", result.ViewName);
-        }
+        //[TestMethod]
+        //public void TestDetails()
+        //{
+        //    this.mockUnitOfWork.Setup(m => m.CohortRepository.GetByID(0)).Returns(cohorts[0]);
+        //    var result = this.controller.Details(0) as ViewResult;
+        //    Assert.AreEqual("Details", result.ViewName);
+        //}
 
         [TestMethod]
         public void TestDelete()
