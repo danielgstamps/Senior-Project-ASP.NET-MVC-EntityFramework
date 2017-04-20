@@ -8,7 +8,7 @@
 <h2>Cohorts</h2>
 <h4 class="alert-success">@TempData["CreateSuccess"]</h4>
 <h4 class="alert-success">@TempData["EditSuccess"]</h4>
-
+<h4 class="alert-success">@TempData["EmailSuccess"]</h4>
 
 @Html.ActionLink("Add New Cohort", "Create")
 
@@ -58,7 +58,7 @@
                 {
                     <label class="alert-warning">Type 1 in progress</label>
                     <label> ( </label>
-                    @Html.ActionLink("Remind Cohort", "SendEvalEmail", new {id = item.CohortID})
+                    @Html.ActionLink("Remind Cohort", "NotifyCohort", new {cohortId = item.CohortID, typeId = 1})
                     <label> ) </label>
                     if (item.Type2Assigned){ <br /> }
                 } 
@@ -71,7 +71,7 @@
                     <label> | </label>
                     @Html.ActionLink("Delete", "Delete", "Evaluations", new {cohortId = item.CohortID, typeId = 1}, null)
                     <label> | </label>
-                    @Html.ActionLink("Notify Cohort", "SendEvalEmail", new {id = item.CohortID})
+                    @Html.ActionLink("Notify Cohort", "NotifyCohort", new {cohortId = item.CohortID, typeId = 1})
                     <label> ) </label>
                     if (item.Type2Assigned){ <br /> }
                 }
@@ -80,7 +80,7 @@
                 {
                     <label class="alert-warning">Type 2 in progress</label>
                     <label> ( </label>
-                    @Html.ActionLink("Remind Cohort", "SendEvalEmail", new { id = item.CohortID })
+                    @Html.ActionLink("Remind Cohort", "NotifyCohort", new { cohortId = item.CohortID, typeId = 2 })
                     <label> ) </label>
                 }
 
@@ -92,7 +92,7 @@
                     <label> | </label>
                     @Html.ActionLink("Delete", "Delete", "Evaluations", new {cohortId = item.CohortID, typeId = 2}, null)
                     <label> | </label>
-                    @Html.ActionLink("Notify Cohort", "SendEvalEmail", new {id = item.CohortID})
+                    @Html.ActionLink("Notify Cohort", "NotifyCohort", new { cohortId = item.CohortID, typeId = 2 })
                     <label> ) </label>
                 }
             </td>

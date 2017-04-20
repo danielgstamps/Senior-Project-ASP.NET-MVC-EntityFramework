@@ -12,7 +12,6 @@ using CapstoneProject.ViewModels;
 using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-// ReSharper disable InconsistentNaming
 
 namespace CapstoneProject.Controllers
 {
@@ -49,11 +48,11 @@ namespace CapstoneProject.Controllers
             }
 
             // Probably need different authentication for Raters
-            //var employee = UnitOfWork.EmployeeRepository.GetByID(eval.EmployeeID);
-            //if (employee == null || !employee.Email.Equals(User.Identity.GetUserName()))
-            //{
-            //    return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
-            //}
+            var employee = UnitOfWork.EmployeeRepository.GetByID(eval.EmployeeID);
+            if (employee == null || !employee.Email.Equals(User.Identity.GetUserName()))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+            }
 
             var model = new TakeEvalViewModel
             {
@@ -72,7 +71,6 @@ namespace CapstoneProject.Controllers
                         Text = question.QuestionText,
                         Id = count
                     });
-
                     count++;
                 }
             }
@@ -508,7 +506,6 @@ namespace CapstoneProject.Controllers
 
                 UnitOfWork.EvaluationRepository.Insert(eval);
                 UnitOfWork.Save();
-               // SendEvaluationEmail(emp.EmployeeID, eval); // Commenting this out for now, it rustles Microsoft's jimmies.
             }
 
             if (model.TypeID == 1)
@@ -652,7 +649,6 @@ namespace CapstoneProject.Controllers
                     }
                 }
                 UnitOfWork.Save();
-                // SendEvaluationEmail(emp.EmployeeID, eval); // Don't await this. Commenting this out for now, it rustles Microsoft's jimmies.
             }
 
             TempData["EditSuccess"] = "Successfully updated evaluation.";
@@ -788,34 +784,6 @@ namespace CapstoneProject.Controllers
             }
 
             return raters;
-        }
-
-        public ApplicationUserManager UserManager => _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-
-        private async void SendEvaluationEmail(int employeeID, Evaluation evaluation)
-        {
-            var employee = UnitOfWork.EmployeeRepository.GetByID(employeeID);
-            var userAccount = userDB.Users.ToList().Find(u => u.Email == employee.Email);
-            var userEmail = userAccount.Email;
-
-            // TODO Specify EvaluationsController Action in first string param
-            var callbackUrl = Url.Action("TakeEvaluation", "Evaluations", new { id = evaluation.EvaluationID }, protocol: Request.Url.Scheme);
-
-            var emailSubject = "New Evaluation Available";
-            var emailBody =
-            "You have a new evaluation to complete. Here are the details: " +
-            "\r\n\r\n" +
-            "Type: " + evaluation.Type.TypeName +
-            "\r\n\r\n" +
-            "Stage: " + evaluation.Stage.StageName +
-            "\r\n\r\n" +
-            "Open Date: " + evaluation.OpenDate +
-            "\r\n\r\n" +
-            "Close Date: " + evaluation.CloseDate +
-            "\r\n\r\n" +
-            "Click <a href=\"" + callbackUrl + "\">here</a> to complete your evaluation.";
-
-            await UserManager.SendEmailAsync(userAccount.Id, emailSubject, emailBody);
         }
 
         protected override void Dispose(bool disposing)

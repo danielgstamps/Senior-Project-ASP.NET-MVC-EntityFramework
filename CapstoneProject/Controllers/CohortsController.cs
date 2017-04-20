@@ -3,35 +3,36 @@ using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using CapstoneProject.DAL;
 using CapstoneProject.Models;
 using CapstoneProject.ViewModels;
 using WebGrease.Css.Extensions;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 
 namespace CapstoneProject.Controllers
 {
     [Authorize(Roles="Admin")]
     public class CohortsController : Controller
     {
-        private IUnitOfWork unitOfWork = new UnitOfWork();
+        private readonly IUnitOfWork _unitOfWork = new UnitOfWork();
+        private readonly ApplicationDbContext _userDb = new ApplicationDbContext();
+        private ApplicationUserManager _userManager;
 
-        public IUnitOfWork UnitOfWork
+        public IUnitOfWork UnitOfWork { get; set; } = new UnitOfWork();
+        public ApplicationUserManager UserManager
         {
-            get
-            {
-                return this.unitOfWork;
-            }
-            set
-            {
-                this.unitOfWork = value;
-            }
+            get { return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
+            private set { _userManager = value; }
         }
 
         // GET: Cohorts
         public ActionResult Index()
         {
-            return View("Index", this.unitOfWork.CohortRepository.Get());
+            return View("Index", this._unitOfWork.CohortRepository.Get());
         }
 
         // GET: Cohorts/Details/5
@@ -41,7 +42,7 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var cohort = this.unitOfWork.CohortRepository.GetByID(id);
+            var cohort = this._unitOfWork.CohortRepository.GetByID(id);
             if (cohort == null)
             {
                 return HttpNotFound();
@@ -57,8 +58,6 @@ namespace CapstoneProject.Controllers
         }
 
         // POST: Cohorts/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -66,8 +65,8 @@ namespace CapstoneProject.Controllers
         {
             if (ModelState.IsValid)
             {
-                this.unitOfWork.CohortRepository.Insert(cohort);
-                this.unitOfWork.Save();
+                this._unitOfWork.CohortRepository.Insert(cohort);
+                this._unitOfWork.Save();
                 return RedirectToAction("Index");
             }
 
@@ -83,9 +82,9 @@ namespace CapstoneProject.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var cohort = this.unitOfWork.CohortRepository.GetByID(id);
-            var allCohorts = this.unitOfWork.CohortRepository.Get();
-            var allEmployees = this.unitOfWork.EmployeeRepository.Get();
+            var cohort = this._unitOfWork.CohortRepository.GetByID(id);
+            var allCohorts = this._unitOfWork.CohortRepository.Get();
+            var allEmployees = this._unitOfWork.EmployeeRepository.Get();
             var employeesToShow = allEmployees.ToList();
             foreach (var currentCohort in allCohorts.ToList())
             {
@@ -112,25 +111,23 @@ namespace CapstoneProject.Controllers
         }
 
         // POST: Cohorts/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int? id, string[] selectedEmployees/*[Bind(Include = "CohortID,Name")] Cohort cohort*/)
+        public ActionResult Edit(int? id, string[] selectedEmployees)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var cohortToUpdate = unitOfWork.CohortRepository.GetByID(id);
+            var cohortToUpdate = _unitOfWork.CohortRepository.GetByID(id);
             if (TryUpdateModel(cohortToUpdate, "",
                new string[] { "Name" }))
             {
                 try
                 {
                     UpdateCohortEmployees(selectedEmployees, cohortToUpdate);
-                    unitOfWork.Save();
+                    _unitOfWork.Save();
                     return RedirectToAction("Index");
                 }
                 catch (RetryLimitExceededException /* dex */)
@@ -139,25 +136,111 @@ namespace CapstoneProject.Controllers
                     ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
                 }
             }
-            populateAssignedEmployees(cohortToUpdate);
+            PopulateAssignedEmployees(cohortToUpdate);
             return View(cohortToUpdate);
         }
 
-        private bool CohortHasOpenEval(int cohortId)
+        // GET: Cohorts/Delete/5
+        [Authorize(Roles = "Admin")]
+        public ActionResult Delete(int? id)
         {
-            var cohort = UnitOfWork.CohortRepository.GetByID(cohortId);
-            var firstEmployee = cohort.Employees.First();
-            if (firstEmployee == null)
+            if (id == null)
             {
-                return false;
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var firstEval = firstEmployee.Evaluations.First();
-            if (firstEval == null)
+            var cohort = this._unitOfWork.CohortRepository.GetByID(id);
+            if (cohort == null)
             {
-                return false;
+                return HttpNotFound();
+            }
+            return View("Delete", cohort);
+        }
+
+        // POST: Cohorts/Delete/5
+        [Authorize(Roles = "Admin")]
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            var cohort = _unitOfWork.CohortRepository.GetByID(id);
+            var evalsToDelete = new List<Evaluation>();
+
+            // Remove all cohort's employees from the cohort.
+            foreach (var employee in cohort.Employees)
+            {
+                employee.CohortID = null;
+                employee.Cohort = null;
+
+                // Gather each employee's incomplete evals into evalsToDelete.
+                foreach (var eval in employee.Evaluations)
+                {
+                    if (!eval.IsComplete())
+                    {
+                        evalsToDelete.Add(eval);
+                    }
+                }
             }
 
-            return firstEval.OpenDate < DateTime.Today && firstEval.CloseDate > DateTime.Today;
+            // Delete each eval in evalsToDelete
+            foreach (var eval in evalsToDelete)
+            {
+                _unitOfWork.EvaluationRepository.Delete(eval);
+                _unitOfWork.Save();
+            }
+
+            _unitOfWork.CohortRepository.Delete(cohort);
+            _unitOfWork.Save();
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult NotifyCohort(int? cohortId, int? typeId)
+        {
+            if (cohortId == null || typeId == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var cohort = UnitOfWork.CohortRepository.GetByID(cohortId);
+            if (cohort == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var employees = cohort.Employees.ToList();
+            var eval = employees.First().Evaluations.Single(e => !e.IsComplete() && e.TypeID == typeId);
+
+            foreach (var emp in employees)
+            {
+                SendEvaluationEmail(emp.EmployeeID, eval.EvaluationID);
+            }
+
+            TempData["EmailSuccess"] = "Sent email notifications to " + cohort.Name + ".";
+            return RedirectToAction("Index", "Cohorts");
+        }
+
+        private void SendEvaluationEmail(int employeeId, int evalId)
+        {
+            var employee = UnitOfWork.EmployeeRepository.GetByID(employeeId);
+            var userAccount = _userDb.Users.ToList().Find(u => u.Email.Equals(employee.Email));
+            var evaluation = UnitOfWork.EvaluationRepository.GetByID(evalId);
+
+            var callbackUrl = Url.Action("TakeEvaluation", "Evaluations", new { id = evaluation.EvaluationID }, Request.Url.Scheme);
+            var emailSubject = "New Evaluation Available";
+
+            var emailBody =
+            "You have a new evaluation to complete: " +
+            "\r\n\r\n" +
+            "Type: " + evaluation.Type.TypeName +
+            "\r\n\r\n" +
+            "Stage: " + evaluation.Stage.StageName +
+            "\r\n\r\n" +
+            "Open Date: " + evaluation.OpenDate +
+            "\r\n\r\n" +
+            "Close Date: " + evaluation.CloseDate +
+            "\r\n\r\n" +
+            "Click <a href=\"" + callbackUrl + "\">here</a> to complete your evaluation.";
+
+            UserManager.SendEmail(userAccount.Id, emailSubject, emailBody);
         }
 
         private void UpdateCohortEmployees(string[] selectedEmployees, Cohort cohortToUpdate)
@@ -174,7 +257,7 @@ namespace CapstoneProject.Controllers
                 (cohortToUpdate.Employees.Select(e => e.EmployeeID));
 
             // case: An employee is added.
-            foreach (var employee in unitOfWork.EmployeeRepository.Get())
+            foreach (var employee in _unitOfWork.EmployeeRepository.Get())
             {
                 if (selectedEmployeesHashSet.Contains(employee.EmployeeID.ToString()))
                 {
@@ -199,21 +282,21 @@ namespace CapstoneProject.Controllers
                     }
 
                     cohortToUpdate.Employees.Remove(employee);
-                    unitOfWork.Save();
+                    _unitOfWork.Save();
 
                     var evalsToDelete = employee.Evaluations.Where(e => !e.IsComplete()).ToList();
                     foreach (var eval in evalsToDelete)
                     {
-                        unitOfWork.EvaluationRepository.Delete(eval);
-                        unitOfWork.Save();       
+                        _unitOfWork.EvaluationRepository.Delete(eval);
+                        _unitOfWork.Save();       
                     }                    
                 }
             }  
         }
 
-        private void populateAssignedEmployees(Cohort cohort)
+        private void PopulateAssignedEmployees(Cohort cohort)
         {
-            var allEmployees = this.unitOfWork.EmployeeRepository.Get();
+            var allEmployees = this._unitOfWork.EmployeeRepository.Get();
             var cohortEmployees = new HashSet<int>(cohort.Employees.Select(e => e.EmployeeID));
             var assignedEmployees = new List<AssignedEmployeeData>();
             foreach (var employee in allEmployees)
@@ -242,7 +325,7 @@ namespace CapstoneProject.Controllers
                     SelfAnswers = ""
                 });
             }
-            unitOfWork.Save();
+            _unitOfWork.Save();
         }
 
         private void ResetCohort(Cohort cohort)
@@ -253,75 +336,22 @@ namespace CapstoneProject.Controllers
                 var evalsToDelete = employee.Evaluations.Where(e => !e.IsComplete()).ToList();
                 foreach (var eval in evalsToDelete)
                 {
-                    unitOfWork.EvaluationRepository.Delete(eval);
-                    unitOfWork.Save();
+                    _unitOfWork.EvaluationRepository.Delete(eval);
+                    _unitOfWork.Save();
                 }
             }
 
             cohort.Employees.Clear();
             cohort.Type1Assigned = false;
             cohort.Type2Assigned = false;
-            unitOfWork.Save();
+            _unitOfWork.Save();
         }
-
-        // GET: Cohorts/Delete/5
-        [Authorize(Roles = "Admin")]
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            var cohort = this.unitOfWork.CohortRepository.GetByID(id);
-            if (cohort == null)
-            {
-                return HttpNotFound();
-            }
-            return View("Delete", cohort);
-        }
-
-        // POST: Cohorts/Delete/5
-        [Authorize(Roles = "Admin")]
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            var cohort = unitOfWork.CohortRepository.GetByID(id);
-            var evalsToDelete = new List<Evaluation>();
-
-            // Remove all cohort's employees from the cohort.
-            foreach (var employee in cohort.Employees)
-            {
-                employee.CohortID = null;
-                employee.Cohort = null;
-
-                // Gather each employee's incomplete evals into evalsToDelete.
-                foreach (var eval in employee.Evaluations)
-                {
-                    if (!eval.IsComplete())
-                    {
-                        evalsToDelete.Add(eval);
-                    }
-                }
-            }
-
-            // Delete each eval in evalsToDelete
-            foreach (var eval in evalsToDelete)
-            {
-                unitOfWork.EvaluationRepository.Delete(eval);
-                unitOfWork.Save();
-            }
-
-            unitOfWork.CohortRepository.Delete(cohort);
-            unitOfWork.Save();
-            return RedirectToAction("Index");
-        }     
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                this.unitOfWork.Dispose();
+                this._unitOfWork.Dispose();
             }
             base.Dispose(disposing);
         }
