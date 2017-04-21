@@ -95,7 +95,21 @@ namespace CapstoneProject.Controllers
                 }
             }
 
-            ViewBag.EmployeeName = employee.FirstName + " " + employee.LastName;
+            if (raterId == null)
+            {
+                ViewBag.TakeEvalHeader = "Self-Evaluation for " + employee.FirstName + " " + employee.LastName + ".";
+            }
+            else
+            {
+                var rater = UnitOfWork.RaterRepository.GetByID(raterId);
+                if (rater == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                ViewBag.TakeEvalHeader = "Evaluating " + eval.Employee.FirstName + " " + eval.Employee.LastName +
+                                         " as a " + rater.Role + ".";
+            }
+
             return View("TakeEvaluation", model);
         }
 
