@@ -18,8 +18,20 @@ namespace CapstoneProject.Controllers
     [Authorize]
     public class EvaluationsController : Controller
     {
-        private readonly ApplicationDbContext userDB = new ApplicationDbContext();
-        private readonly ApplicationUserManager _userManager;
+       // private readonly ApplicationDbContext userDB = new ApplicationDbContext();
+        private ApplicationUserManager _userManager;
+        private ApplicationSignInManager _signInManager;
+
+        public ApplicationUserManager UserManager
+        {
+            get { return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
+            private set { _userManager = value; }
+        }
+
+        public ApplicationSignInManager SignInManager
+        {
+            get { return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>(); }
+        }
 
         public EvaluationsController()
         {
@@ -33,12 +45,13 @@ namespace CapstoneProject.Controllers
 
         public IUnitOfWork UnitOfWork { get; set; } = new UnitOfWork();
 
+        [AllowAnonymous]
         //GET: Evaluations/TakeEvaluation/5
-        public ActionResult TakeEvaluation(int? id)
+        public ActionResult TakeEvaluation(int? id, int? raterId, string code)
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.ExpectationFailed);
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
             var eval = UnitOfWork.EvaluationRepository.GetByID(id);
@@ -47,18 +60,32 @@ namespace CapstoneProject.Controllers
                 return HttpNotFound();
             }
 
-            // Probably need different authentication for Raters
-            var employee = UnitOfWork.EmployeeRepository.GetByID(eval.EmployeeID);
-            if (employee == null || !employee.Email.Equals(User.Identity.GetUserName()))
+            // If raterId is null, this is an employee taking their eval. Make sure the logged-in user is correct.
+            if (raterId == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+                var employee = UnitOfWork.EmployeeRepository.GetByID(eval.EmployeeID);
+                if (employee == null || !employee.Email.Equals(User.Identity.GetUserName()))
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+                }
+            }
+            else // if raterId is not null, authenticate the rater.
+            { 
+                var rater = UnitOfWork.RaterRepository.GetByID(raterId);
+                var raterUser = UserManager.FindByName(rater.Email);
+                var codeIsValid = UserManager.VerifyUserTokenAsync(raterUser.Id, "RaterLogin", code);
+                if (codeIsValid.Result)
+                {
+                    SignInManager.SignIn(raterUser, false, false);
+                }
             }
 
             var model = new TakeEvalViewModel
             {
                 AllQuestions = new List<QuestionViewModel>(),
                 TypeId = eval.TypeID,
-                EvalId = eval.EvaluationID
+                EvalId = eval.EvaluationID,
+                RaterId = raterId
             };
 
             var count = 1;
@@ -101,7 +128,7 @@ namespace CapstoneProject.Controllers
             eval.CompletedDate = DateTime.Now;
             UnitOfWork.Save();
 
-            if (eval.Raters.Count > 1)
+            if (eval.Raters.Count > 0)
             {
                 return RedirectToAction("AssignRaters", new { id = eval.EvaluationID });
             }
@@ -109,7 +136,7 @@ namespace CapstoneProject.Controllers
             return RedirectToAction("EmployeeEvalsIndex", new { id = eval.EmployeeID });
         }
 
-        // GET
+        // GET AssignRaters
         public ActionResult AssignRaters(int? id)
         {
             if (id == null)
@@ -166,7 +193,7 @@ namespace CapstoneProject.Controllers
             return View("AssignRaters", model);
         }
 
-        // POST
+        // POST AssignRaters
         [HttpPost]
         public ActionResult AssignRaters(AssignRatersViewModel model)
         {

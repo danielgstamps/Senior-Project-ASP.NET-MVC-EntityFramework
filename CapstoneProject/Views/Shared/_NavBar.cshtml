@@ -13,13 +13,15 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li>@Html.ActionLink("Home", "Index", "Home")</li>
-
-                @if (User.Identity.IsAuthenticated && !User.IsInRole("Admin")) 
-                {                  
+                @if (!User.IsInRole("Rater"))
+                {
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                }
+                @if (User.Identity.IsAuthenticated && !User.IsInRole("Admin") && !User.IsInRole("Rater"))
+                {
                     var unitOfWork = new UnitOfWork();
                     var employee = unitOfWork.EmployeeRepository.Get().Single(e => e.Email.Equals(User.Identity.GetUserName()));
-                    <li>@Html.ActionLink("My Evaluations", "EmployeeEvalsIndex", "Evaluations", new { id = employee.EmployeeID}, new {})</li>
+                    <li>@Html.ActionLink("My Evaluations", "EmployeeEvalsIndex", "Evaluations", new {id = employee.EmployeeID}, new {})</li>
                 }
 
                 @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
@@ -28,7 +30,7 @@
                     <li>@Html.ActionLink("Cohorts", "Index", "Cohorts")</li>
                 }
             </ul>
-            @Html.Partial("_LoginPartial")
+            @Html.Partial("_LoginPartial")         
         </div>
     </div>
 </div>

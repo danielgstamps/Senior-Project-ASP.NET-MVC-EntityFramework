@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using System.Web.UI.WebControls;
 using CapstoneProject.DAL;
 using CapstoneProject.Models;
+using CapstoneProject.ViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 
@@ -15,9 +16,11 @@ namespace CapstoneProject.Controllers
     public class RatersController : Controller
     {
         private ApplicationUserManager _userManager;
+        private ApplicationSignInManager _signInManager;
         private readonly ApplicationDbContext _userDb = new ApplicationDbContext();
 
         public IUnitOfWork UnitOfWork { get; set; } = new UnitOfWork();
+
         public ApplicationUserManager UserManager
         {
             get { return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
@@ -47,8 +50,9 @@ namespace CapstoneProject.Controllers
             var evaluation = UnitOfWork.EvaluationRepository.GetByID(evalId);
             var empFirstName = rater.Evaluation.Employee.FirstName;
             var empLastName = rater.Evaluation.Employee.LastName;
+            var code = UserManager.GenerateUserToken("RaterLogin", userAccount.Id);
 
-            var callbackUrl = Url.Action("TakeEvaluation", "Evaluations", new { id = evaluation.EvaluationID }, Request.Url.Scheme);
+            var callbackUrl = Url.Action("TakeEvaluation", "Evaluations", new { id = evaluation.EvaluationID, raterId, code }, Request.Url.Scheme);
             var emailSubject = "Evaluate Your Fellow Employee";
 
             var emailBody =
@@ -87,8 +91,13 @@ namespace CapstoneProject.Controllers
                 EmailConfirmed = true
             };
 
-            const string userPwd = "123123"; // If they do have to log in, change this to randomly generated string?
-            UserManager.Create(user, userPwd);
+            //const string userPwd = "123123";
+            var result = UserManager.Create(user);
+            if (result.Succeeded)
+            {
+                UserManager.AddToRole(user.Id, "Rater");
+            }
+
             return user;
         }
     }

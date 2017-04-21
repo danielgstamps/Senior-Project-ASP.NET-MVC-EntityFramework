@@ -13,5 +13,7 @@ namespace CapstoneProject.ViewModels
         public List<QuestionViewModel> AllQuestions { get; set; }
 
         public int TypeId { get; set; }
+
+        public int? RaterId { get; set; }
     }
 }

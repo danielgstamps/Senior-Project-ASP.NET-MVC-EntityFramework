@@ -35,6 +35,12 @@ namespace CapstoneProject.UserMigrations
                 roleManager.Create(role);
             }
 
+            if (!roleManager.RoleExists("Rater"))
+            {
+                var role = new IdentityRole { Name = "Rater" };
+                roleManager.Create(role);
+            }
+
             // If the admin already exists, delete it. (Can instead be manually deleted from DB)
             if (userManager.FindByEmail("admin@gmail.com") != null)
             {
