@@ -118,16 +118,27 @@ namespace CapstoneProject.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            eval.SelfAnswers = ConvertAnswersToString(model.AllQuestions);
-            eval.CompletedDate = DateTime.Now;
-            UnitOfWork.Save();
-
-            if (eval.Raters.Count > 0)
+            if (model.RaterId == null) //Employee is taking the evaluation.
             {
-                return RedirectToAction("AssignRaters", new { id = eval.EvaluationID });
+                eval.SelfAnswers = ConvertAnswersToString(model.AllQuestions);
+                eval.CompletedDate = DateTime.Now;
+                UnitOfWork.Save();
+
+                return eval.Raters.Count > 0 ? 
+                    RedirectToAction("AssignRaters", new {id = eval.EvaluationID}) : 
+                    RedirectToAction("EmployeeEvalsIndex", new {id = eval.EmployeeID});
             }
 
-            return RedirectToAction("EmployeeEvalsIndex", new { id = eval.EmployeeID });
+            // Rater is taking the evaluation
+            var rater = UnitOfWork.RaterRepository.GetByID(model.RaterId);
+            if (rater == null || !rater.Email.Equals(User.Identity.GetUserName()))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
+            }
+                
+            rater.Answers = ConvertAnswersToString(model.AllQuestions);
+            UnitOfWork.Save();
+            return RedirectToAction("RaterCleanup", "Raters", new {id = rater.RaterID});
         }
 
         // GET AssignRaters

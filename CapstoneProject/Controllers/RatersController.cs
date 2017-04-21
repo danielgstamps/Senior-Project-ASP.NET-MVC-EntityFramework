@@ -31,7 +31,7 @@ namespace CapstoneProject.Controllers
             get { return HttpContext.GetOwinContext().Get<ApplicationSignInManager>(); }
         }
 
-        // GET
+        // GET RaterPrompt
         public async Task<ActionResult> RaterPrompt(int id, int raterId, string code)
         {
             var rater = UnitOfWork.RaterRepository.GetByID(raterId);
@@ -53,11 +53,23 @@ namespace CapstoneProject.Controllers
             return View("RaterPrompt", model);
         }
 
-        // POST
+        // POST RaterPrompt
         [HttpPost]
         public ActionResult RaterPrompt(RaterPromptViewModel model)
         {
             return RedirectToAction("TakeEvaluation", "Evaluations", new { id = model.EvalId, raterId = model.RaterId, code = model.Code});
+        }
+
+        // RaterCleanup
+        public ActionResult RaterCleanup(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            // Logout rater
+            // delete account
+            return View("ThankYou");
         }
 
         // Send Notification Emails

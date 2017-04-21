@@ -428,6 +428,7 @@
     <Content Include="Views\Evaluations\EditRaters.cshtml" />
     <Content Include="Views\Evaluations\ReplaceRater.cshtml" />
     <Content Include="Views\Raters\RaterPrompt.cshtml" />
+    <Content Include="Views\Raters\ThankYou.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
