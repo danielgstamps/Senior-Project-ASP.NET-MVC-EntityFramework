@@ -224,21 +224,32 @@ namespace CapstoneProject.Controllers
             var userAccount = _userDb.Users.ToList().Find(u => u.Email.Equals(employee.Email));
             var evaluation = UnitOfWork.EvaluationRepository.GetByID(evalId);
 
-            var callbackUrl = Url.Action("TakeEvaluation", "Evaluations", new { id = evaluation.EvaluationID }, Request.Url.Scheme);
-            var emailSubject = "New Evaluation Available";
+            var emailSubject = "New Evaluation ";
 
-            var emailBody = "Hello " + employee.FirstName + " " + employee.LastName + ". " + 
-            "You have a new evaluation to complete: " +
-            "\r\n\r\n" +
-            "Type: " + evaluation.Type.TypeName +
-            "\r\n" +
-            "Stage: " + evaluation.Stage.StageName +
-            "\r\n" +
-            "Open Date: " + evaluation.OpenDate.Date.ToString("d") +
-            "\r\n" +
-            "Close Date: " + evaluation.CloseDate.Date.ToString("d") +
-            "\r\n\r\n" +
-            "Click <a href=\"" + callbackUrl + "\">here</a> to complete your evaluation.";
+            var emailBody = "Hello " + employee.FirstName + " " + employee.LastName + ". " +
+                            "You have a new evaluation to complete: " +
+                            "\r\n\r\n" +
+                            "Type: " + evaluation.Type.TypeName +
+                            "\r\n" +
+                            "Stage: " + evaluation.Stage.StageName +
+                            "\r\n" +
+                            "Open Date: " + evaluation.OpenDate.Date.ToString("d") +
+                            "\r\n" +
+                            "Close Date: " + evaluation.CloseDate.Date.ToString("d") +
+                            "\r\n\r\n";
+
+            if (evaluation.OpenDate <= DateTime.Today.Date)
+            {
+                var callbackUrl = Url.Action("TakeEvaluation", "Evaluations", new {id = evaluation.EvaluationID}, Request.Url.Scheme);
+                emailBody += "Click <a href=\"" + callbackUrl + "\">here</a> to complete your evaluation.";
+                emailSubject += "Ready!";
+            }
+            else
+            {
+                var callbackUrl = Url.Action("EmployeeEvalsIndex", "Evaluations", new {id = evaluation.EmployeeID}, Request.Url.Scheme);
+                emailBody += "Click <a href=\"" + callbackUrl + "\">here</a> to view your evaluations, and check back once they open";
+                emailSubject += " Opens " + evaluation.OpenDate.ToString("d");
+            }
 
             UserManager.SendEmail(userAccount.Id, emailSubject, emailBody);
         }

@@ -680,24 +680,18 @@ namespace CapstoneProject.Controllers
             // Recreate evals (I remove/recreate so the emails re-send, and the Rater logic is cleaner).
             foreach (var emp in cohort.Employees)
             {
-                if (model.OpenDate != null)
+                var eval = new Evaluation
                 {
-                    if (model.CloseDate != null)
-                    {
-                        var eval = new Evaluation
-                        {
-                            Employee = emp,
-                            Type = UnitOfWork.TypeRepository.GetByID(model.TypeID),
-                            Stage = UnitOfWork.StageRepository.GetByID(model.StageID),
-                            OpenDate = model.OpenDate.Value, // This "PossibleInvalidOperation" will never happen. It'd break way up there^ if the dates were null.
-                            CloseDate = model.CloseDate.Value,
-                            SelfAnswers = "",
-                            Raters = GenerateRaterList(model.NumberOfSupervisors, model.NumberOfCoworkers, model.NumberOfSupervisees)
-                        };
+                    Employee = emp,
+                    Type = UnitOfWork.TypeRepository.GetByID(model.TypeID),
+                    Stage = UnitOfWork.StageRepository.GetByID(model.StageID),
+                    OpenDate = model.OpenDate.Value, // This "PossibleInvalidOperation" will never happen. It'd break way up there^ if the dates were null.
+                    CloseDate = model.CloseDate.Value,
+                    SelfAnswers = "",
+                    Raters = GenerateRaterList(model.NumberOfSupervisors, model.NumberOfCoworkers, model.NumberOfSupervisees)
+                };
 
-                        UnitOfWork.EvaluationRepository.Insert(eval);
-                    }
-                }
+                UnitOfWork.EvaluationRepository.Insert(eval);
                 UnitOfWork.Save();
             }
 
