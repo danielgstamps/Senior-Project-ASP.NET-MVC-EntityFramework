@@ -12,6 +12,7 @@ using CapstoneProject.ViewModels;
 using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin.Security;
 
 namespace CapstoneProject.Controllers
 {
@@ -20,7 +21,6 @@ namespace CapstoneProject.Controllers
     {
        // private readonly ApplicationDbContext userDB = new ApplicationDbContext();
         private ApplicationUserManager _userManager;
-        private ApplicationSignInManager _signInManager;
 
         public ApplicationUserManager UserManager
         {
@@ -30,7 +30,7 @@ namespace CapstoneProject.Controllers
 
         public ApplicationSignInManager SignInManager
         {
-            get { return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>(); }
+            get { return HttpContext.GetOwinContext().Get<ApplicationSignInManager>(); }
         }
 
         public EvaluationsController()
@@ -71,13 +71,13 @@ namespace CapstoneProject.Controllers
             }
             else // if raterId is not null, authenticate the rater.
             { 
-                var rater = UnitOfWork.RaterRepository.GetByID(raterId);
-                var raterUser = UserManager.FindByName(rater.Email);
-                var codeIsValid = UserManager.VerifyUserTokenAsync(raterUser.Id, "RaterLogin", code);
-                if (codeIsValid.Result)
-                {
-                    SignInManager.SignIn(raterUser, false, false);
-                }
+                //var rater = UnitOfWork.RaterRepository.GetByID(raterId);
+                //var raterUser = UserManager.FindByName(rater.Email);
+                //var codeIsValid = UserManager.VerifyUserTokenAsync(raterUser.Id, "RaterLogin", code);
+                //if (codeIsValid.Result)
+                //{
+                //    SignInManager.SignIn(raterUser, false, false);
+                //}
             }
 
             var model = new TakeEvalViewModel

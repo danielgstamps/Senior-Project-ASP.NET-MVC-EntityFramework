@@ -13,10 +13,7 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                @if (!User.IsInRole("Rater"))
-                {
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                }
+                <li>@Html.ActionLink("Home", "Index", "Home")</li>
                 @if (User.Identity.IsAuthenticated && !User.IsInRole("Admin") && !User.IsInRole("Rater"))
                 {
                     var unitOfWork = new UnitOfWork();

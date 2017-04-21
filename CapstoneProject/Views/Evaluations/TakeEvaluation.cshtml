@@ -17,10 +17,10 @@
             <label>@Model.AllQuestions[i].Id.</label>
             <label>@Model.AllQuestions[i].Text</label>
 
-            @Html.ValidationMessageFor(model => model.AllQuestions[i].SelectedAnswer, "", new { @class = "text-danger" })
-            <br />
+            @Html.ValidationMessageFor(model => model.AllQuestions[i].SelectedAnswer, "", new {@class = "text-danger"})
+            <br/>
 
-            @Html.Label("Disagree", new { @class = "text-warning" })
+            @Html.Label("Disagree", new {@class = "text-warning"})
             <label></label>
 
             var numberOfAnswers = Model.TypeId == 1 ? 5 : 10;
@@ -28,11 +28,11 @@
             {
                 @Html.HiddenFor(m => m.AllQuestions[i].Id)
                 @Html.HiddenFor(m => m.AllQuestions[i].Text)
-                @Html.RadioButtonFor(m => m.AllQuestions[i].SelectedAnswer, j, new {Name = "AllQuestions["+i+"].SelectedAnswer"})
+                @Html.RadioButtonFor(m => m.AllQuestions[i].SelectedAnswer, j, new {Name = "AllQuestions[" + i + "].SelectedAnswer"})
             }
 
             <label></label>
-            @Html.Label("Agree", new {@class="text-info"})
+            @Html.Label("Agree", new {@class = "text-info"})
             <br/>
             <br/>
             <br/>
@@ -40,7 +40,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Submit" class="btn btn-default" />
+                <input type="submit" value="Submit" class="btn btn-default"/>
             </div>
         </div>
     }

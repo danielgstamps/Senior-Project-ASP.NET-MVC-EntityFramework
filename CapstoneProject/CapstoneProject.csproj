@@ -340,6 +340,7 @@
     <Compile Include="ViewModels\AssignedEmployeeData.cs" />
     <Compile Include="ViewModels\AssignRatersViewModel.cs" />
     <Compile Include="ViewModels\EvaluationCreateViewModel.cs" />
+    <Compile Include="ViewModels\RaterPromptViewModel.cs" />
     <Compile Include="ViewModels\ReplaceRaterViewModel.cs" />
     <Compile Include="ViewModels\TakeEvalViewModel.cs" />
     <Compile Include="ViewModels\QuestionViewModel.cs" />
@@ -426,6 +427,7 @@
     <Content Include="Views\Evaluations\Delete.cshtml" />
     <Content Include="Views\Evaluations\EditRaters.cshtml" />
     <Content Include="Views\Evaluations\ReplaceRater.cshtml" />
+    <Content Include="Views\Raters\RaterPrompt.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,19 @@
+﻿@model CapstoneProject.ViewModels.RaterPromptViewModel
+@{
+    ViewBag.Title = "Hello Rater";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Welcome Rater</h2>
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.EvalId)
+    @Html.HiddenFor(m => m.RaterId)
+    @Html.HiddenFor(m => m.Code)
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Click here to begin" class="btn btn-default" />
+        </div>
+    </div>
+}
+

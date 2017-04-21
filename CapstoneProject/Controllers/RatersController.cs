@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
@@ -16,15 +17,46 @@ namespace CapstoneProject.Controllers
     public class RatersController : Controller
     {
         private ApplicationUserManager _userManager;
-        private ApplicationSignInManager _signInManager;
-        private readonly ApplicationDbContext _userDb = new ApplicationDbContext();
-
+                                         
         public IUnitOfWork UnitOfWork { get; set; } = new UnitOfWork();
 
         public ApplicationUserManager UserManager
         {
             get { return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
             private set { _userManager = value; }
+        }
+
+        public ApplicationSignInManager SignInManager
+        {
+            get { return HttpContext.GetOwinContext().Get<ApplicationSignInManager>(); }
+        }
+
+        // GET
+        public async Task<ActionResult> RaterPrompt(int id, int raterId, string code)
+        {
+            var rater = UnitOfWork.RaterRepository.GetByID(raterId);
+            var raterUser = UserManager.FindByName(rater.Email);
+            var codeIsValid = UserManager.VerifyUserTokenAsync(raterUser.Id, "RaterLogin", code);
+            if (codeIsValid.Result)
+            {
+                await SignInManager.SignInAsync(raterUser, false, false);
+            }
+
+            var model = new RaterPromptViewModel
+            {
+                EvalId = id,
+                RaterId = raterId,
+                Code = code
+            };
+
+            return View("RaterPrompt", model);
+        }
+
+        // POST
+        [HttpPost]
+        public ActionResult RaterPrompt(RaterPromptViewModel model)
+        {
+            return RedirectToAction("TakeEvaluation", "Evaluations", new { id = model.EvalId, raterId = model.RaterId, code = model.Code});
         }
 
         // Send Notification Emails
@@ -52,7 +84,7 @@ namespace CapstoneProject.Controllers
             var empLastName = rater.Evaluation.Employee.LastName;
             var code = UserManager.GenerateUserToken("RaterLogin", userAccount.Id);
 
-            var callbackUrl = Url.Action("TakeEvaluation", "Evaluations", new { id = evaluation.EvaluationID, raterId, code }, Request.Url.Scheme);
+            var callbackUrl = Url.Action("RaterPrompt", "Raters", new { id = evaluation.EvaluationID, raterId, code }, Request.Url.Scheme);
             var emailSubject = "Evaluate Your Fellow Employee";
 
             var emailBody =
@@ -91,7 +123,6 @@ namespace CapstoneProject.Controllers
                 EmailConfirmed = true
             };
 
-            //const string userPwd = "123123";
             var result = UserManager.Create(user);
             if (result.Succeeded)
             {
