@@ -55,29 +55,20 @@ namespace CapstoneProject.Controllers
             }
 
             var eval = UnitOfWork.EvaluationRepository.GetByID(id);
-            if (eval == null)
+            if (eval == null || !string.IsNullOrEmpty(eval.SelfAnswers))
             {
-                return HttpNotFound();
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
+            var employee = UnitOfWork.EmployeeRepository.GetByID(eval.EmployeeID);
 
             // If raterId is null, this is an employee taking their eval. Make sure the logged-in user is correct.
             if (raterId == null)
             {
-                var employee = UnitOfWork.EmployeeRepository.GetByID(eval.EmployeeID);
                 if (employee == null || !employee.Email.Equals(User.Identity.GetUserName()))
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
                 }
-            }
-            else // if raterId is not null, authenticate the rater.
-            { 
-                //var rater = UnitOfWork.RaterRepository.GetByID(raterId);
-                //var raterUser = UserManager.FindByName(rater.Email);
-                //var codeIsValid = UserManager.VerifyUserTokenAsync(raterUser.Id, "RaterLogin", code);
-                //if (codeIsValid.Result)
-                //{
-                //    SignInManager.SignIn(raterUser, false, false);
-                //}
             }
 
             var model = new TakeEvalViewModel
@@ -102,6 +93,7 @@ namespace CapstoneProject.Controllers
                 }
             }
 
+            ViewBag.EmployeeName = employee.FirstName + " " + employee.LastName;
             return View("TakeEvaluation", model);
         }
 
