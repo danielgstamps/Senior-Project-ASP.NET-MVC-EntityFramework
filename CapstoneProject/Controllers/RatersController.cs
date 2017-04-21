@@ -32,12 +32,29 @@ namespace CapstoneProject.Controllers
         }
 
         // GET RaterPrompt
-        public async Task<ActionResult> RaterPrompt(int id, int raterId, string code)
+        public async Task<ActionResult> RaterPrompt(int? id, int? raterId, string code)
         {
+            if (id == null || raterId == null || string.IsNullOrEmpty(code))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
             var rater = UnitOfWork.RaterRepository.GetByID(raterId);
+            if (rater == null)
+            {
+                ViewBag.RaterError = "This evaluation is no longer available.";
+                return View("ThankYou");
+            }
+
+            if (rater.Disabled)
+            {
+                ViewBag.RaterError = "This evaluation is no longer available.";
+                return View("ThankYou");
+            }
+
             if (!string.IsNullOrEmpty(rater.Answers))
             {
-                ViewBag.AlreadyComplete = "You have already completed this evaluation.";
+                ViewBag.RaterError = "You have already completed this evaluation.";
                 return View("ThankYou");
             }
 
@@ -55,8 +72,8 @@ namespace CapstoneProject.Controllers
 
             var model = new RaterPromptViewModel
             {
-                EvalId = id,
-                RaterId = raterId,
+                EvalId = id.Value,
+                RaterId = raterId.Value,
                 Code = code
             };
 
@@ -68,6 +85,19 @@ namespace CapstoneProject.Controllers
         [HttpPost]
         public ActionResult RaterPrompt(RaterPromptViewModel model)
         {
+            var eval = UnitOfWork.EvaluationRepository.GetByID(model.EvalId);
+            if (eval == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var rater = UnitOfWork.RaterRepository.GetByID(model.RaterId);
+            if (rater == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            ViewBag.TakeEvalHeader = "Evaluating " + eval.Employee.FirstName + " " + eval.Employee.LastName + " as a " + rater.Role;
             return RedirectToAction("TakeEvaluation", "Evaluations", new { id = model.EvalId, raterId = model.RaterId, code = model.Code});
         }
 
@@ -122,19 +152,12 @@ namespace CapstoneProject.Controllers
             var emailBody =
             "Hello " + rater.Name + "! You have been selected by " +
             empFirstName + " " + empLastName +
-            " as a Rater for one of their evaluations. Please click the link below to complete the " +
-            "following evaluation before the close date:" +
-            "\r\n\r\n" +
-            "Employee: " + empFirstName + " " + empLastName +
-            "\r\n" +
-            "Type: " + evaluation.Type.TypeName +
-            "\r\n" +
-            "Stage: " + evaluation.Stage.StageName +
-            "\r\n" +
-            "Open Date: " + evaluation.OpenDate.Date.ToString("d") +
-            "\r\n" +
-            "Close Date: " + evaluation.CloseDate.Date.ToString("d") +
-            "\r\n\r\n" +
+            " as a " + rater.Role + " for one of their evaluations. Please click the link below to complete the " +
+            "following evaluation before the close date:" + "\r\n\r\n" +
+            "Employee: " + empFirstName + " " + empLastName + "\r\n" +
+            "Type: " + evaluation.Type.TypeName + "\r\n" + "Stage: " + evaluation.Stage.StageName + "\r\n" +
+            "Open Date: " + evaluation.OpenDate.Date.ToString("d") + "\r\n" +
+            "Close Date: " + evaluation.CloseDate.Date.ToString("d") + "\r\n\r\n" +
             "Click <a href=\"" + callbackUrl + "\">here</a> to evaluate " + empFirstName + " " + empLastName + ".";
 
             UserManager.SendEmail(userAccount.Id, emailSubject, emailBody);
