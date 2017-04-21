@@ -49,6 +49,7 @@ namespace CapstoneProject.Controllers
                 Code = code
             };
 
+            ViewBag.RaterName = rater.Name;
             return View("RaterPrompt", model);
         }
 

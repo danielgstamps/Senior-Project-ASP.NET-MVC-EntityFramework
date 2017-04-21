@@ -55,17 +55,19 @@ namespace CapstoneProject.Controllers
             }
 
             var eval = UnitOfWork.EvaluationRepository.GetByID(id);
-            if (eval == null || !string.IsNullOrEmpty(eval.SelfAnswers))
+            if (eval == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
             var employee = UnitOfWork.EmployeeRepository.GetByID(eval.EmployeeID);
 
-            // If raterId is null, this is an employee taking their eval. Make sure the logged-in user is correct.
+            // If raterId is null, this is an employee taking their eval. Make sure the logged-in user is correct and hasn't already finished this eval.
             if (raterId == null)
             {
-                if (employee == null || !employee.Email.Equals(User.Identity.GetUserName()))
+                if (employee == null || 
+                    !employee.Email.Equals(User.Identity.GetUserName()) ||
+                    !string.IsNullOrEmpty(eval.SelfAnswers))
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
                 }

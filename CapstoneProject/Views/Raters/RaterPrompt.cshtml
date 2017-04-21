@@ -3,17 +3,39 @@
     ViewBag.Title = "Hello Rater";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<script>
+    window.setTimeout(function () {
+        window.location.href = '@Url.Action("TakeEvaluation", "Evaluations", new { id = Model.EvalId, raterId = Model.RaterId, code = Model.Code })';
+    }, 4000);
 
-<h2>Welcome Rater</h2>
+    window.onload = function () {
+        var timerElement = document.getElementById('timer'),
+            seconds = 4,
+            second = 0,
+            interval;
+
+        interval = setInterval(function () {
+            timerElement.firstChild.data = "Redirecting you to the evaluation... " + (seconds - second);
+            if (second >= seconds) {
+                clearInterval(interval);
+            }
+
+            second++;
+        }, 1000);
+    }
+</script>
+
+<h2>Hello @ViewBag.RaterName</h2>
+<h4 id="timer">Redirecting you to the evaluation... 5</h4>
+<h4>If you aren't automatically redirected, click 
+    @Html.ActionLink("here", "TakeEvaluation", "Evaluations", 
+        new { id = Model.EvalId, raterId = Model.RaterId, code = Model.Code }, null).
+</h4>
+
 @using (Html.BeginForm())
 {
     @Html.HiddenFor(m => m.EvalId)
     @Html.HiddenFor(m => m.RaterId)
     @Html.HiddenFor(m => m.Code)
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Click here to begin" class="btn btn-default" />
-        </div>
-    </div>
 }
 
