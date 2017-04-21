@@ -81,26 +81,6 @@ namespace CapstoneProject.Controllers
             return View("RaterPrompt", model);
         }
 
-        // POST RaterPrompt
-        [HttpPost]
-        public ActionResult RaterPrompt(RaterPromptViewModel model)
-        {
-            var eval = UnitOfWork.EvaluationRepository.GetByID(model.EvalId);
-            if (eval == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var rater = UnitOfWork.RaterRepository.GetByID(model.RaterId);
-            if (rater == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            ViewBag.TakeEvalHeader = "Evaluating " + eval.Employee.FirstName + " " + eval.Employee.LastName + " as a " + rater.Role;
-            return RedirectToAction("TakeEvaluation", "Evaluations", new { id = model.EvalId, raterId = model.RaterId, code = model.Code});
-        }
-
         // RaterCleanup
         public ActionResult RaterCleanup(int? id)
         {
@@ -114,6 +94,9 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+ 
+            HttpContext.GetOwinContext().Authentication.SignOut(DefaultAuthenticationTypes.ApplicationCookie, DefaultAuthenticationTypes.ExternalCookie);
+            Session.Abandon();
 
             var raterUserAccount = UserManager.FindByEmail(rater.Email);
             UserManager.Delete(raterUserAccount);
