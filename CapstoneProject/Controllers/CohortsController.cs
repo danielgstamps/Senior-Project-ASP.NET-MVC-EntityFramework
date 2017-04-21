@@ -247,9 +247,9 @@ namespace CapstoneProject.Controllers
             else
             {
                 var callbackUrl = Url.Action("EmployeeEvalsIndex", "Evaluations", new {id = evaluation.EmployeeID}, Request.Url.Scheme);
-                emailBody += "Click <a href=\"" + callbackUrl + "\">here</a> to view your evaluations, and check back once they open";
+                emailBody += "Click <a href=\"" + callbackUrl + "\">here</a> to view all of your evaluations, and check back once they open.";
                 emailSubject += " Opens " + evaluation.OpenDate.ToString("d");
-            }
+            } 
 
             UserManager.SendEmail(userAccount.Id, emailSubject, emailBody);
         }

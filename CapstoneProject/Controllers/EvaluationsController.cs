@@ -65,11 +65,28 @@ namespace CapstoneProject.Controllers
             // If raterId is null, this is an employee taking their eval. Make sure the logged-in user is correct and hasn't already finished this eval.
             if (raterId == null)
             {
-                if (employee == null || 
-                    !employee.Email.Equals(User.Identity.GetUserName()) ||
-                    !string.IsNullOrEmpty(eval.SelfAnswers))
+                if (employee == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                if (!employee.Email.Equals(User.Identity.GetUserName()))
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+                }
+                if (!string.IsNullOrEmpty(eval.SelfAnswers))
+                {
+                    TempData["EvalAlreadyComplete"] = "You have already completed this evaluation.";
+                    return RedirectToAction("EmployeeEvalsIndex", new { id = employee.EmployeeID });
+                }
+                if (eval.OpenDate > DateTime.Today.Date)
+                {
+                    TempData["EvalNotYetOpen"] = "This evaluation is not open yet.";
+                    return RedirectToAction("EmployeeEvalsIndex", new { id = employee.EmployeeID });
+                }
+                if (eval.CloseDate <= DateTime.Today.Date)
+                {
+                    TempData["EvalClosed"] = "This evaluation is closed.";
+                    return RedirectToAction("EmployeeEvalsIndex", new { id = employee.EmployeeID });
                 }
             }
 
@@ -106,6 +123,7 @@ namespace CapstoneProject.Controllers
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
+
                 ViewBag.TakeEvalHeader = "Evaluating " + eval.Employee.FirstName + " " + eval.Employee.LastName +
                                          " as a " + rater.Role + ".";
             }

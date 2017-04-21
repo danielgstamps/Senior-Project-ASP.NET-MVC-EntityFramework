@@ -39,6 +39,11 @@ namespace CapstoneProject.Models
             }
         }
 
+        //public bool AllEvalsComplete()
+        //{
+            
+        //}
+
         public string EvalOpenDate(int typeId)
         {
             try

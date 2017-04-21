@@ -8,6 +8,9 @@
 <h2>Evaluations for @User.Identity.Name</h2>
 <h4 class="alert-success">@TempData["TakeEvalSuccess"]</h4>
 <h4 class="alert-success">@TempData["EditRaterSuccess"]</h4>
+<h4 class="alert-warning">@TempData["EvalAlreadyComplete"]</h4>
+<h4 class="alert-warning">@TempData["EvalNotYetOpen"]</h4>
+<h4 class="alert-warning">@TempData["EvalClosed"]</h4>
 
 <table class="table">
     <tr>
@@ -53,7 +56,7 @@
                     <label> | </label>
                     @Html.ActionLink("View", "Details", new { id = item.EvaluationID })
                 }
-                else if (item.OpenDate <= DateTime.Today && !item.IsComplete())
+                else if (item.OpenDate <= DateTime.Today && !item.IsComplete() && item.CloseDate > DateTime.Today)
                 {
                     @Html.ActionLink("Start Evaluation", "TakeEvaluation", new { id = item.EvaluationID })
                     <label> | </label>
@@ -65,9 +68,9 @@
                 {
                     <label class="alert-info">Opens @item.OpenDate.Date.ToString("d")</label>
                 }
-                else if (item.CloseDate < DateTime.Today)
+                else if (item.CloseDate <= DateTime.Today)
                 {
-                    <label class="alert-danger">Closed @item.CloseDate.Date.ToString("d")</label>
+                    <label class="alert-warning">Closed @item.CloseDate.Date.ToString("d")</label>
                 }
             </td>
             <td>

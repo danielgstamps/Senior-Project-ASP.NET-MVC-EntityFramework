@@ -40,13 +40,14 @@ namespace CapstoneProject.Controllers
             }
 
             var rater = UnitOfWork.RaterRepository.GetByID(raterId);
-            if (rater == null)
+            var eval = UnitOfWork.EvaluationRepository.GetByID(id);
+            if (rater == null || eval == null)
             {
                 ViewBag.RaterError = "This evaluation is no longer available.";
                 return View("ThankYou");
             }
 
-            if (rater.Disabled)
+            if (eval.CloseDate <= DateTime.Today || rater.Disabled)
             {
                 ViewBag.RaterError = "This evaluation is no longer available.";
                 return View("ThankYou");
@@ -116,7 +117,7 @@ namespace CapstoneProject.Controllers
             var evalId = rater.Evaluation.EvaluationID;
             SendRaterEmail(raterId.Value, evalId);
 
-            TempData["EmailSuccess"] = "Sent notification email to " + rater.Name;
+            TempData["EmailSuccess"] = "Sent notification email to " + rater.Email;
             return RedirectToAction("EditRaters", "Evaluations", new { id = evalId });
         }
 

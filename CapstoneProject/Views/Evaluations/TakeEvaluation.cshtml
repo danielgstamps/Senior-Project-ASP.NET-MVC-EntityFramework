@@ -28,7 +28,7 @@
             {
                 @Html.HiddenFor(m => m.AllQuestions[i].Id)
                 @Html.HiddenFor(m => m.AllQuestions[i].Text)
-                @Html.RadioButtonFor(m => m.AllQuestions[i].SelectedAnswer, j, new {Name = "AllQuestions[" + i + "].SelectedAnswer"})
+                @Html.RadioButtonFor(m => m.AllQuestions[i].SelectedAnswer, j, new {Name = "AllQuestions["+i+"].SelectedAnswer"})
             }
 
             <label></label>

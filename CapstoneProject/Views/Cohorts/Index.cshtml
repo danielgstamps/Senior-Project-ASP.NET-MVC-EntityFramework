@@ -52,8 +52,9 @@
                 @if (item.Employees.Count == 0)
                 {
                     <label class="alert-warning">Empty</label>
-                } 
+                }
 
+                @* and they aren't all finished *@
                 @if (item.HasOpenEval(1))
                 {
                     <label class="alert-warning">Type 1 in progress</label>
@@ -75,7 +76,8 @@
                     <label> ) </label>
                     if (item.Type2Assigned){ <br /> }
                 }
-                
+
+                @* and they aren't all finished *@
                 @if (item.HasOpenEval(2))
                 {
                     <label class="alert-warning">Type 2 in progress</label>

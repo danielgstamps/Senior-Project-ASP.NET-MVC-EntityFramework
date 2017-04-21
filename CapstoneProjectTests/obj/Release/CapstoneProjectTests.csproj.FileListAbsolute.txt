@@ -279,9 +279,11 @@ C:\Users\csuser\Desktop\WUDSCO\CapstoneProjectTests\bin\Release\Owin.dll
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProjectTests\bin\Release\EntityFramework.dll
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProjectTests\bin\Release\Microsoft.AspNet.Identity.EntityFramework.dll
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProjectTests\bin\Release\LumenWorks.Framework.IO.dll
+C:\Users\csuser\Desktop\WUDSCO\CapstoneProjectTests\bin\Release\itextsharp.dll
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProjectTests\bin\Release\Microsoft.Owin.Security.Cookies.dll
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProjectTests\bin\Release\Microsoft.Owin.Host.SystemWeb.dll
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProjectTests\bin\Release\WebGrease.dll
+C:\Users\csuser\Desktop\WUDSCO\CapstoneProjectTests\bin\Release\MvcRazorToPdf.dll
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProjectTests\bin\Release\Antlr3.Runtime.dll
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProjectTests\bin\Release\CapstoneProject.pdb
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProjectTests\bin\Release\Castle.Core.xml
@@ -301,6 +303,7 @@ C:\Users\csuser\Desktop\WUDSCO\CapstoneProjectTests\bin\Release\EntityFramework.
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProjectTests\bin\Release\Microsoft.AspNet.Identity.EntityFramework.xml
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProjectTests\bin\Release\LumenWorks.Framework.IO.pdb
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProjectTests\bin\Release\LumenWorks.Framework.IO.xml
+C:\Users\csuser\Desktop\WUDSCO\CapstoneProjectTests\bin\Release\itextsharp.xml
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProjectTests\bin\Release\Microsoft.Owin.Security.Cookies.xml
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProjectTests\bin\Release\Microsoft.Owin.Host.SystemWeb.xml
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProjectTests\bin\Release\Antlr3.Runtime.pdb
