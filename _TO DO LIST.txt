@@ -1,8 +1,7 @@
 CLONE URL: https://wudsco.visualstudio.com/_git/WUDSCO
 
 - rater takeEval
-	- fix weird login-refresh bug
-	- post
+	-auto logout
 - closeEval logic (cohort flags)
 - stages fix
 - reports

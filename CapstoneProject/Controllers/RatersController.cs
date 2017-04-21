@@ -35,11 +35,22 @@ namespace CapstoneProject.Controllers
         public async Task<ActionResult> RaterPrompt(int id, int raterId, string code)
         {
             var rater = UnitOfWork.RaterRepository.GetByID(raterId);
+            if (!string.IsNullOrEmpty(rater.Answers))
+            {
+                ViewBag.AlreadyComplete = "You have already completed this evaluation.";
+                return View("ThankYou");
+            }
+
             var raterUser = UserManager.FindByName(rater.Email);
             var codeIsValid = UserManager.VerifyUserTokenAsync(raterUser.Id, "RaterLogin", code);
+
             if (codeIsValid.Result)
             {
                 await SignInManager.SignInAsync(raterUser, false, false);
+            }
+            else
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }
 
             var model = new RaterPromptViewModel
@@ -67,8 +78,16 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            // Logout rater
-            // delete account
+
+            var rater = UnitOfWork.RaterRepository.GetByID(id);
+            if (rater == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var raterUserAccount = UserManager.FindByEmail(rater.Email);
+            UserManager.Delete(raterUserAccount);
+
             return View("ThankYou");
         }
 

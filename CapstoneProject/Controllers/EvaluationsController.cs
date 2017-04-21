@@ -131,11 +131,15 @@ namespace CapstoneProject.Controllers
 
             // Rater is taking the evaluation
             var rater = UnitOfWork.RaterRepository.GetByID(model.RaterId);
-            if (rater == null || !rater.Email.Equals(User.Identity.GetUserName()))
+            if (rater == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-                
+            if (!rater.Email.Equals(User.Identity.GetUserName()))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+            }
+
             rater.Answers = ConvertAnswersToString(model.AllQuestions);
             UnitOfWork.Save();
             return RedirectToAction("RaterCleanup", "Raters", new {id = rater.RaterID});
