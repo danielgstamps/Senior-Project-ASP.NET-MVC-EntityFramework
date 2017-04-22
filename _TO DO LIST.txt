@@ -1,18 +1,10 @@
 CLONE URL: https://wudsco.visualstudio.com/_git/WUDSCO
 
-- stages? Seem to be working?
+- reports
 - reset password invalid token
 	- maybe just reroute it to generate password if they don't have one?
 - delete rater account if they close page early
-- reports
-- make sure emps cant enter themselves as raters
-- disable rater editing if eval is closed
-- set typexAssigned after edits
-- type 2 answer storage?
-- name and email@address.com show up in assignRaters? Happened with Supervisee (may have been from a previous rater)
-- ban emp email from assignraters
 - (maybe) prevent spamming email links.
-- limit createEval rater fields to 0.
 
 Eval breakdown:
 3 stages: baseline -> formative -> summative
@@ -54,7 +46,7 @@ Reports:
 	- find employee by cohort? Type/Stage filter optional?
 	- "suppose the user chose to create a report for userid=3, stage=baseline, type=type1 on [date]."
 	
-- pdf format, or "at least provide a view."
+- pdf format
 - Shows:
 	- Employee name
 	- Eval stage

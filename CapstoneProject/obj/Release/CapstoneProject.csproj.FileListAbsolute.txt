@@ -773,6 +773,13 @@ C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.
 C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.AddedEnabledFieldToRater.resources
 C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.RaterEnabledDefaultsTrue.resources
 C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.ChangedRaterEnabledToDisabled.resources
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\bin\itextsharp.dll
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\bin\itextsharp.xmlworker.dll
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\bin\MvcRazorToPdf.dll
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\bin\itextsharp.xml
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.csprojResolveAssemblyReference.cache
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.RaterFirstLastNameNowJustName.resources
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.ForgotToRemoveLastNameFromRater.resources
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\ApplicationInsights.config
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\roslyn\csc.exe
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
@@ -861,6 +868,7 @@ C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\Microsoft.Owin.Security.OAuth
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\Microsoft.Owin.Security.Google.xml
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\Microsoft.Owin.Security.Twitter.xml
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.csprojResolveAssemblyReference.cache
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.Init.resources
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.CohortsNullable.resources
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.EvaluationRefactor.resources
@@ -890,10 +898,3 @@ C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.UserM
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.csproj.GenerateResource.Cache
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.dll
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.pdb
-C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\bin\itextsharp.dll
-C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\bin\itextsharp.xmlworker.dll
-C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\bin\MvcRazorToPdf.dll
-C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\bin\itextsharp.xml
-C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.csprojResolveAssemblyReference.cache
-C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.RaterFirstLastNameNowJustName.resources
-C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.ForgotToRemoveLastNameFromRater.resources
