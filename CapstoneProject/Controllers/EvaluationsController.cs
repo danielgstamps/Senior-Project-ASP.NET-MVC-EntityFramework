@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Mail;
-using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using CapstoneProject.DAL;
@@ -12,7 +10,6 @@ using CapstoneProject.ViewModels;
 using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security;
 
 namespace CapstoneProject.Controllers
 {
@@ -443,6 +440,11 @@ namespace CapstoneProject.Controllers
 
             TempData["ReplaceRaterSuccess"] = "Successfully replaced rater.";
             return RedirectToAction("EditRaters", new { id = eval.EvaluationID });
+        }
+
+        public ActionResult Report(int? id)
+        {
+            return View("Report", this.UnitOfWork.EvaluationRepository.GetByID(id));
         }
 
         // GET: Evaluations/Details/5
