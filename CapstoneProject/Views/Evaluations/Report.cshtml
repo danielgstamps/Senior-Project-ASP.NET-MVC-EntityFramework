@@ -29,12 +29,13 @@
         var questionNumber = 1;
         foreach (var question in category.Questions)
         {
+            var answer = Model.SelfAnswers.Split(',')[0];
             <tr>
                 <td>
                     Question @questionNumber
                 </td>
                 <td>
-                    
+                    @answer
                 </td>
             </tr>
             questionNumber++;
