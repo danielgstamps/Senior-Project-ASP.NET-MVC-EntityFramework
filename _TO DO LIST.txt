@@ -1,11 +1,10 @@
 CLONE URL: https://wudsco.visualstudio.com/_git/WUDSCO
 
-- closeEval logic (cohort flags)
-	- when raters finish
-	- when emp finished & 0 raters
-	- cohortIndex labels
-	- helper methods in cohort model probably need adjusting.
-- stages fix
+- stages
+- reset password invalid token
+	- maybe just reroute it to generate password if they don't have one?
+- delete rater account if they close page early
+- emails link to same eval for all employees
 - reports
 
 Eval breakdown:

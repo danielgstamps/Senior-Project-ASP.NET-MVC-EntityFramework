@@ -50,13 +50,15 @@ namespace CapstoneProject.Controllers
             if (eval.CloseDate <= DateTime.Today || rater.Disabled)
             {
                 ViewBag.RaterError = "This evaluation is no longer available.";
-                return View("ThankYou");
+                return RedirectToAction("RaterCleanup", "Raters", new { id = raterId });
+                // return View("ThankYou");
             }
 
             if (!string.IsNullOrEmpty(rater.Answers))
             {
                 ViewBag.RaterError = "You have already completed this evaluation.";
-                return View("ThankYou");
+                return RedirectToAction("RaterCleanup", "Raters", new { id = raterId });
+                // return View("ThankYou");
             }
 
             var raterUser = UserManager.FindByName(rater.Email);
@@ -100,7 +102,10 @@ namespace CapstoneProject.Controllers
             Session.Abandon();
 
             var raterUserAccount = UserManager.FindByEmail(rater.Email);
-            UserManager.Delete(raterUserAccount);
+            if (raterUserAccount != null)
+            {
+                UserManager.Delete(raterUserAccount);
+            }
 
             return View("ThankYou");
         }

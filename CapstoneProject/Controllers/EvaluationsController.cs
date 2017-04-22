@@ -132,6 +132,7 @@ namespace CapstoneProject.Controllers
             return View("TakeEvaluation", model);
         }
 
+        // POST: TakeEval
         [HttpPost]
         public ActionResult TakeEvaluation(TakeEvalViewModel model)
         {
@@ -156,10 +157,13 @@ namespace CapstoneProject.Controllers
                 eval.SelfAnswers = ConvertAnswersToString(model.AllQuestions);
                 eval.CompletedDate = DateTime.Now;
                 UnitOfWork.Save();
+                if (eval.Raters.Count > 0)
+                {
+                    return RedirectToAction("AssignRaters", new {id = eval.EvaluationID});
+                }
 
-                return eval.Raters.Count > 0 ? 
-                    RedirectToAction("AssignRaters", new {id = eval.EvaluationID}) : 
-                    RedirectToAction("EmployeeEvalsIndex", new {id = eval.EmployeeID});
+                CheckCohortAndResetFlags(eval.Employee.CohortID);
+                return RedirectToAction("EmployeeEvalsIndex", new {id = eval.EmployeeID});
             }
 
             // Rater is taking the evaluation
@@ -175,6 +179,7 @@ namespace CapstoneProject.Controllers
 
             rater.Answers = ConvertAnswersToString(model.AllQuestions);
             UnitOfWork.Save();
+            CheckCohortAndResetFlags(eval.Employee.CohortID);
             return RedirectToAction("RaterCleanup", "Raters", new {id = rater.RaterID});
         }
 
@@ -267,29 +272,6 @@ namespace CapstoneProject.Controllers
             {
                 rater.Name = model.Raters[i].Name;
                 rater.Email = model.Raters[i].Email;
-
-                //if (ModelState.IsValid)
-                //{
-                //    MailMessage mail = new MailMessage();
-                //    mail.To.Add(rater.Email);
-                //    mail.From = new MailAddress("admin@gmail.com");
-                //    mail.Subject = "Evaluation";
-                //    var Body = "";
-                //    mail.Body = Body;
-                //    mail.IsBodyHtml = true;
-                //    var smtp = new SmtpClient
-                //    {
-                //        Host = "smtp.gmail.com",
-                //        Port = 587,
-                //        UseDefaultCredentials = false,
-                //        Credentials = new NetworkCredential
-                //            ("admin@gmail.com", "123123"),
-                //        EnableSsl = true
-                //    };
-                //    // Enter seders User name and password
-                //    smtp.Send(mail);
-                //}
-
                 UnitOfWork.Save();
                 i++;
             }
@@ -468,7 +450,7 @@ namespace CapstoneProject.Controllers
             }
 
             var answersList = ConvertAnswersToList(evaluation.SelfAnswers);
-            var model = new ViewEvalViewModel()
+            var model = new ViewEvalViewModel
             {
                 Eval = evaluation,
                 QuestionList = questionList,
@@ -690,9 +672,14 @@ namespace CapstoneProject.Controllers
             // Remove target evals
             foreach (var emp in cohort.Employees)
             {
-                // If this throws an exception, that means an employee has more than 1 eval of the same type. Which it shouldn't. That'd be bad.
+                // If this throws an exception, that means an employee has more than 1 incomplete eval of the same type. Which should be impossible.
                 var eval = emp.Evaluations.Single(e => !e.IsComplete() && e.TypeID == model.TypeID);
                 UnitOfWork.EvaluationRepository.Delete(eval.EvaluationID);
+                foreach (var rater in eval.Raters)
+                {
+                    var raterUserAccount = UserManager.FindByEmail(rater.Email);
+                    UserManager.Delete(raterUserAccount);
+                }
                 UnitOfWork.Save();
             }
 
@@ -847,6 +834,32 @@ namespace CapstoneProject.Controllers
             }
 
             return raters;
+        }
+
+        private void CheckCohortAndResetFlags(int? cohortId)
+        {
+            if (cohortId == null)
+            {
+                return;
+            }
+
+            var cohort = UnitOfWork.CohortRepository.GetByID(cohortId);
+            if (cohort == null)
+            {
+                return;
+            }
+
+            if (cohort.AllEvalsOfTypeComplete(1))
+            {
+                cohort.Type1Assigned = false;
+            }
+
+            if (cohort.AllEvalsOfTypeComplete(2))
+            {
+                cohort.Type2Assigned = false;
+            }
+
+            UnitOfWork.Save();
         }
 
         protected override void Dispose(bool disposing)
