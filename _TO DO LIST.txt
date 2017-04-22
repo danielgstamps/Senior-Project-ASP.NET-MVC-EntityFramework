@@ -1,11 +1,18 @@
 CLONE URL: https://wudsco.visualstudio.com/_git/WUDSCO
 
-- stages
+- stages? Seem to be working?
 - reset password invalid token
 	- maybe just reroute it to generate password if they don't have one?
 - delete rater account if they close page early
-- emails link to same eval for all employees
 - reports
+- make sure emps cant enter themselves as raters
+- disable rater editing if eval is closed
+- set typexAssigned after edits
+- type 2 answer storage?
+- name and email@address.com show up in assignRaters? Happened with Supervisee (may have been from a previous rater)
+- ban emp email from assignraters
+- (maybe) prevent spamming email links.
+- limit createEval rater fields to 0.
 
 Eval breakdown:
 3 stages: baseline -> formative -> summative

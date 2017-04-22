@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Web;
 using System.Web.Mvc;
 using CapstoneProject.DAL;
@@ -189,7 +190,7 @@ namespace CapstoneProject.Controllers
         }
 
         // GET AssignRaters
-        public ActionResult AssignRaters(int? id)
+        public ActionResult AssignRaters(int? id) //evalId
         {
             if (id == null)
             {
@@ -272,6 +273,12 @@ namespace CapstoneProject.Controllers
                 return RedirectToAction("AssignRaters", new { id = model.EvalId });
             }
 
+            if (model.Raters.Any(r => r.Email.Equals(eval.Employee.Email)))
+            {
+                TempData["DuplicateError"] = "Nice try. You can't rate yourself.";
+                return RedirectToAction("AssignRaters", new { id = eval.EvaluationID });
+            }
+
             var i = 0;
             foreach (var rater in eval.Raters)
             {
@@ -323,16 +330,22 @@ namespace CapstoneProject.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
+            var eval = UnitOfWork.EvaluationRepository.GetByID(model.EvalId);
+            if (eval == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
             if (model.Raters.DistinctBy(r => r.Email).Count() != model.Raters.Count)
             {
                 TempData["DuplicateError"] = "Please enter a unique email address for each rater.";
                 return RedirectToAction("EditRaters", new { id = model.EvalId });
             }
 
-            var eval = UnitOfWork.EvaluationRepository.GetByID(model.EvalId);
-            if (eval == null)
+            if (model.Raters.Any(r => r.Email.Equals(eval.Employee.Email)))
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                TempData["DuplicateError"] = "Nice try. You can't rate yourself.";
+                return RedirectToAction("EditRaters", new { id = model.EvalId });
             }
 
             var i = 0;
@@ -408,6 +421,12 @@ namespace CapstoneProject.Controllers
                 return RedirectToAction("ReplaceRater", new { id = model.RaterToReplace.RaterID });
             }
 
+            if (model.NewRater.Email.Equals(eval.Employee.Email))
+            {
+                TempData["DuplicateError"] = "Nice try. You can't rate yourself.";
+                return RedirectToAction("ReplaceRater", new { id = model.RaterToReplace.RaterID });
+            }
+
             var raterToDisable = UnitOfWork.RaterRepository.GetByID(model.RaterToReplace.RaterID);
             if (raterToDisable == null)
             {
@@ -418,6 +437,18 @@ namespace CapstoneProject.Controllers
             UnitOfWork.Save();
 
             eval.Raters.Add(model.NewRater);
+            UnitOfWork.Save();
+
+            var type = eval.TypeID;
+            switch (type)
+            {
+                case 1:
+                    eval.Employee.Cohort.Type1Assigned = true;
+                    break;
+                case 2:
+                    eval.Employee.Cohort.Type2Assigned = true;
+                    break;
+            }
             UnitOfWork.Save();
 
             TempData["ReplaceRaterSuccess"] = "Successfully replaced rater.";
