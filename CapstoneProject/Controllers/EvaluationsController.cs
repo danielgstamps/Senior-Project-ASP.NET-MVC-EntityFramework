@@ -457,7 +457,8 @@ namespace CapstoneProject.Controllers
 
         public ActionResult Report(int? id)
         {
-            return View("Report", this.UnitOfWork.EvaluationRepository.GetByID(id));
+            var eval = this.UnitOfWork.EvaluationRepository.GetByID(id);
+            return View("Report", eval);
         }
 
         // GET: Evaluations/Details/5
@@ -489,8 +490,8 @@ namespace CapstoneProject.Controllers
                     questionList.Add(question);
                 }
             }
-
-            var answersList = ConvertAnswersToList(evaluation.SelfAnswers);
+            
+            var answersList = evaluation.SelfAnswers.Split(',').ToList();
             var model = new ViewEvalViewModel
             {
                 Eval = evaluation,
@@ -821,24 +822,9 @@ namespace CapstoneProject.Controllers
             var answerString = "";
             foreach (var question in questions)
             {
-                answerString += question.SelectedAnswer.ToString();
+                answerString += question.SelectedAnswer + ",";
             }
             return answerString;
-        }
-
-        private List<string> ConvertAnswersToList(string answers)
-        {
-            var list = new List<string>();
-            for (var i = 0; i < answers.Length; i++)
-            {
-                if (answers[i].Equals('0') && answers[i - 1].Equals('1'))
-                {
-                    list.Add("10");
-                    continue;
-                }
-                list.Add(answers[i].ToString());
-            }
-            return list;
         }
 
         private List<Rater> GenerateRaterList(int numSupervisors, int numCoworkers, int numSupervisees)
