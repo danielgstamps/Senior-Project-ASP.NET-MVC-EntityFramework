@@ -16,22 +16,13 @@
             @Html.DisplayNameFor(model => model.Employee.FirstName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Stage.StageName)
+            @Html.DisplayNameFor(model => model.Employee.LastName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Type.TypeName)
+            @Html.DisplayNameFor(model => model.Stage)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.OpenDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CloseDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CompletedDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.SelfAnswers)
+            @Html.DisplayNameFor(model => model.Type)
         </th>
         <th></th>
     </tr>
@@ -42,22 +33,13 @@
             @Html.DisplayFor(modelItem => item.Employee.FirstName)
         </td>
         <td>
+            @Html.DisplayFor(modelItem => item.Employee.LastName)
+        </td>
+        <td>
             @Html.DisplayFor(modelItem => item.Stage.StageName)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Type.TypeName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.OpenDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CloseDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CompletedDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.SelfAnswers)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.EvaluationID }) |
