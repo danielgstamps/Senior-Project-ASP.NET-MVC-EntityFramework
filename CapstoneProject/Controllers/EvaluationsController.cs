@@ -126,6 +126,7 @@ namespace CapstoneProject.Controllers
 
                 ViewBag.TakeEvalHeader = "Evaluating " + eval.Employee.FirstName + " " + eval.Employee.LastName +
                                          " as a " + rater.Role + ".";
+                ViewBag.TakeEvalSubHeader = "Logged in as " + rater.Name + ".";
             }
 
             return View("TakeEvaluation", model);

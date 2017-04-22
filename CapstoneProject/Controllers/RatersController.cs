@@ -117,7 +117,7 @@ namespace CapstoneProject.Controllers
             var evalId = rater.Evaluation.EvaluationID;
             SendRaterEmail(raterId.Value, evalId);
 
-            TempData["EmailSuccess"] = "Sent notification email to " + rater.Email;
+            TempData["EmailSuccess"] = "Sent notification to " + rater.Email;
             return RedirectToAction("EditRaters", "Evaluations", new { id = evalId });
         }
 

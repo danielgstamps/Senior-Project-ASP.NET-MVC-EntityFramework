@@ -53,9 +53,15 @@
                 {
                     <label class="alert-warning">Empty</label>
                 }
+                
+                @if (item.AllEvalsOfTypeComplete(1))
+                {
+                    <label class="alert-success">Type 1 Complete</label>
+                    if (item.Type2Assigned){ <br /> }
+                    @* view? *@
+                }
 
-                @* and they aren't all finished *@
-                @if (item.HasOpenEval(1))
+                @if (item.HasOpenEval(1) && !item.AllEvalsOfTypeComplete(1))
                 {
                     <label class="alert-warning">Type 1 in progress</label>
                     <label> ( </label>
@@ -76,9 +82,14 @@
                     <label> ) </label>
                     if (item.Type2Assigned){ <br /> }
                 }
+                
+                @if (item.AllEvalsOfTypeComplete(2))
+                {
+                    <label class="alert-success">Type 2 Complete</label>
+                    @* view? *@
+                }
 
-                @* and they aren't all finished *@
-                @if (item.HasOpenEval(2))
+                @if (item.HasOpenEval(2) && !item.AllEvalsOfTypeComplete(2))
                 {
                     <label class="alert-warning">Type 2 in progress</label>
                     <label> ( </label>

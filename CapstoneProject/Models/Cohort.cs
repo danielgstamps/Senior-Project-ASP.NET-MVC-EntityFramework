@@ -39,10 +39,12 @@ namespace CapstoneProject.Models
             }
         }
 
-        //public bool AllEvalsComplete()
-        //{
-            
-        //}
+        public bool AllEvalsOfTypeComplete(int type)
+        {
+            return Employees.All(
+                em => em.Evaluations.Count > 0 && em.Evaluations.Where(ev => ev.TypeID == type).All(
+                     e => e.IsComplete()));
+        }
 
         public string EvalOpenDate(int typeId)
         {
