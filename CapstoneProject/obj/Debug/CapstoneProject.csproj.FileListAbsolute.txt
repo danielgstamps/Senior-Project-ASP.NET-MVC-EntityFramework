@@ -224,3 +224,9 @@ C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.csproj.
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.dll
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.pdb
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.csprojResolveAssemblyReference.cache
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\bin\itextsharp.dll
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\bin\itextsharp.xmlworker.dll
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\bin\MvcRazorToPdf.dll
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\bin\itextsharp.xml
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.DataMigrations.RaterFirstLastNameNowJustName.resources
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.DataMigrations.ForgotToRemoveLastNameFromRater.resources

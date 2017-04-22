@@ -443,10 +443,13 @@
     <Content Include="Views\Raters\RaterPrompt.cshtml" />
     <Content Include="Views\Raters\ThankYou.cshtml" />
     <Content Include="Views\Shared\PdfLayout.cshtml" />
+    <Content Include="Views\Pdf\Index.cshtml" />
+    <Content Include="Views\Pdf\Details.cshtml" />
+    <Content Include="Views\Evaluations\AdminEvalsIndex.cshtml" />
+    <Content Include="Views\Evaluations\Report.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Pdf\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

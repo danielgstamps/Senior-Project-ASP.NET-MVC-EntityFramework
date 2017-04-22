@@ -1,0 +1,50 @@
+﻿@model IEnumerable<CapstoneProject.Models.Evaluation>
+
+@{
+    ViewBag.Title = "AdminEvalsIndex";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>AdminEvalsIndex</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Employee.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Employee.LastName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Stage)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Type)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Employee.FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Employee.LastName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Stage.StageName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Type.TypeName)
+        </td>
+        <td>
+            @Html.ActionLink("View Report", "Report", new { id=item.EvaluationID })
+        </td>
+    </tr>
+}
+
+</table>
