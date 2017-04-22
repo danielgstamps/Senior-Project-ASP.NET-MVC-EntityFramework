@@ -207,10 +207,10 @@ namespace CapstoneProject.Controllers
             }
 
             var employees = cohort.Employees.ToList();
-            var eval = employees.First().Evaluations.Single(e => !e.IsComplete() && e.TypeID == typeId);
 
             foreach (var emp in employees)
             {
+                var eval = emp.Evaluations.Single(e => !e.IsComplete() && e.TypeID == typeId);
                 SendEvaluationEmail(emp.EmployeeID, eval.EvaluationID);
             }
 
