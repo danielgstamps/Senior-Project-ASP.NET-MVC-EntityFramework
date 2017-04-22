@@ -4,6 +4,7 @@
     ViewBag.Title = "Report";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var currentDate = DateTime.Today.ToString().Split(' ')[0];
+    var questionNumber = 1;
 }
 
 <h3>
@@ -26,10 +27,9 @@
                 @category.Name
             </td>
         </tr>
-        var questionNumber = 1;
         foreach (var question in category.Questions)
         {
-            var answer = Model.SelfAnswers.Split(',')[0];
+            var answer = Model.SelfAnswers.Split(',')[questionNumber - 1];
             <tr>
                 <td>
                     Question @questionNumber
