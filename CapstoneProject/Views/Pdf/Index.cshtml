@@ -1,0 +1,23 @@
+﻿@using CapstoneProject.Controllers
+@model IEnumerable<CapstoneProject.Models.Evaluation>
+
+@{
+    ViewBag.Title = "All Evaluations";
+}
+
+<table class="table">
+    <tr>
+        <th>
+            
+        </th>
+    </tr>
+    
+    @foreach (var eval in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayName(eval.Employee.FirstName) @Html.DisplayName(eval.Employee.LastName)
+            </td>
+        </tr>
+    }
+</table>

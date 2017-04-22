@@ -5,20 +5,20 @@ using iTextSharp.text;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI.WebControls;
+using CapstoneProject.DAL;
 using MvcRazorToPdf;
 
 namespace CapstoneProject.Controllers
 {
     public class PdfController : Controller
     {
+        private IUnitOfWork unitOfWork = new UnitOfWork();
+
         // GET: Pdf
         public ActionResult Index()
         {
-            var anon = new
-            {
-                Output = "Print me!"
-            };
-            return new PdfActionResult(anon);
+            return View("Index", this.unitOfWork.EvaluationRepository.Get());
         }
 
         /// <summary>

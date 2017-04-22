@@ -45,6 +45,14 @@ namespace CapstoneProject.Controllers
 
         public IUnitOfWork UnitOfWork { get; set; } = new UnitOfWork();
 
+        [Authorize(Roles = "Admin")]
+        public ActionResult AdminEvalsIndex()
+        {
+            var evalsOrderedByEmployeeID =
+                this.UnitOfWork.EvaluationRepository.Get().OrderBy(e => e.Employee.EmployeeID).ToList();
+            return View("AdminEvalsIndex", evalsOrderedByEmployeeID);
+        }
+
         [AllowAnonymous]
         //GET: Evaluations/TakeEvaluation/5
         public ActionResult TakeEvaluation(int? id, int? raterId, string code)

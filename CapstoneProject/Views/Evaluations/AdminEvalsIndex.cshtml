@@ -1,0 +1,70 @@
+﻿@model IEnumerable<CapstoneProject.Models.Evaluation>
+
+@{
+    ViewBag.Title = "AdminEvalsIndex";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>AdminEvalsIndex</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Employee.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Stage.StageName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Type.TypeName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OpenDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CloseDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CompletedDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SelfAnswers)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Employee.FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Stage.StageName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Type.TypeName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OpenDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CloseDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CompletedDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SelfAnswers)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.EvaluationID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.EvaluationID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.EvaluationID })
+        </td>
+    </tr>
+}
+
+</table>
