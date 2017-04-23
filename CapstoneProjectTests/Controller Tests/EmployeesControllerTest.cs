@@ -102,5 +102,11 @@ namespace CapstoneProjectTests
 
             this.mockUnitOfWork.Verify(m => m.EmployeeRepository.Update(employeeToUpdate), Times.Once);
         }
+
+        [TestMethod]
+        public void TestEdit()
+        {
+
+        }
     }
 }

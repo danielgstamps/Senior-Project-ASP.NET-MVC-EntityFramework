@@ -90,6 +90,11 @@ namespace CapstoneProjectTests
             this.mockUnitOfWork.Verify(m => m.QuestionRepository.Update(questionToUpdate), Times.Once);
         }
 
+        [TestMethod]
+        public void TestEdit()
+        {
+
+        }
 
     }
 }
