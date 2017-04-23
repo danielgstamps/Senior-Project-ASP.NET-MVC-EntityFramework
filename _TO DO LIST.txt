@@ -1,10 +1,14 @@
 CLONE URL: https://wudsco.visualstudio.com/_git/WUDSCO
 
+Musts: 
 - reports
+- more testing
+
+Maybes:
 - reset password invalid token
 	- maybe just reroute it to generate password if they don't have one?
 - delete rater account if they close page early
-- (maybe) prevent spamming email links.
+- prevent spamming email links.
 
 Eval breakdown:
 3 stages: baseline -> formative -> summative

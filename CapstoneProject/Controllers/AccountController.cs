@@ -94,9 +94,18 @@ namespace CapstoneProject.Controllers
             if (ModelState.IsValid)
             {
                 var user = await UserManager.FindByNameAsync(model.Email);
-                if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
+                if (user == null)
                 {
-                    return View("ForgotPasswordConfirmation");
+                    ViewBag.ErrorMsg = "Looks like your administrator hasn't uploaded your details yet. " +
+                        "You should receive an email once they do.";
+                    return View("Error");
+                }
+
+                if (!await UserManager.IsEmailConfirmedAsync(user.Id))
+                {
+                    await SendPasswordCreationEmail(user);
+                    ViewBag.ErrorMsg = "You should have recieved an email to create your password by now... We'll send it again.";
+                    return View("Error");
                 }
 
                 var code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
@@ -174,6 +183,7 @@ namespace CapstoneProject.Controllers
             var user = await UserManager.FindByNameAsync(model.Email);
             if (user == null)
             {
+                ViewBag.ErrorMsg = "You shouldn't be seeing this page. Ask your administrator for assistance.";
                 return View("Error");
             }
 
@@ -257,6 +267,15 @@ namespace CapstoneProject.Controllers
                 }
                 context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
             }
+        }
+
+        private async Task SendPasswordCreationEmail(ApplicationUser user)
+        {
+            var email = user.Email;
+            var callbackUrl = Url.Action("CreatePassword", "Account", new { userId = user.Id, email = email },
+                protocol: Request.Url.Scheme);
+            await UserManager.SendEmailAsync(user.Id, "Create your WUDSCO password",
+                "Click <a href=\"" + callbackUrl + "\">here</a> to create your password.");
         }
 
         #endregion
