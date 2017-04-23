@@ -1,12 +1,10 @@
 CLONE URL: https://wudsco.visualstudio.com/_git/WUDSCO
 
-- closeEval logic (cohort flags)
-	- when raters finish
-	- when emp finished & 0 raters
-	- cohortIndex labels
-	- helper methods in cohort model probably need adjusting.
-- stages fix
 - reports
+- reset password invalid token
+	- maybe just reroute it to generate password if they don't have one?
+- delete rater account if they close page early
+- (maybe) prevent spamming email links.
 
 Eval breakdown:
 3 stages: baseline -> formative -> summative
@@ -48,7 +46,7 @@ Reports:
 	- find employee by cohort? Type/Stage filter optional?
 	- "suppose the user chose to create a report for userid=3, stage=baseline, type=type1 on [date]."
 	
-- pdf format, or "at least provide a view."
+- pdf format
 - Shows:
 	- Employee name
 	- Eval stage

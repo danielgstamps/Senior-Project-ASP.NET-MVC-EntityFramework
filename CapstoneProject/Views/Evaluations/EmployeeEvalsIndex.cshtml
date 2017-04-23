@@ -85,14 +85,20 @@
                 else if (item.Raters.Any(r => string.IsNullOrEmpty(r.Answers)))
                 {
                     <label class="alert-warning">Rater evaluations in progress</label>
-                    <label> | </label>
-                    @Html.ActionLink("Edit/Notify", "EditRaters", new {id = item.EvaluationID})
+                    if (item.CloseDate > DateTime.Today)
+                    {
+                        <label> | </label>
+                        @Html.ActionLink("Edit/Notify", "EditRaters", new { id = item.EvaluationID })
+                    }
                 }
                 else
                 {
                     <label class="alert-success">Complete</label>
-                    <label> | </label>
-                    @Html.ActionLink("Edit", "EditRaters", new { id = item.EvaluationID })
+                    if (item.CloseDate > DateTime.Today)
+                    {
+                        <label> | </label>
+                        @Html.ActionLink("Edit", "EditRaters", new { id = item.EvaluationID })
+                    }
                 }
             </td>
         </tr>

@@ -42,7 +42,9 @@ namespace CapstoneProject.Models
         public bool AllEvalsOfTypeComplete(int type)
         {
             return Employees.All(
-                em => em.Evaluations.Count > 0 && em.Evaluations.Where(ev => ev.TypeID == type).All(
+                em => em.Evaluations.Count > 0 && 
+                em.Evaluations.Count(ev => ev.TypeID == type) > 0 &&
+                em.Evaluations.Where(ev => ev.TypeID == type).All(
                      e => e.IsComplete()));
         }
 

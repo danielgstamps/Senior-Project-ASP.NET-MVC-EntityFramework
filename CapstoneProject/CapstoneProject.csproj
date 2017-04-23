@@ -352,6 +352,7 @@
     <Compile Include="UserMigrations\UserConfig.cs" />
     <Compile Include="ViewModels\AssignedEmployeeData.cs" />
     <Compile Include="ViewModels\AssignRatersViewModel.cs" />
+    <Compile Include="ViewModels\EvaluationData.cs" />
     <Compile Include="ViewModels\EvaluationCreateViewModel.cs" />
     <Compile Include="ViewModels\RaterPromptViewModel.cs" />
     <Compile Include="ViewModels\ReplaceRaterViewModel.cs" />
@@ -443,10 +444,13 @@
     <Content Include="Views\Raters\RaterPrompt.cshtml" />
     <Content Include="Views\Raters\ThankYou.cshtml" />
     <Content Include="Views\Shared\PdfLayout.cshtml" />
+    <Content Include="Views\Pdf\Index.cshtml" />
+    <Content Include="Views\Pdf\Details.cshtml" />
+    <Content Include="Views\Evaluations\AdminEvalsIndex.cshtml" />
+    <Content Include="Views\Evaluations\Report.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Pdf\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

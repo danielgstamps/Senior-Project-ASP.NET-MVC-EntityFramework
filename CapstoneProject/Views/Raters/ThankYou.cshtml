@@ -4,6 +4,10 @@
 }
 
 <h2>Thank You.</h2>
-<h4>Your answers have been recorded. You may now close this page.</h4>
 <h4 class="alert-warning">@ViewBag.RaterError</h4>
+@if (ViewBag.RaterError == null)
+{
+    <h4>Your answers have been recorded. You may now close this page.</h4>
+}
+
 

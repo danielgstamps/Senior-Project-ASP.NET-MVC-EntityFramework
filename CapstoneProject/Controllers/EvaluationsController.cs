@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Mail;
-using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 using System.Web;
 using System.Web.Mvc;
 using CapstoneProject.DAL;
@@ -12,7 +11,6 @@ using CapstoneProject.ViewModels;
 using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security;
 
 namespace CapstoneProject.Controllers
 {
@@ -44,6 +42,14 @@ namespace CapstoneProject.Controllers
         }
 
         public IUnitOfWork UnitOfWork { get; set; } = new UnitOfWork();
+
+        [Authorize(Roles = "Admin")]
+        public ActionResult AdminEvalsIndex()
+        {
+            var evalsOrderedByEmployeeID =
+                this.UnitOfWork.EvaluationRepository.Get().OrderBy(e => e.Employee.EmployeeID).ToList();
+            return View("AdminEvalsIndex", evalsOrderedByEmployeeID);
+        }
 
         [AllowAnonymous]
         //GET: Evaluations/TakeEvaluation/5
@@ -132,6 +138,7 @@ namespace CapstoneProject.Controllers
             return View("TakeEvaluation", model);
         }
 
+        // POST: TakeEval
         [HttpPost]
         public ActionResult TakeEvaluation(TakeEvalViewModel model)
         {
@@ -156,10 +163,13 @@ namespace CapstoneProject.Controllers
                 eval.SelfAnswers = ConvertAnswersToString(model.AllQuestions);
                 eval.CompletedDate = DateTime.Now;
                 UnitOfWork.Save();
+                if (eval.Raters.Count > 0)
+                {
+                    return RedirectToAction("AssignRaters", new {id = eval.EvaluationID});
+                }
 
-                return eval.Raters.Count > 0 ? 
-                    RedirectToAction("AssignRaters", new {id = eval.EvaluationID}) : 
-                    RedirectToAction("EmployeeEvalsIndex", new {id = eval.EmployeeID});
+                CheckCohortAndResetFlags(eval.Employee.CohortID);
+                return RedirectToAction("EmployeeEvalsIndex", new {id = eval.EmployeeID});
             }
 
             // Rater is taking the evaluation
@@ -175,11 +185,12 @@ namespace CapstoneProject.Controllers
 
             rater.Answers = ConvertAnswersToString(model.AllQuestions);
             UnitOfWork.Save();
+            CheckCohortAndResetFlags(eval.Employee.CohortID);
             return RedirectToAction("RaterCleanup", "Raters", new {id = rater.RaterID});
         }
 
         // GET AssignRaters
-        public ActionResult AssignRaters(int? id)
+        public ActionResult AssignRaters(int? id) //evalId
         {
             if (id == null)
             {
@@ -262,34 +273,17 @@ namespace CapstoneProject.Controllers
                 return RedirectToAction("AssignRaters", new { id = model.EvalId });
             }
 
+            if (model.Raters.Any(r => r.Email.Equals(eval.Employee.Email)))
+            {
+                TempData["DuplicateError"] = "Nice try. You can't rate yourself.";
+                return RedirectToAction("AssignRaters", new { id = eval.EvaluationID });
+            }
+
             var i = 0;
             foreach (var rater in eval.Raters)
             {
                 rater.Name = model.Raters[i].Name;
                 rater.Email = model.Raters[i].Email;
-
-                //if (ModelState.IsValid)
-                //{
-                //    MailMessage mail = new MailMessage();
-                //    mail.To.Add(rater.Email);
-                //    mail.From = new MailAddress("admin@gmail.com");
-                //    mail.Subject = "Evaluation";
-                //    var Body = "";
-                //    mail.Body = Body;
-                //    mail.IsBodyHtml = true;
-                //    var smtp = new SmtpClient
-                //    {
-                //        Host = "smtp.gmail.com",
-                //        Port = 587,
-                //        UseDefaultCredentials = false,
-                //        Credentials = new NetworkCredential
-                //            ("admin@gmail.com", "123123"),
-                //        EnableSsl = true
-                //    };
-                //    // Enter seders User name and password
-                //    smtp.Send(mail);
-                //}
-
                 UnitOfWork.Save();
                 i++;
             }
@@ -336,16 +330,22 @@ namespace CapstoneProject.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
+            var eval = UnitOfWork.EvaluationRepository.GetByID(model.EvalId);
+            if (eval == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
             if (model.Raters.DistinctBy(r => r.Email).Count() != model.Raters.Count)
             {
                 TempData["DuplicateError"] = "Please enter a unique email address for each rater.";
                 return RedirectToAction("EditRaters", new { id = model.EvalId });
             }
 
-            var eval = UnitOfWork.EvaluationRepository.GetByID(model.EvalId);
-            if (eval == null)
+            if (model.Raters.Any(r => r.Email.Equals(eval.Employee.Email)))
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                TempData["DuplicateError"] = "Nice try. You can't rate yourself.";
+                return RedirectToAction("EditRaters", new { id = model.EvalId });
             }
 
             var i = 0;
@@ -421,6 +421,12 @@ namespace CapstoneProject.Controllers
                 return RedirectToAction("ReplaceRater", new { id = model.RaterToReplace.RaterID });
             }
 
+            if (model.NewRater.Email.Equals(eval.Employee.Email))
+            {
+                TempData["DuplicateError"] = "Nice try. You can't rate yourself.";
+                return RedirectToAction("ReplaceRater", new { id = model.RaterToReplace.RaterID });
+            }
+
             var raterToDisable = UnitOfWork.RaterRepository.GetByID(model.RaterToReplace.RaterID);
             if (raterToDisable == null)
             {
@@ -433,8 +439,26 @@ namespace CapstoneProject.Controllers
             eval.Raters.Add(model.NewRater);
             UnitOfWork.Save();
 
+            var type = eval.TypeID;
+            switch (type)
+            {
+                case 1:
+                    eval.Employee.Cohort.Type1Assigned = true;
+                    break;
+                case 2:
+                    eval.Employee.Cohort.Type2Assigned = true;
+                    break;
+            }
+            UnitOfWork.Save();
+
             TempData["ReplaceRaterSuccess"] = "Successfully replaced rater.";
             return RedirectToAction("EditRaters", new { id = eval.EvaluationID });
+        }
+
+        public ActionResult Report(int? id)
+        {
+            var eval = this.UnitOfWork.EvaluationRepository.GetByID(id);
+            return View("Report", eval);
         }
 
         // GET: Evaluations/Details/5
@@ -466,9 +490,9 @@ namespace CapstoneProject.Controllers
                     questionList.Add(question);
                 }
             }
-
-            var answersList = ConvertAnswersToList(evaluation.SelfAnswers);
-            var model = new ViewEvalViewModel()
+            
+            var answersList = evaluation.SelfAnswers.Split(',').ToList();
+            var model = new ViewEvalViewModel
             {
                 Eval = evaluation,
                 QuestionList = questionList,
@@ -690,9 +714,14 @@ namespace CapstoneProject.Controllers
             // Remove target evals
             foreach (var emp in cohort.Employees)
             {
-                // If this throws an exception, that means an employee has more than 1 eval of the same type. Which it shouldn't. That'd be bad.
+                // If this throws an exception, that means an employee has more than 1 incomplete eval of the same type. Which should be impossible.
                 var eval = emp.Evaluations.Single(e => !e.IsComplete() && e.TypeID == model.TypeID);
                 UnitOfWork.EvaluationRepository.Delete(eval.EvaluationID);
+                foreach (var rater in eval.Raters)
+                {
+                    var raterUserAccount = UserManager.FindByEmail(rater.Email);
+                    UserManager.Delete(raterUserAccount);
+                }
                 UnitOfWork.Save();
             }
 
@@ -793,24 +822,9 @@ namespace CapstoneProject.Controllers
             var answerString = "";
             foreach (var question in questions)
             {
-                answerString += question.SelectedAnswer.ToString();
+                answerString += question.SelectedAnswer + ",";
             }
             return answerString;
-        }
-
-        private List<string> ConvertAnswersToList(string answers)
-        {
-            var list = new List<string>();
-            for (var i = 0; i < answers.Length; i++)
-            {
-                if (answers[i].Equals('0') && answers[i - 1].Equals('1'))
-                {
-                    list.Add("10");
-                    continue;
-                }
-                list.Add(answers[i].ToString());
-            }
-            return list;
         }
 
         private List<Rater> GenerateRaterList(int numSupervisors, int numCoworkers, int numSupervisees)
@@ -847,6 +861,32 @@ namespace CapstoneProject.Controllers
             }
 
             return raters;
+        }
+
+        private void CheckCohortAndResetFlags(int? cohortId)
+        {
+            if (cohortId == null)
+            {
+                return;
+            }
+
+            var cohort = UnitOfWork.CohortRepository.GetByID(cohortId);
+            if (cohort == null)
+            {
+                return;
+            }
+
+            if (cohort.AllEvalsOfTypeComplete(1))
+            {
+                cohort.Type1Assigned = false;
+            }
+
+            if (cohort.AllEvalsOfTypeComplete(2))
+            {
+                cohort.Type2Assigned = false;
+            }
+
+            UnitOfWork.Save();
         }
 
         protected override void Dispose(bool disposing)

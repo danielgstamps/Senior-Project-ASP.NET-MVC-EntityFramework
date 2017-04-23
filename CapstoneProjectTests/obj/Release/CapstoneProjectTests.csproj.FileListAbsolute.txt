@@ -244,6 +244,9 @@ C:\Users\Will\Source\Repos\WUDSCO2\CapstoneProjectTests\obj\Release\CapstoneProj
 C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProjectTests\bin\Release\WebGrease.dll
 C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProjectTests\bin\Release\Antlr3.Runtime.dll
 C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProjectTests\bin\Release\Antlr3.Runtime.pdb
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProjectTests\bin\Release\itextsharp.dll
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProjectTests\bin\Release\MvcRazorToPdf.dll
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProjectTests\bin\Release\itextsharp.xml
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProjectTests\bin\Release\ApplicationInsights.config
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProjectTests\bin\Release\roslyn\csc.exe
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProjectTests\bin\Release\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
