@@ -8,6 +8,9 @@ Musts:
 Maybes:
 - delete rater account if they close page early
 - prevent spamming email links.
+- remind createpassword on cohort/index
+- remind employee on employee/index
+
 
 Eval breakdown:
 3 stages: baseline -> formative -> summative

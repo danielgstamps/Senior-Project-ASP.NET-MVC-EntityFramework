@@ -2,15 +2,15 @@
 @model IEnumerable<CapstoneProject.Models.Cohort>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Cohort Index";
 }
 
 <h2>Cohorts</h2>
+<h4>Manage your cohorts, and assign evaluations to them.</h4>
 <h4 class="alert-success">@TempData["CreateSuccess"]</h4>
 <h4 class="alert-success">@TempData["EditSuccess"]</h4>
 <h4 class="alert-success">@TempData["EmailSuccess"]</h4>
-
-@Html.ActionLink("Add New Cohort", "Create")
+<h4>@Html.ActionLink("Add New Cohort", "Create")</h4>
 
 <table class="table">
     <tr>

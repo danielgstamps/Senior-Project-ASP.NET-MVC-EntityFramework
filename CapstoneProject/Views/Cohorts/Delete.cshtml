@@ -1,14 +1,13 @@
 ﻿@model CapstoneProject.Models.Cohort
 
 @{
-    ViewBag.Title = "Delete";
+    ViewBag.Title = "Delete | " + Model.Name;
 }
 
-<h2>Delete</h2>
+<h2>Delete Cohort</h2>
+<h4>Are you sure you want to delete @Model.Name?</h4>
 
-<h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>Cohort</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -19,22 +18,24 @@
         </dd>
 
         <dt>
-            These employees will need to be assigned to new cohorts: 
+            Employees
         </dt>
         @foreach (var employee in Model.Employees)
         {
             <dd>
                 @employee.FirstName  @employee.LastName
             </dd>
-        }
+        }  
     </dl>
+    
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Delete Cohort" class="btn btn-default" />
+        </div>
+    </div>
 
     @using (Html.BeginForm()) {
         @Html.AntiForgeryToken()
-
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
-        </div>
+        @Html.ActionLink("Back to List", "Index")
     }
 </div>
