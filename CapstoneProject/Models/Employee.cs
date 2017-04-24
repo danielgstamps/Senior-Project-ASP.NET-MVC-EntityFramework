@@ -43,5 +43,7 @@ namespace CapstoneProject.Models
         public virtual Cohort Cohort { get; set; }
 
         public virtual ICollection<Evaluation> Evaluations { get; set; }
+
+        public bool EmailConfirmed { get; set; }
     }
 }

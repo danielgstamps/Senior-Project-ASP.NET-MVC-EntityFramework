@@ -8,6 +8,7 @@
 <h4>@Html.ActionLink("Upload Employee Data", "UploadData")</h4>
 <h4 class="alert-success">@TempData["DeleteSuccess"]</h4>
 <h4 class="alert-success">@TempData["EditSuccess"]</h4>
+<h4 class="alert-success">@TempData["EmailSuccess"]</h4>
 <br/>
 
 <table class="table">
@@ -28,11 +29,15 @@
             <label>Cohort</label>
         </th>
         <th>
+            <label>Account Status</label>
+        </th>
+        <th>
             <label>Action</label>
         </th>
     </tr>
 
 @foreach (var item in Model) {
+    @Html.HiddenFor(modelItem => item.EmployeeID)
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.FirstName)
@@ -51,9 +56,22 @@
             @Html.DisplayFor(modelItem => item.Cohort.Name)
         </td>
         <td>
-            @Html.ActionLink("View", "Details", new { id = item.EmployeeID }) |
+            @if (item.EmailConfirmed)
+            {
+                <label class="alert-success">Email Confirmed</label>
+            }
+            else
+            {
+                <label class="alert-warning">Pending</label>
+                <label>(</label>
+                @Html.ActionLink("Notify", "SendPasswordCreationEmail", "Employees", new {id = item.EmployeeID}, null)
+                <label>)</label>
+            }
+        </td>
+        <td>
+            @Html.ActionLink("View", "Details", new {id = item.EmployeeID}) |
             @Html.ActionLink("Edit", "Edit", new {id = item.EmployeeID}) |
-            @Html.ActionLink("Delete", "Delete", new { id = item.EmployeeID })
+            @Html.ActionLink("Delete", "Delete", new {id = item.EmployeeID})
         </td>
     </tr>
 }

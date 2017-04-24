@@ -328,6 +328,10 @@
     <Compile Include="DataMigrations\201704192029005_ForgotToRemoveLastNameFromRater.Designer.cs">
       <DependentUpon>201704192029005_ForgotToRemoveLastNameFromRater.cs</DependentUpon>
     </Compile>
+    <Compile Include="DataMigrations\201704242232585_AddedEmailConfirmedToEmployee.cs" />
+    <Compile Include="DataMigrations\201704242232585_AddedEmailConfirmedToEmployee.Designer.cs">
+      <DependentUpon>201704242232585_AddedEmailConfirmedToEmployee.cs</DependentUpon>
+    </Compile>
     <Compile Include="DataMigrations\DataConfig.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -537,6 +541,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DataMigrations\201704192029005_ForgotToRemoveLastNameFromRater.resx">
       <DependentUpon>201704192029005_ForgotToRemoveLastNameFromRater.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataMigrations\201704242232585_AddedEmailConfirmedToEmployee.resx">
+      <DependentUpon>201704242232585_AddedEmailConfirmedToEmployee.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserMigrations\201702202104105_Initial.resx">
       <DependentUpon>201702202104105_Initial.cs</DependentUpon>

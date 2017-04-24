@@ -1,6 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using CapstoneProject.DAL;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
@@ -13,6 +15,7 @@ namespace CapstoneProject.Controllers
     {
         private ApplicationUserManager _userManager;
         private ApplicationSignInManager _signInManager;
+        public IUnitOfWork UnitOfWork { get; set; } = new UnitOfWork();
 
         public AccountController()
         {
@@ -192,6 +195,12 @@ namespace CapstoneProject.Controllers
             {
                 UserManager.FindByEmail(model.Email).EmailConfirmed = true;
                 UserManager.Update(user);
+                var employee = UnitOfWork.EmployeeRepository.Get(e => e.Email.Equals(model.Email));
+                if (employee != null)
+                {
+                    employee.First().EmailConfirmed = true;
+                    UnitOfWork.Save();
+                }
                 return RedirectToAction("CreatePasswordConfirmation", "Account");
             }
 

@@ -3,6 +3,11 @@ CLONE URL: https://wudsco.visualstudio.com/_git/WUDSCO
 Musts: 
 - reports
 - more testing
+- legitimize questions/categories
+- print category titles on TakeEval/Report/ViewEval
+- disable rater# options after Baseline.
+- email employees PasswordCreate
+- email cohort PasswordCreate
 
 Maybes:
 - delete rater account if they close page early
