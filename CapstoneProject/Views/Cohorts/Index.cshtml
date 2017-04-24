@@ -10,6 +10,7 @@
 <h4 class="alert-success">@TempData["CreateSuccess"]</h4>
 <h4 class="alert-success">@TempData["EditSuccess"]</h4>
 <h4 class="alert-success">@TempData["EmailSuccess"]</h4>
+<h4 class="alert-success">@TempData["DeleteSuccess"]</h4>
 <h4>@Html.ActionLink("Add New Cohort", "Create")</h4>
 
 <table class="table">
@@ -84,7 +85,7 @@
                 {
                     <label class="alert-info">Type 1 opens @item.EvalOpenDate(1)</label>
                     <label> ( </label>
-                    @Html.ActionLink("Change", "Edit", "Evaluations", new {cohortId = item.CohortID, typeId = 1}, null)
+                    @Html.ActionLink("Edit", "Edit", "Evaluations", new {cohortId = item.CohortID, typeId = 1}, null)
                     <label> | </label>
                     @Html.ActionLink("Delete", "Delete", "Evaluations", new {cohortId = item.CohortID, typeId = 1}, null)
                     <label> | </label>

@@ -34,7 +34,8 @@
         </div>
     </div>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
         @Html.ActionLink("Back to List", "Index")
     }

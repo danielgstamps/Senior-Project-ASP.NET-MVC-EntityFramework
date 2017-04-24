@@ -4,6 +4,7 @@ Musts:
 - reports
 - more testing
 - Employee/details: view evaluations link? 
+- edit eval, #ofraters from 0-1 crash
 
 Maybes:
 - delete rater account if they close page early

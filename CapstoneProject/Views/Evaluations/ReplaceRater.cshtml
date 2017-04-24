@@ -13,7 +13,7 @@
 
     <h2>Replace Rater</h2>
     <h4>This rater will be disabled and replaced by the new one you specify below:</h4>
-
+    <br/>
     <h4 class="alert-warning">Old @Model.RaterToReplace.Role:</h4>
     <dl>
         <dt>
@@ -21,10 +21,11 @@
             @Html.DisplayFor(model => model.RaterToReplace.Name)
         </dt>
         <dt>
-            @Html.DisplayNameFor(model => model.RaterToReplace.Email):
+            Email:
             @Html.DisplayFor(model => model.RaterToReplace.Email)
         </dt>
     </dl>
+    <br/>
 
     <h4 class="alert-danger">@TempData["DuplicateError"]</h4>
     <h4 class="alert-info">New @Model.RaterToReplace.Role:</h4>
@@ -46,7 +47,7 @@
     <br /><br />
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Replace" class="btn btn-default" />
+            <input type="submit" value="Replace Rater" class="btn btn-default" />
         </div>
     </div>
 }

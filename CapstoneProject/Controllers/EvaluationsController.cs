@@ -791,6 +791,7 @@ namespace CapstoneProject.Controllers
                     break;
             }
 
+            TempData["DeleteSuccess"] = "Successfully deleted evaluation.";
             return RedirectToAction("Index", "Cohorts");
         }
 

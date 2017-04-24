@@ -1,4 +1,9 @@
 ﻿@model CapstoneProject.ViewModels.TakeEvalViewModel
+@{
+    ViewBag.Title = "Take Evaluation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
 
 <h2>@ViewBag.TakeEvalHeader</h2>
 <h4>@ViewBag.TakeEvalSubHeader</h4>
@@ -29,6 +34,7 @@
                 @Html.HiddenFor(m => m.AllQuestions[i].Id)
                 @Html.HiddenFor(m => m.AllQuestions[i].Text)
                 @Html.RadioButtonFor(m => m.AllQuestions[i].SelectedAnswer, j, new {Name = "AllQuestions["+i+"].SelectedAnswer"})
+                <label></label>
             }
 
             <label></label>
@@ -39,9 +45,7 @@
         }
 
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Submit" class="btn btn-default"/>
-            </div>
+                <input type="submit" value="Submit Evaluation" class="btn btn-default"/>
         </div>
     }
 </div>

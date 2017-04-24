@@ -1,11 +1,11 @@
 ﻿@model IEnumerable<CapstoneProject.Models.Evaluation>
 
 @{
-    ViewBag.Title = "My Evaluations";
+    ViewBag.Title = "Evaluations";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Evaluations for @User.Identity.Name</h2>
+<h2>Evaluations for @Model.First().Employee.FirstName @Model.First().Employee.LastName</h2>
 <h4 class="alert-success">@TempData["TakeEvalSuccess"]</h4>
 <h4 class="alert-success">@TempData["EditRaterSuccess"]</h4>
 <h4 class="alert-warning">@TempData["EvalAlreadyComplete"]</h4>
