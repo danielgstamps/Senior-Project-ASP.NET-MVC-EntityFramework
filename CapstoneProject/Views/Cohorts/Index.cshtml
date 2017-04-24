@@ -122,7 +122,7 @@
                 {
                     <label class="alert-info">Type 2 opens @item.EvalOpenDate(2)</label>
                     <label> ( </label>
-                    @Html.ActionLink("Change", "Edit", "Evaluations", new {cohortId = item.CohortID, typeId = 2}, null)
+                    @Html.ActionLink("Edit", "Edit", "Evaluations", new {cohortId = item.CohortID, typeId = 2}, null)
                     <label> | </label>
                     @Html.ActionLink("Delete", "Delete", "Evaluations", new {cohortId = item.CohortID, typeId = 2}, null)
                     <label> | </label>

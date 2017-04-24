@@ -230,3 +230,7 @@ C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\bin\MvcRazorToPdf.dll
 C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\bin\itextsharp.xml
 C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.DataMigrations.RaterFirstLastNameNowJustName.resources
 C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.DataMigrations.ForgotToRemoveLastNameFromRater.resources
+C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\itextsharp.dll
+C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\itextsharp.xmlworker.dll
+C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\MvcRazorToPdf.dll
+C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\itextsharp.xml

@@ -316,7 +316,7 @@ namespace CapstoneProject.Controllers
             {
                 EvalId = eval.EvaluationID,
                 Raters = eval.Raters.ToList()
-            };
+            }; 
 
             return View("EditRaters", model);
         }
@@ -717,11 +717,6 @@ namespace CapstoneProject.Controllers
                 // If this throws an exception, that means an employee has more than 1 incomplete eval of the same type. Which should be impossible.
                 var eval = emp.Evaluations.Single(e => !e.IsComplete() && e.TypeID == model.TypeID);
                 UnitOfWork.EvaluationRepository.Delete(eval.EvaluationID);
-                foreach (var rater in eval.Raters)
-                {
-                    var raterUserAccount = UserManager.FindByEmail(rater.Email);
-                    UserManager.Delete(raterUserAccount);
-                }
                 UnitOfWork.Save();
             }
 
