@@ -156,7 +156,7 @@ namespace CapstoneProject.Controllers
                 unitOfWork.EmployeeRepository.Insert(e1);
                 dbUser.SaveChanges();
                 unitOfWork.Save();
-                await SendPasswordCreationEmail(u1);
+               // await SendPasswordCreationEmail(u1); don't do this here, add links in cohort/details.
             }
 
             if (!string.IsNullOrEmpty(duplicates))
@@ -204,6 +204,7 @@ namespace CapstoneProject.Controllers
             {
                 unitOfWork.EmployeeRepository.Update(employee);
                 unitOfWork.Save();
+                TempData["EditSuccess"] = "Edited Employee: " + employee.FirstName + " " + employee.LastName + ".";
                 return RedirectToAction("Index");
             }
             //ViewBag.CohortID = new SelectList(unitOfWork.CohortRepository.Get(), "CohortID", "Name", employee.CohortID);
@@ -239,7 +240,7 @@ namespace CapstoneProject.Controllers
             unitOfWork.Save();
             dbUser.SaveChanges();
 
-            TempData["DeleteSuccess"] = "Deleted " + employee.FirstName + " " + employee.LastName + ".";
+            TempData["DeleteSuccess"] = "Deleted Employee:" + employee.FirstName + " " + employee.LastName + ".";
             return RedirectToAction("Index");
         }
 

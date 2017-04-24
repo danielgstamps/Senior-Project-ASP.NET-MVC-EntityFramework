@@ -6,8 +6,6 @@ Musts:
 - Employee/details: view evaluations link? 
 
 Maybes:
-- reset password invalid token
-	- maybe just reroute it to generate password if they don't have one?
 - delete rater account if they close page early
 - prevent spamming email links.
 
