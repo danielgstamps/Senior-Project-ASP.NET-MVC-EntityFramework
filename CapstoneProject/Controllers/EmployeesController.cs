@@ -232,15 +232,31 @@ namespace CapstoneProject.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             var employee = unitOfWork.EmployeeRepository.GetByID(id);
-            unitOfWork.EmployeeRepository.Delete(employee);
+            if (employee == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }        
 
-            var aspNetUser = dbUser.Users.Where(a => a.Email.Equals(employee.Email)).Single();
+            var aspNetUser = dbUser.Users.Single(a => a.Email.Equals(employee.Email));
             dbUser.Users.Remove(aspNetUser);
-
-            unitOfWork.Save();
             dbUser.SaveChanges();
 
-            TempData["DeleteSuccess"] = "Deleted Employee:" + employee.FirstName + " " + employee.LastName + ".";
+            var cohort = unitOfWork.CohortRepository.GetByID(employee.CohortID); 
+            if (cohort != null)
+            {
+                cohort.Employees.Remove(employee);
+                UnitOfWork.Save();
+                if (cohort.Employees.Count == 0)
+                {
+                    cohort.Type1Assigned = false;
+                    cohort.Type2Assigned = false;
+                }
+            }
+
+            unitOfWork.EmployeeRepository.Delete(employee);
+            unitOfWork.Save();
+
+            TempData["DeleteSuccess"] = "Deleted Employee: " + employee.FirstName + " " + employee.LastName + ".";
             return RedirectToAction("Index");
         }
 
