@@ -1,30 +1,22 @@
 ﻿@model CapstoneProject.Models.Employee
 
 @{
-    ViewBag.Title = "Delete";
+    ViewBag.Title = "Delete | " + Model.FirstName + " " + Model.LastName;
 }
 
-<h2>Delete</h2>
+<h2>Delete Employee</h2>
+<h4>Are you sure you want to delete @Model.FirstName @Model.LastName?</h4>
 
-<h4>Are you sure you want to delete this?</h4>
 <div>
-    <h4>Employee</h4>
     <hr />
     <dl class="dl-horizontal">
 
         <dt>
-            @Html.DisplayNameFor(model => model.FirstName)
+            Name
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.FirstName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
-
-        <dd>
             @Html.DisplayFor(model => model.LastName)
         </dd>
 
@@ -52,7 +44,7 @@
             @Html.DisplayFor(model => model.Phone)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Cohort.Name)
+            Cohort
         </dt>
 
         <dd>
@@ -65,8 +57,8 @@
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+            @Html.ActionLink("Back to List", "Index") |
+            <input type="submit" value="Delete Employee" class="btn btn-default" />
         </div>
     }
 </div>

@@ -182,12 +182,14 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             var employee = unitOfWork.EmployeeRepository.GetByID(id);
             if (employee == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.CohortID = new SelectList(unitOfWork.CohortRepository.Get(), "CohortID", "Name", employee.CohortID);
+
+            //ViewBag.CohortID = new SelectList(unitOfWork.CohortRepository.Get(), "CohortID", "Name", employee.CohortID);
             return View("Edit", employee);
         }
 
@@ -196,7 +198,7 @@ namespace CapstoneProject.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "EmployeeID,FirstName,LastName,Email,Address,Phone,CohortID")] Employee employee)
+        public ActionResult Edit([Bind(Include = "EmployeeID,FirstName,LastName,Email,Address,Phone")] Employee employee)
         {
             if (ModelState.IsValid)
             {
@@ -204,7 +206,7 @@ namespace CapstoneProject.Controllers
                 unitOfWork.Save();
                 return RedirectToAction("Index");
             }
-            ViewBag.CohortID = new SelectList(unitOfWork.CohortRepository.Get(), "CohortID", "Name", employee.CohortID);
+            //ViewBag.CohortID = new SelectList(unitOfWork.CohortRepository.Get(), "CohortID", "Name", employee.CohortID);
             return View("Edit", employee);
         }
 
@@ -236,6 +238,8 @@ namespace CapstoneProject.Controllers
 
             unitOfWork.Save();
             dbUser.SaveChanges();
+
+            TempData["DeleteSuccess"] = "Deleted " + employee.FirstName + " " + employee.LastName + ".";
             return RedirectToAction("Index");
         }
 

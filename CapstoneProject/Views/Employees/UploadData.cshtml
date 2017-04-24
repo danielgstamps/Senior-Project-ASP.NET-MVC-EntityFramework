@@ -1,20 +1,20 @@
-﻿
+﻿@model System.Data.DataTable
+@using System.Data;
+
 @{
     ViewBag.Title = "Upload Employee Data";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Upload Employee Data</h2>
-
-@model System.Data.DataTable
-@using System.Data;
+<h4 class="alert-warning">@ViewBag.Duplicates</h4>
 
 @using (Html.BeginForm("UploadData", "Employees", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary()
-    <p class="alert-info">@ViewBag.Duplicates</p>
 
+    <br />
     <div class="form-group">
         <input type="file" id="dataFile" name="upload" />
     </div>
@@ -23,10 +23,12 @@
         <input type="submit" value="Upload" class="btn btn-default" />
     </div>
 
+    <br />
+
     if (Model != null && Model.Rows.Count > 0)
     {
-        <p>Uploaded employee data:</p>
-        <table>
+        <h4>Employees Uploaded:</h4>
+        <table class="table">
             <thead>
             <tr>
                 @foreach (DataColumn col in Model.Columns)
@@ -50,10 +52,11 @@
     }
     if (Model != null && Model.Rows.Count == 0)
     {
-        <p class="alert-info">No employees were added.</p>
+        <p class="alert-warning">No employees were added.</p>
     }
 }
 
+<br />
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>

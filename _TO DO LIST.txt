@@ -3,6 +3,7 @@ CLONE URL: https://wudsco.visualstudio.com/_git/WUDSCO
 Musts: 
 - reports
 - more testing
+- Employee/details: view evaluations link? 
 
 Maybes:
 - reset password invalid token
