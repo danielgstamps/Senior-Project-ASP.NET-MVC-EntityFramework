@@ -11,6 +11,8 @@ using CapstoneProject.ViewModels;
 using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+using MvcRazorToPdf;
+using iTextSharp.text;
 
 namespace CapstoneProject.Controllers
 {
@@ -459,6 +461,22 @@ namespace CapstoneProject.Controllers
         {
             var eval = this.UnitOfWork.EvaluationRepository.GetByID(id);
             return View("Report", eval);
+        }
+
+        public ActionResult DownloadReport()
+        {
+            var anon = new
+            {
+                Output = "Download me!"
+            };
+            return new PdfActionResult(anon, (writer, document) =>
+            {
+                document.SetPageSize(new Rectangle(500f, 500f, 90));
+                document.NewPage();
+            })
+            {
+                FileDownloadName = "DownloadMe.pdf"
+            };
         }
 
         // GET: Evaluations/Details/5
