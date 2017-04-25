@@ -572,6 +572,7 @@ namespace CapstoneProject.Controllers
             }
             model.TypeList = itemList;
 
+            ViewBag.BaselineId = UnitOfWork.StageRepository.Get(s => s.StageName.Equals("Baseline")).First().StageID;
             return View("Create", model);
         }
 

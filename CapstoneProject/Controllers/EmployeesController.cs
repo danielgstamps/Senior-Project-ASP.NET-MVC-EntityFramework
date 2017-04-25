@@ -156,7 +156,6 @@ namespace CapstoneProject.Controllers
                 unitOfWork.EmployeeRepository.Insert(e1);
                 dbUser.SaveChanges();
                 unitOfWork.Save();
-               // await SendPasswordCreationEmail(u1); don't do this here, add links in cohort/details.
             }
 
             if (!string.IsNullOrEmpty(duplicates))
