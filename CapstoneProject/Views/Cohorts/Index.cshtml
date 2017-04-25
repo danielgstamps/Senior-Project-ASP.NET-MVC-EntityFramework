@@ -22,7 +22,10 @@
             <label>Available Actions</label>
         </th>
         <th>
-            <label>Status</label>
+            <label>Cohort Status</label>
+        </th>
+        <th>
+            <label>Evaluation Status</label>
         </th>
     </tr>
 
@@ -33,7 +36,9 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @if (item.Employees.Count != 0 && !(item.Type1Assigned && item.Type2Assigned))
+                @if (item.Employees.Count != 0 && 
+                     !(item.Type1Assigned && item.Type2Assigned) &&
+                     item.Employees.All(e => e.EmailConfirmed))
                 {
                     @Html.ActionLink("Evaluate", "Create", "Evaluations", new { cohortId = item.CohortID }, null)
                     <label> | </label>
@@ -54,7 +59,16 @@
                 {
                     <label class="alert-warning">Empty</label>
                 }
-                
+                else if (!item.Employees.All(e => e.EmailConfirmed))
+                {
+                    <label class="alert-warning">Contains Pending Accounts</label>
+                }
+                else
+                {
+                    <label class="alert-success">Ready</label>
+                }
+            </td>
+            <td>
                 @if (item.AllEvalsOfTypeComplete(1))
                 {
                     if (item.IsStageComplete("Summative", 1))

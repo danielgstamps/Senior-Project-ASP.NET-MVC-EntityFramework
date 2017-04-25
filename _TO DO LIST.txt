@@ -5,15 +5,13 @@ Musts:
 - more testing
 - legitimize questions/categories
 - print category titles on TakeEval/Report/ViewEval
-- disable rater# options after Baseline.
-- email employees PasswordCreate
-- email cohort PasswordCreate
+- disable rater# options after Baseline???
+- "Notify raters now?"
 
 Maybes:
 - delete rater account if they close page early
 - prevent spamming email links.
-- remind createpassword on cohort/index
-- remind employee on employee/index
+- Adding employee to a cohort: Catch them up? Reset?
 
 
 Eval breakdown:

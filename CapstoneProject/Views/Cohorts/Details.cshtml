@@ -6,31 +6,67 @@
 
 <h2>Cohort Details</h2>
 <h4>@Model.Name</h4>
+<h4 class="alert-success">@TempData["EmailSuccess"]</h4>
+<br/>
 
 <div>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
+    <table class="table-condensed">
+        <tr>
+            <th>
+                <label>Name</label>
+            </th>
+            <th>
+                <label>Email</label>
+            </th>
+            <th>
+                <label>Address</label>
+            </th>
+            <th>
+                <label>Phone</label>
+            </th>
+            <th>
+                <label>Account Status</label>
+            </th>
+        </tr>
 
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        
-        <dt>
-            @Html.DisplayNameFor(model => model.Employees)
-        </dt>
-        
         @foreach (var employee in Model.Employees)
         {
-            <dd>
-                @employee.FirstName  @employee.LastName
-            </dd>
+            @Html.HiddenFor(modelItem => employee.EmployeeID)
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => employee.FirstName)
+                    @Html.DisplayFor(modelItem => employee.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => employee.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => employee.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => employee.Phone)
+                </td>
+                <td>
+                    @if (employee.EmailConfirmed)
+                    {
+                        <label class="alert-success">Email Confirmed</label>
+                    }
+                    else
+                    {
+                        <label class="alert-warning">Pending</label>
+                        <label>(</label>
+                        @Html.ActionLink("Notify", "SendPasswordCreationEmail", "Cohorts", new { id = employee.EmployeeID }, null)
+                        <label>)</label>
+                    }
+                </td>
+            </tr>
         }
-    </dl>
+
+    </table>
 </div>
-<p>
+<br/>
+<br/>
+<div>
     @Html.ActionLink("Edit", "Edit", new { id = Model.CohortID }) |
     @Html.ActionLink("Back to List", "Index")
-</p>
+</div>

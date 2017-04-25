@@ -191,7 +191,7 @@ namespace CapstoneProject.Controllers
             await UserManager.SendEmailAsync(user.Id, "Create your WUDSCO password",
                 "Click <a href=\"" + callbackUrl + "\">here</a> to create your password.");
 
-            TempData["EmailSuccess"] = "Sent notification email to " + employee.FirstName + " " + employee.LastName;
+            TempData["EmailSuccess"] = "Sent notification email to " + employee.FirstName + " " + employee.LastName + ".";
             return RedirectToAction("Index");
         }
 

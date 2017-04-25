@@ -218,6 +218,35 @@ namespace CapstoneProject.Controllers
             return RedirectToAction("Index", "Cohorts");
         }
 
+        public async Task<ActionResult> SendPasswordCreationEmail(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var employee = UnitOfWork.EmployeeRepository.GetByID(id);
+            if (employee == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var user = await UserManager.FindByNameAsync(employee.Email);
+            if (user == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var email = user.Email;
+            var callbackUrl = Url.Action("CreatePassword", "Account", new { userId = user.Id, email },
+                protocol: Request.Url.Scheme);
+            await UserManager.SendEmailAsync(user.Id, "Create your WUDSCO password",
+                "Click <a href=\"" + callbackUrl + "\">here</a> to create your password.");
+
+            TempData["EmailSuccess"] = "Sent notification email to " + employee.FirstName + " " + employee.LastName + ".";
+            return RedirectToAction("Details", "Cohorts", new {id = employee.CohortID});
+        }
+
         private void SendEvaluationEmail(int employeeId, int evalId)
         {
             var employee = UnitOfWork.EmployeeRepository.GetByID(employeeId);
