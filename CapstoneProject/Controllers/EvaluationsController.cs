@@ -608,7 +608,8 @@ namespace CapstoneProject.Controllers
                 var prevEval = UnitOfWork.EvaluationRepository.Get().First(e =>
                     e.Employee.CohortID == cohort.CohortID &&
                     e.IsComplete() &&
-                    e.Stage.StageName.Equals("Baseline"));
+                    e.Stage.StageName.Equals("Baseline") && 
+                    e.TypeID == model.TypeID);
 
                 model.NumberOfSupervisors = prevEval.Raters.Count(r => r.Role.Equals("Supervisor"));
                 model.NumberOfCoworkers = prevEval.Raters.Count(r => r.Role.Equals("Coworker"));
