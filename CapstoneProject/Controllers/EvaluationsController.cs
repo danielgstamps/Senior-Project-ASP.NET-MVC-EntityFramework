@@ -455,7 +455,7 @@ namespace CapstoneProject.Controllers
             return RedirectToAction("EditRaters", new { id = eval.EvaluationID });
         }
 
-        public ActionResult Report(int? id)
+        public ActionResult ShowReport(int? id)
         {
             var eval = this.UnitOfWork.EvaluationRepository.GetByID(id);
             return View("Report", eval);

@@ -356,7 +356,7 @@
     <Compile Include="UserMigrations\UserConfig.cs" />
     <Compile Include="ViewModels\AssignedEmployeeData.cs" />
     <Compile Include="ViewModels\AssignRatersViewModel.cs" />
-    <Compile Include="ViewModels\EvaluationData.cs" />
+    <Compile Include="ViewModels\EvaluationReportData.cs" />
     <Compile Include="ViewModels\EvaluationCreateViewModel.cs" />
     <Compile Include="ViewModels\RaterPromptViewModel.cs" />
     <Compile Include="ViewModels\ReplaceRaterViewModel.cs" />
