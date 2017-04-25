@@ -19,6 +19,15 @@
             @Html.HiddenFor(m => m.EvalId)
             @Html.HiddenFor(m => m.RaterId)
 
+            if (i == 0)
+            {
+                <label class="alert-info h4">@Model.AllQuestions[i].Category</label><br/>
+            }
+            else if (!Model.AllQuestions[i].Category.Equals(Model.AllQuestions[i - 1].Category))
+            {
+                <label class="alert-info h4">@Model.AllQuestions[i].Category</label><br/>
+            }
+
             <label>@Model.AllQuestions[i].Id.</label>
             <label>@Model.AllQuestions[i].Text</label>
 

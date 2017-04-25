@@ -113,8 +113,9 @@ namespace CapstoneProject.Controllers
                 {
                     model.AllQuestions.Add(new QuestionViewModel
                     {
+                        Id = count,
                         Text = question.QuestionText,
-                        Id = count
+                        Category = question.Category.Name
                     });
                     count++;
                 }
