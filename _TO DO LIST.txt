@@ -5,7 +5,6 @@ Musts:
 - more testing
 - legitimize questions/categories
 - print category titles on TakeEval/Report/ViewEval
-- disable rater# options after Baseline???
 - "Notify raters now?"
 
 Maybes:

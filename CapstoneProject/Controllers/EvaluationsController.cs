@@ -602,6 +602,19 @@ namespace CapstoneProject.Controllers
                 return RedirectToAction("Create", new { cohortId = (int)TempData["CohortID"] });
             }
 
+            // If stage != baseline, pull rater numbers from baseline eval
+            if (selectedStageName != "Baseline")
+            {
+                var prevEval = UnitOfWork.EvaluationRepository.Get().First(e =>
+                    e.Employee.CohortID == cohort.CohortID &&
+                    e.IsComplete() &&
+                    e.Stage.StageName.Equals("Baseline"));
+
+                model.NumberOfSupervisors = prevEval.Raters.Count(r => r.Role.Equals("Supervisor"));
+                model.NumberOfCoworkers = prevEval.Raters.Count(r => r.Role.Equals("Coworker"));
+                model.NumberOfSupervisees = prevEval.Raters.Count(r => r.Role.Equals("Supervisee"));
+            }
+
             foreach (var emp in cohort.Employees)
             {
                 var eval = new Evaluation
