@@ -102,7 +102,7 @@ namespace CapstoneProjectTests
             
             this.mockUnitOfWork.Object.CohortRepository.Update(cohortToUpdate);
 
-            this.mockUnitOfWork.Verify(m => m.CohortRepository.Update(cohortToUpdate), Times.Once); 
+            this.mockUnitOfWork.Verify(m => m.CohortRepository.Update(cohortToUpdate), Times.Once);
         }
 
         //[TestMethod]
