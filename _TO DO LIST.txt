@@ -3,14 +3,18 @@ CLONE URL: https://wudsco.visualstudio.com/_git/WUDSCO
 Musts: 
 - reports
 - more testing
-- print category titles on Report/ViewEval
-- stages: Disallow redos? Disallow any more evals of type after Summative is done?
+- print category titles on ViewEval
+- email(s?) link to localhost?
+- does notify crash if 1 has completed the eval?
+- stages: Should they be able to start over after summative?
+- raters: Change disable to only apply to in-progress raters
+- "Notify all" buttons on empIndex/cohortDetails
+- "Notify raters now?"
 
 Maybes:
 - delete rater account if they close page early
 - prevent spamming emails.
 - Adding employee to a cohort: Catch them up? Reset?
-- "Notify raters now?"
 
 
 Eval breakdown:

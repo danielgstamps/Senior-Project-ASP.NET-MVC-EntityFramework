@@ -677,6 +677,14 @@ namespace CapstoneProject.Controllers
                 return RedirectToAction("Create", new { cohortId = (int)TempData["CohortID"] });
             }
 
+            // Disallow selecting stages that are already complete.
+            if (cohort.IsStageComplete(selectedStageName, model.TypeID))
+            {
+                TempData["StageError"] = "This cohort has already completed the " + selectedStageName + 
+                    " stage for Type " + model.TypeID.ToString() + ".";
+                return RedirectToAction("Create", new { cohortId = (int)TempData["CohortID"] });
+            }
+
             // If stage != baseline, pull rater numbers from baseline eval
             if (selectedStageName != "Baseline")
             {
