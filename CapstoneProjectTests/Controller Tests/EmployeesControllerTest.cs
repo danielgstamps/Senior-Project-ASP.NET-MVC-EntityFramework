@@ -107,6 +107,7 @@ namespace CapstoneProjectTests
         //public void TestEdit()
         //{
         //    var employeeToEdit = this.mockUnitOfWork.Object.EmployeeRepository.GetByID(0);
+        //    this.mockUnitOfWork.Setup(m => m.EmployeeRepository.Update(employeeToEdit));
 
         //    var result = this.controller.Edit(employeeToEdit.EmployeeID) as ViewResult;
 
