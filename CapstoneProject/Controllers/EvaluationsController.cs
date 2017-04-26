@@ -113,8 +113,9 @@ namespace CapstoneProject.Controllers
                 {
                     model.AllQuestions.Add(new QuestionViewModel
                     {
+                        Id = count,
                         Text = question.QuestionText,
-                        Id = count
+                        Category = question.Category.Name
                     });
                     count++;
                 }
@@ -572,6 +573,7 @@ namespace CapstoneProject.Controllers
             }
             model.TypeList = itemList;
 
+            ViewBag.BaselineId = UnitOfWork.StageRepository.Get(s => s.StageName.Equals("Baseline")).First().StageID;
             return View("Create", model);
         }
 
@@ -599,6 +601,20 @@ namespace CapstoneProject.Controllers
             {
                 TempData["StageError"] = "Summative can only be selected after Formative is completed.";
                 return RedirectToAction("Create", new { cohortId = (int)TempData["CohortID"] });
+            }
+
+            // If stage != baseline, pull rater numbers from baseline eval
+            if (selectedStageName != "Baseline")
+            {
+                var prevEval = UnitOfWork.EvaluationRepository.Get().First(e =>
+                    e.Employee.CohortID == cohort.CohortID &&
+                    e.IsComplete() &&
+                    e.Stage.StageName.Equals("Baseline") && 
+                    e.TypeID == model.TypeID);
+
+                model.NumberOfSupervisors = prevEval.Raters.Count(r => r.Role.Equals("Supervisor"));
+                model.NumberOfCoworkers = prevEval.Raters.Count(r => r.Role.Equals("Coworker"));
+                model.NumberOfSupervisees = prevEval.Raters.Count(r => r.Role.Equals("Supervisee"));
             }
 
             foreach (var emp in cohort.Employees)
