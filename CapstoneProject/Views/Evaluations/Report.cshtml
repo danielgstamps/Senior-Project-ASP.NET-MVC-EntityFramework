@@ -2,7 +2,7 @@
 
 @{
     ViewBag.Title = "Report";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/PdfLayout.cshtml";
     var currentDate = DateTime.Today.ToString().Split(' ')[0];
     var questionNumber = 1;
     var numOfRaters = Model.Raters.Count;
