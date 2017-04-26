@@ -93,7 +93,10 @@ namespace CapstoneProjectTests
         [TestMethod]
         public void TestEdit()
         {
+            var questionToEdit = this.mockUnitOfWork.Object.QuestionRepository.GetByID(0);
+            var result = this.controller.Edit(questionToEdit.QuestionID);
 
+            Assert.AreEqual("Edit", result);
         }
 
     }
