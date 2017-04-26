@@ -127,3 +127,7 @@ C:\Users\csuser\Desktop\WUDSCO\CapstoneProjectTests\bin\Debug\Antlr3.Runtime.pdb
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProjectTests\obj\Debug\CapstoneProjectTests.csprojResolveAssemblyReference.cache
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProjectTests\obj\Debug\CapstoneProjectTests.dll
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProjectTests\obj\Debug\CapstoneProjectTests.pdb
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProjectTests\bin\Debug\MvcRazorToPdf.dll
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProjectTests\bin\Debug\itextsharp.dll
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProjectTests\bin\Debug\itextsharp.xmlworker.dll
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProjectTests\bin\Debug\itextsharp.xml

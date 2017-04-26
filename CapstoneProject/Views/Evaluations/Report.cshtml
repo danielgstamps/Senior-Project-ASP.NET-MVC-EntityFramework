@@ -1,41 +1,25 @@
-﻿@model CapstoneProject.Models.Evaluation
-
-@{
-    var currentDate = DateTime.Today.ToString().Split(' ')[0];
-    var questionNumber = 1;
-    var numOfSupervisors = 0;
-    var numOfCoworkers = 0;
-    var numOfSupervisees = 0;
-    foreach (var rater in Model.Raters)
-    {
-        switch (rater.Role)
-        {
-            case "Supervisor":
-                numOfSupervisors++;
-                break;
-            case "Coworker":
-                numOfCoworkers++;
-                break;
-            case "Supervisee":
-                numOfSupervisees++;
-                break;
-        }
-    }
-}
+﻿@using Castle.Core.Internal
+@model CapstoneProject.ViewModels.EvaluationReportData
 
 <h3>
-    Employee @Model.Employee.FirstName @Model.Employee.LastName Evaluation Report (of Evaluation @Model.Type.TypeName @Model.Stage.StageName --generated on @currentDate)
+    Employee @Model.EmployeeName Evaluation Report (of Evaluation @Model.TypeName @Model.StageName --generated on @Model.CurrentDate)
 </h3>
 <table>
     <tr>
         <th></th>
         <th>Self </th>
-        @foreach (var rater in Model.Raters)
-    {
-            <th>@rater.Role </th>
+        @if (!Model.Raters.IsNullOrEmpty())
+        {
+            foreach (var rater in Model.Raters)
+            {
+                <th>@rater.Role AVG</th>
+            }
         }
     </tr>
-    @foreach (var category in Model.Type.Categories)
+    @{
+        var questionNumber = 1;
+    }
+    @foreach (var category in Model.Categories)
     {
         <tr>
             <td></td>
@@ -43,9 +27,9 @@
                 @category.Name
             </td>
         </tr>
-        foreach (var question in category.Questions)
+        for (int i = 0; i < category.Questions.Count; i++)
         {
-            var answer = Model.SelfAnswers.Split(',')[questionNumber - 1];
+            var answer = Model.EmployeeAnswers[questionNumber - 1];
             <tr>
                 <td>
                     Question @questionNumber
@@ -53,10 +37,29 @@
                 <td>
                     @answer
                 </td>
-                @foreach (var rater in Model.Raters) {
-                    <td>
-                        @rater.Answers.Split(',')[questionNumber - 1]
-                    </td>
+                @if (!Model.Raters.IsNullOrEmpty())
+                {
+                    foreach (var rater in Model.Raters)
+                    {
+                        switch (rater.Role)
+                        {
+                            case "Supervisor":
+                                <td>
+                                    @Model.SupervisorAvgAnswers[questionNumber - 1]
+                                </td>
+                                break;
+                            case "Coworker":
+                                <td>
+                                    @Model.CoworkerAvgAnswers[questionNumber - 1]
+                                </td>
+                                break;
+                            case "Supervisee":
+                                <td>
+                                    @Model.SuperviseeAvgAnswers[questionNumber - 1]
+                                </td>
+                                break;
+                        }
+                    }
                 }
             </tr>
             questionNumber++;

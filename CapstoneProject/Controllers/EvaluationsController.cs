@@ -2,20 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Runtime.InteropServices;
 using System.Web;
 using System.Web.Mvc;
 using CapstoneProject.DAL;
 using CapstoneProject.Models;
 using CapstoneProject.ViewModels;
+using Castle.Core.Internal;
 using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using MvcRazorToPdf;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
-using System.IO;
-using iTextSharp.tool.xml;
 
 namespace CapstoneProject.Controllers
 {
@@ -469,13 +465,15 @@ namespace CapstoneProject.Controllers
         public ActionResult ShowReportAsHtml(int? id)
         {
             var eval = this.UnitOfWork.EvaluationRepository.GetByID(id);
-            return View("ReportAsHtml", eval);
+            var reportData = this.createReportData(eval);
+            return View("ReportAsHtml", reportData);
         }
 
         public ActionResult ShowReportAsPdf(int? id)
         {
             var eval = this.UnitOfWork.EvaluationRepository.GetByID(id);
-            return new PdfActionResult("ReportAsPdf", eval);
+            var reportData = this.createReportData(eval);
+            return new PdfActionResult("ReportAsPdf", reportData);
         }
 
         private EvaluationReportData createReportData(Evaluation eval)
@@ -498,6 +496,10 @@ namespace CapstoneProject.Controllers
                         break;
                 }
             }
+            var ratersToShow = new List<Rater>();
+            ratersToShow.AddRange(supervisors);
+            ratersToShow.AddRange(coworkers);
+            ratersToShow.AddRange(supervisees);
             var numOfQuestions = 0;
             foreach (var category in eval.Type.Categories)
             {
@@ -516,11 +518,14 @@ namespace CapstoneProject.Controllers
             }
             var data = new EvaluationReportData
             {
+                EvaluationID = eval.EvaluationID,
                 EmployeeName = eval.Employee.FirstName + " " + eval.Employee.LastName,
                 TypeName = eval.Type.TypeName,
                 StageName = eval.Stage.StageName,
+                Raters = ratersToShow,
+                Categories = eval.Type.Categories.ToList(),
                 EmployeeAnswers = employeeAnswers,
-                SupervisorAvgAnswers = superviseeAvgs,
+                SupervisorAvgAnswers = supervisorAvgs,
                 CoworkerAvgAnswers = coworkerAvgs,
                 SuperviseeAvgAnswers = superviseeAvgs
             };
@@ -529,11 +534,15 @@ namespace CapstoneProject.Controllers
 
         private List<int> getQuestionAvgPerRole(List<Rater> raters, int numOfQuestions)
         {
-            var totalForQuestion = 0;
-            var avgForQuestion = 0;
+            if (raters.IsNullOrEmpty())
+            {
+                return new List<int>();
+            }
             var avgs = new List<int>();
             for (int i = 0; i < numOfQuestions; i++)
             {
+                var totalForQuestion = 0;
+                var avgForQuestion = 0;
                 foreach (var rater in raters)
                 {
                     var answer = Convert.ToInt32(rater.Answers.Split(',')[i]);
@@ -919,6 +928,7 @@ namespace CapstoneProject.Controllers
             {
                 answerString += question.SelectedAnswer + ",";
             }
+            answerString = answerString.TrimEnd(',');
             return answerString;
         }
 
