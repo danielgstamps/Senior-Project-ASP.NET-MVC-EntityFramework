@@ -3,8 +3,7 @@ CLONE URL: https://wudsco.visualstudio.com/_git/WUDSCO
 Musts: 
 - reports
 - more testing
-- legitimize questions/categories
-- print category titles on TakeEval/Report/ViewEval
+- print category titles on Report/ViewEval
 - stages: Disallow redos? Disallow any more evals of type after Summative is done?
 
 Maybes:
