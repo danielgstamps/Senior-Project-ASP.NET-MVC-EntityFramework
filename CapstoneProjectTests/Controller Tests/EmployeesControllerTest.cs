@@ -107,9 +107,10 @@ namespace CapstoneProjectTests
         public void TestEdit()
         {
             var employeeToEdit = this.mockUnitOfWork.Object.EmployeeRepository.GetByID(0);
-            var result = this.controller.Edit(employeeToEdit);
 
-            Assert.AreEqual("Edit", result);
+            var result = this.controller.Edit(employeeToEdit.EmployeeID) as ViewResult;
+
+            Assert.IsInstanceOfType(result.ViewData.Model, typeof(Employee));
         }
     }
 }
