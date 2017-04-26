@@ -28,12 +28,12 @@ namespace CapstoneProject.Models
         public bool HasOpenEval(int typeId)
         {
             try
-            {
-                var firstEmployee = Employees.First();
-                return firstEmployee.Evaluations.Any(
-                    eval => eval.TypeID == typeId && 
-                    eval.OpenDate <= DateTime.Today &&
-                    !eval.IsComplete());
+            {             
+                return Employees.Any(
+                    emp => emp.Evaluations.Any(
+                        eval => eval.TypeID == typeId && 
+                        eval.OpenDate <= DateTime.Today &&
+                        !eval.IsComplete()));
             }
             catch (Exception)
             {
@@ -43,6 +43,11 @@ namespace CapstoneProject.Models
 
         public bool AllEvalsOfTypeComplete(int type)
         {
+            if (Employees.Count == 0)
+            {
+                return false;
+            }
+
             return Employees.All(
                 em => em.Evaluations.Count > 0 && 
                 em.Evaluations.Count(ev => ev.TypeID == type) > 0 &&
@@ -66,28 +71,39 @@ namespace CapstoneProject.Models
 
         public bool IsStageComplete(string stageName, int typeId)
         {
+            if (Employees.Count == 0)
+            {
+                return false;
+            }
+
             try
             {
                 foreach (var emp in Employees)
                 {
                     var evalsOfType = emp.Evaluations.Where(eval => eval.TypeID.Equals(typeId));
+                    if (!evalsOfType.Any())
+                    {
+                        return false;
+                    }
+
                     var evalsOfTypeAndStage = evalsOfType.Where(eval => eval.Stage.StageName.Equals(stageName));
                     if (!evalsOfTypeAndStage.Any())
                     {
                         return false;
                     }
 
-                    if (evalsOfTypeAndStage.All(eval => eval.IsComplete()))
+                    if (!evalsOfTypeAndStage.All(eval => eval.IsComplete()))
                     {
-                        return true;
+                        return false;
                     }
                 }
-                return false;
             }
             catch (Exception)
             {
                 return false;
             }
+
+            return true;
         }
     }
 }

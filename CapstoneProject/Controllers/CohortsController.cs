@@ -210,8 +210,15 @@ namespace CapstoneProject.Controllers
 
             foreach (var emp in employees)
             {
-                var eval = emp.Evaluations.Single(e => !e.IsComplete() && e.TypeID == typeId);
-                SendEvaluationEmail(emp.EmployeeID, eval.EvaluationID);
+                try
+                {
+                    var eval = emp.Evaluations.Single(e => !e.IsComplete() && e.TypeID == typeId);
+                    SendEvaluationEmail(emp.EmployeeID, eval.EvaluationID);
+                }
+                catch (Exception)
+                {
+                    continue;
+                }
             }
 
             TempData["EmailSuccess"] = "Sent email notifications to " + cohort.Name + ".";

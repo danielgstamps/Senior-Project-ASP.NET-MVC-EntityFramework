@@ -4,11 +4,11 @@ Musts:
 - reports
 - more testing
 - print category titles on ViewEval
-- email(s?) link to localhost?
-- does notify crash if 1 has completed the eval?
+-IsStageComplete returns true if 1 employee has no evals
+	cant assign baseline to edited cohort if added emp has a finished baseline in history
 - stages: Should they be able to start over after summative?
 - raters: Change disable to only apply to in-progress raters
-- "Notify all" buttons on empIndex/cohortDetails
+- "Notify all" buttons on cohortDetails
 - "Notify raters now?"
 
 Maybes:
