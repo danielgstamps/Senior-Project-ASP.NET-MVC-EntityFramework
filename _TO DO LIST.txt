@@ -1,10 +1,17 @@
 CLONE URL: https://wudsco.visualstudio.com/_git/WUDSCO
 
+Musts: 
 - reports
-- reset password invalid token
-	- maybe just reroute it to generate password if they don't have one?
+- more testing
+- print category titles on Report/ViewEval
+- stages: Disallow redos? Disallow any more evals of type after Summative is done?
+
+Maybes:
 - delete rater account if they close page early
-- (maybe) prevent spamming email links.
+- prevent spamming emails.
+- Adding employee to a cohort: Catch them up? Reset?
+- "Notify raters now?"
+
 
 Eval breakdown:
 3 stages: baseline -> formative -> summative

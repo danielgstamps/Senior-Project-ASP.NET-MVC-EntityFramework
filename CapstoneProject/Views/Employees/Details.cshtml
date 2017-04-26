@@ -1,25 +1,17 @@
 ﻿@model CapstoneProject.Models.Employee
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = Model.FirstName + " " + Model.LastName;
 }
 
-<h2>Details</h2>
+<h2>Employee Details</h2>
+@*<h4>@Model.FirstName @Model.LastName | @Html.ActionLink("View Evaluations??", "Details")</h4>*@
 
 <div>
-    <h4>Employee</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Cohort.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Cohort.Name)
-        </dd>
-
-        <dt>
-            Employee
+            Name
         </dt>
 
         <dd>
@@ -49,11 +41,14 @@
         <dd>
             @Html.DisplayFor(model => model.Phone)
         </dd>
-        
-        <dd>
-            @Html.ActionLink("View Evaluations", "Details")
-        </dd>
 
+        <dt>
+            Cohort
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cohort.Name)
+        </dd>
     </dl>
 </div>
 <p>

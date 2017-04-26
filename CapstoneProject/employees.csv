@@ -1,9 +1,25 @@
-FirstName,LastName,Email,Address,Phone
-"Michael","Scott","mscott@mailinator.com","123 Maple St, New York, NY 123456","(321) 456-7890"
-"Jim","Halpert","jhalpert@mailinator.com","234 Oak St, New York, NY 234567","(234) 567-8901"
-"Dwight","Schrute","dwightkurtschrute@mailinator.com","100 Schrute Farm Road","(234) 651-2359"
-"Ryan","Anderson","ryananderson@mailinator.com","1101 Charter Oak Ct., IL, 56869","(678) 567-5678"
-"Curtis","Russel","curtisrussel@mailinator.com","5253 Trophy Dr, Fairfield, CA, 94534","(678) 888-9977"
-"Don","Harmon","donsharmon@mailinator.com","4031 Frum Street Smithville, TN 37166","(615) 273-2077"
-"Joyce","Clifton","joycedclifton@mailinator.com","4675 Cottrill Lane, Stlouis, MO 63101","(314) 420-7760"
-"Email","Tester","emailtester123@mailinator.com","123 Mailinator Lane","(321) 456-7890"
+First,Last,Email,Address,Phone
+Michael,Scott,mscott@mailinator.com,"123 Maple St, New York, NY 12345",(321) 456-7890
+Jim,Halpert,jhalpert@mailinator.com,"234 Oak St, New York, NY 23456",(234) 567-8901
+Dwight,Schrute,dschrute@mailinator.com,"100 Schrute Farms Road, PA 30213",(234) 651-2359
+Curtis,Russel,crussel@mailinator.com,"5253 Trophy Dr, Fairfield, CA, 94534",(678) 888-9977
+Don,Harmon,dharmon@mailinator.com,"4031 Frum Street Smithville, TN 37166",(615) 273-2077
+Joyce,Clifton,jclifton@mailinator.com,"4675 Cottrill Lane, Stlouis, MO 63101",(314) 420-7760
+Pam,Beesly,pbeesly@mailinator.com,"123 6th St., Melbourne, FL 32904",(321) 456-7890
+Ryan,Howard,rhoward@mailinator.com,"70 Bowman St., South Windsor, CT 06074",(404) 563-6942
+Andy,Bernard,abernard@mailinator.com,"69 Alderwood Ave., Campbell, CA 95008",(678) 249-1023
+Robert,California,rcalifornia@mailinator.com,"571 Hillside St., Evanston, IL 60201",(513) 292-5233
+Jan,Levinson,jlevinson@mailinator.com,"7421 Pawnee Rd., Spartanburg, SC 29301",(218) 912-0495
+Roy,Anderson,randerson@mailinator.com,"89 Fairground St., Dearborn, MI 48127",(929) 102-4318
+Stanley,Hudson,shudson@mailinator.com,"7645 Hill Field Lane, Moorhead, MN 56560",(678) 192-6092
+Kevin,Malone,kmalone@mailinator.com,"78 Johnson Lane, Glenside, PA 19038",(691) 562-9365
+Meredith,Palmer,mpalmer@mailinator.com,"50 Andover Street, Martinsville, VA 24112",(321) 412-6498
+Angela,Martin,amartin@mailinator.com,"933 Squaw Creek Street, Port Saint Lucie, FL 34952",(329) 128-4819
+Oscar,Martinez,omartinez@mailinator.com,"370 Jefferson Lane, Monroeville, PA 15146",(404) 678-0507
+Phyllis,Lapin,plapin@mailinator.com,"778 South Ave., South Park, NY 11420",(621) 412-2438
+Kelly,Kapoor,kkapoor@mailinator.com,"630 Overlook St., Myrtle Beach, SC 29577",(241) 325-1856
+Tony,Flenderson,tflenderson@mailinator.com,"373 Cliff Rd., Los Angeles, CA 90008",(542) 126-0590
+Creed,Bratton,cbratton@mailinator.com,"571 Mayflower St., Oakland, NY 11364",(251) 681-2395
+Erin,Hannon,ehannon@mailinator.com,"7397 10th St., Urbandale, IA 50322",(404) 512-1636
+Gabe,Lewis,glewis@mailinator.com,"35 Mountain Ave., Owensboro, KY 42301",(918) 256-1602
+Holly,Flax,hflax@mailinator.com,"7283 Catherine St., Greensboro, NC 27405",(481) 516-2342

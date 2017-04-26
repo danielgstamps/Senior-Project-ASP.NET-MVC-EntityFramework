@@ -30,8 +30,10 @@ namespace CapstoneProject.Models
             try
             {
                 var firstEmployee = Employees.First();
-                var allEvalsOfType = firstEmployee.Evaluations.Where(eval => eval.TypeID == typeId);
-                return allEvalsOfType.First().OpenDate <= DateTime.Today.Date;
+                return firstEmployee.Evaluations.Any(
+                    eval => eval.TypeID == typeId && 
+                    eval.OpenDate <= DateTime.Today &&
+                    !eval.IsComplete());
             }
             catch (Exception)
             {

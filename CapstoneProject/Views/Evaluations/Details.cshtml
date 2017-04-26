@@ -1,11 +1,13 @@
 ﻿@model CapstoneProject.ViewModels.ViewEvalViewModel
 
 @{
-    ViewBag.Title = "View Evaluation";
+    ViewBag.Title = "Evaluation Details";
     var maxAnswerOption = Model.Eval.TypeID == 1 ? 5 : 10;
 }
 
 <h2>Evaluation Details</h2>
+<h4>View the details of your evaluation, and see your answers.</h4>
+<br/>
 
 <div>   
     <table class="table">
@@ -23,9 +25,11 @@
                 @Html.DisplayNameFor(model => model.Eval.CloseDate)
             </th>
             <th>
-                <label>Status</label>
+                <label>Self Status</label>
             </th>
-            <th></th>
+            <th>
+                Rater Status
+            </th>
         </tr>
         <tr>
             <td>
@@ -41,16 +45,46 @@
                 <label>@Model.Eval.CloseDate.Date.ToString("d")</label>
             </td>
             <td>
-                @if (Model.Eval.CompletedDate.HasValue)
+                @if (Model.Eval.CompletedDate.HasValue && !string.IsNullOrEmpty(Model.Eval.SelfAnswers))
                 {
                     <label class="alert-success">Completed @Model.Eval.CompletedDate.Value.ToString("MM/dd/yyyy h:mm tt")</label>
+                    if (Model.Eval.CloseDate <= DateTime.Today)
+                    {
+                        <br/>
+                        <label class="alert-warning">Closed @Model.Eval.CloseDate.Date.ToString("d")</label>
+                    }
+                }
+            </td>
+            <td>
+                @if (Model.Eval.Raters.Count == 0)
+                {
+                    <label>N/A (No raters)</label>
+                }
+                else if (Model.Eval.Raters.Any(r => string.IsNullOrEmpty(r.Answers)))
+                {
+                    <label class="alert-warning">Rater evaluations in progress</label>
+                    if (Model.Eval.CloseDate > DateTime.Today)
+                    {
+                        <label> | </label>
+                        @Html.ActionLink("Edit/Notify", "EditRaters", new { id = Model.Eval.EvaluationID })
+                    }
+                }
+                else
+                {
+                    <label class="alert-success">Complete</label>
+                    if (Model.Eval.CloseDate > DateTime.Today)
+                    {
+                        <label> | </label>
+                        @Html.ActionLink("Edit", "EditRaters", new { id = Model.Eval.EvaluationID })
+                    }
                 }
             </td>
         </tr>
     </table>
 </div>
 <div>
-    <h3>Your Answers:</h3>
+    <br/>
+    <h2>Your Answers:</h2>
     <h4>On a scale from 1-@maxAnswerOption, (1 meaning disagree, @maxAnswerOption meaning agree), you answered the following:</h4>
     <br/>
     @for (var i = 1; i < Model.QuestionList.Count + 1; i++)

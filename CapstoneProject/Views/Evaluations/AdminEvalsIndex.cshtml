@@ -1,15 +1,12 @@
 ﻿@model IEnumerable<CapstoneProject.Models.Evaluation>
 
 @{
-    ViewBag.Title = "AdminEvalsIndex";
+    ViewBag.Title = "Administrator Evaluations Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>AdminEvalsIndex</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 <table class="table">
     <tr>
         <th>
@@ -42,7 +39,7 @@
             @Html.DisplayFor(modelItem => item.Type.TypeName)
         </td>
         <td>
-            @Html.ActionLink("View Report", "Report", new { id=item.EvaluationID })
+            @Html.ActionLink("View Report", "ShowReportAsHtml", new { id=item.EvaluationID })
         </td>
     </tr>
 }

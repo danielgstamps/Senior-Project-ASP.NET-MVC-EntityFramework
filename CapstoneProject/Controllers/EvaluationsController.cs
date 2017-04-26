@@ -11,6 +11,11 @@ using CapstoneProject.ViewModels;
 using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+using MvcRazorToPdf;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using System.IO;
+using iTextSharp.tool.xml;
 
 namespace CapstoneProject.Controllers
 {
@@ -111,8 +116,9 @@ namespace CapstoneProject.Controllers
                 {
                     model.AllQuestions.Add(new QuestionViewModel
                     {
+                        Id = count,
                         Text = question.QuestionText,
-                        Id = count
+                        Category = question.Category.Name
                     });
                     count++;
                 }
@@ -316,7 +322,7 @@ namespace CapstoneProject.Controllers
             {
                 EvalId = eval.EvaluationID,
                 Raters = eval.Raters.ToList()
-            };
+            }; 
 
             return View("EditRaters", model);
         }
@@ -455,10 +461,21 @@ namespace CapstoneProject.Controllers
             return RedirectToAction("EditRaters", new { id = eval.EvaluationID });
         }
 
-        public ActionResult Report(int? id)
+        /// <summary>
+        /// Shows an evaluation report as an HTML page.
+        /// </summary>
+        /// <param name="id">ID of the desired evaluation</param>
+        /// <returns>A ViewResult that renders the report</returns>
+        public ActionResult ShowReportAsHtml(int? id)
         {
             var eval = this.UnitOfWork.EvaluationRepository.GetByID(id);
-            return View("Report", eval);
+            return View("ReportAsHtml", eval);
+        }
+
+        public ActionResult ShowReportAsPdf(int? id)
+        {
+            var eval = this.UnitOfWork.EvaluationRepository.GetByID(id);
+            return new PdfActionResult("ReportAsPdf", eval);
         }
 
         // GET: Evaluations/Details/5
@@ -554,6 +571,7 @@ namespace CapstoneProject.Controllers
             }
             model.TypeList = itemList;
 
+            ViewBag.BaselineId = UnitOfWork.StageRepository.Get(s => s.StageName.Equals("Baseline")).First().StageID;
             return View("Create", model);
         }
 
@@ -581,6 +599,20 @@ namespace CapstoneProject.Controllers
             {
                 TempData["StageError"] = "Summative can only be selected after Formative is completed.";
                 return RedirectToAction("Create", new { cohortId = (int)TempData["CohortID"] });
+            }
+
+            // If stage != baseline, pull rater numbers from baseline eval
+            if (selectedStageName != "Baseline")
+            {
+                var prevEval = UnitOfWork.EvaluationRepository.Get().First(e =>
+                    e.Employee.CohortID == cohort.CohortID &&
+                    e.IsComplete() &&
+                    e.Stage.StageName.Equals("Baseline") && 
+                    e.TypeID == model.TypeID);
+
+                model.NumberOfSupervisors = prevEval.Raters.Count(r => r.Role.Equals("Supervisor"));
+                model.NumberOfCoworkers = prevEval.Raters.Count(r => r.Role.Equals("Coworker"));
+                model.NumberOfSupervisees = prevEval.Raters.Count(r => r.Role.Equals("Supervisee"));
             }
 
             foreach (var emp in cohort.Employees)
@@ -717,11 +749,6 @@ namespace CapstoneProject.Controllers
                 // If this throws an exception, that means an employee has more than 1 incomplete eval of the same type. Which should be impossible.
                 var eval = emp.Evaluations.Single(e => !e.IsComplete() && e.TypeID == model.TypeID);
                 UnitOfWork.EvaluationRepository.Delete(eval.EvaluationID);
-                foreach (var rater in eval.Raters)
-                {
-                    var raterUserAccount = UserManager.FindByEmail(rater.Email);
-                    UserManager.Delete(raterUserAccount);
-                }
                 UnitOfWork.Save();
             }
 
@@ -791,6 +818,7 @@ namespace CapstoneProject.Controllers
                     break;
             }
 
+            TempData["DeleteSuccess"] = "Successfully deleted evaluation.";
             return RedirectToAction("Index", "Cohorts");
         }
 

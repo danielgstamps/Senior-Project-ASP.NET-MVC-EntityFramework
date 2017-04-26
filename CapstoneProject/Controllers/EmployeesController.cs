@@ -156,7 +156,6 @@ namespace CapstoneProject.Controllers
                 unitOfWork.EmployeeRepository.Insert(e1);
                 dbUser.SaveChanges();
                 unitOfWork.Save();
-                await SendPasswordCreationEmail(u1);
             }
 
             if (!string.IsNullOrEmpty(duplicates))
@@ -166,13 +165,33 @@ namespace CapstoneProject.Controllers
             }
         }
 
-        private async Task SendPasswordCreationEmail(ApplicationUser user)
+        public async Task<ActionResult> SendPasswordCreationEmail(int? id)
         {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var employee = UnitOfWork.EmployeeRepository.GetByID(id);
+            if (employee == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var user = await UserManager.FindByNameAsync(employee.Email);
+            if (user == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
             var email = user.Email;
-            var callbackUrl = Url.Action("CreatePassword", "Account", new { userId = user.Id, email = email },
+            var callbackUrl = Url.Action("CreatePassword", "Account", new { userId = user.Id, email },
                 protocol: Request.Url.Scheme);
             await UserManager.SendEmailAsync(user.Id, "Create your WUDSCO password",
                 "Click <a href=\"" + callbackUrl + "\">here</a> to create your password.");
+
+            TempData["EmailSuccess"] = "Sent notification email to " + employee.FirstName + " " + employee.LastName + ".";
+            return RedirectToAction("Index");
         }
 
         // GET: Employees/Edit/5
@@ -182,12 +201,14 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             var employee = unitOfWork.EmployeeRepository.GetByID(id);
             if (employee == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.CohortID = new SelectList(unitOfWork.CohortRepository.Get(), "CohortID", "Name", employee.CohortID);
+
+            //ViewBag.CohortID = new SelectList(unitOfWork.CohortRepository.Get(), "CohortID", "Name", employee.CohortID);
             return View("Edit", employee);
         }
 
@@ -196,15 +217,16 @@ namespace CapstoneProject.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "EmployeeID,FirstName,LastName,Email,Address,Phone,CohortID")] Employee employee)
+        public ActionResult Edit([Bind(Include = "EmployeeID,FirstName,LastName,Email,Address,Phone")] Employee employee)
         {
             if (ModelState.IsValid)
             {
                 unitOfWork.EmployeeRepository.Update(employee);
                 unitOfWork.Save();
+                TempData["EditSuccess"] = "Edited Employee: " + employee.FirstName + " " + employee.LastName + ".";
                 return RedirectToAction("Index");
             }
-            ViewBag.CohortID = new SelectList(unitOfWork.CohortRepository.Get(), "CohortID", "Name", employee.CohortID);
+            //ViewBag.CohortID = new SelectList(unitOfWork.CohortRepository.Get(), "CohortID", "Name", employee.CohortID);
             return View("Edit", employee);
         }
 
@@ -229,13 +251,31 @@ namespace CapstoneProject.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             var employee = unitOfWork.EmployeeRepository.GetByID(id);
-            unitOfWork.EmployeeRepository.Delete(employee);
+            if (employee == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }        
 
-            var aspNetUser = dbUser.Users.Where(a => a.Email.Equals(employee.Email)).Single();
+            var aspNetUser = dbUser.Users.Single(a => a.Email.Equals(employee.Email));
             dbUser.Users.Remove(aspNetUser);
-
-            unitOfWork.Save();
             dbUser.SaveChanges();
+
+            var cohort = unitOfWork.CohortRepository.GetByID(employee.CohortID); 
+            if (cohort != null)
+            {
+                cohort.Employees.Remove(employee);
+                UnitOfWork.Save();
+                if (cohort.Employees.Count == 0)
+                {
+                    cohort.Type1Assigned = false;
+                    cohort.Type2Assigned = false;
+                }
+            }
+
+            unitOfWork.EmployeeRepository.Delete(employee);
+            unitOfWork.Save();
+
+            TempData["DeleteSuccess"] = "Deleted Employee: " + employee.FirstName + " " + employee.LastName + ".";
             return RedirectToAction("Index");
         }
 

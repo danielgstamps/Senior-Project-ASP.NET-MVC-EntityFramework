@@ -1,21 +1,20 @@
 ﻿@model IEnumerable<CapstoneProject.Models.Employee>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Employee Index";
 }
 
-<h2>Employees</h2>
+<h2>Employee List</h2>
+<h4>@Html.ActionLink("Upload Employee Data", "UploadData")</h4>
+<h4 class="alert-success">@TempData["DeleteSuccess"]</h4>
+<h4 class="alert-success">@TempData["EditSuccess"]</h4>
+<h4 class="alert-success">@TempData["EmailSuccess"]</h4>
+<br/>
 
-<p>
-    @Html.ActionLink("Upload Employee Data", "UploadData")
-</p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.FirstName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LastName)
+            <label>Name</label>
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Email)
@@ -27,17 +26,21 @@
             @Html.DisplayNameFor(model => model.Phone)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Cohort.Name)
+            <label>Cohort</label>
         </th>
-        <th></th>
+        <th>
+            <label>Account Status</label>
+        </th>
+        <th>
+            <label>Action</label>
+        </th>
     </tr>
 
 @foreach (var item in Model) {
+    @Html.HiddenFor(modelItem => item.EmployeeID)
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.FirstName)
-        </td>
-        <td>
             @Html.DisplayFor(modelItem => item.LastName)
         </td>
         <td>
@@ -53,9 +56,22 @@
             @Html.DisplayFor(modelItem => item.Cohort.Name)
         </td>
         <td>
+            @if (item.EmailConfirmed)
+            {
+                <label class="alert-success">Email Confirmed</label>
+            }
+            else
+            {
+                <label class="alert-warning">Pending</label>
+                <label>(</label>
+                @Html.ActionLink("Notify", "SendPasswordCreationEmail", "Employees", new {id = item.EmployeeID}, null)
+                <label>)</label>
+            }
+        </td>
+        <td>
+            @Html.ActionLink("View", "Details", new {id = item.EmployeeID}) |
             @Html.ActionLink("Edit", "Edit", new {id = item.EmployeeID}) |
-            @Html.ActionLink("Details", "Details", new {id = item.EmployeeID}) |
-            @Html.ActionLink("Delete", "Delete", new { id = item.EmployeeID })
+            @Html.ActionLink("Delete", "Delete", new {id = item.EmployeeID})
         </td>
     </tr>
 }

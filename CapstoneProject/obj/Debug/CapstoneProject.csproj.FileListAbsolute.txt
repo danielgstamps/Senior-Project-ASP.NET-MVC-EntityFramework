@@ -110,6 +110,12 @@ C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.Da
 C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.DataMigrations.AddedEnabledFieldToRater.resources
 C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.DataMigrations.RaterEnabledDefaultsTrue.resources
 C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.DataMigrations.ChangedRaterEnabledToDisabled.resources
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\bin\itextsharp.dll
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\bin\itextsharp.xmlworker.dll
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\bin\MvcRazorToPdf.dll
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\bin\itextsharp.xml
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.DataMigrations.RaterFirstLastNameNowJustName.resources
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.DataMigrations.ForgotToRemoveLastNameFromRater.resources
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\ApplicationInsights.config
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\roslyn\csc.exe
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
@@ -130,6 +136,8 @@ C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\Antlr3.Runtime.dll
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\Castle.Core.dll
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\EntityFramework.dll
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\EntityFramework.SqlServer.dll
+C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\itextsharp.dll
+C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\itextsharp.xmlworker.dll
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\LumenWorks.Framework.IO.dll
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\Microsoft.AI.Agent.Intercept.dll
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\Microsoft.AI.DependencyCollector.dll
@@ -152,6 +160,7 @@ C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\Microsoft.Owin.Security.Micro
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\Microsoft.Owin.Security.OAuth.dll
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\Microsoft.Owin.Security.Twitter.dll
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\MvcRazorToPdf.dll
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\Newtonsoft.Json.dll
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\Owin.dll
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\System.Web.Helpers.dll
@@ -163,6 +172,7 @@ C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\System.Web.WebPages.dll
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\System.Web.WebPages.Razor.dll
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\WebGrease.dll
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\Castle.Core.xml
+C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\itextsharp.xml
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\LumenWorks.Framework.IO.pdb
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\LumenWorks.Framework.IO.xml
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\Microsoft.AI.DependencyCollector.xml
@@ -223,10 +233,5 @@ C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.UserMig
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.csproj.GenerateResource.Cache
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.dll
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.pdb
+C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.DataMigrations.AddedEmailConfirmedToEmployee.resources
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.csprojResolveAssemblyReference.cache
-C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\bin\itextsharp.dll
-C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\bin\itextsharp.xmlworker.dll
-C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\bin\MvcRazorToPdf.dll
-C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\bin\itextsharp.xml
-C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.DataMigrations.RaterFirstLastNameNowJustName.resources
-C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.DataMigrations.ForgotToRemoveLastNameFromRater.resources

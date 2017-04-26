@@ -1,0 +1,13 @@
+﻿
+@{
+    ViewBag.Title = "Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<body>
+    @Html.Partial("Report")
+</body>
+
+<p>
+    @Html.ActionLink("Download as PDF", "ShowReportAsPdf", new { id = Model.EvaluationID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

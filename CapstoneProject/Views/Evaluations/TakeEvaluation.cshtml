@@ -1,4 +1,9 @@
 ﻿@model CapstoneProject.ViewModels.TakeEvalViewModel
+@{
+    ViewBag.Title = "Take Evaluation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
 
 <h2>@ViewBag.TakeEvalHeader</h2>
 <h4>@ViewBag.TakeEvalSubHeader</h4>
@@ -13,6 +18,15 @@
             @Html.HiddenFor(m => m.TypeId)
             @Html.HiddenFor(m => m.EvalId)
             @Html.HiddenFor(m => m.RaterId)
+
+            if (i == 0)
+            {
+                <label class="alert-info h4">@Model.AllQuestions[i].Category</label><br/>
+            }
+            else if (!Model.AllQuestions[i].Category.Equals(Model.AllQuestions[i - 1].Category))
+            {
+                <label class="alert-info h4">@Model.AllQuestions[i].Category</label><br/>
+            }
 
             <label>@Model.AllQuestions[i].Id.</label>
             <label>@Model.AllQuestions[i].Text</label>
@@ -29,6 +43,7 @@
                 @Html.HiddenFor(m => m.AllQuestions[i].Id)
                 @Html.HiddenFor(m => m.AllQuestions[i].Text)
                 @Html.RadioButtonFor(m => m.AllQuestions[i].SelectedAnswer, j, new {Name = "AllQuestions["+i+"].SelectedAnswer"})
+                <label></label>
             }
 
             <label></label>
@@ -39,9 +54,7 @@
         }
 
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Submit" class="btn btn-default"/>
-            </div>
+                <input type="submit" value="Submit Evaluation" class="btn btn-default"/>
         </div>
     }
 </div>

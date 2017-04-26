@@ -3,10 +3,34 @@
 @model CapstoneProject.ViewModels.EvaluationCreateViewModel
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Evaluate Cohort";
 }
 
-<h2>Evaluate Cohort: @TempData["CohortName"] </h2>
+@section scripts
+{
+<script type="text/javascript">
+    $(function() {
+        $('#stageDropdown').change(function() {
+            if ($(this).val() == (@ViewBag.BaselineId)) {
+                $('#supervisors').show();
+                $('#coworkers').show();
+                $('#supervisees').show();
+                $('#stageWarnLabel').hide();
+            } else {
+                $('#supervisors').hide();
+                $('#coworkers').hide();
+                $('#supervisees').hide();
+                $('#stageWarnLabel').show();
+            }
+        });
+    });
+</script>
+}
+
+<h2>Evaluate Cohort</h2>
+<h4>Fill in the details below to evaluate every employee in @TempData["CohortName"].</h4>
+<label class="alert-danger control-label">@TempData["StageError"]</label>
+<br/>
 
 @using (Html.BeginForm())
 {
@@ -23,16 +47,15 @@
         <div class="form-group">
             @Html.LabelFor(model => model.StageID, new { @class = "control-label col-md-2" })
             <div class="col-md-2">
-                @Html.DropDownListFor(model => model.StageID, Model.StageList, new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.StageID, Model.StageList, new { @class = "form-control", id = "stageDropdown"})
                 @Html.ValidationMessageFor(model => model.StageID, "", new { @class = "text-danger" })
-                <label class="text-danger control-label">@TempData["StageError"]</label>
             </div>
         </div>
         
         <div class="form-group">
             @Html.LabelFor(model => model.OpenDate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <div class="input-group" id="datetimepicker">
+                <div class="input-group" id="openDatePicker">
                     @Html.EditorFor(model => model.OpenDate, new { htmlAttributes = new { @class = "form-control" } })
                     <label class="text-danger control-label">@TempData["DateError"]</label>
                 </div>
@@ -43,33 +66,38 @@
         <div class="form-group">
             @Html.LabelFor(model => model.CloseDate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <div class="input-group" id="datetimepicker">
+                <div class="input-group" id="closeDatePicker">
                     @Html.EditorFor(model => model.CloseDate, new { htmlAttributes = new { @class = "form-control" } })
                 </div>
                 @Html.ValidationMessageFor(model => model.CloseDate, "", new { @class = "text-danger" })
             </div>
         </div>
         
-        <div class="form-group">
-            @Html.Label("Supervisors", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="form-group" id="stageWarnLabel" style="display: none;">
+            <label class="col-md-2"></label>
+            <label class="alert-info col-md-2">Raters from the previous stage will be assigned.</label>
+        </div>
+        
+        <div class="form-group", id="supervisors">
+            @Html.Label("Supervisors", htmlAttributes: new { @class = "control-label col-md-2", id = "supervisorsLabel" })
             <div class="col-md-1">
-                @Html.EditorFor(m => m.NumberOfSupervisors, new { htmlAttributes = new { @class = "form-control", min = 0 } })
+                @Html.EditorFor(m => m.NumberOfSupervisors, new { htmlAttributes = new { @class = "form-control", min = 0, max = 1, id = "supervisorsEditor" } })
                 @Html.ValidationMessageFor(model => model.NumberOfSupervisors, "", new { @class = "text-danger" })
             </div>
         </div>
         
-        <div class="form-group">
-            @Html.Label("Coworkers", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="form-group", id="coworkers">
+            @Html.Label("Coworkers", htmlAttributes: new { @class = "control-label col-md-2", id = "coworkersLabel" })
             <div class="col-md-1">
-                @Html.EditorFor(m => m.NumberOfCoworkers, new { htmlAttributes = new { @class = "form-control", min = 0 } })
+                @Html.EditorFor(m => m.NumberOfCoworkers, new { htmlAttributes = new { @class = "form-control", min = 0, max = 10, id = "coworkersEditor" } })
                 @Html.ValidationMessageFor(model => model.NumberOfCoworkers, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.Label("Supervisees", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="form-group", id="supervisees">
+            @Html.Label("Supervisees", htmlAttributes: new { @class = "control-label col-md-2", id = "superviseesLabel" })
             <div class="col-md-1">
-                @Html.EditorFor(m => m.NumberOfSupervisees, new { htmlAttributes = new { @class = "form-control", min = 0 } })
+                @Html.EditorFor(m => m.NumberOfSupervisees, new { htmlAttributes = new { @class = "form-control", min = 0, max = 10, id = "superviseesEditor" } })
                 @Html.ValidationMessageFor(model => model.NumberOfSupervisees, "", new { @class = "text-danger" })
             </div>
         </div>           
@@ -82,6 +110,7 @@
     </div>
 }
 
+<br/>
 <div>
     @Html.ActionLink("Back to Cohorts", "Index", "Cohorts")
 </div>

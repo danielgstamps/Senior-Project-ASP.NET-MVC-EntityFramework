@@ -1,16 +1,16 @@
-﻿@using CapstoneProject.Controllers
-@model IEnumerable<CapstoneProject.Models.Cohort>
+﻿@model IEnumerable<CapstoneProject.Models.Cohort>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Cohort Index";
 }
 
 <h2>Cohorts</h2>
+<h4>Manage your cohorts, and assign evaluations to them.</h4>
 <h4 class="alert-success">@TempData["CreateSuccess"]</h4>
 <h4 class="alert-success">@TempData["EditSuccess"]</h4>
 <h4 class="alert-success">@TempData["EmailSuccess"]</h4>
-
-@Html.ActionLink("Add New Cohort", "Create")
+<h4 class="alert-success">@TempData["DeleteSuccess"]</h4>
+<h4>@Html.ActionLink("Add New Cohort", "Create")</h4>
 
 <table class="table">
     <tr>
@@ -21,7 +21,10 @@
             <label>Available Actions</label>
         </th>
         <th>
-            <label>Status</label>
+            <label>Cohort Status</label>
+        </th>
+        <th>
+            <label>Evaluation Status</label>
         </th>
     </tr>
 
@@ -32,7 +35,9 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @if (item.Employees.Count != 0 && !(item.Type1Assigned && item.Type2Assigned))
+                @if (item.Employees.Count != 0 && 
+                     !(item.Type1Assigned && item.Type2Assigned) &&
+                     item.Employees.All(e => e.EmailConfirmed))
                 {
                     @Html.ActionLink("Evaluate", "Create", "Evaluations", new { cohortId = item.CohortID }, null)
                     <label> | </label>
@@ -53,7 +58,16 @@
                 {
                     <label class="alert-warning">Empty</label>
                 }
-                
+                else if (!item.Employees.All(e => e.EmailConfirmed))
+                {
+                    <label class="alert-warning">Contains Pending Accounts</label>
+                }
+                else
+                {
+                    <label class="alert-success">Ready</label>
+                }
+            </td>
+            <td>
                 @if (item.AllEvalsOfTypeComplete(1))
                 {
                     if (item.IsStageComplete("Summative", 1))
@@ -84,7 +98,7 @@
                 {
                     <label class="alert-info">Type 1 opens @item.EvalOpenDate(1)</label>
                     <label> ( </label>
-                    @Html.ActionLink("Change", "Edit", "Evaluations", new {cohortId = item.CohortID, typeId = 1}, null)
+                    @Html.ActionLink("Edit", "Edit", "Evaluations", new {cohortId = item.CohortID, typeId = 1}, null)
                     <label> | </label>
                     @Html.ActionLink("Delete", "Delete", "Evaluations", new {cohortId = item.CohortID, typeId = 1}, null)
                     <label> | </label>
@@ -121,7 +135,7 @@
                 {
                     <label class="alert-info">Type 2 opens @item.EvalOpenDate(2)</label>
                     <label> ( </label>
-                    @Html.ActionLink("Change", "Edit", "Evaluations", new {cohortId = item.CohortID, typeId = 2}, null)
+                    @Html.ActionLink("Edit", "Edit", "Evaluations", new {cohortId = item.CohortID, typeId = 2}, null)
                     <label> | </label>
                     @Html.ActionLink("Delete", "Delete", "Evaluations", new {cohortId = item.CohortID, typeId = 2}, null)
                     <label> | </label>

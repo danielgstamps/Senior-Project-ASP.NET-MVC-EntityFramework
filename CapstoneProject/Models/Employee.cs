@@ -13,17 +13,17 @@ namespace CapstoneProject.Models
         [Required(ErrorMessage = "Employee must have ID")]
         public int EmployeeID { get; set; }
 
-        [Display(Name = "First Name")]
+        [Display(Name = "First")]
         [StringLength(MAX_NAME_LENGTH)]
         [Required(ErrorMessage = "Employee must have first name")]
         public string FirstName { get; set; }
 
-        [Display(Name = "Last Name")]
+        [Display(Name = "Last")]
         [StringLength(MAX_NAME_LENGTH)]
         [Required(ErrorMessage = "Employee must have last name")]
         public string LastName { get; set; }
 
-        [Display(Name = "Email Address")]
+        [Display(Name = "Email")]
         [DataType(DataType.EmailAddress)]
         [Required(ErrorMessage = "The email address is required")]
         [EmailAddress(ErrorMessage = "Invalid Email Address")]
@@ -33,7 +33,7 @@ namespace CapstoneProject.Models
         [Required(ErrorMessage = "Employee must have address")]
         public string Address { get; set; }
 
-        [Display(Name = "Phone Number")]
+        [Display(Name = "Phone")]
         [Required(ErrorMessage = "Phone number required")]
         [DataType(DataType.PhoneNumber)]
         public string Phone { get; set; }
@@ -43,5 +43,7 @@ namespace CapstoneProject.Models
         public virtual Cohort Cohort { get; set; }
 
         public virtual ICollection<Evaluation> Evaluations { get; set; }
+
+        public bool EmailConfirmed { get; set; }
     }
 }
