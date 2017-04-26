@@ -90,14 +90,14 @@ namespace CapstoneProjectTests
             this.mockUnitOfWork.Verify(m => m.QuestionRepository.Update(questionToUpdate), Times.Once);
         }
 
-        [TestMethod]
-        public void TestEdit()
-        {
-            var questionToEdit = this.mockUnitOfWork.Object.QuestionRepository.GetByID(0);
-            var result = this.controller.Edit(questionToEdit.QuestionID);
+        //[TestMethod]
+        //public void TestEdit()
+        //{
+        //    var questionToEdit = this.mockUnitOfWork.Object.QuestionRepository.GetByID(0);
+        //    var result = this.controller.Edit(questionToEdit.QuestionID);
 
-            Assert.AreEqual("Edit", result);
-        }
+        //    Assert.AreEqual("Edit", result);
+        //}
 
     }
 }
