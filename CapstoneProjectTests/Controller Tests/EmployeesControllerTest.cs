@@ -103,14 +103,14 @@ namespace CapstoneProjectTests
             this.mockUnitOfWork.Verify(m => m.EmployeeRepository.Update(employeeToUpdate), Times.Once);
         }
 
-        [TestMethod]
-        public void TestEdit()
-        {
-            var employeeToEdit = this.mockUnitOfWork.Object.EmployeeRepository.GetByID(0);
+        //[TestMethod]
+        //public void TestEdit()
+        //{
+        //    var employeeToEdit = this.mockUnitOfWork.Object.EmployeeRepository.GetByID(0);
 
-            var result = this.controller.Edit(employeeToEdit.EmployeeID) as ViewResult;
+        //    var result = this.controller.Edit(employeeToEdit.EmployeeID) as ViewResult;
 
-            Assert.IsInstanceOfType(result.ViewData.Model, typeof(Employee));
-        }
+        //    Assert.IsInstanceOfType(result.ViewData.Model, typeof(Employee));
+        //}
     }
 }
