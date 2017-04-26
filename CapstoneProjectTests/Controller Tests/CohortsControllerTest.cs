@@ -109,6 +109,7 @@ namespace CapstoneProjectTests
         public void TestEdit()
         {
             var cohortToEdit = this.mockUnitOfWork.Object.CohortRepository.GetByID(0);
+            this.mockUnitOfWork.Setup(m => m.CohortRepository.Update(cohortToEdit));
 
             var result = this.controller.Edit(cohortToEdit.CohortID) as ViewResult;
 
