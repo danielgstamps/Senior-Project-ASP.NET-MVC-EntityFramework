@@ -60,7 +60,7 @@ namespace CapstoneProject.Models
             try
             {
                 var firstEmployee = Employees.First();
-                var allEvalsOfType = firstEmployee.Evaluations.Where(eval => eval.TypeID == typeId);
+                var allEvalsOfType = firstEmployee.Evaluations.Where(eval => eval.TypeID == typeId && !eval.IsComplete());
                 return allEvalsOfType.First().OpenDate.ToString("d");
             }
             catch (Exception)
