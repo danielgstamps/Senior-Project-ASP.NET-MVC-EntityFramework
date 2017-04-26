@@ -108,7 +108,16 @@ namespace CapstoneProjectTests
         [TestMethod]
         public void TestEdit()
         {
+            var cohortToEdit = this.mockUnitOfWork.Object.CohortRepository.GetByID(0);
             
+            var result = this.controller.Edit(cohortToEdit.CohortID) as RedirectToRouteResult;
+
+            var d = new FormCollection()
+            {
+                
+            };
+
+            //Assert.AreEqual("Details", result.RouteValues("Action"));
         }
     }
 }

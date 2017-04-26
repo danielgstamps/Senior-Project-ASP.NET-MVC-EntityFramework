@@ -84,11 +84,5 @@ namespace CapstoneProjectTests
 
             this.mockUnitOfWork.Verify(m => m.EvaluationRepository.Update(evalToUpdate), Times.Once);
         }
-
-        [TestMethod]
-        public void TestEdit()
-        {
-
-        }
     }
 }
