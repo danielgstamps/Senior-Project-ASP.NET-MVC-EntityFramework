@@ -3,7 +3,24 @@
 @{
     var currentDate = DateTime.Today.ToString().Split(' ')[0];
     var questionNumber = 1;
-    var numOfRaters = Model.Raters.Count;
+    var numOfSupervisors = 0;
+    var numOfCoworkers = 0;
+    var numOfSupervisees = 0;
+    foreach (var rater in Model.Raters)
+    {
+        switch (rater.Role)
+        {
+            case "Supervisor":
+                numOfSupervisors++;
+                break;
+            case "Coworker":
+                numOfCoworkers++;
+                break;
+            case "Supervisee":
+                numOfSupervisees++;
+                break;
+        }
+    }
 }
 
 <h3>
@@ -14,7 +31,7 @@
         <th></th>
         <th>Self </th>
         @foreach (var rater in Model.Raters)
-        {
+    {
             <th>@rater.Role </th>
         }
     </tr>
@@ -31,7 +48,7 @@
             var answer = Model.SelfAnswers.Split(',')[questionNumber - 1];
             <tr>
                 <td>
-                    Question @questionNumber 
+                    Question @questionNumber
                 </td>
                 <td>
                     @answer

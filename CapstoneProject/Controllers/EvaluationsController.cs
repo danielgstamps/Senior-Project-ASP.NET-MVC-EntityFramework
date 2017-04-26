@@ -478,6 +478,73 @@ namespace CapstoneProject.Controllers
             return new PdfActionResult("ReportAsPdf", eval);
         }
 
+        private EvaluationReportData createReportData(Evaluation eval)
+        {
+            var supervisors = new List<Rater>();
+            var coworkers = new List<Rater>();
+            var supervisees = new List<Rater>();
+            foreach (var rater in eval.Raters)
+            {
+                switch (rater.Role)
+                {
+                    case "Supervisor":
+                        supervisors.Add(rater);
+                        break;
+                    case "Coworker":
+                        coworkers.Add(rater);
+                        break;
+                    case "Supervisee":
+                        supervisors.Add(rater);
+                        break;
+                }
+            }
+            var numOfQuestions = 0;
+            foreach (var category in eval.Type.Categories)
+            {
+                foreach (var question in category.Questions)
+                {
+                    numOfQuestions++;
+                }
+            }
+            var supervisorAvgs = getQuestionAvgPerRole(supervisors, numOfQuestions);
+            var coworkerAvgs = getQuestionAvgPerRole(coworkers, numOfQuestions);
+            var superviseeAvgs = getQuestionAvgPerRole(supervisees, numOfQuestions);
+            var employeeAnswers = new List<int>();
+            foreach (var answerString in eval.SelfAnswers.Split(',').ToList())
+            {
+                employeeAnswers.Add(Convert.ToInt32(answerString));
+            }
+            var data = new EvaluationReportData
+            {
+                EmployeeName = eval.Employee.FirstName + " " + eval.Employee.LastName,
+                TypeName = eval.Type.TypeName,
+                StageName = eval.Stage.StageName,
+                EmployeeAnswers = employeeAnswers,
+                SupervisorAvgAnswers = superviseeAvgs,
+                CoworkerAvgAnswers = coworkerAvgs,
+                SuperviseeAvgAnswers = superviseeAvgs
+            };
+            return data;
+        }
+
+        private List<int> getQuestionAvgPerRole(List<Rater> raters, int numOfQuestions)
+        {
+            var totalForQuestion = 0;
+            var avgForQuestion = 0;
+            var avgs = new List<int>();
+            for (int i = 0; i < numOfQuestions; i++)
+            {
+                foreach (var rater in raters)
+                {
+                    var answer = Convert.ToInt32(rater.Answers.Split(',')[i]);
+                    totalForQuestion += answer;
+                }
+                avgForQuestion = totalForQuestion / raters.Count;
+                avgs.Add(avgForQuestion);
+            }
+            return avgs;
+        }
+
         // GET: Evaluations/Details/5
         public ActionResult Details(int? id)
         {
