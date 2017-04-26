@@ -90,16 +90,16 @@ namespace CapstoneProjectTests
             this.mockUnitOfWork.Verify(m => m.QuestionRepository.Update(questionToUpdate), Times.Once);
         }
 
-        [TestMethod]
-        public void TestEdit()
-        {
-            var questionToEdit = this.mockUnitOfWork.Object.QuestionRepository.GetByID(0);
-            this.mockUnitOfWork.Setup(m => m.QuestionRepository.Update(questionToEdit));
+        //[TestMethod]
+        //public void TestEdit()
+        //{
+        //    var questionToEdit = this.mockUnitOfWork.Object.QuestionRepository.GetByID(0);
+        //    this.mockUnitOfWork.Setup(m => m.QuestionRepository.Update(questionToEdit));
 
-            var result = this.controller.Edit(questionToEdit.QuestionID) as ViewResult;
+        //    var result = this.controller.Edit(questionToEdit.QuestionID) as ViewResult;
 
-            Assert.IsInstanceOfType(result.ViewData.Model, typeof(Question));
-        }
+        //    Assert.IsInstanceOfType(result.ViewData.Model, typeof(Question));
+        //}
 
     }
 }
