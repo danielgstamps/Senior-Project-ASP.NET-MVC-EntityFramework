@@ -775,7 +775,6 @@ C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\bin\itextsharp.dll
 C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\bin\itextsharp.xmlworker.dll
 C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\bin\MvcRazorToPdf.dll
 C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\bin\itextsharp.xml
-C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.csprojResolveAssemblyReference.cache
 C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.RaterFirstLastNameNowJustName.resources
 C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.ForgotToRemoveLastNameFromRater.resources
 C:\Users\Daniel\Desktop\WUDSCO\CapstoneProject\bin\ApplicationInsights.config
@@ -1034,3 +1033,5 @@ C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.UserM
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.csproj.GenerateResource.Cache
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.dll
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.pdb
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.AddedEmailConfirmedToEmployee.resources
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.csprojResolveAssemblyReference.cache

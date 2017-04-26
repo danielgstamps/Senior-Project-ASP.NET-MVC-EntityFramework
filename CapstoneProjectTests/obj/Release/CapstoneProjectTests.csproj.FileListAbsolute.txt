@@ -386,3 +386,4 @@ C:\Users\csuser\Desktop\WUDSCO\CapstoneProjectTests\obj\Release\CapstoneProjectT
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProjectTests\obj\Release\CapstoneProjectTests.dll
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProjectTests\obj\Release\CapstoneProjectTests.pdb
 C:\Users\Will\Source\Repos\WUDSCO\CapstoneProjectTests\bin\Release\itextsharp.xmlworker.dll
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProjectTests\bin\Release\itextsharp.xmlworker.dll
