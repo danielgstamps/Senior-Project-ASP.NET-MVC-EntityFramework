@@ -39,7 +39,7 @@
             @Html.DisplayFor(modelItem => item.Type.TypeName)
         </td>
         <td>
-            @Html.ActionLink("View Report", "ShowReport", new { id=item.EvaluationID })
+            @Html.ActionLink("View Report", "ShowReportAsHtml", new { id=item.EvaluationID })
         </td>
     </tr>
 }

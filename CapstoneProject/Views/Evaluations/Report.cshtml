@@ -1,8 +1,6 @@
 ﻿@model CapstoneProject.Models.Evaluation
 
 @{
-    ViewBag.Title = "Report";
-    Layout = "~/Views/Shared/PdfLayout.cshtml";
     var currentDate = DateTime.Today.ToString().Split(' ')[0];
     var questionNumber = 1;
     var numOfRaters = Model.Raters.Count;
@@ -48,7 +46,3 @@
         }
     }
 </table>
-<p>
-    @Html.ActionLink("Download as PDF", "DownloadReport", new { id = Model.EvaluationID }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>

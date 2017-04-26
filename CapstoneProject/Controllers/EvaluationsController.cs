@@ -461,28 +461,21 @@ namespace CapstoneProject.Controllers
             return RedirectToAction("EditRaters", new { id = eval.EvaluationID });
         }
 
-        public ActionResult ShowReport(int? id)
+        /// <summary>
+        /// Shows an evaluation report as an HTML page.
+        /// </summary>
+        /// <param name="id">ID of the desired evaluation</param>
+        /// <returns>A ViewResult that renders the report</returns>
+        public ActionResult ShowReportAsHtml(int? id)
         {
             var eval = this.UnitOfWork.EvaluationRepository.GetByID(id);
-            return View("Report", eval);
+            return View("ReportAsHtml", eval);
         }
 
-        public ActionResult DownloadReport(int? id)
+        public ActionResult ShowReportAsPdf(int? id)
         {
             var eval = this.UnitOfWork.EvaluationRepository.GetByID(id);
-            //Document pdf = new Document();
-            //pdf.Open();
-            //pdf.NewPage();
-            //pdf.Close();
-            return new PdfActionResult("Report", eval);
-            //return new PdfActionResult(eval, (writer, document) =>
-            //{
-            //    document.SetPageSize(new Rectangle(500f, 500f, 90));
-            //    document.NewPage();
-            //})
-            //{
-            //    FileDownloadName = "DownloadMe.pdf"
-            //};
+            return new PdfActionResult("ReportAsPdf", eval);
         }
 
         // GET: Evaluations/Details/5
