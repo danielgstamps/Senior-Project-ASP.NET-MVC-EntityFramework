@@ -50,7 +50,7 @@
                     <label class="alert-success">Completed @Model.Eval.CompletedDate.Value.ToString("MM/dd/yyyy h:mm tt")</label>
                     if (Model.Eval.CloseDate <= DateTime.Today)
                     {
-                        <br/>
+                        <br />
                         <label class="alert-warning">Closed @Model.Eval.CloseDate.Date.ToString("d")</label>
                     }
                 }

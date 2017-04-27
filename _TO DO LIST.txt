@@ -4,15 +4,10 @@ Musts:
 - reports
 - more testing
 
-- moving an employee with baseline complete flags the cohort as baseline complete
-	- disallow editing cohort after baseline is complete?
-
-- stages: Should they be able to start over after summative?
-
 Maybes:
+- prevent double-clicking postbacks.
 - delete rater account if they close page early
-- prevent spamming emails.
-- Adding employee to a cohort: Catch them up? Reset?
+- prevent spamming emails
 _____________________________________________________________________________
 
 Reports:
@@ -32,9 +27,3 @@ Reports:
 		- AVERAGE of supervisees' answers.
 		- AVERAGE of coworkers' answers.
 		- AVERAGE of all.
-
-supervisor: rater1 replaced by rater5 in formative
-	rater5 replaced by rater7
-supervisee: rater3 replaced by rater4 in baseline
-coworker: rater2 replaced by rater6 in formative
-expected: 4, 6, 7

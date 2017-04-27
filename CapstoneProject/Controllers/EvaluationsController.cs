@@ -587,6 +587,12 @@ namespace CapstoneProject.Controllers
                 return HttpNotFound();
             }
 
+            // Link manipulation could crash the page without this.
+            if (cohort.IsStageComplete("Summative", 1) && cohort.IsStageComplete("Summative", 2))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
             TempData["CohortID"] = cohortId;
             TempData["CohortName"] = cohort.Name;
 
@@ -614,11 +620,11 @@ namespace CapstoneProject.Controllers
 
             // Remove types if the cohort already has them assigned.
             var itemList = model.TypeList.ToList();
-            if (cohort.Type1Assigned)
+            if (cohort.Type1Assigned || cohort.IsStageComplete("Summative", 1))
             {
                 itemList.RemoveAt(0);
             }
-            if (cohort.Type2Assigned)
+            if (cohort.Type2Assigned || cohort.IsStageComplete("Summative", 2))
             {
                 itemList.RemoveAt(1);
             }
