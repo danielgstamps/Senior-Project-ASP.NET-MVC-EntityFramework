@@ -89,7 +89,7 @@
                 {
                     <label class="alert-warning">Type 1 in progress</label>
                     <label> ( </label>
-                    @Html.ActionLink("Remind Cohort", "NotifyCohort", new {cohortId = item.CohortID, typeId = 1})
+                    @Html.ActionLink("Notify", "NotifyCohort", new {cohortId = item.CohortID, typeId = 1})
                     <label> ) </label>
                     if (item.Type2Assigned || item.AllEvalsOfTypeComplete(2)){ <br /> }
                 } 
@@ -102,7 +102,7 @@
                     <label> | </label>
                     @Html.ActionLink("Delete", "Delete", "Evaluations", new {cohortId = item.CohortID, typeId = 1}, null)
                     <label> | </label>
-                    @Html.ActionLink("Notify Cohort", "NotifyCohort", new {cohortId = item.CohortID, typeId = 1})
+                    @Html.ActionLink("Notify", "NotifyCohort", new {cohortId = item.CohortID, typeId = 1})
                     <label> ) </label>
                     if (item.Type2Assigned || item.AllEvalsOfTypeComplete(2)){ <br /> }
                 }
@@ -127,7 +127,7 @@
                 {
                     <label class="alert-warning">Type 2 in progress</label>
                     <label> ( </label>
-                    @Html.ActionLink("Remind Cohort", "NotifyCohort", new { cohortId = item.CohortID, typeId = 2 })
+                    @Html.ActionLink("Notify", "NotifyCohort", new { cohortId = item.CohortID, typeId = 2 })
                     <label> ) </label>
                 }
 
@@ -139,7 +139,7 @@
                     <label> | </label>
                     @Html.ActionLink("Delete", "Delete", "Evaluations", new {cohortId = item.CohortID, typeId = 2}, null)
                     <label> | </label>
-                    @Html.ActionLink("Notify Cohort", "NotifyCohort", new { cohortId = item.CohortID, typeId = 2 })
+                    @Html.ActionLink("Notify", "NotifyCohort", new { cohortId = item.CohortID, typeId = 2 })
                     <label> ) </label>
                 }
             </td>

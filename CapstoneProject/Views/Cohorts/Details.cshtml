@@ -62,18 +62,20 @@
             </tr>
         }
 
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>
-                <label>(</label>
-                @Html.ActionLink("Notify All Pending", "SendCreatePasswordEmails", new { id = Model.CohortID })
-                <label>)</label>
-            </td>
-        </tr>
-
+        @if (Model.Employees.Any(e => !e.EmailConfirmed))
+        {
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <label>(</label>
+                    @Html.ActionLink("Notify All Pending", "SendCreatePasswordEmails", new { id = Model.CohortID })
+                    <label>)</label>
+                </td>
+            </tr>
+        }
     </table>
 </div>
 <br/>

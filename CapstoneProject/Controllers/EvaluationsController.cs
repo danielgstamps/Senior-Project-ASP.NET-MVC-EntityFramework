@@ -441,18 +441,6 @@ namespace CapstoneProject.Controllers
             eval.Raters.Add(model.NewRater);
             UnitOfWork.Save();
 
-            var type = eval.TypeID;
-            switch (type)
-            {
-                case 1:
-                    eval.Employee.Cohort.Type1Assigned = true;
-                    break;
-                case 2:
-                    eval.Employee.Cohort.Type2Assigned = true;
-                    break;
-            }
-            UnitOfWork.Save();
-
             TempData["ReplaceRaterSuccess"] = "Successfully replaced rater.";
             return RedirectToAction("EditRaters", new { id = eval.EvaluationID });
         }
@@ -694,9 +682,9 @@ namespace CapstoneProject.Controllers
                     e.Stage.StageName.Equals("Baseline") && 
                     e.TypeID == model.TypeID);
 
-                model.NumberOfSupervisors = prevEval.Raters.Count(r => r.Role.Equals("Supervisor"));
-                model.NumberOfCoworkers = prevEval.Raters.Count(r => r.Role.Equals("Coworker"));
-                model.NumberOfSupervisees = prevEval.Raters.Count(r => r.Role.Equals("Supervisee"));
+                model.NumberOfSupervisors = NumberOfRatersWithRole(prevEval, "Supervisor");
+                model.NumberOfCoworkers = NumberOfRatersWithRole(prevEval, "Coworker");
+                model.NumberOfSupervisees = NumberOfRatersWithRole(prevEval, "Supervisee");
             }
 
             foreach (var emp in cohort.Employees)
@@ -926,7 +914,7 @@ namespace CapstoneProject.Controllers
 
         private int NumberOfRatersWithRole(Evaluation eval, string role)
         {
-            return eval.Raters.Count(r => r.Role.Equals(role));
+            return eval.Raters.Count(r => r.Role.Equals(role) && !r.Disabled);
         }
 
         private string ConvertAnswersToString(List<QuestionViewModel> questions)

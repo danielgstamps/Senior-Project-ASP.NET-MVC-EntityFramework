@@ -18,35 +18,36 @@
     <dl>
         <dt>
             @Html.DisplayNameFor(model => model.RaterToReplace.Name):
+            <label></label>
             @Html.DisplayFor(model => model.RaterToReplace.Name)
+            <br />
         </dt>
         <dt>
             Email:
+            <label></label>
             @Html.DisplayFor(model => model.RaterToReplace.Email)
         </dt>
     </dl>
-    <br/>
+    <br />
 
     <h4 class="alert-danger">@TempData["DuplicateError"]</h4>
     <h4 class="alert-info">New @Model.RaterToReplace.Role:</h4>
-    <div class="form-group">
-        @Html.LabelFor(model => Model.NewRater.Name, new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => Model.NewRater.Name, new { htmlAttributes = new { @class = "form-control" } })
-        </div>
-    </div>
+    <dl>
+        <dt>
+            @Html.DisplayNameFor(model => model.NewRater.Name):
+            <label></label>
+            @Html.EditorFor(model => model.NewRater.Name)
+        </dt>
+        <dt>
+            Email:
+            <label></label>
+            @Html.EditorFor(model => model.NewRater.Email)
+        </dt>
+    </dl>
 
+    <br />
     <div class="form-group">
-        @Html.LabelFor(model => Model.NewRater.Email, new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => Model.NewRater.Email, new { htmlAttributes = new { @class = "form-control" } })
-        </div>
-    </div>
-
-    <label></label>
-    <br /><br />
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
+        <div>
             <input type="submit" value="Replace Rater" class="btn btn-default" />
         </div>
     </div>

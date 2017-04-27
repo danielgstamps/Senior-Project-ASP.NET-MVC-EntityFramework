@@ -82,13 +82,13 @@
                 {
                     <label class="alert-info">Raters not yet assigned</label>
                 }
-                else if (item.Raters.Any(r => string.IsNullOrEmpty(r.Answers)))
+                else if (item.Raters.Any(r => !r.Disabled && string.IsNullOrEmpty(r.Answers)))
                 {
                     <label class="alert-warning">Rater evaluations in progress</label>
                     if (item.CloseDate > DateTime.Today)
                     {
                         <label> | </label>
-                        @Html.ActionLink("Edit/Notify", "EditRaters", new { id = item.EvaluationID })
+                        @Html.ActionLink("View", "EditRaters", new { id = item.EvaluationID })
                     }
                 }
                 else
@@ -97,7 +97,7 @@
                     if (item.CloseDate > DateTime.Today)
                     {
                         <label> | </label>
-                        @Html.ActionLink("Edit", "EditRaters", new { id = item.EvaluationID })
+                        @Html.ActionLink("View", "EditRaters", new { id = item.EvaluationID })
                     }
                 }
             </td>
