@@ -1,0 +1,34 @@
+﻿@model CapstoneProject.ViewModels.AssignRatersViewModel
+@{
+    ViewBag.Title = "Confirm Raters";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Your Raters</h2>
+<h4>Here are the raters from your previous evaluation. Are they correct?</h4>
+<br />
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.EvalId)
+    for (var i = 0; i < Model.Raters.Count; i++)
+    {
+        <h4>@Model.Raters[i].Role:</h4>
+        <dl>
+            <dt>
+                <label>@Html.DisplayNameFor(model => model.Raters[i].Name):</label>
+                <label>@Html.DisplayFor(model => model.Raters[i].Name)</label>
+            </dt>
+            <dt>
+                <label>Email:</label>
+                <label>@Html.DisplayFor(model => model.Raters[i].Email)</label>
+            </dt>
+        </dl>
+        <br/>
+    }
+
+    <br /><br />
+    @Html.ActionLink("Edit Raters", "EditRaters", "Evaluations", new { id = Model.EvalId }, null)
+    <label> | </label>
+    <input type="submit" value="Confirm Raters" class="btn btn-default" />
+}

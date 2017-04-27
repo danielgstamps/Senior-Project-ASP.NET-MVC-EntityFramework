@@ -110,6 +110,61 @@ namespace CapstoneProject.Controllers
             return View("ThankYou");
         }
 
+        public ActionResult ConfirmRaters(int? id) //evalId
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var eval = UnitOfWork.EvaluationRepository.GetByID(id);
+            if (eval == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var employee = UnitOfWork.EmployeeRepository.GetByID(eval.EmployeeID);
+            if (employee == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
+            }
+
+            // If the employee has a previously completed eval (with raters), pull as much rater info from it as possible.
+            if (employee.Evaluations.Any(e => e.IsComplete() && e.Raters.Count != 0))
+            {
+                var completedEval = employee.Evaluations.Last(e => e.IsComplete() && e.Raters.Count != 0);
+                var previousRaters = completedEval.Raters.ToList();
+                foreach (var rater in eval.Raters)
+                {
+                    foreach (var prevRater in previousRaters)
+                    {
+                        if (rater.Role.Equals(prevRater.Role) &&                    // Roles are the same
+                            !prevRater.Disabled &&                                  // Previous rater isn't disabled.
+                            !eval.Raters.Any(r => r.Email.Equals(prevRater.Email))) // model didn't already use this rater.
+                        {
+                            rater.Name = prevRater.Name;
+                            rater.Email = prevRater.Email;
+                            UnitOfWork.Save();
+                        }
+                    }
+                }
+            }
+
+            var model = new AssignRatersViewModel()
+            {
+                EvalId = eval.EvaluationID,
+                Raters = eval.Raters.ToList()
+            };
+
+            return View("ConfirmRaters", model);
+        }
+
+        [HttpPost]
+        public ActionResult ConfirmRaters(AssignRatersViewModel model)
+        {
+            return RedirectToAction("NotifyRatersNow", new {id = model.EvalId });
+        }
+
         // Send Notification Emails
         public ActionResult NotifyRater(int? raterId)
         {

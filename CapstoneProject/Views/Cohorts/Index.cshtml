@@ -87,7 +87,7 @@
 
                 @if (item.HasOpenEval(1) && !item.AllEvalsOfTypeComplete(1))
                 {
-                    <label class="alert-warning">Type 1 in progress</label>
+                    <label class="alert-info">Type 1 in progress</label>
                     <label> ( </label>
                     @Html.ActionLink("Notify", "NotifyCohort", new {cohortId = item.CohortID, typeId = 1})
                     <label> ) </label>
@@ -125,7 +125,7 @@
 
                 @if (item.HasOpenEval(2) && !item.AllEvalsOfTypeComplete(2))
                 {
-                    <label class="alert-warning">Type 2 in progress</label>
+                    <label class="alert-info">Type 2 in progress</label>
                     <label> ( </label>
                     @Html.ActionLink("Notify", "NotifyCohort", new { cohortId = item.CohortID, typeId = 2 })
                     <label> ) </label>
