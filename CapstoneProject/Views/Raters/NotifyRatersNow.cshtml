@@ -1,0 +1,21 @@
+﻿@model CapstoneProject.Models.Evaluation
+@{
+    ViewBag.Title = "Notify Raters?";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => Model.EmployeeID)
+    @Html.HiddenFor(m => Model.EvaluationID)
+    <h2>Thank you.</h2>
+    <h4>Your evaluation is complete. Would you like to send an email notification to your raters now?</h4>
+    <h4>Please note that they will only be able to complete the evaluation after you've sent the email.</h4>
+
+    <br/>
+    <br/>
+
+    @Html.ActionLink("Notify later", "EmployeeEvalsIndex", "Evaluations", new {id = Model.EmployeeID}, null)
+    <label> | </label>
+    <input type="submit" value="Notify Raters Now" class="btn btn-default"/>
+}

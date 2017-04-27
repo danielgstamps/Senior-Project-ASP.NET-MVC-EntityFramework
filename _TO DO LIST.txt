@@ -5,8 +5,12 @@ Musts:
 - more testing
 - print category titles on ViewEval
 - "Notify raters now?" view after assign
+	- skip AssignRaters for Formative/Summative
+	- skip NotifyRaters if no raters.
+
 - moving an employee with baseline complete flags the cohort as baseline complete
-	- disallow editing cohort after baseline is complete
+	- disallow editing cohort after baseline is complete?
+
 - stages: Should they be able to start over after summative?
 
 Maybes:

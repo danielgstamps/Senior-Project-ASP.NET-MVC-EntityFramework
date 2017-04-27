@@ -126,6 +126,46 @@ namespace CapstoneProject.Controllers
             return RedirectToAction("EditRaters", "Evaluations", new { id = evalId });
         }
 
+        // GET: NotifyRatersNow
+        public ActionResult NotifyRatersNow(int? id) //evalId
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var eval = UnitOfWork.EvaluationRepository.GetByID(id);
+            if (eval == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            TempData["TakeEvalSuccess"] = "Evaluation complete. Please remember to send email notifications to your raters."; 
+            return View("NotifyRatersNow", eval);
+        }
+        
+        // POST: NotifyRatersNow
+        [HttpPost]
+        public ActionResult NotifyRatersNow(Evaluation model)
+        {
+            if (model == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var eval = UnitOfWork.EvaluationRepository.GetByID(model.EvaluationID);
+            foreach (var rater in eval.Raters)
+            {
+                if (!rater.Disabled && string.IsNullOrEmpty(rater.Answers))
+                {
+                    SendRaterEmail(rater.RaterID, model.EvaluationID);
+                }
+            }
+
+            TempData["TakeEvalSuccess"] = "Evaluation complete. Email notifications sent to raters.";
+            return RedirectToAction("EmployeeEvalsIndex", "Evaluations", new {id = model.EmployeeID});
+        }
+
         private void SendRaterEmail(int raterId, int evalId)
         {
             var rater = UnitOfWork.RaterRepository.GetByID(raterId);
