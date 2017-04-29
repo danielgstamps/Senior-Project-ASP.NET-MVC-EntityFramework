@@ -1154,3 +1154,4 @@ C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.cspro
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.dll
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.pdb
 C:\Users\Will\Source\Repos\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.csprojResolveAssemblyReference.cache
+C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.csprojResolveAssemblyReference.cache

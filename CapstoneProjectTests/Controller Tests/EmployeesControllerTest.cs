@@ -108,7 +108,15 @@ namespace CapstoneProjectTests
         {
             this.mockUnitOfWork.Setup(m => m.EmployeeRepository.GetByID(0)).Returns(employees[0]);
             var result = this.controller.Edit(0) as ViewResult;
+            if (result == null) return;
+            var resultModel = result.Model as Employee;
             Assert.AreEqual("Edit", result.ViewName);
+            if (resultModel == null) return;
+            Assert.AreEqual(employees[0].Address, resultModel.Address);
+            Assert.AreEqual(employees[0].Email, resultModel.Email);
+            Assert.AreEqual(employees[0].FirstName, resultModel.FirstName);
+            Assert.AreEqual(employees[0].LastName, resultModel.LastName);
+            Assert.AreEqual(employees[0].Phone, resultModel.Phone);
         }
     }
 }
