@@ -448,7 +448,7 @@
     <Content Include="Views\Raters\ThankYou.cshtml" />
     <Content Include="Views\Shared\PdfLayout.cshtml" />
     <Content Include="Views\Evaluations\AdminEvalsIndex.cshtml" />
-    <Content Include="Views\Evaluations\Report.cshtml" />
+    <Content Include="Views\Evaluations\ReportPartial.cshtml" />
     <Content Include="Views\Account\Error.cshtml" />
     <Content Include="Views\Evaluations\ReportAsHtml.cshtml" />
     <Content Include="Views\Evaluations\ReportAsPdf.cshtml" />

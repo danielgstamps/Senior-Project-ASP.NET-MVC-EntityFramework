@@ -4,10 +4,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <body>
-    @Html.Partial("Report")
+    @Html.Partial("ReportPartial")
 </body>
 
 <p>
     @Html.ActionLink("Download as PDF", "ShowReportAsPdf", new { id = Model.EvaluationID }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to List", "AdminEvalsIndex")
 </p>
