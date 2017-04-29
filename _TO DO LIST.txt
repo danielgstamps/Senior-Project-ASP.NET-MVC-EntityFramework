@@ -3,7 +3,7 @@ CLONE URL: https://wudsco.visualstudio.com/_git/WUDSCO
 Musts: 
 - reports
 - more testing
-- editEval posts formative with 0 raters if baseline had 1
+- entering employee email as rater will delete the user once they finish eval
 
 Maybes:
 - prevent double-clicking postbacks.

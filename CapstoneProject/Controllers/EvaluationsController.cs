@@ -556,7 +556,7 @@ namespace CapstoneProject.Controllers
             model.CohortID = (int)cohortId;
             model.TypeID = typeId.Value;
 
-            model.StageID = eval.StageID;
+            model.StageID = eval.StageID; 
             model.OpenDate = eval.OpenDate;
             model.CloseDate = eval.CloseDate;
 
@@ -613,6 +613,20 @@ namespace CapstoneProject.Controllers
                 var eval = emp.Evaluations.Single(e => !e.IsComplete() && e.TypeID == model.TypeID);
                 UnitOfWork.EvaluationRepository.Delete(eval.EvaluationID);
                 UnitOfWork.Save();
+            }
+
+            // If stage != baseline, pull rater numbers from baseline eval
+            if (selectedStageName != "Baseline")
+            {
+                var prevEval = UnitOfWork.EvaluationRepository.Get().First(e =>
+                    e.Employee.CohortID == cohort.CohortID &&
+                    e.IsComplete() &&
+                    e.Stage.StageName.Equals("Baseline") &&
+                    e.TypeID == model.TypeID);
+
+                model.NumberOfSupervisors = NumberOfRatersWithRole(prevEval, "Supervisor");
+                model.NumberOfCoworkers = NumberOfRatersWithRole(prevEval, "Coworker");
+                model.NumberOfSupervisees = NumberOfRatersWithRole(prevEval, "Supervisee");
             }
 
             // Recreate evals (I remove/recreate so the emails re-send, and the Rater logic is cleaner).
