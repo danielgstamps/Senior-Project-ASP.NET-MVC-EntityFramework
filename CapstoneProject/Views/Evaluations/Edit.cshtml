@@ -21,7 +21,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.StageID, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.StageID, Model.StageList, new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.StageID, Model.StageList, new { @class = "form-control"})
                 @Html.ValidationMessageFor(model => model.StageID, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -46,30 +46,40 @@
                 @Html.ValidationMessageFor(model => model.CloseDate, "", new { @class = "text-danger" })
             </div>
         </div>
-
-        <div class="form-group">
-            @Html.Label("Supervisors", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-1">
-                @Html.EditorFor(m => m.NumberOfSupervisors, new { htmlAttributes = new { @class = "form-control", min = 0 } })
-                @Html.ValidationMessageFor(model => model.NumberOfSupervisors, "", new { @class = "text-danger" })
+        
+        @if (Model.StageID == ViewBag.BaselineId)
+        {
+            <div class="form-group">
+                @Html.Label("Supervisors", htmlAttributes: new {@class = "control-label col-md-2"})
+                <div class="col-md-1">
+                    @Html.EditorFor(m => m.NumberOfSupervisors, new {htmlAttributes = new {@class = "form-control", min = 0, max = 1}})
+                    @Html.ValidationMessageFor(model => model.NumberOfSupervisors, "", new {@class = "text-danger"})
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            @Html.Label("Coworkers", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-1">
-                @Html.EditorFor(m => m.NumberOfCoworkers, new { htmlAttributes = new { @class = "form-control", min = 0 } })
-                @Html.ValidationMessageFor(model => model.NumberOfCoworkers, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.Label("Coworkers", htmlAttributes: new {@class = "control-label col-md-2"})
+                <div class="col-md-1">
+                    @Html.EditorFor(m => m.NumberOfCoworkers, new {htmlAttributes = new {@class = "form-control", min = 0, max = 10}})
+                    @Html.ValidationMessageFor(model => model.NumberOfCoworkers, "", new {@class = "text-danger"})
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            @Html.Label("Supervisees", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-1">
-                @Html.EditorFor(m => m.NumberOfSupervisees, new { htmlAttributes = new { @class = "form-control", min = 0 } })
-                @Html.ValidationMessageFor(model => model.NumberOfSupervisees, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.Label("Supervisees", htmlAttributes: new {@class = "control-label col-md-2"})
+                <div class="col-md-1">
+                    @Html.EditorFor(m => m.NumberOfSupervisees, new {htmlAttributes = new {@class = "form-control", min = 0, max = 10}})
+                    @Html.ValidationMessageFor(model => model.NumberOfSupervisees, "", new {@class = "text-danger"})
+                </div>
             </div>
-        </div> 
+        }
+        else
+        {
+            <div class="form-group">
+                <label class="col-md-2"></label>
+                <label class="alert-info col-md-2">Raters from the previous stage are assigned.</label>
+            </div>
+        }
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">

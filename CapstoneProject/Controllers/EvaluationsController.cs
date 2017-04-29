@@ -523,7 +523,7 @@ namespace CapstoneProject.Controllers
             TempData["TypeDisplay"] = typeId;
             TempData["CohortName"] = cohort.Name;
 
-            EvaluationCreateViewModel model = new EvaluationCreateViewModel();
+            var model = new EvaluationCreateViewModel();
 
             // Get all Types.
             model.TypeList = UnitOfWork.TypeRepository.dbSet.Select(t => new SelectListItem()
@@ -543,14 +543,14 @@ namespace CapstoneProject.Controllers
             var employee = cohort.Employees.First(e => e.Evaluations.Count != 0);
             if (employee == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
             // Get the first eval that isn't complete, of this type.
             var eval = employee.Evaluations.First(e => !e.IsComplete() && e.TypeID == typeId);
             if (eval == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
             model.CohortID = (int)cohortId;
@@ -564,6 +564,7 @@ namespace CapstoneProject.Controllers
             model.NumberOfCoworkers = NumberOfRatersWithRole(eval, "Coworker");
             model.NumberOfSupervisees = NumberOfRatersWithRole(eval, "Supervisee"); ;
 
+            ViewBag.BaselineId = UnitOfWork.StageRepository.Get(s => s.StageName.Equals("Baseline")).First().StageID;
             return View("Edit", model);
         }
 
@@ -594,6 +595,14 @@ namespace CapstoneProject.Controllers
             if (selectedStageName.Equals("Summative") && !cohort.IsStageComplete("Formative", model.TypeID))
             {
                 TempData["StageError"] = "Summative can only be selected after Formative is completed.";
+                return RedirectToAction("Edit", new { cohortId = (int)TempData["CohortID"], typeId = (int)TempData["TypeId"] });
+            }
+
+            // Disallow selecting stages that are already complete.
+            if (cohort.IsStageComplete(selectedStageName, model.TypeID))
+            {
+                TempData["StageError"] = "This cohort has already completed the " + selectedStageName +
+                    " stage for Type " + model.TypeID.ToString() + ".";
                 return RedirectToAction("Edit", new { cohortId = (int)TempData["CohortID"], typeId = (int)TempData["TypeId"] });
             }
 
