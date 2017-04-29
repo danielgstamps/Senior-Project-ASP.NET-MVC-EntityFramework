@@ -93,12 +93,9 @@ namespace CapstoneProjectTests
         //[TestMethod]
         //public void TestEdit()
         //{
-        //    var questionToEdit = this.mockUnitOfWork.Object.QuestionRepository.GetByID(0);
-        //    this.mockUnitOfWork.Setup(m => m.QuestionRepository.Update(questionToEdit));
-
-        //    var result = this.controller.Edit(questionToEdit.QuestionID) as ViewResult;
-
-        //    Assert.IsInstanceOfType(result.ViewData.Model, typeof(Question));
+        //    this.mockUnitOfWork.Setup(m => m.QuestionRepository.GetByID(0)).Returns(questions[0]);
+        //    var result = this.controller.Edit(0) as ViewResult;
+        //    Assert.AreEqual("Edit", result.ViewName);
         //}
 
     }

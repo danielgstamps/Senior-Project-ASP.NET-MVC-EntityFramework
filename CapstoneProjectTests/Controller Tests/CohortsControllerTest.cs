@@ -108,12 +108,9 @@ namespace CapstoneProjectTests
         //[TestMethod]
         //public void TestEdit()
         //{
-        //    var cohortToEdit = this.mockUnitOfWork.Object.CohortRepository.GetByID(0);
-        //    this.mockUnitOfWork.Setup(m => m.CohortRepository.Update(cohortToEdit));
-
-        //    var result = this.controller.Edit(cohortToEdit.CohortID) as ViewResult;
-
-        //    Assert.IsInstanceOfType(result.ViewData.Model, typeof(Cohort));
+        //    this.mockUnitOfWork.Setup(m => m.CohortRepository.GetByID(0)).Returns(cohorts[0]);
+        //    var result = this.controller.Edit(0) as ViewResult;
+        //    Assert.AreEqual("Edit Cohort", result.ViewName);
         //}
     }
 }
