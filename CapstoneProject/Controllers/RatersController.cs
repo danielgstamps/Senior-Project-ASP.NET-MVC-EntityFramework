@@ -26,10 +26,7 @@ namespace CapstoneProject.Controllers
             private set { _userManager = value; }
         }
 
-        public ApplicationSignInManager SignInManager
-        {
-            get { return HttpContext.GetOwinContext().Get<ApplicationSignInManager>(); }
-        }
+        public ApplicationSignInManager SignInManager => HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
 
         // GET RaterPrompt
         public async Task<ActionResult> RaterPrompt(int? id, int? raterId, string code)
