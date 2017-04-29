@@ -3,7 +3,7 @@ CLONE URL: https://wudsco.visualstudio.com/_git/WUDSCO
 Musts: 
 - reports
 - more testing
-- Evaluate still available with Type 2 in progress, type 1 complete
+- editEval displays raters
 
 Maybes:
 - prevent double-clicking postbacks.

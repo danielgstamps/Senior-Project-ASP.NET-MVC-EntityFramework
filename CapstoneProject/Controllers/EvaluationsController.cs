@@ -759,12 +759,12 @@ namespace CapstoneProject.Controllers
                 return;
             }
 
-            if (cohort.AllEvalsOfTypeComplete(1))
+            if (cohort.AllEvalsOfTypeComplete(1) && !cohort.IsStageComplete("Summative", 1))
             {
                 cohort.Type1Assigned = false;
             }
 
-            if (cohort.AllEvalsOfTypeComplete(2))
+            if (cohort.AllEvalsOfTypeComplete(2) && !cohort.IsStageComplete("Summative", 2))
             {
                 cohort.Type2Assigned = false;
             }
