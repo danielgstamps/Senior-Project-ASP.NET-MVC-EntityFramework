@@ -12,7 +12,7 @@
 {
     <h4 class="alert-danger">@TempData["DuplicateError"]</h4>
 
-    @Html.HiddenFor(m => m.EvalId);
+    @Html.HiddenFor(m => m.EvalId)
     for(var i = 0; i < Model.Raters.Count; i++)
     {
         <h4>@Model.Raters[i].Role:</h4>

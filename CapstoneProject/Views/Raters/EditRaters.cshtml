@@ -50,7 +50,7 @@
                 <dt>
                     @Html.ActionLink("Notify", "NotifyRater", "Raters", new { raterId = Model.Raters[i].RaterID }, null)
                     <label> | </label>
-                    @Html.ActionLink("Replace", "ReplaceRater", "Evaluations", new { id = Model.Raters[i].RaterID }, null)
+                    @Html.ActionLink("Replace", "ReplaceRater", "Raters", new { id = Model.Raters[i].RaterID }, null)
                 </dt>
             }
         </dl>

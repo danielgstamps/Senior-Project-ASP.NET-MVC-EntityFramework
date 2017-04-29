@@ -9,6 +9,7 @@ using System.Web.UI.WebControls;
 using CapstoneProject.DAL;
 using CapstoneProject.Models;
 using CapstoneProject.ViewModels;
+using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 
@@ -31,10 +32,241 @@ namespace CapstoneProject.Controllers
             get { return HttpContext.GetOwinContext().Get<ApplicationSignInManager>(); }
         }
 
+        // GET AssignRaters
+        public ActionResult AssignRaters(int? id) //evalId
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var eval = UnitOfWork.EvaluationRepository.GetByID(id);
+            if (eval == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var employee = UnitOfWork.EmployeeRepository.GetByID(eval.EmployeeID);
+            if (employee == null || !employee.Email.Equals(User.Identity.GetUserName()))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+            }
+
+            var model = new AssignRatersViewModel
+            {
+                EvalId = eval.EvaluationID,
+                Raters = eval.Raters.ToList()
+            };
+
+            foreach (var rater in model.Raters)
+            {
+                rater.Name = "";
+                rater.Email = "";
+            }
+
+            return View("AssignRaters", model);
+        }
+
+        // POST AssignRaters
+        [HttpPost]
+        public ActionResult AssignRaters(AssignRatersViewModel model)
+        {
+            if (model == null || model.Raters.Count == 0)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var eval = UnitOfWork.EvaluationRepository.GetByID(model.EvalId);
+            if (eval == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
+            }
+
+            if (eval.Raters.Count != model.Raters.Count)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
+            }
+
+            // Check for duplicate emails (Not using Unique tags because they don't need to be unique in the db).
+            if (model.Raters.DistinctBy(r => r.Email).Count() != model.Raters.Count)
+            {
+                TempData["DuplicateError"] = "Please enter a unique email address for each rater.";
+                return RedirectToAction("AssignRaters", new { id = model.EvalId });
+            }
+
+            if (model.Raters.Any(r => r.Email.Equals(eval.Employee.Email)))
+            {
+                TempData["DuplicateError"] = "Nice try. You can't rate yourself.";
+                return RedirectToAction("AssignRaters", new { id = eval.EvaluationID });
+            }
+
+            var i = 0;
+            foreach (var rater in eval.Raters)
+            {
+                rater.Name = model.Raters[i].Name;
+                rater.Email = model.Raters[i].Email;
+                UnitOfWork.Save();
+                i++;
+            }
+
+            return RedirectToAction("NotifyRatersNow", "Raters", new { id = eval.EvaluationID });
+        }
+
+        // GET: EditRaters
+        public ActionResult EditRaters(int? id) //evalID
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var eval = UnitOfWork.EvaluationRepository.GetByID(id);
+            if (eval == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var employee = UnitOfWork.EmployeeRepository.GetByID(eval.EmployeeID);
+            if (employee == null || !employee.Email.Equals(User.Identity.GetUserName()))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+            }
+
+            var model = new AssignRatersViewModel
+            {
+                EvalId = eval.EvaluationID,
+                Raters = eval.Raters.ToList()
+            };
+
+            return View("EditRaters", model);
+        }
+
+        // POST: EditRaters
+        [HttpPost]
+        public ActionResult EditRaters(AssignRatersViewModel model)
+        {
+            if (model == null || model.Raters.Count == 0)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var eval = UnitOfWork.EvaluationRepository.GetByID(model.EvalId);
+            if (eval == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            if (model.Raters.DistinctBy(r => r.Email).Count() != model.Raters.Count)
+            {
+                TempData["DuplicateError"] = "Please enter a unique email address for each rater.";
+                return RedirectToAction("EditRaters", new { id = model.EvalId });
+            }
+
+            if (model.Raters.Any(r => r.Email.Equals(eval.Employee.Email)))
+            {
+                TempData["DuplicateError"] = "Nice try. You can't rate yourself.";
+                return RedirectToAction("EditRaters", new { id = model.EvalId });
+            }
+
+            var i = 0;
+            foreach (var rater in eval.Raters)
+            {
+                rater.Name = model.Raters[i].Name;
+                rater.Email = model.Raters[i].Email;
+                UnitOfWork.Save();
+                i++;
+            }
+
+            TempData["EditRaterSuccess"] = "Successfully updated raters.";
+            return RedirectToAction("EmployeeEvalsIndex", "Evaluations", new { id = eval.EmployeeID });
+        }
+
+        // GET: ReplaceRater
+        public ActionResult ReplaceRater(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var raterToReplace = UnitOfWork.RaterRepository.GetByID(id);
+            if (raterToReplace == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var eval = UnitOfWork.EvaluationRepository.GetByID(raterToReplace.EvaluationID);
+            if (eval == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var employee = UnitOfWork.EmployeeRepository.GetByID(eval.EmployeeID);
+            if (employee == null || !employee.Email.Equals(User.Identity.GetUserName()))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+            }
+
+            var model = new ReplaceRaterViewModel()
+            {
+                EvalId = eval.EvaluationID,
+                RaterToReplace = raterToReplace,
+                NewRater = new Rater { Role = raterToReplace.Role }
+            };
+
+            return View("ReplaceRater", model);
+        }
+
+        // POST: ReplaceRater
+        [HttpPost]
+        public ActionResult ReplaceRater(ReplaceRaterViewModel model)
+        {
+            if (model == null ||
+                model.EvalId == null ||
+                model.RaterToReplace == null ||
+                model.NewRater == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
+            }
+
+            var eval = UnitOfWork.EvaluationRepository.GetByID(model.EvalId);
+            if (eval == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
+            }
+
+            if (eval.Raters.Any(r => r.Email.Equals(model.NewRater.Email)))
+            {
+                TempData["DuplicateError"] = "This evaluation already has a rater with that email.";
+                return RedirectToAction("ReplaceRater", new { id = model.RaterToReplace.RaterID });
+            }
+
+            if (model.NewRater.Email.Equals(eval.Employee.Email))
+            {
+                TempData["DuplicateError"] = "Nice try. You can't rate yourself.";
+                return RedirectToAction("ReplaceRater", new { id = model.RaterToReplace.RaterID });
+            }
+
+            var raterToDisable = UnitOfWork.RaterRepository.GetByID(model.RaterToReplace.RaterID);
+            if (raterToDisable == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
+            }
+
+            raterToDisable.Disabled = true;
+            UnitOfWork.Save();
+
+            eval.Raters.Add(model.NewRater);
+            UnitOfWork.Save();
+
+            TempData["ReplaceRaterSuccess"] = "Successfully replaced rater.";
+            return RedirectToAction("EditRaters", "Raters", new { id = eval.EvaluationID });
+        }
+
         // GET RaterPrompt
         public async Task<ActionResult> RaterPrompt(int? id, int? raterId, string code)
         {
-            if (id == null || raterId == null || string.IsNullOrEmpty(code))
+            if (id == null || raterId == 0 || string.IsNullOrEmpty(code))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
@@ -43,25 +275,29 @@ namespace CapstoneProject.Controllers
             var eval = UnitOfWork.EvaluationRepository.GetByID(id);
             if (rater == null || eval == null)
             {
-                ViewBag.RaterError = "This evaluation is no longer available.";
+                TempData["RaterError"] = "This evaluation is no longer available.";
                 return View("ThankYou");
             }
 
             if (eval.CloseDate <= DateTime.Today || rater.Disabled)
             {
-                ViewBag.RaterError = "This evaluation is no longer available.";
-                return RedirectToAction("RaterCleanup", "Raters", new { id = raterId });
-                // return View("ThankYou");
+                TempData["RaterError"] = "This evaluation is no longer available.";
+                return View("ThankYou");
             }
 
             if (!string.IsNullOrEmpty(rater.Answers))
             {
-                ViewBag.RaterError = "You have already completed this evaluation.";
-                return RedirectToAction("RaterCleanup", "Raters", new { id = raterId });
-                // return View("ThankYou");
+                TempData["RaterError"] = "You have already completed this evaluation.";
+                return View("ThankYou");
             }
 
             var raterUser = UserManager.FindByName(rater.Email);
+            if (raterUser == null)
+            {
+                TempData["RaterError"] = "This evaluation is no longer available.";
+                return View("ThankYou");
+            }
+
             var codeIsValid = UserManager.VerifyUserTokenAsync(raterUser.Id, "RaterLogin", code);
 
             if (codeIsValid.Result)
@@ -70,7 +306,8 @@ namespace CapstoneProject.Controllers
             }
             else
             {
-                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                TempData["RaterError"] = "This evaluation is no longer available.";
+                return View("ThankYou");
             }
 
             var model = new RaterPromptViewModel
@@ -178,7 +415,7 @@ namespace CapstoneProject.Controllers
             SendRaterEmail(raterId.Value, evalId);
 
             TempData["EmailSuccess"] = "Sent notification to " + rater.Email;
-            return RedirectToAction("EditRaters", "Evaluations", new { id = evalId });
+            return RedirectToAction("EditRaters", "Raters", new { id = evalId });
         }
 
         // GET: NotifyRatersNow
