@@ -107,7 +107,7 @@
                     if (item.Type2Assigned || item.AllEvalsOfTypeComplete(2)){ <br /> }
                 } 
 
-                @if (item.Type1Assigned && !item.HasOpenEval(1))
+                @if (item.Type1Assigned && !item.HasOpenEval(1) && !item.IsStageComplete("Summative", 1))
                 {
                     <label class="alert-info">Type 1 opens @item.EvalOpenDate(1)</label>
                     <label> ( </label>
@@ -144,7 +144,7 @@
                     <label> ) </label>
                 }
 
-                @if (item.Type2Assigned && !item.HasOpenEval(2))
+                @if (item.Type2Assigned && !item.HasOpenEval(2) && !item.IsStageComplete("Summative", 2))
                 {
                     <label class="alert-info">Type 2 opens @item.EvalOpenDate(2)</label>
                     <label> ( </label>

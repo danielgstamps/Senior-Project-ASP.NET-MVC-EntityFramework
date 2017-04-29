@@ -3,6 +3,7 @@ CLONE URL: https://wudsco.visualstudio.com/_git/WUDSCO
 Musts: 
 - reports
 - more testing
+- editEval displays raters
 
 Maybes:
 - prevent double-clicking postbacks.
