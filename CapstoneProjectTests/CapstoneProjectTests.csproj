@@ -89,7 +89,6 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Controller Tests\RatersControllerTest.cs" />
     <Compile Include="Model Tests\CategoryTest.cs" />
     <Compile Include="Controller Tests\CohortsControllerTest.cs" />
     <Compile Include="Controller Tests\EmployeesControllerTest.cs" />
