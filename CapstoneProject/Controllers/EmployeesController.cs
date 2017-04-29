@@ -276,7 +276,7 @@ namespace CapstoneProject.Controllers
                 "Click <a href=\"" + callbackUrl + "\">here</a> to create your password.");
 
             TempData["EmailSuccess"] = "Sent notification email to " + employee.FirstName + " " + employee.LastName + ".";
-            return RedirectToAction("Details", "Cohorts", new { id = employee.CohortID });
+            return RedirectToAction("Index", "Employees");
         }
 
         protected override void Dispose(bool disposing)

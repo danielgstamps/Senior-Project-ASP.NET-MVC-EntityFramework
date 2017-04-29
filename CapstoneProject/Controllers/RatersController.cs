@@ -296,7 +296,6 @@ namespace CapstoneProject.Controllers
             }
 
             var codeIsValid = UserManager.VerifyUserTokenAsync(raterUser.Id, "RaterLogin", code);
-
             if (codeIsValid.Result)
             {
                 await SignInManager.SignInAsync(raterUser, false, false);
@@ -336,7 +335,7 @@ namespace CapstoneProject.Controllers
             Session.Abandon();
 
             var raterUserAccount = UserManager.FindByEmail(rater.Email);
-            if (raterUserAccount != null)
+            if (raterUserAccount != null && User.IsInRole("Rater"))
             {
                 UserManager.Delete(raterUserAccount);
             }
