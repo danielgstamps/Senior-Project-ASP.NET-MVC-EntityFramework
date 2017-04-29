@@ -452,6 +452,8 @@
     <Content Include="Views\Account\Error.cshtml" />
     <Content Include="Views\Evaluations\ReportAsHtml.cshtml" />
     <Content Include="Views\Evaluations\ReportAsPdf.cshtml" />
+    <Content Include="Views\Raters\NotifyRatersNow.cshtml" />
+    <Content Include="Views\Raters\ConfirmRaters.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

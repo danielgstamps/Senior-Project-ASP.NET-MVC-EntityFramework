@@ -210,41 +210,51 @@ namespace CapstoneProject.Controllers
 
             foreach (var emp in employees)
             {
-                var eval = emp.Evaluations.Single(e => !e.IsComplete() && e.TypeID == typeId);
-                SendEvaluationEmail(emp.EmployeeID, eval.EvaluationID);
+                try
+                {
+                    var eval = emp.Evaluations.Single(e => !e.IsComplete() && e.TypeID == typeId);
+                    SendEvaluationEmail(emp.EmployeeID, eval.EvaluationID);
+                }
+                catch (Exception)
+                {
+                    continue;
+                }
             }
 
-            TempData["EmailSuccess"] = "Sent email notifications to " + cohort.Name + ".";
+            TempData["EmailSuccess"] = "Sent evaluation notifications to " + cohort.Name + ".";
             return RedirectToAction("Index", "Cohorts");
         }
 
-        public async Task<ActionResult> SendPasswordCreationEmail(int? id)
+        public async Task<ActionResult> SendCreatePasswordEmails(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var employee = UnitOfWork.EmployeeRepository.GetByID(id);
-            if (employee == null)
+            var cohort = UnitOfWork.CohortRepository.GetByID(id);
+            if (cohort == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var user = await UserManager.FindByNameAsync(employee.Email);
-            if (user == null)
+            foreach (var employee in cohort.Employees)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+                var user = await UserManager.FindByNameAsync(employee.Email);
+                if (user == null || user.EmailConfirmed)
+                {
+                    continue;
+                }
 
-            var email = user.Email;
-            var callbackUrl = Url.Action("CreatePassword", "Account", new { userId = user.Id, email },
-                protocol: Request.Url.Scheme);
-            await UserManager.SendEmailAsync(user.Id, "Create your WUDSCO password",
-                "Click <a href=\"" + callbackUrl + "\">here</a> to create your password.");
+                var email = user.Email;
+                var callbackUrl = Url.Action("CreatePassword", "Account", new { userId = user.Id, email },
+                    protocol: Request.Url.Scheme);
+                await UserManager.SendEmailAsync(user.Id, "Create your WUDSCO password",
+                    "Click <a href=\"" + callbackUrl + "\">here</a> to create your password.");
+            }  
 
-            TempData["EmailSuccess"] = "Sent notification email to " + employee.FirstName + " " + employee.LastName + ".";
-            return RedirectToAction("Details", "Cohorts", new {id = employee.CohortID});
+            TempData["EmailSuccess"] = "Sent notifications to pending accounts.";
+            return RedirectToAction("Details", "Cohorts", new { id });
         }
 
         private void SendEvaluationEmail(int employeeId, int evalId)

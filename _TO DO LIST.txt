@@ -3,50 +3,13 @@ CLONE URL: https://wudsco.visualstudio.com/_git/WUDSCO
 Musts: 
 - reports
 - more testing
-- print category titles on Report/ViewEval
-- stages: Disallow redos? Disallow any more evals of type after Summative is done?
 
 Maybes:
+- prevent double-clicking postbacks.
 - delete rater account if they close page early
-- prevent spamming emails.
-- Adding employee to a cohort: Catch them up? Reset?
-- "Notify raters now?"
+- prevent spamming emails
+_____________________________________________________________________________
 
-
-Eval breakdown:
-3 stages: baseline -> formative -> summative
-2 types: Type1 and Type2
-	- Totally different sets of categories/questions.
-	- Type1: 5 categories, 3 questions each, answer options 1-5.
-	- Type2: 7 categories, 4 questions each, answer options 1-10.
-	
-Eval start/end time should be stored.
-
-Admin powers:
-- Assign eval(s) to a cohort: 
-	- Choose type, stage, start/end dates.
-		- Cohort editing/deletion is disabled if it has an open evaluation (current date is between start/end dates)
-		- Type1 and Type2 evals can be assigned at the same time.
-    - Sends notification email to employees, with a link to eval, type, stage, and start/end dates.
-	- Needs to enforce stage order (can't take formative before baseline, etc.)
-	- Select which other roles will evaluate the employee: 1 supervisor, 2 coworkers, 2 supervisees.
-		- Note that the employee will choose who these people are when they take the eval.
-		
-Employee powers:
-- Choose a supervisor, co-workers, and/or supervisees based on which roles were selected by the admin.
-	- Can't pick the same person for different roles.
-- View completed evals.
-- Complete open evals.
-
-Employee taking an eval: 
-- Completes it for himself first.
-- Sends email to the chosen peers evaluating him.
-	- Has a link to the same eval (same type and stage)
-	- NO LOGIN REQUIRED FOR THESE PEOPLE
-		- we'll have to store their identity (or maybe just their role) somehow. Pass through the link?
-	- Able to resend, only to peers who haven't finished the eval.
-	- Able to disable/replace peers. Disabled peers should be marked as such, not removed.
-	
 Reports:
 - Only generatable by admin.
 	- Not sure exactly how they're supposed to be generated. 
@@ -64,4 +27,3 @@ Reports:
 		- AVERAGE of supervisees' answers.
 		- AVERAGE of coworkers' answers.
 		- AVERAGE of all.
-

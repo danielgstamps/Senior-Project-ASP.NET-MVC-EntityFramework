@@ -55,13 +55,27 @@
                     {
                         <label class="alert-warning">Pending</label>
                         <label>(</label>
-                        @Html.ActionLink("Notify", "SendPasswordCreationEmail", "Cohorts", new { id = employee.EmployeeID }, null)
+                        @Html.ActionLink("Notify", "SendPasswordCreationEmail", "Employees", new { id = employee.EmployeeID }, null)
                         <label>)</label>
                     }
                 </td>
             </tr>
         }
 
+        @if (Model.Employees.Any(e => !e.EmailConfirmed))
+        {
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <label>(</label>
+                    @Html.ActionLink("Notify All Pending", "SendCreatePasswordEmails", new { id = Model.CohortID })
+                    <label>)</label>
+                </td>
+            </tr>
+        }
     </table>
 </div>
 <br/>

@@ -23,7 +23,7 @@ namespace CapstoneProject
             client.Timeout = 20000;
             client.DeliveryMethod = SmtpDeliveryMethod.Network;
             client.UseDefaultCredentials = false;
-            client.Credentials = new NetworkCredential("dstamps1@my.westga.edu", "Temppass123!");
+            client.Credentials = new NetworkCredential("stampsr92@gmail.com", "Temppass123!");
 
             return client.SendMailAsync("support@wudsco.com",
                                         message.Destination,

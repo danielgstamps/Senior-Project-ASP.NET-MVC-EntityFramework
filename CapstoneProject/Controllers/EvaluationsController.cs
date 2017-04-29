@@ -167,7 +167,11 @@ namespace CapstoneProject.Controllers
                 UnitOfWork.Save();
                 if (eval.Raters.Count > 0)
                 {
-                    return RedirectToAction("AssignRaters", new {id = eval.EvaluationID});
+                    if (eval.Stage.StageName.Equals("Baseline"))
+                    {
+                        return RedirectToAction("AssignRaters", new { id = eval.EvaluationID });
+                    }
+                    return RedirectToAction("ConfirmRaters", "Raters", new { id = eval.EvaluationID });
                 }
 
                 CheckCohortAndResetFlags(eval.Employee.CohortID);
@@ -217,33 +221,11 @@ namespace CapstoneProject.Controllers
                 Raters = eval.Raters.ToList()
             };
 
-            // If the employee has a previously completed eval (with raters), pull as much rater info from it as possible.
-            if (employee.Evaluations.Any(e => e.IsComplete() && e.Raters.Count != 0))
+            foreach (var rater in model.Raters)
             {
-                var completedEval = employee.Evaluations.First(e => e.IsComplete() && e.Raters.Count != 0);
-                var previousRaters = completedEval.Raters.ToList();
-                foreach (var modelRater in model.Raters)
-                {
-                    foreach (var prevRater in previousRaters)
-                    {
-                        if (modelRater.Role.Equals(prevRater.Role) && // Roles are the same
-                            !model.Raters.Exists(r => r.Email.Equals(prevRater.Email))) // model didn't already use this rater.
-                        {
-                            modelRater.Name = prevRater.Name;
-                            modelRater.Email = prevRater.Email;
-                        }
-                    }
-                }
-            }
-            // Otherwise, just initialize the rater fields as empty.
-            else
-            {
-                foreach (var rater in model.Raters)
-                {
-                    rater.Name = "";
-                    rater.Email = "";
-                }
-            }         
+                rater.Name = "";
+                rater.Email = "";
+            }      
 
             return View("AssignRaters", model);
         }
@@ -290,9 +272,16 @@ namespace CapstoneProject.Controllers
                 i++;
             }
 
-            TempData["TakeEvalSuccess"] = "Successfully completed evaluation.";
-            return RedirectToAction("EmployeeEvalsIndex", new { id = eval.EmployeeID });
+            return RedirectToAction("NotifyRatersNow", "Raters", new { id = eval.EvaluationID });
         }
+
+        //public ActionResult NotifyRatersNow(Employee model)
+        //{
+        //    if (model == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //}
 
         // GET: EditRaters
         public ActionResult EditRaters(int? id) //evalID
@@ -439,18 +428,6 @@ namespace CapstoneProject.Controllers
             UnitOfWork.Save();
 
             eval.Raters.Add(model.NewRater);
-            UnitOfWork.Save();
-
-            var type = eval.TypeID;
-            switch (type)
-            {
-                case 1:
-                    eval.Employee.Cohort.Type1Assigned = true;
-                    break;
-                case 2:
-                    eval.Employee.Cohort.Type2Assigned = true;
-                    break;
-            }
             UnitOfWork.Save();
 
             TempData["ReplaceRaterSuccess"] = "Successfully replaced rater.";
@@ -610,6 +587,12 @@ namespace CapstoneProject.Controllers
                 return HttpNotFound();
             }
 
+            // Link manipulation could crash the page without this.
+            if (cohort.IsStageComplete("Summative", 1) && cohort.IsStageComplete("Summative", 2))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
             TempData["CohortID"] = cohortId;
             TempData["CohortName"] = cohort.Name;
 
@@ -637,11 +620,11 @@ namespace CapstoneProject.Controllers
 
             // Remove types if the cohort already has them assigned.
             var itemList = model.TypeList.ToList();
-            if (cohort.Type1Assigned)
+            if (cohort.Type1Assigned || cohort.IsStageComplete("Summative", 1))
             {
                 itemList.RemoveAt(0);
             }
-            if (cohort.Type2Assigned)
+            if (cohort.Type2Assigned || cohort.IsStageComplete("Summative", 2))
             {
                 itemList.RemoveAt(1);
             }
@@ -677,6 +660,14 @@ namespace CapstoneProject.Controllers
                 return RedirectToAction("Create", new { cohortId = (int)TempData["CohortID"] });
             }
 
+            // Disallow selecting stages that are already complete.
+            if (cohort.IsStageComplete(selectedStageName, model.TypeID))
+            {
+                TempData["StageError"] = "This cohort has already completed the " + selectedStageName + 
+                    " stage for Type " + model.TypeID.ToString() + ".";
+                return RedirectToAction("Create", new { cohortId = (int)TempData["CohortID"] });
+            }
+
             // If stage != baseline, pull rater numbers from baseline eval
             if (selectedStageName != "Baseline")
             {
@@ -686,9 +677,9 @@ namespace CapstoneProject.Controllers
                     e.Stage.StageName.Equals("Baseline") && 
                     e.TypeID == model.TypeID);
 
-                model.NumberOfSupervisors = prevEval.Raters.Count(r => r.Role.Equals("Supervisor"));
-                model.NumberOfCoworkers = prevEval.Raters.Count(r => r.Role.Equals("Coworker"));
-                model.NumberOfSupervisees = prevEval.Raters.Count(r => r.Role.Equals("Supervisee"));
+                model.NumberOfSupervisors = NumberOfRatersWithRole(prevEval, "Supervisor");
+                model.NumberOfCoworkers = NumberOfRatersWithRole(prevEval, "Coworker");
+                model.NumberOfSupervisees = NumberOfRatersWithRole(prevEval, "Supervisee");
             }
 
             foreach (var emp in cohort.Employees)
@@ -918,7 +909,7 @@ namespace CapstoneProject.Controllers
 
         private int NumberOfRatersWithRole(Evaluation eval, string role)
         {
-            return eval.Raters.Count(r => r.Role.Equals(role));
+            return eval.Raters.Count(r => r.Role.Equals(role) && !r.Disabled);
         }
 
         private string ConvertAnswersToString(List<QuestionViewModel> questions)

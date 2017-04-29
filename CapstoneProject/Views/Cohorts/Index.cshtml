@@ -37,7 +37,8 @@
             <td>
                 @if (item.Employees.Count != 0 && 
                      !(item.Type1Assigned && item.Type2Assigned) &&
-                     item.Employees.All(e => e.EmailConfirmed))
+                     item.Employees.All(e => e.EmailConfirmed) && 
+                     !(item.IsStageComplete("Summative", 1) && item.IsStageComplete("Summative", 2)))
                 {
                     @Html.ActionLink("Evaluate", "Create", "Evaluations", new { cohortId = item.CohortID }, null)
                     <label> | </label>
@@ -45,7 +46,8 @@
 
                 @Html.ActionLink("View", "Details", new { id = item.CohortID })
 
-                @if (!item.HasOpenEval(1) && !item.HasOpenEval(2))
+                @if (!item.HasOpenEval(1) && !item.HasOpenEval(2) &&
+                    !(item.IsStageComplete("Baseline", 1) || item.IsStageComplete("Baseline", 2)))
                 {
                     <label> | </label>
                     @Html.ActionLink("Edit", "Edit", new { id = item.CohortID })
@@ -62,9 +64,20 @@
                 {
                     <label class="alert-warning">Contains Pending Accounts</label>
                 }
+                else if (item.IsStageComplete("Summative", 1) && item.IsStageComplete("Summative", 2))
+                {
+                    <label class="alert-success">Finished</label>
+                }
+                else if (item.Type1Assigned || item.Type2Assigned ||
+                         item.HasOpenEval(1) || item.HasOpenEval(2) ||
+                         item.IsStageComplete("Baseline", 1) ||
+                         item.IsStageComplete("Baseline", 2))
+                {
+                    <label class="alert-success">Locked - Evaluating</label>
+                }
                 else
                 {
-                    <label class="alert-success">Ready</label>
+                    <label class="alert-info">Ready to Evaluate</label>
                 }
             </td>
             <td>
@@ -87,9 +100,9 @@
 
                 @if (item.HasOpenEval(1) && !item.AllEvalsOfTypeComplete(1))
                 {
-                    <label class="alert-warning">Type 1 in progress</label>
+                    <label class="alert-info">Type 1 in progress</label>
                     <label> ( </label>
-                    @Html.ActionLink("Remind Cohort", "NotifyCohort", new {cohortId = item.CohortID, typeId = 1})
+                    @Html.ActionLink("Notify", "NotifyCohort", new {cohortId = item.CohortID, typeId = 1})
                     <label> ) </label>
                     if (item.Type2Assigned || item.AllEvalsOfTypeComplete(2)){ <br /> }
                 } 
@@ -102,7 +115,7 @@
                     <label> | </label>
                     @Html.ActionLink("Delete", "Delete", "Evaluations", new {cohortId = item.CohortID, typeId = 1}, null)
                     <label> | </label>
-                    @Html.ActionLink("Notify Cohort", "NotifyCohort", new {cohortId = item.CohortID, typeId = 1})
+                    @Html.ActionLink("Notify", "NotifyCohort", new {cohortId = item.CohortID, typeId = 1})
                     <label> ) </label>
                     if (item.Type2Assigned || item.AllEvalsOfTypeComplete(2)){ <br /> }
                 }
@@ -125,9 +138,9 @@
 
                 @if (item.HasOpenEval(2) && !item.AllEvalsOfTypeComplete(2))
                 {
-                    <label class="alert-warning">Type 2 in progress</label>
+                    <label class="alert-info">Type 2 in progress</label>
                     <label> ( </label>
-                    @Html.ActionLink("Remind Cohort", "NotifyCohort", new { cohortId = item.CohortID, typeId = 2 })
+                    @Html.ActionLink("Notify", "NotifyCohort", new { cohortId = item.CohortID, typeId = 2 })
                     <label> ) </label>
                 }
 
@@ -139,7 +152,7 @@
                     <label> | </label>
                     @Html.ActionLink("Delete", "Delete", "Evaluations", new {cohortId = item.CohortID, typeId = 2}, null)
                     <label> | </label>
-                    @Html.ActionLink("Notify Cohort", "NotifyCohort", new { cohortId = item.CohortID, typeId = 2 })
+                    @Html.ActionLink("Notify", "NotifyCohort", new { cohortId = item.CohortID, typeId = 2 })
                     <label> ) </label>
                 }
             </td>

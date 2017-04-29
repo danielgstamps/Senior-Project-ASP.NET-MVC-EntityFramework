@@ -47,7 +47,7 @@ namespace CapstoneProject.Models
 
             foreach (var rater in Raters)
             {
-                if (string.IsNullOrEmpty(rater.Answers))
+                if (string.IsNullOrEmpty(rater.Answers) && !rater.Disabled)
                 {
                     return false;
                 }

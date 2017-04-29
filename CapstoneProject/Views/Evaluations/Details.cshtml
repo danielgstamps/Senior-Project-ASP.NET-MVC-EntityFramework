@@ -50,7 +50,7 @@
                     <label class="alert-success">Completed @Model.Eval.CompletedDate.Value.ToString("MM/dd/yyyy h:mm tt")</label>
                     if (Model.Eval.CloseDate <= DateTime.Today)
                     {
-                        <br/>
+                        <br />
                         <label class="alert-warning">Closed @Model.Eval.CloseDate.Date.ToString("d")</label>
                     }
                 }
@@ -87,14 +87,22 @@
     <h2>Your Answers:</h2>
     <h4>On a scale from 1-@maxAnswerOption, (1 meaning disagree, @maxAnswerOption meaning agree), you answered the following:</h4>
     <br/>
-    @for (var i = 1; i < Model.QuestionList.Count + 1; i++)
+    @for (var i = 0; i < Model.QuestionList.Count; i++)
     {
-        <label>@i.</label>
-        <label>@Model.QuestionList[i - 1].QuestionText</label>
+        if (i == 0)
+        {
+            <label class="alert-info h4">@Model.QuestionList[i].Category.Name</label><br />
+        }
+        else if (!Model.QuestionList[i].Category.Equals(Model.QuestionList[i - 1].Category))
+        {
+            <label class="alert-info h4">@Model.QuestionList[i].Category.Name</label><br />
+        }
+
+        <label>@Model.QuestionList[i].QuestionText</label>
         <br/>
 
         <label>You said: </label>
-        <label>@Model.Answers[i - 1] / @maxAnswerOption</label>
+        <label>@Model.Answers[i] / @maxAnswerOption</label>
         <br/><br/>
     }
     @Html.ActionLink("Back to My Evaluations", "EmployeeEvalsIndex", new {id = Model.Eval.EmployeeID})
