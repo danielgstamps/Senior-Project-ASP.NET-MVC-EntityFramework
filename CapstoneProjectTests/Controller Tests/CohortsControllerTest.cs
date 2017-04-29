@@ -110,7 +110,10 @@ namespace CapstoneProjectTests
         //{
         //    this.mockUnitOfWork.Setup(m => m.CohortRepository.GetByID(0)).Returns(cohorts[0]);
         //    var result = this.controller.Edit(0) as ViewResult;
-        //    Assert.AreEqual("Edit Cohort", result.ViewName);
+        //    var resultvm = result.Model as Cohort;
+
+        //    Assert.AreEqual(cohorts[0].Name, resultvm.Name);
+        //    Assert.AreEqual("Edit", result.ViewName);
         //}
     }
 }
