@@ -27,10 +27,7 @@ namespace CapstoneProject.Controllers
             private set { _userManager = value; }
         }
 
-        public ApplicationSignInManager SignInManager
-        {
-            get { return HttpContext.GetOwinContext().Get<ApplicationSignInManager>(); }
-        }
+        public ApplicationSignInManager SignInManager => HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
 
         // GET AssignRaters
         public ActionResult AssignRaters(int? id) //evalId
