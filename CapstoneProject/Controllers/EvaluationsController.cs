@@ -18,7 +18,6 @@ namespace CapstoneProject.Controllers
     [Authorize]
     public class EvaluationsController : Controller
     {
-       // private readonly ApplicationDbContext userDB = new ApplicationDbContext();
         private ApplicationUserManager _userManager;
 
         public ApplicationUserManager UserManager
@@ -275,14 +274,6 @@ namespace CapstoneProject.Controllers
             return RedirectToAction("NotifyRatersNow", "Raters", new { id = eval.EvaluationID });
         }
 
-        //public ActionResult NotifyRatersNow(Employee model)
-        //{
-        //    if (model == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //}
-
         // GET: EditRaters
         public ActionResult EditRaters(int? id) //evalID
         {
@@ -458,42 +449,17 @@ namespace CapstoneProject.Controllers
             var supervisors = new List<Rater>();
             var coworkers = new List<Rater>();
             var supervisees = new List<Rater>();
-            foreach (var rater in eval.Raters)
-            {
-                switch (rater.Role)
-                {
-                    case "Supervisor":
-                        supervisors.Add(rater);
-                        break;
-                    case "Coworker":
-                        coworkers.Add(rater);
-                        break;
-                    case "Supervisee":
-                        supervisors.Add(rater);
-                        break;
-                }
-            }
+            this.groupRatersByRole(eval, supervisors, coworkers, supervisees);
             var ratersToShow = new List<Rater>();
             ratersToShow.AddRange(supervisors);
             ratersToShow.AddRange(coworkers);
             ratersToShow.AddRange(supervisees);
-            var numOfQuestions = 0;
-            foreach (var category in eval.Type.Categories)
-            {
-                foreach (var question in category.Questions)
-                {
-                    numOfQuestions++;
-                }
-            }
-            var supervisorAvgs = getQuestionAvgPerRole(supervisors, numOfQuestions);
-            var coworkerAvgs = getQuestionAvgPerRole(coworkers, numOfQuestions);
-            var superviseeAvgs = getQuestionAvgPerRole(supervisees, numOfQuestions);
-            var employeeAnswers = new List<int>();
-            foreach (var answerString in eval.SelfAnswers.Split(',').ToList())
-            {
-                employeeAnswers.Add(Convert.ToInt32(answerString));
-            }
-            var data = new EvaluationReportData
+            int numOfQuestions = this.getNumberOfQuestions(eval);
+            var supervisorAvgs = this.getQuestionAvgPerRole(supervisors, numOfQuestions);
+            var coworkerAvgs = this.getQuestionAvgPerRole(coworkers, numOfQuestions);
+            var superviseeAvgs = this.getQuestionAvgPerRole(supervisees, numOfQuestions);
+            List<int> employeeAnswers = this.getEmployeeAnswers(eval);
+            return new EvaluationReportData
             {
                 EvaluationID = eval.EvaluationID,
                 EmployeeName = eval.Employee.FirstName + " " + eval.Employee.LastName,
@@ -506,7 +472,54 @@ namespace CapstoneProject.Controllers
                 CoworkerAvgAnswers = coworkerAvgs,
                 SuperviseeAvgAnswers = superviseeAvgs
             };
-            return data;
+        }
+
+        private void groupRatersByRole(Evaluation eval, List<Rater> supervisors, List<Rater> coworkers, List<Rater> supervisees)
+        {
+            foreach (var rater in eval.Raters)
+            {
+                this.putRaterInGroup(supervisors, coworkers, supervisees, rater);
+            }
+        }
+
+        private void putRaterInGroup(List<Rater> supervisors, List<Rater> coworkers, List<Rater> supervisees, Rater rater)
+        {
+            switch (rater.Role)
+            {
+                case "Supervisor":
+                    supervisors.Add(rater);
+                    break;
+                case "Coworker":
+                    coworkers.Add(rater);
+                    break;
+                case "Supervisee":
+                    supervisees.Add(rater);
+                    break;
+            }
+        }
+
+        private int getNumberOfQuestions(Evaluation eval)
+        {
+            var numOfQuestions = 0;
+            foreach (var category in eval.Type.Categories)
+            {
+                foreach (var question in category.Questions)
+                {
+                    numOfQuestions++;
+                }
+            }
+
+            return numOfQuestions;
+        }
+
+        private List<int> getEmployeeAnswers(Evaluation eval)
+        {
+            var employeeAnswers = new List<int>();
+            foreach (var answerString in eval.SelfAnswers.Split(',').ToList())
+            {
+                employeeAnswers.Add(Convert.ToInt32(answerString));
+            }
+            return employeeAnswers;
         }
 
         private List<int> getQuestionAvgPerRole(List<Rater> raters, int numOfQuestions)
@@ -516,19 +529,24 @@ namespace CapstoneProject.Controllers
                 return new List<int>();
             }
             var avgs = new List<int>();
-            for (int i = 0; i < numOfQuestions; i++)
+            for (int index = 0; index < numOfQuestions; index++)
             {
-                var totalForQuestion = 0;
-                var avgForQuestion = 0;
-                foreach (var rater in raters)
-                {
-                    var answer = Convert.ToInt32(rater.Answers.Split(',')[i]);
-                    totalForQuestion += answer;
-                }
-                avgForQuestion = totalForQuestion / raters.Count;
-                avgs.Add(avgForQuestion);
+                this.calculateAverage(raters, avgs, index);
             }
             return avgs;
+        }
+
+        private void calculateAverage(List<Rater> raters, List<int> avgs, int index)
+        {
+            var totalForQuestion = 0;
+            var avgForQuestion = 0;
+            foreach (var rater in raters)
+            {
+                var answer = Convert.ToInt32(rater.Answers.Split(',')[index]);
+                totalForQuestion += answer;
+            }
+            avgForQuestion = totalForQuestion / raters.Count;
+            avgs.Add(avgForQuestion);
         }
 
         // GET: Evaluations/Details/5
