@@ -36,10 +36,7 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @if (item.Employees.Count != 0 && 
-                     !(item.Type1Assigned && item.Type2Assigned) &&
-                     item.Employees.All(e => e.EmailConfirmed) && 
-                     !(HtmlExtensions.CohortFinishedStage(item, "Summative", 1) && HtmlExtensions.CohortFinishedStage(item, "Summative", 2)))
+                @if (HtmlExtensions.CohortCanEvaluate(item))
                 {
                     @Html.ActionLink("Evaluate", "Create", "Evaluations", new { cohortId = item.CohortID }, null)
                     <label> | </label>
@@ -47,8 +44,8 @@
 
                 @Html.ActionLink("View", "Details", new { id = item.CohortID })
 
-                @*@if (!item.HasOpenEval(1) && !item.HasOpenEval(2) &&*@
-                @if (!HtmlExtensions.CohortHasOpenEval(item, 1) && !HtmlExtensions.CohortHasOpenEval(item, 2) &&
+                @if (!HtmlExtensions.CohortHasOpenEval(item, 1) && 
+                    !HtmlExtensions.CohortHasOpenEval(item, 2) &&
                     !(HtmlExtensions.CohortFinishedStage(item, "Baseline", 1) || HtmlExtensions.CohortFinishedStage(item, "Baseline", 2)))
                 {
                     <label> | </label>
@@ -66,14 +63,12 @@
                 {
                     <label class="alert-warning">Contains Pending Accounts</label>
                 }
-                else if (HtmlExtensions.CohortFinishedStage(item, "Summative", 1) && HtmlExtensions.CohortFinishedStage(item, "Summative", 2))
+                else if (HtmlExtensions.CohortFinishedStage(item, "Summative", 1) && 
+                         HtmlExtensions.CohortFinishedStage(item, "Summative", 2))
                 {
                     <label class="alert-success">Finished</label>
                 }
-                else if (item.Type1Assigned || item.Type2Assigned ||
-                         HtmlExtensions.CohortHasOpenEval(item, 1) || HtmlExtensions.CohortHasOpenEval(item, 2) ||
-                         HtmlExtensions.CohortFinishedStage(item, "Baseline", 1) ||
-                         HtmlExtensions.CohortFinishedStage(item, "Baseline", 2))
+                else if (HtmlExtensions.CohortLocked(item))
                 {
                     <label class="alert-success">Locked - Evaluating</label>
                 }
@@ -109,7 +104,8 @@
                     if (item.Type2Assigned || HtmlExtensions.CohortFinishedType(item, 2)){ <br /> }
                 } 
 
-                @if (item.Type1Assigned && !HtmlExtensions.CohortHasOpenEval(item, 1) && !HtmlExtensions.CohortFinishedStage(item, "Summative", 1))
+                @if (item.Type1Assigned && !HtmlExtensions.CohortHasOpenEval(item, 1) && 
+                     !HtmlExtensions.CohortFinishedStage(item, "Summative", 1))
                 {
                     <label class="alert-info">Type 1 opens @HtmlExtensions.CohortEvalOpenDate(item, 1)</label>
                     <label> ( </label>
@@ -146,7 +142,9 @@
                     <label> ) </label>
                 }
 
-                @if (item.Type2Assigned && !HtmlExtensions.CohortHasOpenEval(item, 2) && !HtmlExtensions.CohortFinishedStage(item, "Summative", 2))
+                @if (item.Type2Assigned && 
+                    !HtmlExtensions.CohortHasOpenEval(item, 2) && 
+                    !HtmlExtensions.CohortFinishedStage(item, "Summative", 2))
                 {
                     <label class="alert-info">Type 2 opens @HtmlExtensions.CohortEvalOpenDate(item, 2)</label>
                     <label> ( </label>

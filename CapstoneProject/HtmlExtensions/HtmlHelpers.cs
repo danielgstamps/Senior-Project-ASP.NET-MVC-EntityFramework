@@ -54,6 +54,30 @@ namespace CapstoneProject.HtmlExtensions
             }
         }
 
+        public static bool CohortLocked(Cohort cohort)
+        {
+            return cohort.Type1Assigned || 
+                   cohort.Type2Assigned ||
+                   CohortHasOpenEval(cohort, 1) || 
+                   CohortHasOpenEval(cohort, 2) ||
+                   CohortFinishedStage(cohort, "Baseline", 1) ||
+                   CohortFinishedStage(cohort, "Baseline", 2);
+        }
+
+        public static bool CohortCanEvaluate(Cohort cohort)
+        {
+            return cohort.Employees.Count != 0 &&
+                   cohort.Employees.All(e => e.EmailConfirmed) &&
+                   !(cohort.Type1Assigned && cohort.Type2Assigned) &&
+                   !CohortFinished(cohort);
+        }
+
+        public static bool CohortFinished(Cohort cohort)
+        {
+            return CohortFinishedStage(cohort, "Summative", 1) &&
+                   CohortFinishedStage(cohort, "Summative", 2);
+        }
+
         public static bool CohortFinishedStage(Cohort cohort, string stageName, int typeId)
         {
             if (cohort.Employees.Count == 0)

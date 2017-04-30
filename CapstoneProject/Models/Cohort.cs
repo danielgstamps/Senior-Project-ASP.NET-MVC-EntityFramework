@@ -7,7 +7,7 @@ namespace CapstoneProject.Models
 {
     public class Cohort
     {
-        private const int MAX_NAME_LENGTH = 50;
+        private const int MaxNameLength = 50;
 
         [Display(Name = "Cohort ID")]
         [Range(0, int.MaxValue, ErrorMessage = "ID must be a non-negative whole number")]
@@ -15,7 +15,7 @@ namespace CapstoneProject.Models
         public int CohortID { get; set; }
 
         [Display(Name = "Cohort Name")]
-        [StringLength(MAX_NAME_LENGTH)]
+        [StringLength(MaxNameLength)]
         [Required(ErrorMessage = "Cohort name required")]
         public string Name { get; set; }
 
