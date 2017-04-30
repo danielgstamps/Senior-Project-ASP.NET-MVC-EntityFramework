@@ -202,33 +202,33 @@ namespace CapstoneProject.Controllers
         /// <returns>A ViewResult that renders the report</returns>
         public ActionResult ShowReportAsHtml(int? id)
         {
-            var eval = this.UnitOfWork.EvaluationRepository.GetByID(id);
-            var reportData = this.createReportData(eval);
+            var eval = UnitOfWork.EvaluationRepository.GetByID(id);
+            var reportData = CreateReportData(eval);
             return View("ReportAsHtml", reportData);
         }
 
         public ActionResult ShowReportAsPdf(int? id)
         {
-            var eval = this.UnitOfWork.EvaluationRepository.GetByID(id);
-            var reportData = this.createReportData(eval);
+            var eval = UnitOfWork.EvaluationRepository.GetByID(id);
+            var reportData = CreateReportData(eval);
             return new PdfActionResult("ReportAsPdf", reportData);
         }
 
-        private EvaluationReportData createReportData(Evaluation eval)
+        private EvaluationReportData CreateReportData(Evaluation eval)
         {
             var supervisors = new List<Rater>();
             var coworkers = new List<Rater>();
             var supervisees = new List<Rater>();
-            this.groupRatersByRole(eval, supervisors, coworkers, supervisees);
+            GroupRatersByRole(eval, supervisors, coworkers, supervisees);
             var ratersToShow = new List<Rater>();
             ratersToShow.AddRange(supervisors);
             ratersToShow.AddRange(coworkers);
             ratersToShow.AddRange(supervisees);
-            int numOfQuestions = this.getNumberOfQuestions(eval);
-            var supervisorAvgs = this.getQuestionAvgPerRole(supervisors, numOfQuestions);
-            var coworkerAvgs = this.getQuestionAvgPerRole(coworkers, numOfQuestions);
-            var superviseeAvgs = this.getQuestionAvgPerRole(supervisees, numOfQuestions);
-            List<int> employeeAnswers = this.getEmployeeAnswers(eval);
+            var numOfQuestions = GetNumberOfQuestions(eval);
+            var supervisorAvgs = getQuestionAvgPerRole(supervisors, numOfQuestions);
+            var coworkerAvgs = getQuestionAvgPerRole(coworkers, numOfQuestions);
+            var superviseeAvgs = getQuestionAvgPerRole(supervisees, numOfQuestions);
+            var employeeAnswers = getEmployeeAnswers(eval);
             return new EvaluationReportData
             {
                 EvaluationID = eval.EvaluationID,
@@ -244,15 +244,15 @@ namespace CapstoneProject.Controllers
             };
         }
 
-        private void groupRatersByRole(Evaluation eval, List<Rater> supervisors, List<Rater> coworkers, List<Rater> supervisees)
+        private void GroupRatersByRole(Evaluation eval, List<Rater> supervisors, List<Rater> coworkers, List<Rater> supervisees)
         {
             foreach (var rater in eval.Raters)
             {
-                this.putRaterInGroup(supervisors, coworkers, supervisees, rater);
+                PutRaterInGroup(supervisors, coworkers, supervisees, rater);
             }
         }
 
-        private void putRaterInGroup(List<Rater> supervisors, List<Rater> coworkers, List<Rater> supervisees, Rater rater)
+        private void PutRaterInGroup(List<Rater> supervisors, List<Rater> coworkers, List<Rater> supervisees, Rater rater)
         {
             switch (rater.Role)
             {
@@ -268,7 +268,7 @@ namespace CapstoneProject.Controllers
             }
         }
 
-        private int getNumberOfQuestions(Evaluation eval)
+        private int GetNumberOfQuestions(Evaluation eval)
         {
             var numOfQuestions = 0;
             foreach (var category in eval.Type.Categories)
@@ -299,9 +299,9 @@ namespace CapstoneProject.Controllers
                 return new List<int>();
             }
             var avgs = new List<int>();
-            for (int index = 0; index < numOfQuestions; index++)
+            for (var index = 0; index < numOfQuestions; index++)
             {
-                this.calculateAverage(raters, avgs, index);
+                calculateAverage(raters, avgs, index);
             }
             return avgs;
         }
