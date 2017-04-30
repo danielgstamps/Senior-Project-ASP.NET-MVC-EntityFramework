@@ -712,7 +712,7 @@ namespace CapstoneProject.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
             }
 
-            var employeeEvals = employee.Evaluations;
+            var employeeEvals = employee.Evaluations.OrderBy(e => e.TypeID);
             return View(employeeEvals);
         }
 
