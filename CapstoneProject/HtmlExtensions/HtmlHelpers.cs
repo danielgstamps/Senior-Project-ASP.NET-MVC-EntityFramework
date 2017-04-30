@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using CapstoneProject.DAL;
 using CapstoneProject.Models;
 
 namespace CapstoneProject.HtmlExtensions
@@ -18,7 +14,22 @@ namespace CapstoneProject.HtmlExtensions
                     emp => emp.Evaluations.Any(
                         eval => eval.TypeID == typeId &&
                         eval.OpenDate <= DateTime.Today &&
+                        eval.CloseDate > DateTime.Today &&
                         !eval.IsComplete()));
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public static bool CohortHasClosedEval(Cohort cohort, int typeId)
+        {
+            try
+            {
+                var firstEmployee = cohort.Employees.First();
+                var allEvalsOfType = firstEmployee.Evaluations.Where(eval => eval.TypeID == typeId && !eval.IsComplete());
+                return allEvalsOfType.First().CloseDate <= DateTime.Today;
             }
             catch (Exception)
             {
@@ -47,6 +58,20 @@ namespace CapstoneProject.HtmlExtensions
                 var firstEmployee = cohort.Employees.First();
                 var allEvalsOfType = firstEmployee.Evaluations.Where(eval => eval.TypeID == typeId && !eval.IsComplete());
                 return allEvalsOfType.First().OpenDate.ToString("d");
+            }
+            catch (Exception)
+            {
+                return "0/0/0000";
+            }
+        }
+
+        public static string CohortEvalCloseDate(Cohort cohort, int typeId)
+        {
+            try
+            {
+                var firstEmployee = cohort.Employees.First();
+                var allEvalsOfType = firstEmployee.Evaluations.Where(eval => eval.TypeID == typeId && !eval.IsComplete());
+                return allEvalsOfType.First().CloseDate.ToString("d");
             }
             catch (Exception)
             {

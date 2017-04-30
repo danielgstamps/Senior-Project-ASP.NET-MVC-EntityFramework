@@ -8,11 +8,9 @@ using CapstoneProject.DAL;
 using CapstoneProject.Models;
 using CapstoneProject.ViewModels;
 using Castle.Core.Internal;
-using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using MvcRazorToPdf;
-using CapstoneProject.HtmlExtensions;
 
 namespace CapstoneProject.Controllers
 {
@@ -225,9 +223,9 @@ namespace CapstoneProject.Controllers
             ratersToShow.AddRange(coworkers);
             ratersToShow.AddRange(supervisees);
             var numOfQuestions = GetNumberOfQuestions(eval);
-            var supervisorAvgs = getQuestionAvgPerRole(supervisors, numOfQuestions);
-            var coworkerAvgs = getQuestionAvgPerRole(coworkers, numOfQuestions);
-            var superviseeAvgs = getQuestionAvgPerRole(supervisees, numOfQuestions);
+            var supervisorAvgs = GetQuestionAvgPerRole(supervisors, numOfQuestions);
+            var coworkerAvgs = GetQuestionAvgPerRole(coworkers, numOfQuestions);
+            var superviseeAvgs = GetQuestionAvgPerRole(supervisees, numOfQuestions);
             var employeeAnswers = getEmployeeAnswers(eval);
             return new EvaluationReportData
             {
@@ -292,7 +290,7 @@ namespace CapstoneProject.Controllers
             return employeeAnswers;
         }
 
-        private List<int> getQuestionAvgPerRole(List<Rater> raters, int numOfQuestions)
+        private List<int> GetQuestionAvgPerRole(List<Rater> raters, int numOfQuestions)
         {
             if (raters.IsNullOrEmpty())
             {
