@@ -12,6 +12,7 @@ using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using MvcRazorToPdf;
+using CapstoneProject.HtmlExtensions;
 
 namespace CapstoneProject.Controllers
 {
@@ -375,7 +376,7 @@ namespace CapstoneProject.Controllers
             }
 
             // Link manipulation could crash the page without this.
-            if (cohort.IsStageComplete("Summative", 1) && cohort.IsStageComplete("Summative", 2))
+            if (HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Summative", 1) && HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Summative", 2))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
@@ -407,11 +408,11 @@ namespace CapstoneProject.Controllers
 
             // Remove types if the cohort already has them assigned.
             var itemList = model.TypeList.ToList();
-            if (cohort.Type1Assigned || cohort.IsStageComplete("Summative", 1))
+            if (cohort.Type1Assigned || HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Summative", 1))
             {
                 itemList.RemoveAt(0);
             }
-            if (cohort.Type2Assigned || cohort.IsStageComplete("Summative", 2))
+            if (cohort.Type2Assigned || HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Summative", 2))
             {
                 itemList.RemoveAt(1);
             }
@@ -436,19 +437,19 @@ namespace CapstoneProject.Controllers
 
             // Stage order enforcement
             var selectedStageName = UnitOfWork.StageRepository.GetByID(model.StageID).StageName;
-            if (selectedStageName.Equals("Formative") && !cohort.IsStageComplete("Baseline", model.TypeID))
+            if (selectedStageName.Equals("Formative") && !HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Baseline", model.TypeID))
             {
                 TempData["StageError"] = "Formative can only be selected after Baseline is completed.";
                 return RedirectToAction("Create", new { cohortId = (int)TempData["CohortID"] });
             }
-            if (selectedStageName.Equals("Summative") && !cohort.IsStageComplete("Formative", model.TypeID))
+            if (selectedStageName.Equals("Summative") && !HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Formative", model.TypeID))
             {
                 TempData["StageError"] = "Summative can only be selected after Formative is completed.";
                 return RedirectToAction("Create", new { cohortId = (int)TempData["CohortID"] });
             }
 
             // Disallow selecting stages that are already complete.
-            if (cohort.IsStageComplete(selectedStageName, model.TypeID))
+            if (HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, selectedStageName, model.TypeID))
             {
                 TempData["StageError"] = "This cohort has already completed the " + selectedStageName + 
                     " stage for Type " + model.TypeID.ToString() + ".";
@@ -587,19 +588,19 @@ namespace CapstoneProject.Controllers
 
             // Stage order enforcement
             var selectedStageName = UnitOfWork.StageRepository.GetByID(model.StageID).StageName;
-            if (selectedStageName.Equals("Formative") && !cohort.IsStageComplete("Baseline", model.TypeID))
+            if (selectedStageName.Equals("Formative") && !HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Baseline", model.TypeID))
             {
                 TempData["StageError"] = "Formative can only be selected after Baseline is completed.";
                 return RedirectToAction("Edit", new { cohortId = (int)TempData["CohortID"], typeId = (int)TempData["TypeId"] });
             }
-            if (selectedStageName.Equals("Summative") && !cohort.IsStageComplete("Formative", model.TypeID))
+            if (selectedStageName.Equals("Summative") && !HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Formative", model.TypeID))
             {
                 TempData["StageError"] = "Summative can only be selected after Formative is completed.";
                 return RedirectToAction("Edit", new { cohortId = (int)TempData["CohortID"], typeId = (int)TempData["TypeId"] });
             }
 
             // Disallow selecting stages that are already complete.
-            if (cohort.IsStageComplete(selectedStageName, model.TypeID))
+            if (HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, selectedStageName, model.TypeID))
             {
                 TempData["StageError"] = "This cohort has already completed the " + selectedStageName +
                     " stage for Type " + model.TypeID.ToString() + ".";
@@ -782,12 +783,12 @@ namespace CapstoneProject.Controllers
                 return;
             }
 
-            if (cohort.AllEvalsOfTypeComplete(1) && !cohort.IsStageComplete("Summative", 1))
+            if (HtmlExtensions.HtmlExtensions.CohortFinishedType(cohort, 1) && !HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Summative", 1))
             {
                 cohort.Type1Assigned = false;
             }
 
-            if (cohort.AllEvalsOfTypeComplete(2) && !cohort.IsStageComplete("Summative", 2))
+            if (HtmlExtensions.HtmlExtensions.CohortFinishedType(cohort, 2) && !HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Summative", 2))
             {
                 cohort.Type2Assigned = false;
             }
