@@ -5,7 +5,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CapstoneProject.DAL;
 using Moq;
 using System.Collections.Generic;
-using System.Web.UI.WebControls;
 
 namespace CapstoneProjectTests.ControllerTests
 {
@@ -19,7 +18,7 @@ namespace CapstoneProjectTests.ControllerTests
         [TestInitialize]
         public void Setup()
         {
-            this.employees = new List<Employee>
+            employees = new List<Employee>
             {
                 new Employee
                 {
@@ -40,37 +39,37 @@ namespace CapstoneProjectTests.ControllerTests
                     LastName = "Bernard"
                 }
             };
-            this.mockUnitOfWork = new Mock<IUnitOfWork>();
-            this.controller = new EmployeesController();
-            this.controller.UnitOfWork = mockUnitOfWork.Object;
-            this.mockUnitOfWork.Setup(
+            mockUnitOfWork = new Mock<IUnitOfWork>();
+            controller = new EmployeesController();
+            controller.UnitOfWork = mockUnitOfWork.Object;
+            mockUnitOfWork.Setup(
                 m => m.EmployeeRepository.Get(null, null, "")).Returns(
-                this.employees);
-            foreach (var employee in this.employees)
+                employees);
+            foreach (var employee in employees)
             {
-                this.mockUnitOfWork.Object.EmployeeRepository.Insert(employee);
+                mockUnitOfWork.Object.EmployeeRepository.Insert(employee);
             }
         }
 
         [TestMethod]
         public void TestGet()
         {
-            var result = this.mockUnitOfWork.Object.EmployeeRepository.Get() as List<Employee>;
+            var result = mockUnitOfWork.Object.EmployeeRepository.Get() as List<Employee>;
             Assert.AreEqual("Dwight", result[0].FirstName);
         }
 
         [TestMethod]
         public void TestIndex()
         {
-            var result = this.controller.Index() as ViewResult;
+            var result = controller.Index() as ViewResult;
             Assert.AreEqual("Index", result.ViewName);
         }
 
         [TestMethod]
         public void TestGetById()
         {
-            this.mockUnitOfWork.Setup(m => m.EmployeeRepository.GetByID(1)).Returns(employees[1]);
-            var result = this.mockUnitOfWork.Object.EmployeeRepository.GetByID(1);
+            mockUnitOfWork.Setup(m => m.EmployeeRepository.GetByID(1)).Returns(employees[1]);
+            var result = mockUnitOfWork.Object.EmployeeRepository.GetByID(1);
             Assert.AreEqual("Angela", result.FirstName);
         }
 
@@ -85,29 +84,25 @@ namespace CapstoneProjectTests.ControllerTests
         [TestMethod]
         public void TestDelete()
         {
-            this.mockUnitOfWork.Setup(m => m.EmployeeRepository.Delete(2));
-
-            this.mockUnitOfWork.Object.EmployeeRepository.Delete(2);
-
-            this.mockUnitOfWork.Verify(u => u.EmployeeRepository.Delete(2), Times.Once);
+            mockUnitOfWork.Setup(m => m.EmployeeRepository.Delete(2));
+            mockUnitOfWork.Object.EmployeeRepository.Delete(2);
+            mockUnitOfWork.Verify(u => u.EmployeeRepository.Delete(2), Times.Once);
         }
 
         [TestMethod]
         public void TestUpdate()
         {
             var employeeToUpdate = this.mockUnitOfWork.Object.EmployeeRepository.GetByID(0);
-            this.mockUnitOfWork.Setup(m => m.EmployeeRepository.Update(employeeToUpdate));
-
-            this.mockUnitOfWork.Object.EmployeeRepository.Update(employeeToUpdate);
-
-            this.mockUnitOfWork.Verify(m => m.EmployeeRepository.Update(employeeToUpdate), Times.Once);
+            mockUnitOfWork.Setup(m => m.EmployeeRepository.Update(employeeToUpdate));
+            mockUnitOfWork.Object.EmployeeRepository.Update(employeeToUpdate);
+            mockUnitOfWork.Verify(m => m.EmployeeRepository.Update(employeeToUpdate), Times.Once);
         }
 
         [TestMethod]
         public void TestEdit()
         {
-            this.mockUnitOfWork.Setup(m => m.EmployeeRepository.GetByID(0)).Returns(employees[0]);
-            var result = this.controller.Edit(0) as ViewResult;
+            mockUnitOfWork.Setup(m => m.EmployeeRepository.GetByID(0)).Returns(employees[0]);
+            var result = controller.Edit(0) as ViewResult;
             if (result == null) return;
             var resultModel = result.Model as Employee;
             Assert.AreEqual("Edit", result.ViewName);

@@ -27,15 +27,21 @@ namespace CapstoneProjectTests.ControllerTests
         {
             evals = new List<Evaluation>
             {
-                new Evaluation()
+                new Evaluation
                 {
-                    //EmployeeID = 0,
-                    CompletedDate = DateTime.Today.AddDays(-1),
+                    EvaluationID = 0,
+                    OpenDate = DateTime.Today.AddDays(-10),
+                    CloseDate = DateTime.Today.AddDays(10),
+                    SelfAnswers = "123123",
+                    CompletedDate = DateTime.Today.AddDays(-10),
                     Raters = new List<Rater>()
                 },
-                new Evaluation()
+                new Evaluation
                 {
-                    //EmployeeID = 0,
+                    EvaluationID = 1,
+                    OpenDate = DateTime.Today.AddDays(-10),
+                    CloseDate = DateTime.Today.AddDays(10),
+                    SelfAnswers = null,
                     CompletedDate = null,
                     Raters = new List<Rater>()
                 }
@@ -48,7 +54,7 @@ namespace CapstoneProjectTests.ControllerTests
                     FirstName = "Dwight",
                     LastName = "Schrute",
                     CohortID = 0,
-                    Evaluations = new List<Evaluation>()
+                    Evaluations = evals
                 },
                 new Employee
                 {
@@ -233,6 +239,7 @@ namespace CapstoneProjectTests.ControllerTests
         public void TestPostDeleteReturnsView()
         {
             mockUnitOfWork.Setup(m => m.CohortRepository.GetByID(0)).Returns(cohorts[0]);
+            mockUnitOfWork.Setup(m => m.EvaluationRepository.GetByID(0)).Returns(evals[0]);
             var result = controller.DeleteConfirmed(0) as RedirectToRouteResult;
             Assert.IsNotNull(result);
             Assert.AreEqual("Index", result.RouteValues["action"]);
@@ -242,6 +249,7 @@ namespace CapstoneProjectTests.ControllerTests
         public void TestPostDeleteRemovesEmployeeFromCohort()
         {
             mockUnitOfWork.Setup(m => m.CohortRepository.GetByID(0)).Returns(cohorts[0]);
+            mockUnitOfWork.Setup(m => m.EvaluationRepository.GetByID(0)).Returns(evals[0]);
             Assert.IsNotNull(employees[0].CohortID);
             var result = controller.DeleteConfirmed(0);
             Assert.IsNotNull(result);
@@ -249,21 +257,33 @@ namespace CapstoneProjectTests.ControllerTests
         }
 
         [TestMethod]
-        public void TestPostDeleteDeletesCohort()
+        public void TestPostDeleteDeletesIncompleteEval()
         {
             mockUnitOfWork.Setup(m => m.CohortRepository.GetByID(0)).Returns(cohorts[0]);
-            var result = controller.DeleteConfirmed(0);
+            mockUnitOfWork.Setup(m => m.EvaluationRepository.GetByID(0)).Returns(evals[0]);
+            var result = controller.DeleteConfirmed(0) as RedirectToRouteResult;
             Assert.IsNotNull(result);
-            mockUnitOfWork.Verify(u => u.CohortRepository.Delete(cohorts[0]), Times.Once);
+            mockUnitOfWork.Verify(u => u.EvaluationRepository.Delete(evals[1]), Times.Once);
         }
 
         [TestMethod]
-        public void TestUpdate()
+        public void TestPostDeleteDoesNotDeleteCompleteEval()
         {
-            var cohortToUpdate = mockUnitOfWork.Object.CohortRepository.GetByID(0);
-            mockUnitOfWork.Setup(m => m.CohortRepository.Update(cohortToUpdate));         
-            mockUnitOfWork.Object.CohortRepository.Update(cohortToUpdate);
-            mockUnitOfWork.Verify(m => m.CohortRepository.Update(cohortToUpdate), Times.Once);
+            mockUnitOfWork.Setup(m => m.CohortRepository.GetByID(0)).Returns(cohorts[0]);
+            mockUnitOfWork.Setup(m => m.EvaluationRepository.GetByID(0)).Returns(evals[0]);
+            var result = controller.DeleteConfirmed(0) as RedirectToRouteResult;
+            Assert.IsNotNull(result);
+            mockUnitOfWork.Verify(u => u.EvaluationRepository.Delete(evals[0]), Times.Never);
+        }
+
+        [TestMethod]
+        public void TestPostDeleteDeletesCohort()
+        {
+            mockUnitOfWork.Setup(m => m.CohortRepository.GetByID(0)).Returns(cohorts[0]);
+            mockUnitOfWork.Setup(m => m.EvaluationRepository.GetByID(0)).Returns(evals[0]);
+            var result = controller.DeleteConfirmed(0);
+            Assert.IsNotNull(result);
+            mockUnitOfWork.Verify(u => u.CohortRepository.Delete(cohorts[0]), Times.Once);
         }
 
         //[TestMethod]
