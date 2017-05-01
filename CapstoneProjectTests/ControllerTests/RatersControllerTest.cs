@@ -8,7 +8,7 @@ using Moq;
 using CapstoneProject.ViewModels;
 using System.Web.Mvc;
 
-namespace CapstoneProjectTests.Controller_Tests
+namespace CapstoneProjectTests
 {
     [TestClass]
     public class RatersControllerTest

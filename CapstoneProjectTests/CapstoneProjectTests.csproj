@@ -89,19 +89,19 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Controller Tests\RatersControllerTest.cs" />
-    <Compile Include="Model Tests\CategoryTest.cs" />
-    <Compile Include="Controller Tests\CohortsControllerTest.cs" />
-    <Compile Include="Controller Tests\EmployeesControllerTest.cs" />
-    <Compile Include="Controller Tests\EvaluationsControllerTest.cs" />
-    <Compile Include="Model Tests\EvaluationTest.cs" />
+    <Compile Include="ControllerTests\CohortsControllerTest.cs" />
+    <Compile Include="ControllerTests\EmployeesControllerTest.cs" />
+    <Compile Include="ControllerTests\EvaluationsControllerTest.cs" />
+    <Compile Include="ControllerTests\QuestionsControllerTest.cs" />
+    <Compile Include="ControllerTests\RatersControllerTest.cs" />
+    <Compile Include="ModelTests\CategoryTest.cs" />
+    <Compile Include="ModelTests\CohortTest.cs" />
+    <Compile Include="ModelTests\EmployeeTest.cs" />
+    <Compile Include="ModelTests\EvaluationTest.cs" />
+    <Compile Include="ModelTests\QuestionTest.cs" />
+    <Compile Include="ModelTests\RaterTest.cs" />
+    <Compile Include="ModelTests\StageTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Model Tests\CohortTest.cs" />
-    <Compile Include="Model Tests\EmployeeTest.cs" />
-    <Compile Include="Controller Tests\QuestionsControllerTest.cs" />
-    <Compile Include="Model Tests\QuestionTest.cs" />
-    <Compile Include="Model Tests\RaterTest.cs" />
-    <Compile Include="Model Tests\StageTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CapstoneProject\CapstoneProject.csproj">
