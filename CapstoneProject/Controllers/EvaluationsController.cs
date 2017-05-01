@@ -228,7 +228,7 @@ namespace CapstoneProject.Controllers
             var coworkerAvgs = getQuestionAvgPerRole(coworkers, numOfQuestions);
             var superviseeAvgs = getQuestionAvgPerRole(supervisees, numOfQuestions);
 
-            var allAvgAnswers = new List<int>();
+            var allAvgAnswers = new List<double>();
             var answersCollection = new List<List<int>>();
             answersCollection.Add(employeeAnswers);
             if (!supervisorAvgs.IsNullOrEmpty())
@@ -245,7 +245,7 @@ namespace CapstoneProject.Controllers
             }
             for (int i = 0; i < numOfQuestions; i++)
             {
-                var total = 0;
+                var total = 0.0;
                 foreach (var collection in answersCollection)
                 {
                     total += collection[i];
