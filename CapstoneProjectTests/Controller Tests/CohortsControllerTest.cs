@@ -20,7 +20,7 @@ namespace CapstoneProjectTests
         [TestInitialize]
         public void Setup()
         {
-            this.cohorts = new List<Cohort>()
+            cohorts = new List<Cohort>
             {
                 new Cohort
                 {
@@ -44,15 +44,15 @@ namespace CapstoneProjectTests
                     Type2Assigned = false
                 }
             };
-            this.mockUnitOfWork = new Mock<IUnitOfWork>();
-            this.controller = new CohortsController();
-            this.controller.UnitOfWork = mockUnitOfWork.Object;
-            this.mockUnitOfWork.Setup(
+            mockUnitOfWork = new Mock<IUnitOfWork>();
+            controller = new CohortsController();
+            controller.UnitOfWork = mockUnitOfWork.Object;
+            mockUnitOfWork.Setup(
                 m => m.CohortRepository.Get(null, null, "")).Returns(
-                this.cohorts);
-            foreach (var cohort in this.cohorts)
+                cohorts);
+            foreach (var cohort in cohorts)
             {
-                this.mockUnitOfWork.Object.CohortRepository.Insert(cohort);
+                mockUnitOfWork.Object.CohortRepository.Insert(cohort);
             }
         }
 
@@ -67,24 +67,24 @@ namespace CapstoneProjectTests
         }
 
         [TestMethod]
-        public void TestGetByID()
+        public void TestGetById()
         {
             this.mockUnitOfWork.Setup(m => m.CohortRepository.GetByID(0)).Returns(cohorts[0]);
-            var result = this.mockUnitOfWork.Object.CohortRepository.GetByID(0);
+            var result = mockUnitOfWork.Object.CohortRepository.GetByID(0);
             Assert.AreEqual("Sales", result.Name);
         }
 
         [TestMethod]
         public void TestIndex()
         {
-            var result = this.controller.Index() as ViewResult;
+            var result = controller.Index() as ViewResult;
             Assert.AreEqual("Index", result.ViewName);
         }
 
         [TestMethod]
         public void TestDetails()
         {
-            this.mockUnitOfWork.Setup(m => m.CohortRepository.GetByID(0)).Returns(cohorts[0]);
+            mockUnitOfWork.Setup(m => m.CohortRepository.GetByID(0)).Returns(cohorts[0]);
             var result = controller.Details(0) as ViewResult;
             Assert.AreEqual("Details", result.ViewName);
         }

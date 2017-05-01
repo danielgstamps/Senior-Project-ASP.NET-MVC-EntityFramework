@@ -18,11 +18,21 @@ namespace CapstoneProject.Controllers
     [Authorize(Roles="Admin")]
     public class CohortsController : Controller
     {
-        private readonly IUnitOfWork _unitOfWork = new UnitOfWork();
+        private IUnitOfWork _unitOfWork = new UnitOfWork();
         private readonly ApplicationDbContext _userDb = new ApplicationDbContext();
         private ApplicationUserManager _userManager;
 
-        public IUnitOfWork UnitOfWork { get; set; } = new UnitOfWork();
+        public IUnitOfWork UnitOfWork
+        {
+            get
+            {
+                return _unitOfWork;
+            }
+            set
+            {
+                _unitOfWork = value;
+            }
+        }
         public ApplicationUserManager UserManager
         {
             get { return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
