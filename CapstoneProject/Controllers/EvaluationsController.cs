@@ -228,25 +228,22 @@ namespace CapstoneProject.Controllers
             var coworkerAvgs = getQuestionAvgPerRole(coworkers, numOfQuestions);
             var superviseeAvgs = getQuestionAvgPerRole(supervisees, numOfQuestions);
 
-            var allAvgAnswers = new List<int>();
-            var answersCollection = new List<List<int>>();
-            answersCollection.Add(employeeAnswers);
-            answersCollection.Add(supervisorAvgs);
-            answersCollection.Add(coworkerAvgs);
-            answersCollection.Add(superviseeAvgs);
-            foreach (var collection in answersCollection)
+            var allAvgAnswers = new List<double>();
+            var allAnswers = new List<List<int>>();
+            allAnswers.Add(employeeAnswers);
+            if (!supervisorAvgs.IsNullOrEmpty())
             {
-                if (!collection.IsNullOrEmpty())
-                {
-                    for (int i = 0; i < numOfQuestions; i++)
-                    {
-                        var total = 0;
-                        total += collection[i];
-                        var avg = total / ratersToShow.Count + 1;
-                        allAvgAnswers.Add(avg);
-                    }
-                }
+                allAnswers.Add(supervisorAvgs);
             }
+            if (!coworkerAvgs.IsNullOrEmpty())
+            {
+                allAnswers.Add(coworkerAvgs);
+            }
+            if (!superviseeAvgs.IsNullOrEmpty())
+            {
+                allAnswers.Add(superviseeAvgs);
+            }
+            getAvgForAllResponders(numOfQuestions, allAnswers, allAvgAnswers);
             
             return new EvaluationReportData
             {
@@ -262,6 +259,20 @@ namespace CapstoneProject.Controllers
                 SuperviseeAvgAnswers = superviseeAvgs,
                 AllAvgAnswers = allAvgAnswers
             };
+        }
+
+        private static void getAvgForAllResponders(int numOfQuestions, List<List<int>> allAnswers, List<double> allAvgAnswers)
+        {
+            for (int i = 0; i < numOfQuestions; i++)
+            {
+                var total = 0.0;
+                foreach (var collection in allAnswers)
+                {
+                    total += collection[i];
+                }
+                var avg = total / allAnswers.Count;
+                allAvgAnswers.Add(avg);
+            }
         }
 
         private void GroupRatersByRole(Evaluation eval, List<Rater> supervisors, List<Rater> coworkers, List<Rater> supervisees)
