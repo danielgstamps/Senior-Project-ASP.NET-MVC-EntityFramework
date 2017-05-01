@@ -8,12 +8,9 @@ using CapstoneProject.DAL;
 using CapstoneProject.Models;
 using CapstoneProject.ViewModels;
 using Castle.Core.Internal;
-using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using MvcRazorToPdf;
-using iTextSharp.tool.xml.pipeline.css;
-using iTextSharp.tool.xml;
 
 namespace CapstoneProject.Controllers
 {
@@ -48,9 +45,9 @@ namespace CapstoneProject.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult AdminEvalsIndex()
         {
-            var evalsOrderedByEmployeeID =
+            var evalsOrderedByEmployeeId =
                 this.UnitOfWork.EvaluationRepository.Get().OrderBy(e => e.Employee.EmployeeID).ToList();
-            return View("AdminEvalsIndex", evalsOrderedByEmployeeID);
+            return View("AdminEvalsIndex", evalsOrderedByEmployeeId);
         }
 
         [AllowAnonymous]
@@ -170,7 +167,7 @@ namespace CapstoneProject.Controllers
                 {
                     if (eval.Stage.StageName.Equals("Baseline"))
                     {
-                        return RedirectToAction("AssignRaters", new { id = eval.EvaluationID });
+                        return RedirectToAction("AssignRaters", "Raters", new { id = eval.EvaluationID });
                     }
                     return RedirectToAction("ConfirmRaters", "Raters", new { id = eval.EvaluationID });
                 }
@@ -196,237 +193,6 @@ namespace CapstoneProject.Controllers
             return RedirectToAction("RaterCleanup", "Raters", new {id = rater.RaterID});
         }
 
-        // GET AssignRaters
-        public ActionResult AssignRaters(int? id) //evalId
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var eval = UnitOfWork.EvaluationRepository.GetByID(id);
-            if (eval == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var employee = UnitOfWork.EmployeeRepository.GetByID(eval.EmployeeID);
-            if (employee == null || !employee.Email.Equals(User.Identity.GetUserName()))
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
-            }
-
-            var model = new AssignRatersViewModel
-            {
-                EvalId = eval.EvaluationID,
-                Raters = eval.Raters.ToList()
-            };
-
-            foreach (var rater in model.Raters)
-            {
-                rater.Name = "";
-                rater.Email = "";
-            }      
-
-            return View("AssignRaters", model);
-        }
-
-        // POST AssignRaters
-        [HttpPost]
-        public ActionResult AssignRaters(AssignRatersViewModel model)
-        {
-            if (model == null || model.Raters.Count == 0)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var eval = UnitOfWork.EvaluationRepository.GetByID(model.EvalId);
-            if (eval == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
-            }
-
-            if (eval.Raters.Count != model.Raters.Count)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
-            }
-
-            // Check for duplicate emails (Not using Unique tags because they don't need to be unique in the db).
-            if (model.Raters.DistinctBy(r => r.Email).Count() != model.Raters.Count)
-            {
-                TempData["DuplicateError"] = "Please enter a unique email address for each rater.";
-                return RedirectToAction("AssignRaters", new { id = model.EvalId });
-            }
-
-            if (model.Raters.Any(r => r.Email.Equals(eval.Employee.Email)))
-            {
-                TempData["DuplicateError"] = "Nice try. You can't rate yourself.";
-                return RedirectToAction("AssignRaters", new { id = eval.EvaluationID });
-            }
-
-            var i = 0;
-            foreach (var rater in eval.Raters)
-            {
-                rater.Name = model.Raters[i].Name;
-                rater.Email = model.Raters[i].Email;
-                UnitOfWork.Save();
-                i++;
-            }
-
-            return RedirectToAction("NotifyRatersNow", "Raters", new { id = eval.EvaluationID });
-        }
-
-        // GET: EditRaters
-        public ActionResult EditRaters(int? id) //evalID
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var eval = UnitOfWork.EvaluationRepository.GetByID(id);
-            if (eval == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var employee = UnitOfWork.EmployeeRepository.GetByID(eval.EmployeeID);
-            if (employee == null || !employee.Email.Equals(User.Identity.GetUserName()))
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
-            }
-
-            var model = new AssignRatersViewModel
-            {
-                EvalId = eval.EvaluationID,
-                Raters = eval.Raters.ToList()
-            }; 
-
-            return View("EditRaters", model);
-        }
-
-        // POST: EditRaters
-        [HttpPost]
-        public ActionResult EditRaters(AssignRatersViewModel model)
-        {
-            if (model == null || model.Raters.Count == 0)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var eval = UnitOfWork.EvaluationRepository.GetByID(model.EvalId);
-            if (eval == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            if (model.Raters.DistinctBy(r => r.Email).Count() != model.Raters.Count)
-            {
-                TempData["DuplicateError"] = "Please enter a unique email address for each rater.";
-                return RedirectToAction("EditRaters", new { id = model.EvalId });
-            }
-
-            if (model.Raters.Any(r => r.Email.Equals(eval.Employee.Email)))
-            {
-                TempData["DuplicateError"] = "Nice try. You can't rate yourself.";
-                return RedirectToAction("EditRaters", new { id = model.EvalId });
-            }
-
-            var i = 0;
-            foreach (var rater in eval.Raters)
-            {
-                rater.Name = model.Raters[i].Name;
-                rater.Email = model.Raters[i].Email;
-                UnitOfWork.Save();
-                i++;
-            }
-
-            TempData["EditRaterSuccess"] = "Successfully updated raters.";
-            return RedirectToAction("EmployeeEvalsIndex", new { id = eval.EmployeeID });
-        }
-
-        // GET: ReplaceRater
-        public ActionResult ReplaceRater(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var raterToReplace = UnitOfWork.RaterRepository.GetByID(id);
-            if (raterToReplace == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var eval = UnitOfWork.EvaluationRepository.GetByID(raterToReplace.EvaluationID);
-            if (eval == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var employee = UnitOfWork.EmployeeRepository.GetByID(eval.EmployeeID);
-            if (employee == null || !employee.Email.Equals(User.Identity.GetUserName()))
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
-            }
-
-            var model = new ReplaceRaterViewModel()
-            {
-                EvalId = eval.EvaluationID,
-                RaterToReplace = raterToReplace,
-                NewRater = new Rater { Role = raterToReplace.Role }
-            };
-
-            return View("ReplaceRater", model);
-        }
-
-        // POST: ReplaceRater
-        [HttpPost]
-        public ActionResult ReplaceRater(ReplaceRaterViewModel model)
-        {
-            if (model == null ||
-                model.EvalId == null ||
-                model.RaterToReplace == null ||
-                model.NewRater == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
-            }
-
-            var eval = UnitOfWork.EvaluationRepository.GetByID(model.EvalId);
-            if (eval == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
-            }
-
-            if (eval.Raters.Any(r => r.Email.Equals(model.NewRater.Email)))
-            {
-                TempData["DuplicateError"] = "This evaluation already has a rater with that email.";
-                return RedirectToAction("ReplaceRater", new { id = model.RaterToReplace.RaterID });
-            }
-
-            if (model.NewRater.Email.Equals(eval.Employee.Email))
-            {
-                TempData["DuplicateError"] = "Nice try. You can't rate yourself.";
-                return RedirectToAction("ReplaceRater", new { id = model.RaterToReplace.RaterID });
-            }
-
-            var raterToDisable = UnitOfWork.RaterRepository.GetByID(model.RaterToReplace.RaterID);
-            if (raterToDisable == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
-            }
-
-            raterToDisable.Disabled = true;
-            UnitOfWork.Save();
-
-            eval.Raters.Add(model.NewRater);
-            UnitOfWork.Save();
-
-            TempData["ReplaceRaterSuccess"] = "Successfully replaced rater.";
-            return RedirectToAction("EditRaters", new { id = eval.EvaluationID });
-        }
-
         /// <summary>
         /// Shows an evaluation report as an HTML page.
         /// </summary>
@@ -434,34 +200,33 @@ namespace CapstoneProject.Controllers
         /// <returns>A ViewResult that renders the report</returns>
         public ActionResult ShowReportAsHtml(int? id)
         {
-            var eval = this.UnitOfWork.EvaluationRepository.GetByID(id);
-            var reportData = this.createReportData(eval);
+            var eval = UnitOfWork.EvaluationRepository.GetByID(id);
+            var reportData = CreateReportData(eval);
             return View("ReportAsHtml", reportData);
         }
 
         public ActionResult ShowReportAsPdf(int? id)
         {
-            var eval = this.UnitOfWork.EvaluationRepository.GetByID(id);
-            var reportData = this.createReportData(eval);
-            ICSSResolver cssResolver = XMLWorkerHelper.GetInstance().GetDefaultCssResolver(true);
+            var eval = UnitOfWork.EvaluationRepository.GetByID(id);
+            var reportData = CreateReportData(eval);
             return new PdfActionResult("ReportAsPdf", reportData);
         }
 
-        private EvaluationReportData createReportData(Evaluation eval)
+        private EvaluationReportData CreateReportData(Evaluation eval)
         {
             var supervisors = new List<Rater>();
             var coworkers = new List<Rater>();
             var supervisees = new List<Rater>();
-            this.groupRatersByRole(eval, supervisors, coworkers, supervisees);
+            GroupRatersByRole(eval, supervisors, coworkers, supervisees);
             var ratersToShow = new List<Rater>();
             ratersToShow.AddRange(supervisors);
             ratersToShow.AddRange(coworkers);
             ratersToShow.AddRange(supervisees);
-            int numOfQuestions = this.getNumberOfQuestions(eval);
-            var supervisorAvgs = this.getQuestionAvgPerRole(supervisors, numOfQuestions);
-            var coworkerAvgs = this.getQuestionAvgPerRole(coworkers, numOfQuestions);
-            var superviseeAvgs = this.getQuestionAvgPerRole(supervisees, numOfQuestions);
-            List<int> employeeAnswers = this.getEmployeeAnswers(eval);
+            var numOfQuestions = GetNumberOfQuestions(eval);
+            var supervisorAvgs = GetQuestionAvgPerRole(supervisors, numOfQuestions);
+            var coworkerAvgs = GetQuestionAvgPerRole(coworkers, numOfQuestions);
+            var superviseeAvgs = GetQuestionAvgPerRole(supervisees, numOfQuestions);
+            var employeeAnswers = getEmployeeAnswers(eval);
             return new EvaluationReportData
             {
                 EvaluationID = eval.EvaluationID,
@@ -477,15 +242,15 @@ namespace CapstoneProject.Controllers
             };
         }
 
-        private void groupRatersByRole(Evaluation eval, List<Rater> supervisors, List<Rater> coworkers, List<Rater> supervisees)
+        private void GroupRatersByRole(Evaluation eval, List<Rater> supervisors, List<Rater> coworkers, List<Rater> supervisees)
         {
             foreach (var rater in eval.Raters)
             {
-                this.putRaterInGroup(supervisors, coworkers, supervisees, rater);
+                PutRaterInGroup(supervisors, coworkers, supervisees, rater);
             }
         }
 
-        private void putRaterInGroup(List<Rater> supervisors, List<Rater> coworkers, List<Rater> supervisees, Rater rater)
+        private void PutRaterInGroup(List<Rater> supervisors, List<Rater> coworkers, List<Rater> supervisees, Rater rater)
         {
             switch (rater.Role)
             {
@@ -501,7 +266,7 @@ namespace CapstoneProject.Controllers
             }
         }
 
-        private int getNumberOfQuestions(Evaluation eval)
+        private int GetNumberOfQuestions(Evaluation eval)
         {
             var numOfQuestions = 0;
             foreach (var category in eval.Type.Categories)
@@ -525,16 +290,16 @@ namespace CapstoneProject.Controllers
             return employeeAnswers;
         }
 
-        private List<int> getQuestionAvgPerRole(List<Rater> raters, int numOfQuestions)
+        private List<int> GetQuestionAvgPerRole(List<Rater> raters, int numOfQuestions)
         {
             if (raters.IsNullOrEmpty())
             {
                 return new List<int>();
             }
             var avgs = new List<int>();
-            for (int index = 0; index < numOfQuestions; index++)
+            for (var index = 0; index < numOfQuestions; index++)
             {
-                this.calculateAverage(raters, avgs, index);
+                calculateAverage(raters, avgs, index);
             }
             return avgs;
         }
@@ -609,7 +374,7 @@ namespace CapstoneProject.Controllers
             }
 
             // Link manipulation could crash the page without this.
-            if (cohort.IsStageComplete("Summative", 1) && cohort.IsStageComplete("Summative", 2))
+            if (HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Summative", 1) && HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Summative", 2))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
@@ -641,11 +406,11 @@ namespace CapstoneProject.Controllers
 
             // Remove types if the cohort already has them assigned.
             var itemList = model.TypeList.ToList();
-            if (cohort.Type1Assigned || cohort.IsStageComplete("Summative", 1))
+            if (cohort.Type1Assigned || HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Summative", 1))
             {
                 itemList.RemoveAt(0);
             }
-            if (cohort.Type2Assigned || cohort.IsStageComplete("Summative", 2))
+            if (cohort.Type2Assigned || HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Summative", 2))
             {
                 itemList.RemoveAt(1);
             }
@@ -670,19 +435,19 @@ namespace CapstoneProject.Controllers
 
             // Stage order enforcement
             var selectedStageName = UnitOfWork.StageRepository.GetByID(model.StageID).StageName;
-            if (selectedStageName.Equals("Formative") && !cohort.IsStageComplete("Baseline", model.TypeID))
+            if (selectedStageName.Equals("Formative") && !HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Baseline", model.TypeID))
             {
                 TempData["StageError"] = "Formative can only be selected after Baseline is completed.";
                 return RedirectToAction("Create", new { cohortId = (int)TempData["CohortID"] });
             }
-            if (selectedStageName.Equals("Summative") && !cohort.IsStageComplete("Formative", model.TypeID))
+            if (selectedStageName.Equals("Summative") && !HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Formative", model.TypeID))
             {
                 TempData["StageError"] = "Summative can only be selected after Formative is completed.";
                 return RedirectToAction("Create", new { cohortId = (int)TempData["CohortID"] });
             }
 
             // Disallow selecting stages that are already complete.
-            if (cohort.IsStageComplete(selectedStageName, model.TypeID))
+            if (HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, selectedStageName, model.TypeID))
             {
                 TempData["StageError"] = "This cohort has already completed the " + selectedStageName + 
                     " stage for Type " + model.TypeID.ToString() + ".";
@@ -757,7 +522,7 @@ namespace CapstoneProject.Controllers
             TempData["TypeDisplay"] = typeId;
             TempData["CohortName"] = cohort.Name;
 
-            EvaluationCreateViewModel model = new EvaluationCreateViewModel();
+            var model = new EvaluationCreateViewModel();
 
             // Get all Types.
             model.TypeList = UnitOfWork.TypeRepository.dbSet.Select(t => new SelectListItem()
@@ -777,20 +542,20 @@ namespace CapstoneProject.Controllers
             var employee = cohort.Employees.First(e => e.Evaluations.Count != 0);
             if (employee == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
             // Get the first eval that isn't complete, of this type.
             var eval = employee.Evaluations.First(e => !e.IsComplete() && e.TypeID == typeId);
             if (eval == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
             model.CohortID = (int)cohortId;
             model.TypeID = typeId.Value;
 
-            model.StageID = eval.StageID;
+            model.StageID = eval.StageID; 
             model.OpenDate = eval.OpenDate;
             model.CloseDate = eval.CloseDate;
 
@@ -798,6 +563,7 @@ namespace CapstoneProject.Controllers
             model.NumberOfCoworkers = NumberOfRatersWithRole(eval, "Coworker");
             model.NumberOfSupervisees = NumberOfRatersWithRole(eval, "Supervisee"); ;
 
+            ViewBag.BaselineId = UnitOfWork.StageRepository.Get(s => s.StageName.Equals("Baseline")).First().StageID;
             return View("Edit", model);
         }
 
@@ -820,14 +586,22 @@ namespace CapstoneProject.Controllers
 
             // Stage order enforcement
             var selectedStageName = UnitOfWork.StageRepository.GetByID(model.StageID).StageName;
-            if (selectedStageName.Equals("Formative") && !cohort.IsStageComplete("Baseline", model.TypeID))
+            if (selectedStageName.Equals("Formative") && !HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Baseline", model.TypeID))
             {
                 TempData["StageError"] = "Formative can only be selected after Baseline is completed.";
                 return RedirectToAction("Edit", new { cohortId = (int)TempData["CohortID"], typeId = (int)TempData["TypeId"] });
             }
-            if (selectedStageName.Equals("Summative") && !cohort.IsStageComplete("Formative", model.TypeID))
+            if (selectedStageName.Equals("Summative") && !HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Formative", model.TypeID))
             {
                 TempData["StageError"] = "Summative can only be selected after Formative is completed.";
+                return RedirectToAction("Edit", new { cohortId = (int)TempData["CohortID"], typeId = (int)TempData["TypeId"] });
+            }
+
+            // Disallow selecting stages that are already complete.
+            if (HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, selectedStageName, model.TypeID))
+            {
+                TempData["StageError"] = "This cohort has already completed the " + selectedStageName +
+                    " stage for Type " + model.TypeID.ToString() + ".";
                 return RedirectToAction("Edit", new { cohortId = (int)TempData["CohortID"], typeId = (int)TempData["TypeId"] });
             }
 
@@ -838,6 +612,20 @@ namespace CapstoneProject.Controllers
                 var eval = emp.Evaluations.Single(e => !e.IsComplete() && e.TypeID == model.TypeID);
                 UnitOfWork.EvaluationRepository.Delete(eval.EvaluationID);
                 UnitOfWork.Save();
+            }
+
+            // If stage != baseline, pull rater numbers from baseline eval
+            if (selectedStageName != "Baseline")
+            {
+                var prevEval = UnitOfWork.EvaluationRepository.Get().First(e =>
+                    e.Employee.CohortID == cohort.CohortID &&
+                    e.IsComplete() &&
+                    e.Stage.StageName.Equals("Baseline") &&
+                    e.TypeID == model.TypeID);
+
+                model.NumberOfSupervisors = NumberOfRatersWithRole(prevEval, "Supervisor");
+                model.NumberOfCoworkers = NumberOfRatersWithRole(prevEval, "Coworker");
+                model.NumberOfSupervisees = NumberOfRatersWithRole(prevEval, "Supervisee");
             }
 
             // Recreate evals (I remove/recreate so the emails re-send, and the Rater logic is cleaner).
@@ -924,7 +712,7 @@ namespace CapstoneProject.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
             }
 
-            var employeeEvals = employee.Evaluations;
+            var employeeEvals = employee.Evaluations.OrderBy(e => e.TypeID);
             return View(employeeEvals);
         }
 
@@ -993,12 +781,12 @@ namespace CapstoneProject.Controllers
                 return;
             }
 
-            if (cohort.AllEvalsOfTypeComplete(1))
+            if (HtmlExtensions.HtmlExtensions.CohortFinishedType(cohort, 1) && !HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Summative", 1))
             {
                 cohort.Type1Assigned = false;
             }
 
-            if (cohort.AllEvalsOfTypeComplete(2))
+            if (HtmlExtensions.HtmlExtensions.CohortFinishedType(cohort, 2) && !HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Summative", 2))
             {
                 cohort.Type2Assigned = false;
             }

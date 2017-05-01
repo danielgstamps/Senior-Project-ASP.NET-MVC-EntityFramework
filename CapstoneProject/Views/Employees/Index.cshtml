@@ -4,7 +4,7 @@
     ViewBag.Title = "Employee Index";
 }
 
-<h2>Employee List</h2>
+<h2>Employees</h2>
 <h4>@Html.ActionLink("Upload Employee Data", "UploadData")</h4>
 <h4 class="alert-success">@TempData["DeleteSuccess"]</h4>
 <h4 class="alert-success">@TempData["EditSuccess"]</h4>
@@ -40,8 +40,8 @@
     @Html.HiddenFor(modelItem => item.EmployeeID)
     <tr>
         <td>
+            @Html.DisplayFor(modelItem => item.LastName),
             @Html.DisplayFor(modelItem => item.FirstName)
-            @Html.DisplayFor(modelItem => item.LastName)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Email)
