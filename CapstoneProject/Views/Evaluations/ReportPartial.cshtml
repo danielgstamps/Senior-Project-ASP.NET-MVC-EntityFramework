@@ -1,5 +1,9 @@
 ﻿@using Castle.Core.Internal
 @model CapstoneProject.ViewModels.EvaluationReportData
+@Styles.Render("~/Content/ReportStyle.css")
+@{ 
+    var numberOfColumns = 2;
+}
 
 <h3>
     Employee @Model.EmployeeName Evaluation Report (of Evaluation @Model.TypeName @Model.StageName --generated on @Model.CurrentDate)
@@ -20,11 +24,13 @@
                 {
                     case "Supervisor":
                         <th>Supervisor</th>
+                        numberOfColumns++;
                         break;
                     case "Coworker":
                         if (!hasCoworkerColumn)
                         {
                             <th>Coworker AVG</th>
+                            numberOfColumns++;
                             hasCoworkerColumn = true;
                         }
                         break;
@@ -32,6 +38,7 @@
                         if (!hasSuperviseeColumn)
                         {
                             <th>Supervisee AVG</th>
+                            numberOfColumns++;
                             hasSuperviseeColumn = true;
                         }
                         break;
@@ -49,6 +56,10 @@
             <td>
                 @category.Name
             </td>
+            @for (int i = 0; i < numberOfColumns - 2; i++)
+            {
+                <td></td>
+            }
         </tr>
         for (int i = 0; i < category.Questions.Count; i++)
         {

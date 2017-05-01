@@ -12,6 +12,8 @@ using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using MvcRazorToPdf;
+using iTextSharp.tool.xml.pipeline.css;
+using iTextSharp.tool.xml;
 
 namespace CapstoneProject.Controllers
 {
@@ -441,6 +443,7 @@ namespace CapstoneProject.Controllers
         {
             var eval = this.UnitOfWork.EvaluationRepository.GetByID(id);
             var reportData = this.createReportData(eval);
+            ICSSResolver cssResolver = XMLWorkerHelper.GetInstance().GetDefaultCssResolver(true);
             return new PdfActionResult("ReportAsPdf", reportData);
         }
 

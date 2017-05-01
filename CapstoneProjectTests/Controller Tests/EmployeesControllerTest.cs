@@ -45,7 +45,7 @@ namespace CapstoneProjectTests
             this.controller.UnitOfWork = mockUnitOfWork.Object;
             this.mockUnitOfWork.Setup(
                 m => m.EmployeeRepository.Get(null, null, "")).Returns(
-                employees);
+                this.employees);
             foreach (var employee in this.employees)
             {
                 this.mockUnitOfWork.Object.EmployeeRepository.Insert(employee);
