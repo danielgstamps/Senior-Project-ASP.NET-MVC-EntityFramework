@@ -5,6 +5,7 @@ using CapstoneProject.DAL;
 using CapstoneProject.Controllers;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using CapstoneProject.Models;
 using System.Web.Mvc;
 using Castle.Components.DictionaryAdapter.Xml;
@@ -15,12 +16,58 @@ namespace CapstoneProjectTests.ControllerTests
     public class CohortsControllerTest
     {
         private List<Cohort> cohorts;
+        private List<Employee> employees;
+        private List<Evaluation> evals;
         private Mock<IUnitOfWork> mockUnitOfWork;
         private CohortsController controller;
+        private const int BadRequestStatusCode = 400;
 
         [TestInitialize]
         public void Setup()
         {
+            evals = new List<Evaluation>
+            {
+                new Evaluation()
+                {
+                    //EmployeeID = 0,
+                    CompletedDate = DateTime.Today.AddDays(-1),
+                    Raters = new List<Rater>()
+                },
+                new Evaluation()
+                {
+                    //EmployeeID = 0,
+                    CompletedDate = null,
+                    Raters = new List<Rater>()
+                }
+            };
+            employees = new List<Employee>
+            {
+                new Employee
+                {
+                    EmployeeID = 0,
+                    FirstName = "Dwight",
+                    LastName = "Schrute",
+                    CohortID = 0,
+                    Evaluations = new List<Evaluation>()
+                },
+                new Employee
+                {
+                    EmployeeID = 1,
+                    FirstName = "Angela",
+                    LastName = "Martin",
+                    CohortID = 0,
+                    Evaluations = new List<Evaluation>()
+                },
+                new Employee
+                {
+                    EmployeeID = 2,
+                    FirstName = "Andrew",
+                    LastName = "Bernard",
+                    CohortID = 0,
+                    Evaluations = new List<Evaluation>()
+                }
+            };
+
             cohorts = new List<Cohort>
             {
                 new Cohort
@@ -28,7 +75,9 @@ namespace CapstoneProjectTests.ControllerTests
                     CohortID = 0,
                     Name = "Sales",
                     Type1Assigned = false, 
-                    Type2Assigned = false
+                    Type2Assigned = false,
+                    Employees = employees
+                    
                 },
                 new Cohort
                 {
@@ -45,6 +94,7 @@ namespace CapstoneProjectTests.ControllerTests
                     Type2Assigned = false
                 }
             };
+
             mockUnitOfWork = new Mock<IUnitOfWork>();
             controller = new CohortsController();
             controller.UnitOfWork = mockUnitOfWork.Object;
@@ -104,7 +154,7 @@ namespace CapstoneProjectTests.ControllerTests
         }
 
         [TestMethod]
-        public void TestGetCreate()
+        public void TestGetCreateReturnsView()
         {
             mockUnitOfWork.Setup(m => m.CohortRepository.GetByID(0)).Returns(cohorts[0]);
             var result = controller.Create() as ViewResult;
@@ -119,12 +169,26 @@ namespace CapstoneProjectTests.ControllerTests
             var newCohort = new Cohort
             {
                 CohortID = 10,
-                Name = "New Cohort"
+                Name = "TestRedirect"
             };
 
             var result = controller.Create(newCohort) as RedirectToRouteResult;
             Assert.IsNotNull(result);
             Assert.AreEqual("Index", result.RouteValues["action"]);
+        }
+
+        [TestMethod]
+        public void TestPostCreateInsertsNewObject()
+        {
+            mockUnitOfWork.Setup(m => m.CohortRepository.GetByID(0)).Returns(cohorts[0]);
+            var newCohort = new Cohort
+            {
+                CohortID = 999,
+                Name = "TestInsert"
+            };
+
+            controller.Create(newCohort);
+            mockUnitOfWork.Verify(u => u.CohortRepository.Insert(newCohort), Times.Once);
         }
 
         [TestMethod]
@@ -139,12 +203,58 @@ namespace CapstoneProjectTests.ControllerTests
         }
 
         [TestMethod]
-        public void TestGetDelete()
+        public void TestGetDeleteReturnsView()
         {
-            mockUnitOfWork.Setup(m => m.CohortRepository.Delete(2));
-            mockUnitOfWork.Object.CohortRepository.Insert(cohorts[2]);
-            mockUnitOfWork.Object.CohortRepository.Delete(2);
-            mockUnitOfWork.Verify(u =>u.CohortRepository.Delete(2), Times.Once);
+            mockUnitOfWork.Setup(m => m.CohortRepository.GetByID(0)).Returns(cohorts[0]);
+            var result = controller.Delete(0) as ViewResult;
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Delete", result.ViewName);
+        }
+
+        [TestMethod]
+        public void TestGetDeleteNullIdReturnsBadRequest()
+        {
+            mockUnitOfWork.Setup(m => m.CohortRepository.GetByID(0)).Returns(cohorts[0]);
+            var result = controller.Delete(null) as HttpStatusCodeResult;
+            Assert.IsNotNull(result);
+            Assert.AreEqual(BadRequestStatusCode, result.StatusCode);
+        }
+
+        [TestMethod]
+        public void TestGetDeleteInvalidIdReturnsBadRequest()
+        {
+            mockUnitOfWork.Setup(m => m.CohortRepository.GetByID(0)).Returns(cohorts[0]);
+            var result = controller.Delete(100) as HttpStatusCodeResult;
+            Assert.IsNotNull(result);
+            Assert.AreEqual(BadRequestStatusCode, result.StatusCode);
+        }
+
+        [TestMethod]
+        public void TestPostDeleteReturnsView()
+        {
+            mockUnitOfWork.Setup(m => m.CohortRepository.GetByID(0)).Returns(cohorts[0]);
+            var result = controller.DeleteConfirmed(0) as RedirectToRouteResult;
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Index", result.RouteValues["action"]);
+        }
+
+        [TestMethod]
+        public void TestPostDeleteRemovesEmployeeFromCohort()
+        {
+            mockUnitOfWork.Setup(m => m.CohortRepository.GetByID(0)).Returns(cohorts[0]);
+            Assert.IsNotNull(employees[0].CohortID);
+            var result = controller.DeleteConfirmed(0);
+            Assert.IsNotNull(result);
+            Assert.IsNull(employees[0].CohortID);
+        }
+
+        [TestMethod]
+        public void TestPostDeleteDeletesCohort()
+        {
+            mockUnitOfWork.Setup(m => m.CohortRepository.GetByID(0)).Returns(cohorts[0]);
+            var result = controller.DeleteConfirmed(0);
+            Assert.IsNotNull(result);
+            mockUnitOfWork.Verify(u => u.CohortRepository.Delete(cohorts[0]), Times.Once);
         }
 
         [TestMethod]

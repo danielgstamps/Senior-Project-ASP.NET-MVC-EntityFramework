@@ -158,11 +158,13 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var cohort = this._unitOfWork.CohortRepository.GetByID(id);
+
+            var cohort = _unitOfWork.CohortRepository.GetByID(id);
             if (cohort == null)
             {
-                return HttpNotFound();
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             return View("Delete", cohort);
         }
 
