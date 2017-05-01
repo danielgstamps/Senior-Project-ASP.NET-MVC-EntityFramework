@@ -8,7 +8,6 @@ using CapstoneProject.DAL;
 using CapstoneProject.Models;
 using CapstoneProject.ViewModels;
 using Castle.Core.Internal;
-using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using MvcRazorToPdf;
@@ -201,33 +200,33 @@ namespace CapstoneProject.Controllers
         /// <returns>A ViewResult that renders the report</returns>
         public ActionResult ShowReportAsHtml(int? id)
         {
-            var eval = this.UnitOfWork.EvaluationRepository.GetByID(id);
-            var reportData = this.createReportData(eval);
+            var eval = UnitOfWork.EvaluationRepository.GetByID(id);
+            var reportData = CreateReportData(eval);
             return View("ReportAsHtml", reportData);
         }
 
         public ActionResult ShowReportAsPdf(int? id)
         {
-            var eval = this.UnitOfWork.EvaluationRepository.GetByID(id);
-            var reportData = this.createReportData(eval);
+            var eval = UnitOfWork.EvaluationRepository.GetByID(id);
+            var reportData = CreateReportData(eval);
             return new PdfActionResult("ReportAsPdf", reportData);
         }
 
-        private EvaluationReportData createReportData(Evaluation eval)
+        private EvaluationReportData CreateReportData(Evaluation eval)
         {
             var supervisors = new List<Rater>();
             var coworkers = new List<Rater>();
             var supervisees = new List<Rater>();
-            this.groupRatersByRole(eval, supervisors, coworkers, supervisees);
+            GroupRatersByRole(eval, supervisors, coworkers, supervisees);
             var ratersToShow = new List<Rater>();
             ratersToShow.AddRange(supervisors);
             ratersToShow.AddRange(coworkers);
             ratersToShow.AddRange(supervisees);
-            int numOfQuestions = this.getNumberOfQuestions(eval);
-            var supervisorAvgs = this.getQuestionAvgPerRole(supervisors, numOfQuestions);
-            var coworkerAvgs = this.getQuestionAvgPerRole(coworkers, numOfQuestions);
-            var superviseeAvgs = this.getQuestionAvgPerRole(supervisees, numOfQuestions);
-            List<int> employeeAnswers = this.getEmployeeAnswers(eval);
+            var numOfQuestions = GetNumberOfQuestions(eval);
+            var supervisorAvgs = GetQuestionAvgPerRole(supervisors, numOfQuestions);
+            var coworkerAvgs = GetQuestionAvgPerRole(coworkers, numOfQuestions);
+            var superviseeAvgs = GetQuestionAvgPerRole(supervisees, numOfQuestions);
+            var employeeAnswers = getEmployeeAnswers(eval);
             return new EvaluationReportData
             {
                 EvaluationID = eval.EvaluationID,
@@ -243,15 +242,15 @@ namespace CapstoneProject.Controllers
             };
         }
 
-        private void groupRatersByRole(Evaluation eval, List<Rater> supervisors, List<Rater> coworkers, List<Rater> supervisees)
+        private void GroupRatersByRole(Evaluation eval, List<Rater> supervisors, List<Rater> coworkers, List<Rater> supervisees)
         {
             foreach (var rater in eval.Raters)
             {
-                this.putRaterInGroup(supervisors, coworkers, supervisees, rater);
+                PutRaterInGroup(supervisors, coworkers, supervisees, rater);
             }
         }
 
-        private void putRaterInGroup(List<Rater> supervisors, List<Rater> coworkers, List<Rater> supervisees, Rater rater)
+        private void PutRaterInGroup(List<Rater> supervisors, List<Rater> coworkers, List<Rater> supervisees, Rater rater)
         {
             switch (rater.Role)
             {
@@ -267,7 +266,7 @@ namespace CapstoneProject.Controllers
             }
         }
 
-        private int getNumberOfQuestions(Evaluation eval)
+        private int GetNumberOfQuestions(Evaluation eval)
         {
             var numOfQuestions = 0;
             foreach (var category in eval.Type.Categories)
@@ -291,16 +290,16 @@ namespace CapstoneProject.Controllers
             return employeeAnswers;
         }
 
-        private List<int> getQuestionAvgPerRole(List<Rater> raters, int numOfQuestions)
+        private List<int> GetQuestionAvgPerRole(List<Rater> raters, int numOfQuestions)
         {
             if (raters.IsNullOrEmpty())
             {
                 return new List<int>();
             }
             var avgs = new List<int>();
-            for (int index = 0; index < numOfQuestions; index++)
+            for (var index = 0; index < numOfQuestions; index++)
             {
-                this.calculateAverage(raters, avgs, index);
+                calculateAverage(raters, avgs, index);
             }
             return avgs;
         }
@@ -375,7 +374,7 @@ namespace CapstoneProject.Controllers
             }
 
             // Link manipulation could crash the page without this.
-            if (cohort.IsStageComplete("Summative", 1) && cohort.IsStageComplete("Summative", 2))
+            if (HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Summative", 1) && HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Summative", 2))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
@@ -407,11 +406,11 @@ namespace CapstoneProject.Controllers
 
             // Remove types if the cohort already has them assigned.
             var itemList = model.TypeList.ToList();
-            if (cohort.Type1Assigned || cohort.IsStageComplete("Summative", 1))
+            if (cohort.Type1Assigned || HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Summative", 1))
             {
                 itemList.RemoveAt(0);
             }
-            if (cohort.Type2Assigned || cohort.IsStageComplete("Summative", 2))
+            if (cohort.Type2Assigned || HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Summative", 2))
             {
                 itemList.RemoveAt(1);
             }
@@ -436,19 +435,19 @@ namespace CapstoneProject.Controllers
 
             // Stage order enforcement
             var selectedStageName = UnitOfWork.StageRepository.GetByID(model.StageID).StageName;
-            if (selectedStageName.Equals("Formative") && !cohort.IsStageComplete("Baseline", model.TypeID))
+            if (selectedStageName.Equals("Formative") && !HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Baseline", model.TypeID))
             {
                 TempData["StageError"] = "Formative can only be selected after Baseline is completed.";
                 return RedirectToAction("Create", new { cohortId = (int)TempData["CohortID"] });
             }
-            if (selectedStageName.Equals("Summative") && !cohort.IsStageComplete("Formative", model.TypeID))
+            if (selectedStageName.Equals("Summative") && !HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Formative", model.TypeID))
             {
                 TempData["StageError"] = "Summative can only be selected after Formative is completed.";
                 return RedirectToAction("Create", new { cohortId = (int)TempData["CohortID"] });
             }
 
             // Disallow selecting stages that are already complete.
-            if (cohort.IsStageComplete(selectedStageName, model.TypeID))
+            if (HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, selectedStageName, model.TypeID))
             {
                 TempData["StageError"] = "This cohort has already completed the " + selectedStageName + 
                     " stage for Type " + model.TypeID.ToString() + ".";
@@ -587,19 +586,19 @@ namespace CapstoneProject.Controllers
 
             // Stage order enforcement
             var selectedStageName = UnitOfWork.StageRepository.GetByID(model.StageID).StageName;
-            if (selectedStageName.Equals("Formative") && !cohort.IsStageComplete("Baseline", model.TypeID))
+            if (selectedStageName.Equals("Formative") && !HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Baseline", model.TypeID))
             {
                 TempData["StageError"] = "Formative can only be selected after Baseline is completed.";
                 return RedirectToAction("Edit", new { cohortId = (int)TempData["CohortID"], typeId = (int)TempData["TypeId"] });
             }
-            if (selectedStageName.Equals("Summative") && !cohort.IsStageComplete("Formative", model.TypeID))
+            if (selectedStageName.Equals("Summative") && !HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Formative", model.TypeID))
             {
                 TempData["StageError"] = "Summative can only be selected after Formative is completed.";
                 return RedirectToAction("Edit", new { cohortId = (int)TempData["CohortID"], typeId = (int)TempData["TypeId"] });
             }
 
             // Disallow selecting stages that are already complete.
-            if (cohort.IsStageComplete(selectedStageName, model.TypeID))
+            if (HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, selectedStageName, model.TypeID))
             {
                 TempData["StageError"] = "This cohort has already completed the " + selectedStageName +
                     " stage for Type " + model.TypeID.ToString() + ".";
@@ -713,7 +712,7 @@ namespace CapstoneProject.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
             }
 
-            var employeeEvals = employee.Evaluations;
+            var employeeEvals = employee.Evaluations.OrderBy(e => e.TypeID);
             return View(employeeEvals);
         }
 
@@ -782,12 +781,12 @@ namespace CapstoneProject.Controllers
                 return;
             }
 
-            if (cohort.AllEvalsOfTypeComplete(1) && !cohort.IsStageComplete("Summative", 1))
+            if (HtmlExtensions.HtmlExtensions.CohortFinishedType(cohort, 1) && !HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Summative", 1))
             {
                 cohort.Type1Assigned = false;
             }
 
-            if (cohort.AllEvalsOfTypeComplete(2) && !cohort.IsStageComplete("Summative", 2))
+            if (HtmlExtensions.HtmlExtensions.CohortFinishedType(cohort, 2) && !HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Summative", 2))
             {
                 cohort.Type2Assigned = false;
             }

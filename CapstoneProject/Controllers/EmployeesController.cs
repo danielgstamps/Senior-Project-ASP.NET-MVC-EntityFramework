@@ -59,7 +59,7 @@ namespace CapstoneProject.Controllers
         // GET: Employees
         public ActionResult Index()
         {
-            var employees = unitOfWork.EmployeeRepository.Get();
+            var employees = unitOfWork.EmployeeRepository.Get().OrderBy(e => e.LastName);
             return View("Index", employees.ToList());
         }
 

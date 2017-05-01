@@ -32,7 +32,7 @@ namespace CapstoneProject.Controllers
         // GET: Cohorts
         public ActionResult Index()
         {
-            return View("Index", this._unitOfWork.CohortRepository.Get());
+            return View("Index", this._unitOfWork.CohortRepository.Get().OrderBy(c => c.Name));
         }
 
         // GET: Cohorts/Details/5
