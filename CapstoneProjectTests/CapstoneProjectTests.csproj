@@ -39,14 +39,6 @@
       <HintPath>..\packages\Castle.Core.4.0.0\lib\net45\Castle.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
       <Private>True</Private>
@@ -56,7 +48,6 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
@@ -98,18 +89,19 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="ModelTests\CategoryTest.cs" />
-    <Compile Include="ControllerTests\CohortsControllerTest.cs" />
-    <Compile Include="ControllerTests\EmployeesControllerTest.cs" />
-    <Compile Include="ControllerTests\EvaluationsControllerTest.cs" />
-    <Compile Include="ModelTests\EvaluationTest.cs" />
+    <Compile Include="Controller Tests\RatersControllerTest.cs" />
+    <Compile Include="Model Tests\CategoryTest.cs" />
+    <Compile Include="Controller Tests\CohortsControllerTest.cs" />
+    <Compile Include="Controller Tests\EmployeesControllerTest.cs" />
+    <Compile Include="Controller Tests\EvaluationsControllerTest.cs" />
+    <Compile Include="Model Tests\EvaluationTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ModelTests\CohortTest.cs" />
-    <Compile Include="ModelTests\EmployeeTest.cs" />
-    <Compile Include="ControllerTests\QuestionsControllerTest.cs" />
-    <Compile Include="ModelTests\QuestionTest.cs" />
-    <Compile Include="ModelTests\RaterTest.cs" />
-    <Compile Include="ModelTests\StageTest.cs" />
+    <Compile Include="Model Tests\CohortTest.cs" />
+    <Compile Include="Model Tests\EmployeeTest.cs" />
+    <Compile Include="Controller Tests\QuestionsControllerTest.cs" />
+    <Compile Include="Model Tests\QuestionTest.cs" />
+    <Compile Include="Model Tests\RaterTest.cs" />
+    <Compile Include="Model Tests\StageTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CapstoneProject\CapstoneProject.csproj">
