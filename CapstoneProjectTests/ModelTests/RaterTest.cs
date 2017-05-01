@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CapstoneProject.Models;
 
-namespace CapstoneProjectTests
+namespace CapstoneProjectTests.ModelTests
 {
     [TestClass]
     public class RaterTest

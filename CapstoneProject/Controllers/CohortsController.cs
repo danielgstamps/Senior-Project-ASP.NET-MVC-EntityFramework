@@ -75,12 +75,12 @@ namespace CapstoneProject.Controllers
         {
             if (ModelState.IsValid)
             {
-                this._unitOfWork.CohortRepository.Insert(cohort);
-                this._unitOfWork.Save();
+                _unitOfWork.CohortRepository.Insert(cohort);
+                _unitOfWork.Save();
                 return RedirectToAction("Index");
             }
 
-            return View(cohort);
+            return View("Create", cohort);
         }
 
         // GET: Cohorts/Edit/5
@@ -92,9 +92,9 @@ namespace CapstoneProject.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var cohort = this._unitOfWork.CohortRepository.GetByID(id);
-            var allCohorts = this._unitOfWork.CohortRepository.Get();
-            var allEmployees = this._unitOfWork.EmployeeRepository.Get().OrderBy(e => e.LastName);
+            var cohort = _unitOfWork.CohortRepository.GetByID(id);
+            var allCohorts = _unitOfWork.CohortRepository.Get();
+            var allEmployees = _unitOfWork.EmployeeRepository.Get().OrderBy(e => e.LastName);
             var employeesToShow = allEmployees.ToList();
             foreach (var currentCohort in allCohorts.ToList())
             {

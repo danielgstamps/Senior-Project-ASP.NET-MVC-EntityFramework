@@ -7,7 +7,7 @@ using Moq;
 using System.Collections.Generic;
 using System.Web.UI.WebControls;
 
-namespace CapstoneProjectTests
+namespace CapstoneProjectTests.ControllerTests
 {
     [TestClass]
     public class EmployeesControllerTest

@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CapstoneProject.Models;
 using System.Collections.Generic;
 
-namespace CapstoneProjectTests
+namespace CapstoneProjectTests.ModelTests
 {
     [TestClass]
     public class StageTest

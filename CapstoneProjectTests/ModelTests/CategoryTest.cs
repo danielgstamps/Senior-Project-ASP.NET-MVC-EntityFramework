@@ -2,7 +2,7 @@
 using CapstoneProject.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace CapstoneProjectTests
+namespace CapstoneProjectTests.ModelTests
 {
     [TestClass]
     public class CategoryTest
