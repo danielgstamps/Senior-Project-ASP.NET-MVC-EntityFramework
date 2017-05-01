@@ -80,7 +80,7 @@ namespace CapstoneProjectTests
         {
 
             this.mockUnitOfWork.Setup(m => m.CohortRepository.GetByID(0)).Returns(cohorts[0]);
-            var result = controller.Details(2) as ViewResult;
+            var result = controller.Details(0) as ViewResult;
             Assert.AreEqual("Details", result.ViewName);
         }
 
