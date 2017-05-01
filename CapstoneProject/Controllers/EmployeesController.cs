@@ -74,14 +74,14 @@ namespace CapstoneProject.Controllers
             var employee = unitOfWork.EmployeeRepository.GetByID(id);
             if (employee == null)
             {
-                return HttpNotFound();
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             return View("Details", employee);
         }
 
         public ActionResult UploadData()
         {
-            return View();
+            return View("UploadData");
         }
 
         [HttpPost]
@@ -177,7 +177,7 @@ namespace CapstoneProject.Controllers
             var employee = unitOfWork.EmployeeRepository.GetByID(id);
             if (employee == null)
             {
-                return HttpNotFound();
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
             //ViewBag.CohortID = new SelectList(unitOfWork.CohortRepository.Get(), "CohortID", "Name", employee.CohortID);
@@ -212,7 +212,7 @@ namespace CapstoneProject.Controllers
             var employee = unitOfWork.EmployeeRepository.GetByID(id);
             if (employee == null)
             {
-                return HttpNotFound();
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             return View("Delete", employee);
         }

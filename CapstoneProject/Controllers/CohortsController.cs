@@ -55,7 +55,7 @@ namespace CapstoneProject.Controllers
             var cohort = this._unitOfWork.CohortRepository.GetByID(id);
             if (cohort == null)
             {
-                return HttpNotFound();
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             return View("Details", cohort);
         }

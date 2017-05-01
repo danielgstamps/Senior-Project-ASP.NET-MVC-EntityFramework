@@ -130,7 +130,7 @@ namespace CapstoneProjectTests.ControllerTests
         }
 
         [TestMethod]
-        public void TestIndexGet()
+        public void TestGetIndex()
         {
             var result = controller.Index() as ViewResult;
             Assert.IsNotNull(result);
@@ -138,7 +138,7 @@ namespace CapstoneProjectTests.ControllerTests
         }
 
         [TestMethod]
-        public void TestDetails()
+        public void TestGetDetailsReturnsView()
         {
             mockUnitOfWork.Setup(m => m.CohortRepository.GetByID(0)).Returns(cohorts[0]);
             var result = controller.Details(0) as ViewResult;
@@ -147,7 +147,7 @@ namespace CapstoneProjectTests.ControllerTests
         }
 
         [TestMethod]
-        public void TestDetailsViewData()
+        public void TestGetDetailsViewData()
         {
             mockUnitOfWork.Setup(m => m.CohortRepository.GetByID(0)).Returns(cohorts[0]);
             var result = controller.Details(0) as ViewResult;
@@ -155,6 +155,24 @@ namespace CapstoneProjectTests.ControllerTests
 
             var cohort = (Cohort)result.ViewData.Model;
             Assert.AreEqual(0, cohort.CohortID);
+        }
+
+        [TestMethod]
+        public void TestGetDetailsNullIdReturnsBadRequest()
+        {
+            mockUnitOfWork.Setup(m => m.CohortRepository.GetByID(0)).Returns(cohorts[0]);
+            var result = controller.Details(null) as HttpStatusCodeResult;
+            Assert.IsNotNull(result);
+            Assert.AreEqual(BadRequestStatusCode, result.StatusCode);
+        }
+
+        [TestMethod]
+        public void TestGetDetailsInvalidIdReturnsBadRequest()
+        {
+            mockUnitOfWork.Setup(m => m.CohortRepository.GetByID(0)).Returns(cohorts[0]);
+            var result = controller.Details(999) as HttpStatusCodeResult;
+            Assert.IsNotNull(result);
+            Assert.AreEqual(BadRequestStatusCode, result.StatusCode);
         }
 
         [TestMethod]
