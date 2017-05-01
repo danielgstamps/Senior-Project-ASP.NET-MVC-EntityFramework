@@ -22,7 +22,8 @@ namespace CapstoneProject.Controllers
         private ApplicationUserManager _userManager;
         private ApplicationSignInManager _signInManager;
 
-        public IUnitOfWork UnitOfWork {
+        public IUnitOfWork UnitOfWork
+        {
             get
             {
                 return this.unitOfWork;

@@ -67,7 +67,7 @@ namespace CapstoneProjectTests
         }
 
         [TestMethod]
-        public void TestGetByID()
+        public void TestGetById()
         {
             this.mockUnitOfWork.Setup(m => m.EmployeeRepository.GetByID(1)).Returns(employees[1]);
             var result = this.mockUnitOfWork.Object.EmployeeRepository.GetByID(1);
@@ -77,8 +77,8 @@ namespace CapstoneProjectTests
         [TestMethod]
         public void TestDetails()
         {
-            this.mockUnitOfWork.Setup(m => m.EmployeeRepository.GetByID(0)).Returns(employees[0]);
-            var result = this.controller.Details(0) as ViewResult;
+            mockUnitOfWork.Setup(m => m.EmployeeRepository.GetByID(0)).Returns(employees[0]);
+            var result = controller.Details(0) as ViewResult;
             Assert.AreEqual("Details", result.ViewName);
         }
         
