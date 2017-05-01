@@ -227,15 +227,27 @@ namespace CapstoneProject.Controllers
             var supervisorAvgs = getQuestionAvgPerRole(supervisors, numOfQuestions);
             var coworkerAvgs = getQuestionAvgPerRole(coworkers, numOfQuestions);
             var superviseeAvgs = getQuestionAvgPerRole(supervisees, numOfQuestions);
-            
-            //var allAvgAnswers = new List<int>();
-            //for (int i = 0; i < numOfQuestions; i++)
-            //{
-            //    var total = employeeAnswers[i] + supervisorAvgs[i] + coworkerAvgs[i] + superviseeAvgs[i];
-            //    var avg = total / ratersToShow.Count + 1;
-            //    allAvgAnswers.Add(avg);
-            //}
 
+            var allAvgAnswers = new List<int>();
+            var answersCollection = new List<List<int>>();
+            answersCollection.Add(employeeAnswers);
+            answersCollection.Add(supervisorAvgs);
+            answersCollection.Add(coworkerAvgs);
+            answersCollection.Add(superviseeAvgs);
+            foreach (var collection in answersCollection)
+            {
+                if (!collection.IsNullOrEmpty())
+                {
+                    for (int i = 0; i < numOfQuestions; i++)
+                    {
+                        var total = 0;
+                        total += collection[i];
+                        var avg = total / ratersToShow.Count + 1;
+                        allAvgAnswers.Add(avg);
+                    }
+                }
+            }
+            
             return new EvaluationReportData
             {
                 EvaluationID = eval.EvaluationID,
@@ -248,7 +260,7 @@ namespace CapstoneProject.Controllers
                 SupervisorAvgAnswers = supervisorAvgs,
                 CoworkerAvgAnswers = coworkerAvgs,
                 SuperviseeAvgAnswers = superviseeAvgs,
-                //AllAvgAnswers = allAvgAnswers
+                AllAvgAnswers = allAvgAnswers
             };
         }
 
