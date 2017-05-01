@@ -5,10 +5,8 @@ using CapstoneProject.DAL;
 using CapstoneProject.Controllers;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using CapstoneProject.Models;
 using System.Web.Mvc;
-using Castle.Components.DictionaryAdapter.Xml;
 
 namespace CapstoneProjectTests.ControllerTests
 {
