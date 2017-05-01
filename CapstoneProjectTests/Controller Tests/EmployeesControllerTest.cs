@@ -67,7 +67,7 @@ namespace CapstoneProjectTests
         }
 
         [TestMethod]
-        public void TestGetByID()
+        public void TestGetById()
         {
             this.mockUnitOfWork.Setup(m => m.EmployeeRepository.GetByID(1)).Returns(employees[1]);
             var result = this.mockUnitOfWork.Object.EmployeeRepository.GetByID(1);

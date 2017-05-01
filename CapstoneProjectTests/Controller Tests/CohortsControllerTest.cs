@@ -25,17 +25,23 @@ namespace CapstoneProjectTests
                 new Cohort
                 {
                     CohortID = 0,
-                    Name = "Sales"
+                    Name = "Sales",
+                    Type1Assigned = false, 
+                    Type2Assigned = false
                 },
                 new Cohort
                 {
                     CohortID = 1,
-                    Name = "Accounting"
+                    Name = "Accounting",
+                    Type1Assigned = false,
+                    Type2Assigned = false
                 },
-                new Cohort()
+                new Cohort
                 {
                     CohortID = 2,
-                    Name = "Human Resources"
+                    Name = "Human Resources",
+                    Type1Assigned = false,
+                    Type2Assigned = false
                 }
             };
             this.mockUnitOfWork = new Mock<IUnitOfWork>();
@@ -78,7 +84,6 @@ namespace CapstoneProjectTests
         [TestMethod]
         public void TestDetails()
         {
-
             this.mockUnitOfWork.Setup(m => m.CohortRepository.GetByID(0)).Returns(cohorts[0]);
             var result = controller.Details(0) as ViewResult;
             Assert.AreEqual("Details", result.ViewName);
@@ -88,9 +93,9 @@ namespace CapstoneProjectTests
         public void TestDetailsViewData()
         {
             this.mockUnitOfWork.Setup(m => m.CohortRepository.GetByID(0)).Returns(cohorts[0]);
-            var result = controller.Details(2) as ViewResult;
+            var result = controller.Details(0) as ViewResult;
             var cohort = (Cohort)result.ViewData.Model;
-            Assert.AreEqual(2, cohort.CohortID);
+            Assert.AreEqual(0, cohort.CohortID);
         }
 
         [TestMethod]

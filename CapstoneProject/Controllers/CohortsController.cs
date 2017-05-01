@@ -84,7 +84,7 @@ namespace CapstoneProject.Controllers
 
             var cohort = this._unitOfWork.CohortRepository.GetByID(id);
             var allCohorts = this._unitOfWork.CohortRepository.Get();
-            var allEmployees = this._unitOfWork.EmployeeRepository.Get();
+            var allEmployees = this._unitOfWork.EmployeeRepository.Get().OrderBy(e => e.LastName);
             var employeesToShow = allEmployees.ToList();
             foreach (var currentCohort in allCohorts.ToList())
             {
