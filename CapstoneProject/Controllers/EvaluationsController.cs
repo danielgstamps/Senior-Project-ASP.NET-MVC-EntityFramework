@@ -231,21 +231,27 @@ namespace CapstoneProject.Controllers
             var allAvgAnswers = new List<int>();
             var answersCollection = new List<List<int>>();
             answersCollection.Add(employeeAnswers);
-            answersCollection.Add(supervisorAvgs);
-            answersCollection.Add(coworkerAvgs);
-            answersCollection.Add(superviseeAvgs);
-            foreach (var collection in answersCollection)
+            if (!supervisorAvgs.IsNullOrEmpty())
             {
-                if (!collection.IsNullOrEmpty())
+                answersCollection.Add(supervisorAvgs);
+            }
+            if (!coworkerAvgs.IsNullOrEmpty())
+            {
+                answersCollection.Add(coworkerAvgs);
+            }
+            if (!superviseeAvgs.IsNullOrEmpty())
+            {
+                answersCollection.Add(superviseeAvgs);
+            }
+            for (int i = 0; i < numOfQuestions; i++)
+            {
+                var total = 0;
+                foreach (var collection in answersCollection)
                 {
-                    for (int i = 0; i < numOfQuestions; i++)
-                    {
-                        var total = 0;
-                        total += collection[i];
-                        var avg = total / ratersToShow.Count + 1;
-                        allAvgAnswers.Add(avg);
-                    }
+                    total += collection[i];
                 }
+                var avg = total / answersCollection.Count;
+                allAvgAnswers.Add(avg);
             }
             
             return new EvaluationReportData
