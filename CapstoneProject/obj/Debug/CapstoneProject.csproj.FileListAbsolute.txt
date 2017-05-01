@@ -234,4 +234,4 @@ C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.UserMig
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.csproj.GenerateResource.Cache
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.dll
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.pdb
-C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.csprojResolveAssemblyReference.cache
+C:\Users\csuser\Source\Repos\WUDSCO\CapstoneProject\obj\Debug\CapstoneProject.csprojResolveAssemblyReference.cache

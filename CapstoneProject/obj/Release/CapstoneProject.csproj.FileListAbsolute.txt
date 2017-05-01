@@ -1035,7 +1035,6 @@ C:\Users\Daniel\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.UserM
 C:\Users\Daniel\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.csproj.GenerateResource.Cache
 C:\Users\Daniel\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.dll
 C:\Users\Daniel\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.pdb
-C:\Users\Will\Source\Repos\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.csprojResolveAssemblyReference.cache
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\ApplicationInsights.config
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\roslyn\csc.exe
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
@@ -1154,3 +1153,4 @@ C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.UserM
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.csproj.GenerateResource.Cache
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.dll
 C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.pdb
+C:\Users\csuser\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.csprojResolveAssemblyReference.cache

@@ -1,35 +1,41 @@
-﻿@{
+﻿
+@{
     Layout = null;
 }
 <!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>PDF Generator</title>
+    <title>Report</title>
     <style>
-        html 
+        html
         {
             font-family: Arial;
         }
-        h1 
+        h1
         {
             color: blue;
         }
-        table 
-        {
+        table, tr, th, td {
             border: 1px solid black;
-            border-spacing: 0px;
+            border-collapse: collapse;
         }
-        table tr th 
+        table
+        {
+            border-spacing: 1px;
+        }
+        table tr th
         {
             background-color: gray;
             color: white;
-            padding: 2px;
+            padding: 8px;
+            text-align: center;
         }
-        table tr td 
+        table tr td
         {
             margin: 0px;
-            padding: 2px;
+            padding: 4px;
+            text-align: center;
         }
     </style>
 </head>

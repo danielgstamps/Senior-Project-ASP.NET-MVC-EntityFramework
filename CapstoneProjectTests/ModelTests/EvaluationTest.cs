@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CapstoneProject.Models;
 using Type = CapstoneProject.Models.Type;
 
-namespace CapstoneProjectTests
+namespace CapstoneProjectTests.ModelTests
 {
     [TestClass]
     public class EvaluationTest

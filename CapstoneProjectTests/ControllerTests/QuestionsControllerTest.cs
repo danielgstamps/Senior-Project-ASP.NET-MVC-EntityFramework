@@ -7,7 +7,7 @@ using Moq;
 using CapstoneProject.Controllers;
 using System.Web.Mvc;
 
-namespace CapstoneProjectTests
+namespace CapstoneProjectTests.ControllerTests
 {
     [TestClass]
     public class QuestionsControllerTest

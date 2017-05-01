@@ -19,5 +19,6 @@ namespace CapstoneProject.ViewModels
         public List<int> SupervisorAvgAnswers { get; set; }
         public List<int> CoworkerAvgAnswers { get; set; }
         public List<int> SuperviseeAvgAnswers { get; set; }
+        public List<double> AllAvgAnswers { get; set; }
     }
 }

@@ -5,7 +5,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>AdminEvalsIndex</h2>
+<h2>Evaluations</h2>
+<h4>View employee evaluations and create reports for completed ones.</h4>
 
 <table class="table">
     <tr>
@@ -39,7 +40,14 @@
             @Html.DisplayFor(modelItem => item.Type.TypeName)
         </td>
         <td>
-            @Html.ActionLink("View Report", "ShowReportAsHtml", new { id=item.EvaluationID })
+            @if (item.IsComplete())
+            {
+                @Html.ActionLink("View Report", "ShowReportAsHtml", new {id = item.EvaluationID})
+            }
+            else
+            {
+                <label class="alert-warning">In progress</label>
+            }
         </td>
     </tr>
 }

@@ -43,7 +43,8 @@
                                    name="selectedEmployees"
                                    value="@employee.EmployeeID"
                                    @(Html.Raw(inCohort ? "checked=\"checked\"" : "")) />
-                            @employee.FirstName <label> </label> @employee.LastName <label> </label>
+                            <label>@employee.LastName, @employee.FirstName</label>
+                            <label> </label>
                             @:</td>
                         }
                         @:</tr>
