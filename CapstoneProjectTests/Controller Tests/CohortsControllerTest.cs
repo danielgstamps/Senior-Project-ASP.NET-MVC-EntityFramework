@@ -68,20 +68,20 @@ namespace CapstoneProjectTests
             Assert.AreEqual("Sales", result.Name);
         }
 
-        [TestMethod]
-        public void TestIndex()
-        {
-            var result = this.controller.Index() as ViewResult;
-            Assert.AreEqual("Index", result.ViewName);
-        }
+        //[TestMethod]
+        //public void TestIndex()
+        //{
+        //    var result = this.controller.Index() as ViewResult;
+        //    Assert.AreEqual("Index", result.ViewName);
+        //}
 
-        [TestMethod]
-        public void TestDetails()
-        {
-            this.mockUnitOfWork.Setup(m => m.CohortRepository.GetByID(0)).Returns(cohorts[0]);
-            var result = this.controller.Details(0) as ViewResult;
-            Assert.AreEqual("Details", result.ViewName);
-        }
+        //[TestMethod]
+        //public void TestDetails()
+        //{
+        //    this.mockUnitOfWork.Setup(m => m.CohortRepository.GetByID(0)).Returns(cohorts[0]);
+        //    var result = this.controller.Details(0) as ViewResult;
+        //    Assert.AreEqual("Details", result.ViewName);
+        //}
 
         [TestMethod]
         public void TestDelete()
@@ -105,15 +105,15 @@ namespace CapstoneProjectTests
             this.mockUnitOfWork.Verify(m => m.CohortRepository.Update(cohortToUpdate), Times.Once);
         }
 
-        [TestMethod]
-        public void TestEdit()
-        {
-            this.mockUnitOfWork.Setup(m => m.CohortRepository.GetByID(0)).Returns(cohorts[0]);
-            var result = this.controller.Edit(0) as ViewResult;
-            var resultVm = result?.Model as Cohort;
+        //[TestMethod]
+        //public void TestEdit()
+        //{
+        //    this.mockUnitOfWork.Setup(m => m.CohortRepository.GetByID(0)).Returns(cohorts[0]);
+        //    var result = this.controller.Edit(0) as ViewResult;
+        //    var resultVm = result?.Model as Cohort;
 
-            if (resultVm != null) Assert.AreEqual(cohorts[0].Name, resultVm.Name);
-            if (result != null) Assert.AreEqual("Edit", result.ViewName);
-        }
+        //    if (resultVm != null) Assert.AreEqual(cohorts[0].Name, resultVm.Name);
+        //    if (result != null) Assert.AreEqual("Edit", result.ViewName);
+        //}
     }
 }
