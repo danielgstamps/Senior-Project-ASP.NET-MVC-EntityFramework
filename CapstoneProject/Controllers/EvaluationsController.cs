@@ -683,6 +683,10 @@ namespace CapstoneProject.Controllers
             for (int i = 0; i < numOfQuestions; i++)
             {
                 var total = 0.0;
+                foreach (var collection in allAnswers)
+                {
+                    total += collection[i];
+                }
                 var avg = total / allAnswers.Count;
                 allAvgAnswers.Add(avg);
             }
