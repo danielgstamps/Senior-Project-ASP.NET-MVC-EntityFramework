@@ -207,7 +207,7 @@ namespace CapstoneProject.Controllers
             var evaluation = UnitOfWork.EvaluationRepository.GetByID(id);
             if (evaluation == null)
             {
-                return HttpNotFound();
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
             var employee = UnitOfWork.EmployeeRepository.GetByID(evaluation.EmployeeID);
@@ -250,7 +250,7 @@ namespace CapstoneProject.Controllers
             var type = UnitOfWork.TypeRepository.GetByID(typeId);
             if (cohort == null || type == null)
             {
-                return HttpNotFound();
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
             TempData["CohortID"] = cohortId;

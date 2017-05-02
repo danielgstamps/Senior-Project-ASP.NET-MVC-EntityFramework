@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
+using System.Security.Principal;
+using System.Web;
 using CapstoneProject.Models;
 using CapstoneProject.DAL;
 using Moq;
@@ -20,6 +22,7 @@ namespace CapstoneProjectTests.ControllerTests
 
         private Mock<IUnitOfWork> mockUnitOfWork;
         private EvaluationsController controller;
+        private const int BadRequestStatusCode = 400;
 
         [TestInitialize]
         public void Setup()
@@ -37,8 +40,8 @@ namespace CapstoneProjectTests.ControllerTests
                 EmployeeID = 0,
                 FirstName = "Dwight",
                 LastName = "Schrute",
+                Email = "a@a.com",
                 CohortID = 0,
-                Evaluations = evals,
                 Cohort = cohort
             };
 
@@ -87,6 +90,7 @@ namespace CapstoneProjectTests.ControllerTests
                 new Evaluation
                 {
                     EvaluationID = 0,
+                    EmployeeID = 0,
                     Employee = employee,
                     OpenDate = DateTime.Today.AddDays(-10),
                     CloseDate = DateTime.Today.AddDays(10),
@@ -97,6 +101,7 @@ namespace CapstoneProjectTests.ControllerTests
                 new Evaluation
                 {
                     EvaluationID = 1,
+                    EmployeeID = 0,
                     Employee = employee,
                     OpenDate = DateTime.Today.AddDays(-10),
                     CloseDate = DateTime.Today.AddDays(10),
@@ -143,17 +148,63 @@ namespace CapstoneProjectTests.ControllerTests
             Assert.AreEqual("AdminEvalsIndex", result.ViewName);
         }
 
-        //[TestMethod]
-        //public void TestGetCreateReturnsView()
-        //{
-        //    mockUnitOfWork.Setup(m => m.EvaluationRepository.GetByID(0)).Returns(evals[0]);
-        //    mockUnitOfWork.Setup(m => m.StageRepository.GetByID(0)).Returns(stages[0]);
-        //    mockUnitOfWork.Setup(m => m.TypeRepository.GetByID(0)).Returns(types[0]);
-        //    var result = controller.Create(0) as ViewResult;
-        //    Assert.IsNotNull(result);
-        //    Assert.AreEqual("Create", result.ViewName);
-        //}
+        [TestMethod]
+        public void TestGetDetailsNullIdReturnsBadRequest()
+        {
+            mockUnitOfWork.Setup(m => m.EvaluationRepository.GetByID(0)).Returns(evals[0]);
+            var result = controller.Details(null) as HttpStatusCodeResult;
+            Assert.IsNotNull(result);
+            Assert.AreEqual(BadRequestStatusCode, result.StatusCode);
+        }
 
+        [TestMethod]
+        public void TestGetDetailsInvalidIdReturnsBadRequest()
+        {
+            mockUnitOfWork.Setup(m => m.EvaluationRepository.GetByID(0)).Returns(evals[0]);
+            var result = controller.Details(999) as HttpStatusCodeResult;
+            Assert.IsNotNull(result);
+            Assert.AreEqual(BadRequestStatusCode, result.StatusCode);
+        }
+
+        [TestMethod]
+        public void TestGetEditNullCohortIdReturnsBadRequest()
+        {
+            mockUnitOfWork.Setup(m => m.EvaluationRepository.GetByID(0)).Returns(evals[0]);
+            var result = controller.Edit(null, 0) as HttpStatusCodeResult;
+            Assert.IsNotNull(result);
+            Assert.AreEqual(BadRequestStatusCode, result.StatusCode);
+        }
+
+        [TestMethod]
+        public void TestGetEditNullTypeIdReturnsBadRequest()
+        {
+            mockUnitOfWork.Setup(m => m.EvaluationRepository.GetByID(0)).Returns(evals[0]);
+            var result = controller.Edit(0, null) as HttpStatusCodeResult;
+            Assert.IsNotNull(result);
+            Assert.AreEqual(BadRequestStatusCode, result.StatusCode);
+        }
+
+        [TestMethod]
+        public void TestGetEditInvalidCohortIdReturnsBadRequest()
+        {
+            mockUnitOfWork.Setup(m => m.EvaluationRepository.GetByID(0)).Returns(evals[0]);
+            mockUnitOfWork.Setup(m => m.CohortRepository.GetByID(0)).Returns(cohort);
+            mockUnitOfWork.Setup(m => m.TypeRepository.GetByID(0)).Returns(types[0]);
+            var result = controller.Edit(999, 0) as HttpStatusCodeResult;
+            Assert.IsNotNull(result);
+            Assert.AreEqual(BadRequestStatusCode, result.StatusCode);
+        }
+
+        [TestMethod]
+        public void TestGetEditInvalidTypeIdReturnsBadRequest()
+        {
+            mockUnitOfWork.Setup(m => m.EvaluationRepository.GetByID(0)).Returns(evals[0]);
+            mockUnitOfWork.Setup(m => m.CohortRepository.GetByID(0)).Returns(cohort);
+            mockUnitOfWork.Setup(m => m.TypeRepository.GetByID(0)).Returns(types[0]);
+            var result = controller.Edit(0, 999) as HttpStatusCodeResult;
+            Assert.IsNotNull(result);
+            Assert.AreEqual(BadRequestStatusCode, result.StatusCode);
+        }
 
         [TestMethod]
         public void TestDelete()
