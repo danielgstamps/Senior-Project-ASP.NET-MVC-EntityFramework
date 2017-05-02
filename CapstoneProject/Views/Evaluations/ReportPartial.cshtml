@@ -5,13 +5,16 @@
     var numberOfColumns = 2;
 }
 
-<h3>
-    Employee @Model.EmployeeName Evaluation Report (of Evaluation @Model.TypeName @Model.StageName --generated on @Model.CurrentDate)
-</h3>
+<h2>Employee Evaluation Report</h2>
+<h4>Employee Name: @Model.EmployeeName</h4>
+<h4>Evaluation Type: @Model.TypeName</h4>
+<h4>Evaluation Stage: @Model.StageName</h4>
+<h4>Report Generated: @Model.CurrentDate</h4>
+<br/>
 <table>
     <tr>
-        <th></th>
-        <th>Self </th>
+        <th>Question</th>
+        <th>Self</th>
         @{
             var hasCoworkerColumn = false;
             var hasSuperviseeColumn = false;
@@ -53,21 +56,19 @@
     @foreach (var category in Model.Categories)
     {
         <tr>
+            <td>@category.Name</td>
             <td></td>
-            <td>
-                @category.Name
-            </td>
-            @for (int i = 0; i < numberOfColumns - 2; i++)
+            @for (var i = 0; i < numberOfColumns - 1; i++)
             {
                 <td></td>
             }
         </tr>
-        for (int i = 0; i < category.Questions.Count; i++)
+        for (var i = 0; i < category.Questions.Count; i++)
         {
             var answer = Model.EmployeeAnswers[questionNumber - 1];
             <tr>
-                <td>
-                    Question @questionNumber
+                <td style="text-align: left">
+                    @questionNumber. @category.Questions.ElementAt(i).QuestionText
                 </td>
                 <td>
                     @answer
@@ -101,8 +102,9 @@
                                 break;
                         }
                     }
-                    <td>@Model.AllAvgAnswers[questionNumber - 1]</td>
+                    @*<td>@Model.AllAvgAnswers[questionNumber - 1]</td>*@
                 }
+                <td>@Model.AllAvgAnswers[questionNumber - 1]</td>
             </tr>
             questionNumber++;
         }
