@@ -18,6 +18,7 @@ namespace CapstoneProject.Controllers
     public class EvaluationsController : Controller
     {
         private ApplicationUserManager _userManager;
+        private IUnitOfWork _unitOfWork = new UnitOfWork();
 
         public ApplicationUserManager UserManager
         {
@@ -40,13 +41,422 @@ namespace CapstoneProject.Controllers
             _userManager = userManager;
         }
 
-        public IUnitOfWork UnitOfWork { get; set; } = new UnitOfWork();
+        public IUnitOfWork UnitOfWork
+        {
+            get
+            {
+                return _unitOfWork;
+            }
+            set
+            {
+                _unitOfWork = value;
+            }
+        }
+
+        // GET: Evaluations/Create
+        [Authorize(Roles = "Admin")]
+        public ActionResult Create(int? cohortId)
+        {
+            if (cohortId == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var cohort = UnitOfWork.CohortRepository.GetByID(cohortId);
+            if (cohort == null)
+            {
+                return HttpNotFound();
+            }
+
+            // Link manipulation could crash the page without this.
+            if (HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Summative", 1) && HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Summative", 2))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            TempData["CohortID"] = cohortId;
+            TempData["CohortName"] = cohort.Name;
+
+            var model = new EvaluationCreateViewModel
+            {
+                CohortID = (int)cohortId,
+                NumberOfSupervisors = 1,
+                NumberOfCoworkers = 2,
+                NumberOfSupervisees = 2,
+                OpenDate = DateTime.Today.Date,
+                CloseDate = DateTime.Today.AddDays(1).Date,
+
+                TypeList = UnitOfWork.TypeRepository.dbSet.Select(t => new SelectListItem()
+                {
+                    Value = t.TypeID.ToString(),
+                    Text = t.TypeName,
+                }),
+
+                StageList = UnitOfWork.StageRepository.dbSet.Select(t => new SelectListItem()
+                {
+                    Value = t.StageID.ToString(),
+                    Text = t.StageName
+                })
+            };
+
+            // Remove types if the cohort already has them assigned.
+            var itemList = model.TypeList.ToList();
+            if (cohort.Type1Assigned || HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Summative", 1))
+            {
+                itemList.RemoveAt(0);
+            }
+            if (cohort.Type2Assigned || HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Summative", 2))
+            {
+                itemList.RemoveAt(1);
+            }
+            model.TypeList = itemList;
+
+            ViewBag.BaselineId = UnitOfWork.StageRepository.Get(s => s.StageName.Equals("Baseline")).First().StageID;
+            return View("Create", model);
+        }
+
+        // POST: Evaluations/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(EvaluationCreateViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["DateError"] = "Open Date cannot be in the past, and must come before Close Date.";
+                return RedirectToAction("Create", new { cohortId = (int)TempData["CohortID"] });
+            }
+
+            var cohort = UnitOfWork.CohortRepository.GetByID(model.CohortID);
+
+            // Stage order enforcement
+            var selectedStageName = UnitOfWork.StageRepository.GetByID(model.StageID).StageName;
+            if (selectedStageName.Equals("Formative") && !HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Baseline", model.TypeID))
+            {
+                TempData["StageError"] = "Formative can only be selected after Baseline is completed.";
+                return RedirectToAction("Create", new { cohortId = (int)TempData["CohortID"] });
+            }
+            if (selectedStageName.Equals("Summative") && !HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Formative", model.TypeID))
+            {
+                TempData["StageError"] = "Summative can only be selected after Formative is completed.";
+                return RedirectToAction("Create", new { cohortId = (int)TempData["CohortID"] });
+            }
+
+            // Disallow selecting stages that are already complete.
+            if (HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, selectedStageName, model.TypeID))
+            {
+                TempData["StageError"] = "This cohort has already completed the " + selectedStageName +
+                    " stage for Type " + model.TypeID.ToString() + ".";
+                return RedirectToAction("Create", new { cohortId = (int)TempData["CohortID"] });
+            }
+
+            // If stage != baseline, pull rater numbers from baseline eval
+            if (selectedStageName != "Baseline")
+            {
+                var prevEval = UnitOfWork.EvaluationRepository.Get().First(e =>
+                    e.Employee.CohortID == cohort.CohortID &&
+                    e.IsComplete() &&
+                    e.Stage.StageName.Equals("Baseline") &&
+                    e.TypeID == model.TypeID);
+
+                model.NumberOfSupervisors = NumberOfRatersWithRole(prevEval, "Supervisor");
+                model.NumberOfCoworkers = NumberOfRatersWithRole(prevEval, "Coworker");
+                model.NumberOfSupervisees = NumberOfRatersWithRole(prevEval, "Supervisee");
+            }
+
+            foreach (var emp in cohort.Employees)
+            {
+                var eval = new Evaluation
+                {
+                    Employee = emp,
+                    Type = UnitOfWork.TypeRepository.GetByID(model.TypeID),
+                    Stage = UnitOfWork.StageRepository.GetByID(model.StageID),
+                    OpenDate = model.OpenDate.Value,
+                    CloseDate = model.CloseDate.Value,
+                    CompletedDate = null,
+                    SelfAnswers = "",
+                    Raters = GenerateRaterList(model.NumberOfSupervisors, model.NumberOfCoworkers, model.NumberOfSupervisees)
+                };
+
+                UnitOfWork.EvaluationRepository.Insert(eval);
+                UnitOfWork.Save();
+            }
+
+            if (model.TypeID == 1)
+            {
+                cohort.Type1Assigned = true;
+                UnitOfWork.Save();
+            }
+            if (model.TypeID == 2)
+            {
+                cohort.Type2Assigned = true;
+                UnitOfWork.Save();
+            }
+
+            TempData["CreateSuccess"] = "Successfully created evaluation for " + cohort.Name + ".";
+            return RedirectToAction("Index", "Cohorts");
+        }
+
+        // GET: Evaluations/Details/5
+        public ActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var evaluation = UnitOfWork.EvaluationRepository.GetByID(id);
+            if (evaluation == null)
+            {
+                return HttpNotFound();
+            }
+
+            var employee = UnitOfWork.EmployeeRepository.GetByID(evaluation.EmployeeID);
+            if (employee == null || !employee.Email.Equals(User.Identity.GetUserName()))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+            }
+
+            var questionList = new List<Question>();
+            var categories = evaluation.Type.Categories;
+            foreach (var cat in categories)
+            {
+                foreach (var question in cat.Questions)
+                {
+                    questionList.Add(question);
+                }
+            }
+
+            var answersList = evaluation.SelfAnswers.Split(',').ToList();
+            var model = new ViewEvalViewModel
+            {
+                Eval = evaluation,
+                QuestionList = questionList,
+                Answers = answersList
+            };
+
+            return View("Details", model);
+        }
+
+        // GET: Evaluations/Edit?cohortId=x&typeId=1,2
+        [Authorize(Roles = "Admin")]
+        public ActionResult Edit(int? cohortId, int? typeId)
+        {
+            if (cohortId == null || typeId == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var cohort = UnitOfWork.CohortRepository.GetByID(cohortId);
+            var type = UnitOfWork.TypeRepository.GetByID(typeId);
+            if (cohort == null || type == null)
+            {
+                return HttpNotFound();
+            }
+
+            TempData["CohortID"] = cohortId;
+            TempData["TypeId"] = typeId;
+            TempData["TypeDisplay"] = typeId;
+            TempData["CohortName"] = cohort.Name;
+
+            var model = new EvaluationCreateViewModel();
+
+            // Get all Types.
+            model.TypeList = UnitOfWork.TypeRepository.dbSet.Select(t => new SelectListItem()
+            {
+                Value = t.TypeID.ToString(),
+                Text = t.TypeName,
+            });
+
+            // Get all Stages.
+            model.StageList = UnitOfWork.StageRepository.dbSet.Select(t => new SelectListItem()
+            {
+                Value = t.StageID.ToString(),
+                Text = t.StageName,
+            });
+
+            // Get the first employee in the cohort with at least 1 eval.
+            var employee = cohort.Employees.First(e => e.Evaluations.Count != 0);
+            if (employee == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            // Get the first eval that isn't complete, of this type.
+            var eval = employee.Evaluations.First(e => !e.IsComplete() && e.TypeID == typeId);
+            if (eval == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            model.CohortID = (int)cohortId;
+            model.TypeID = typeId.Value;
+
+            model.StageID = eval.StageID;
+            model.OpenDate = eval.OpenDate;
+            model.CloseDate = eval.CloseDate;
+
+            model.NumberOfSupervisors = NumberOfRatersWithRole(eval, "Supervisor");
+            model.NumberOfCoworkers = NumberOfRatersWithRole(eval, "Coworker");
+            model.NumberOfSupervisees = NumberOfRatersWithRole(eval, "Supervisee"); ;
+
+            ViewBag.BaselineId = UnitOfWork.StageRepository.Get(s => s.StageName.Equals("Baseline")).First().StageID;
+            return View("Edit", model);
+        }
+
+        // POST: Evaluations/Edit?cohortId=x&typeId=1,2
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(EvaluationCreateViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["DateError"] = "Open Date cannot be in the past, and must come before Close Date.";
+                return RedirectToAction("Edit", new { cohortId = (int)TempData["CohortID"], typeId = (int)TempData["TypeId"] });
+            }
+
+            var cohort = UnitOfWork.CohortRepository.GetByID(model.CohortID);
+            if (cohort == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
+
+            // Stage order enforcement
+            var selectedStageName = UnitOfWork.StageRepository.GetByID(model.StageID).StageName;
+            if (selectedStageName.Equals("Formative") && !HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Baseline", model.TypeID))
+            {
+                TempData["StageError"] = "Formative can only be selected after Baseline is completed.";
+                return RedirectToAction("Edit", new { cohortId = (int)TempData["CohortID"], typeId = (int)TempData["TypeId"] });
+            }
+            if (selectedStageName.Equals("Summative") && !HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Formative", model.TypeID))
+            {
+                TempData["StageError"] = "Summative can only be selected after Formative is completed.";
+                return RedirectToAction("Edit", new { cohortId = (int)TempData["CohortID"], typeId = (int)TempData["TypeId"] });
+            }
+
+            // Disallow selecting stages that are already complete.
+            if (HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, selectedStageName, model.TypeID))
+            {
+                TempData["StageError"] = "This cohort has already completed the " + selectedStageName +
+                    " stage for Type " + model.TypeID.ToString() + ".";
+                return RedirectToAction("Edit", new { cohortId = (int)TempData["CohortID"], typeId = (int)TempData["TypeId"] });
+            }
+
+            // Remove target evals
+            foreach (var emp in cohort.Employees)
+            {
+                // If this throws an exception, that means an employee has more than 1 incomplete eval of the same type. Which should be impossible.
+                var eval = emp.Evaluations.Single(e => !e.IsComplete() && e.TypeID == model.TypeID);
+                UnitOfWork.EvaluationRepository.Delete(eval.EvaluationID);
+                UnitOfWork.Save();
+            }
+
+            // If stage != baseline, pull rater numbers from baseline eval
+            if (selectedStageName != "Baseline")
+            {
+                var prevEval = UnitOfWork.EvaluationRepository.Get().First(e =>
+                    e.Employee.CohortID == cohort.CohortID &&
+                    e.IsComplete() &&
+                    e.Stage.StageName.Equals("Baseline") &&
+                    e.TypeID == model.TypeID);
+
+                model.NumberOfSupervisors = NumberOfRatersWithRole(prevEval, "Supervisor");
+                model.NumberOfCoworkers = NumberOfRatersWithRole(prevEval, "Coworker");
+                model.NumberOfSupervisees = NumberOfRatersWithRole(prevEval, "Supervisee");
+            }
+
+            // Recreate evals (I remove/recreate so the emails re-send, and the Rater logic is cleaner).
+            foreach (var emp in cohort.Employees)
+            {
+                var eval = new Evaluation
+                {
+                    Employee = emp,
+                    Type = UnitOfWork.TypeRepository.GetByID(model.TypeID),
+                    Stage = UnitOfWork.StageRepository.GetByID(model.StageID),
+                    OpenDate = model.OpenDate.Value, // This "PossibleInvalidOperation" will never happen. It'd break way up there^ if the dates were null.
+                    CloseDate = model.CloseDate.Value,
+                    SelfAnswers = "",
+                    Raters = GenerateRaterList(model.NumberOfSupervisors, model.NumberOfCoworkers, model.NumberOfSupervisees)
+                };
+
+                UnitOfWork.EvaluationRepository.Insert(eval);
+                UnitOfWork.Save();
+            }
+
+            TempData["EditSuccess"] = "Successfully updated evaluation.";
+            return RedirectToAction("Index", "Cohorts");
+        }
+
+        // GET: Evaluations/Delete/
+        [Authorize(Roles = "Admin")]
+        public ActionResult Delete(int? cohortId, int? typeId)
+        {
+            if (cohortId == null || typeId == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var emp = UnitOfWork.EmployeeRepository.Get().First(e => e.CohortID == cohortId);
+            var eval = emp.Evaluations.Single(e => e.TypeID == typeId && !e.IsComplete());
+            return View("Delete", eval);
+        }
+
+        // POST: Evaluations/Delete/
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int cohortId, int typeId)
+        {
+            var cohort = UnitOfWork.CohortRepository.GetByID(cohortId);
+            if (cohort == null || cohort.Employees.Count == 0)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var employees = cohort.Employees;
+            foreach (var emp in employees)
+            {
+                UnitOfWork.EvaluationRepository.Delete(emp.Evaluations.Single(e => e.TypeID == typeId && !e.IsComplete()));
+                UnitOfWork.Save();
+            }
+
+            switch (typeId)
+            {
+                case 1:
+                    cohort.Type1Assigned = false;
+                    UnitOfWork.Save();
+                    break;
+                case 2:
+                    cohort.Type2Assigned = false;
+                    UnitOfWork.Save();
+                    break;
+            }
+
+            TempData["DeleteSuccess"] = "Successfully deleted evaluation.";
+            return RedirectToAction("Index", "Cohorts");
+        }
+
+        [Authorize]
+        public ActionResult EmployeeEvalsIndex(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var employee = UnitOfWork.EmployeeRepository.GetByID(id);
+            if (employee == null || !employee.Email.Equals(User.Identity.GetUserName()))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+            }
+
+            var employeeEvals = employee.Evaluations.OrderBy(e => e.TypeID);
+            return View(employeeEvals);
+        }
 
         [Authorize(Roles = "Admin")]
         public ActionResult AdminEvalsIndex()
         {
             var evalsOrderedByEmployeeId =
-                this.UnitOfWork.EvaluationRepository.Get().OrderBy(e => e.Employee.EmployeeID).ToList();
+                UnitOfWork.EvaluationRepository.Get().OrderBy(e => e.Employee.EmployeeID).ToList();
             return View("AdminEvalsIndex", evalsOrderedByEmployeeId);
         }
 
@@ -348,405 +758,6 @@ namespace CapstoneProject.Controllers
             }
             avgForQuestion = totalForQuestion / raters.Count;
             avgs.Add(avgForQuestion);
-        }
-
-        // GET: Evaluations/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var evaluation = UnitOfWork.EvaluationRepository.GetByID(id);
-            if (evaluation == null)
-            {
-                return HttpNotFound();
-            }
-
-            var employee = UnitOfWork.EmployeeRepository.GetByID(evaluation.EmployeeID);
-            if (employee == null || !employee.Email.Equals(User.Identity.GetUserName()))
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
-            }
-
-            var questionList = new List<Question>();
-            var categories = evaluation.Type.Categories;
-            foreach (var cat in categories)
-            {
-                foreach (var question in cat.Questions)
-                {
-                    questionList.Add(question);
-                }
-            }
-            
-            var answersList = evaluation.SelfAnswers.Split(',').ToList();
-            var model = new ViewEvalViewModel
-            {
-                Eval = evaluation,
-                QuestionList = questionList,
-                Answers = answersList
-            };
-
-            return View("Details", model);
-        }
-
-        // GET: Evaluations/Create
-        [Authorize(Roles = "Admin")]
-        public ActionResult Create(int? cohortId)
-        {
-            if (cohortId == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var cohort = UnitOfWork.CohortRepository.GetByID(cohortId);
-            if (cohort == null)
-            {
-                return HttpNotFound();
-            }
-
-            // Link manipulation could crash the page without this.
-            if (HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Summative", 1) && HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Summative", 2))
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            TempData["CohortID"] = cohortId;
-            TempData["CohortName"] = cohort.Name;
-
-            var model = new EvaluationCreateViewModel
-            {
-                CohortID = (int)cohortId,
-                NumberOfSupervisors = 1,
-                NumberOfCoworkers = 2,
-                NumberOfSupervisees = 2,
-                OpenDate = DateTime.Today.Date,
-                CloseDate = DateTime.Today.AddDays(1).Date,
-
-                TypeList = UnitOfWork.TypeRepository.dbSet.Select(t => new SelectListItem()
-                {
-                    Value = t.TypeID.ToString(),
-                    Text = t.TypeName,
-                }),
-
-                StageList = UnitOfWork.StageRepository.dbSet.Select(t => new SelectListItem()
-                {
-                    Value = t.StageID.ToString(),
-                    Text = t.StageName
-                })
-            };
-
-            // Remove types if the cohort already has them assigned.
-            var itemList = model.TypeList.ToList();
-            if (cohort.Type1Assigned || HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Summative", 1))
-            {
-                itemList.RemoveAt(0);
-            }
-            if (cohort.Type2Assigned || HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Summative", 2))
-            {
-                itemList.RemoveAt(1);
-            }
-            model.TypeList = itemList;
-
-            ViewBag.BaselineId = UnitOfWork.StageRepository.Get(s => s.StageName.Equals("Baseline")).First().StageID;
-            return View("Create", model);
-        }
-
-        // POST: Evaluations/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(EvaluationCreateViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                TempData["DateError"] = "Open Date cannot be in the past, and must come before Close Date.";
-                return RedirectToAction("Create", new { cohortId = (int)TempData["CohortID"] });
-            }
-
-            var cohort = UnitOfWork.CohortRepository.GetByID(model.CohortID);
-
-            // Stage order enforcement
-            var selectedStageName = UnitOfWork.StageRepository.GetByID(model.StageID).StageName;
-            if (selectedStageName.Equals("Formative") && !HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Baseline", model.TypeID))
-            {
-                TempData["StageError"] = "Formative can only be selected after Baseline is completed.";
-                return RedirectToAction("Create", new { cohortId = (int)TempData["CohortID"] });
-            }
-            if (selectedStageName.Equals("Summative") && !HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Formative", model.TypeID))
-            {
-                TempData["StageError"] = "Summative can only be selected after Formative is completed.";
-                return RedirectToAction("Create", new { cohortId = (int)TempData["CohortID"] });
-            }
-
-            // Disallow selecting stages that are already complete.
-            if (HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, selectedStageName, model.TypeID))
-            {
-                TempData["StageError"] = "This cohort has already completed the " + selectedStageName + 
-                    " stage for Type " + model.TypeID.ToString() + ".";
-                return RedirectToAction("Create", new { cohortId = (int)TempData["CohortID"] });
-            }
-
-            // If stage != baseline, pull rater numbers from baseline eval
-            if (selectedStageName != "Baseline")
-            {
-                var prevEval = UnitOfWork.EvaluationRepository.Get().First(e =>
-                    e.Employee.CohortID == cohort.CohortID &&
-                    e.IsComplete() &&
-                    e.Stage.StageName.Equals("Baseline") && 
-                    e.TypeID == model.TypeID);
-
-                model.NumberOfSupervisors = NumberOfRatersWithRole(prevEval, "Supervisor");
-                model.NumberOfCoworkers = NumberOfRatersWithRole(prevEval, "Coworker");
-                model.NumberOfSupervisees = NumberOfRatersWithRole(prevEval, "Supervisee");
-            }
-
-            foreach (var emp in cohort.Employees)
-            {
-                var eval = new Evaluation
-                {
-                    Employee = emp,
-                    Type = UnitOfWork.TypeRepository.GetByID(model.TypeID),
-                    Stage = UnitOfWork.StageRepository.GetByID(model.StageID),
-                    OpenDate = model.OpenDate.Value,
-                    CloseDate = model.CloseDate.Value,
-                    CompletedDate = null,
-                    SelfAnswers = "",
-                    Raters = GenerateRaterList(model.NumberOfSupervisors, model.NumberOfCoworkers, model.NumberOfSupervisees)
-                };
-
-                UnitOfWork.EvaluationRepository.Insert(eval);
-                UnitOfWork.Save();
-            }
-
-            if (model.TypeID == 1)
-            {
-                cohort.Type1Assigned = true;
-                UnitOfWork.Save();
-            }
-            if (model.TypeID == 2)
-            {
-                cohort.Type2Assigned = true;
-                UnitOfWork.Save();
-            }
-
-            TempData["CreateSuccess"] = "Successfully created evaluation for " + cohort.Name + ".";
-            return RedirectToAction("Index", "Cohorts");
-        }
-
-        // GET: Evaluations/Edit?cohortId=x&typeId=1,2
-        [Authorize(Roles = "Admin")]
-        public ActionResult Edit(int? cohortId, int? typeId)
-        {
-            if (cohortId == null || typeId == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var cohort = UnitOfWork.CohortRepository.GetByID(cohortId);
-            var type = UnitOfWork.TypeRepository.GetByID(typeId);
-            if (cohort == null || type == null)
-            {
-                return HttpNotFound();
-            }
-
-            TempData["CohortID"] = cohortId;
-            TempData["TypeId"] = typeId;
-            TempData["TypeDisplay"] = typeId;
-            TempData["CohortName"] = cohort.Name;
-
-            var model = new EvaluationCreateViewModel();
-
-            // Get all Types.
-            model.TypeList = UnitOfWork.TypeRepository.dbSet.Select(t => new SelectListItem()
-            {
-                Value = t.TypeID.ToString(),
-                Text = t.TypeName,
-            });
-
-            // Get all Stages.
-            model.StageList = UnitOfWork.StageRepository.dbSet.Select(t => new SelectListItem()
-            {
-                Value = t.StageID.ToString(),
-                Text = t.StageName,
-            });
-
-            // Get the first employee in the cohort with at least 1 eval.
-            var employee = cohort.Employees.First(e => e.Evaluations.Count != 0);
-            if (employee == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            // Get the first eval that isn't complete, of this type.
-            var eval = employee.Evaluations.First(e => !e.IsComplete() && e.TypeID == typeId);
-            if (eval == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            model.CohortID = (int)cohortId;
-            model.TypeID = typeId.Value;
-
-            model.StageID = eval.StageID; 
-            model.OpenDate = eval.OpenDate;
-            model.CloseDate = eval.CloseDate;
-
-            model.NumberOfSupervisors = NumberOfRatersWithRole(eval, "Supervisor");
-            model.NumberOfCoworkers = NumberOfRatersWithRole(eval, "Coworker");
-            model.NumberOfSupervisees = NumberOfRatersWithRole(eval, "Supervisee"); ;
-
-            ViewBag.BaselineId = UnitOfWork.StageRepository.Get(s => s.StageName.Equals("Baseline")).First().StageID;
-            return View("Edit", model);
-        }
-
-        // POST: Evaluations/Edit?cohortId=x&typeId=1,2
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(EvaluationCreateViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                TempData["DateError"] = "Open Date cannot be in the past, and must come before Close Date.";
-                return RedirectToAction("Edit", new { cohortId = (int)TempData["CohortID"], typeId = (int)TempData["TypeId"] });
-            }
-
-            var cohort = UnitOfWork.CohortRepository.GetByID(model.CohortID);
-            if (cohort == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
-            }
-
-            // Stage order enforcement
-            var selectedStageName = UnitOfWork.StageRepository.GetByID(model.StageID).StageName;
-            if (selectedStageName.Equals("Formative") && !HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Baseline", model.TypeID))
-            {
-                TempData["StageError"] = "Formative can only be selected after Baseline is completed.";
-                return RedirectToAction("Edit", new { cohortId = (int)TempData["CohortID"], typeId = (int)TempData["TypeId"] });
-            }
-            if (selectedStageName.Equals("Summative") && !HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, "Formative", model.TypeID))
-            {
-                TempData["StageError"] = "Summative can only be selected after Formative is completed.";
-                return RedirectToAction("Edit", new { cohortId = (int)TempData["CohortID"], typeId = (int)TempData["TypeId"] });
-            }
-
-            // Disallow selecting stages that are already complete.
-            if (HtmlExtensions.HtmlExtensions.CohortFinishedStage(cohort, selectedStageName, model.TypeID))
-            {
-                TempData["StageError"] = "This cohort has already completed the " + selectedStageName +
-                    " stage for Type " + model.TypeID.ToString() + ".";
-                return RedirectToAction("Edit", new { cohortId = (int)TempData["CohortID"], typeId = (int)TempData["TypeId"] });
-            }
-
-            // Remove target evals
-            foreach (var emp in cohort.Employees)
-            {
-                // If this throws an exception, that means an employee has more than 1 incomplete eval of the same type. Which should be impossible.
-                var eval = emp.Evaluations.Single(e => !e.IsComplete() && e.TypeID == model.TypeID);
-                UnitOfWork.EvaluationRepository.Delete(eval.EvaluationID);
-                UnitOfWork.Save();
-            }
-
-            // If stage != baseline, pull rater numbers from baseline eval
-            if (selectedStageName != "Baseline")
-            {
-                var prevEval = UnitOfWork.EvaluationRepository.Get().First(e =>
-                    e.Employee.CohortID == cohort.CohortID &&
-                    e.IsComplete() &&
-                    e.Stage.StageName.Equals("Baseline") &&
-                    e.TypeID == model.TypeID);
-
-                model.NumberOfSupervisors = NumberOfRatersWithRole(prevEval, "Supervisor");
-                model.NumberOfCoworkers = NumberOfRatersWithRole(prevEval, "Coworker");
-                model.NumberOfSupervisees = NumberOfRatersWithRole(prevEval, "Supervisee");
-            }
-
-            // Recreate evals (I remove/recreate so the emails re-send, and the Rater logic is cleaner).
-            foreach (var emp in cohort.Employees)
-            {
-                var eval = new Evaluation
-                {
-                    Employee = emp,
-                    Type = UnitOfWork.TypeRepository.GetByID(model.TypeID),
-                    Stage = UnitOfWork.StageRepository.GetByID(model.StageID),
-                    OpenDate = model.OpenDate.Value, // This "PossibleInvalidOperation" will never happen. It'd break way up there^ if the dates were null.
-                    CloseDate = model.CloseDate.Value,
-                    SelfAnswers = "",
-                    Raters = GenerateRaterList(model.NumberOfSupervisors, model.NumberOfCoworkers, model.NumberOfSupervisees)
-                };
-
-                UnitOfWork.EvaluationRepository.Insert(eval);
-                UnitOfWork.Save();
-            }
-
-            TempData["EditSuccess"] = "Successfully updated evaluation.";
-            return RedirectToAction("Index", "Cohorts");
-        }
-
-        // GET: Evaluations/Delete/
-        [Authorize(Roles = "Admin")]
-        public ActionResult Delete(int? cohortId, int? typeId)
-        {
-            if (cohortId == null || typeId == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var emp = UnitOfWork.EmployeeRepository.Get().First(e => e.CohortID == cohortId);
-            var eval = emp.Evaluations.Single(e => e.TypeID == typeId && !e.IsComplete());
-            return View("Delete", eval);
-        }
-
-        // POST: Evaluations/Delete/
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int cohortId, int typeId)
-        {
-            var cohort = UnitOfWork.CohortRepository.GetByID(cohortId);
-            if (cohort == null || cohort.Employees.Count == 0)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var employees = cohort.Employees;
-            foreach (var emp in employees)
-            {
-                UnitOfWork.EvaluationRepository.Delete(emp.Evaluations.Single(e => e.TypeID == typeId && !e.IsComplete()));
-                UnitOfWork.Save();
-            }
-
-            switch (typeId)
-            {
-                case 1:
-                    cohort.Type1Assigned = false;
-                    UnitOfWork.Save();
-                    break;
-                case 2:
-                    cohort.Type2Assigned = false;
-                    UnitOfWork.Save();
-                    break;
-            }
-
-            TempData["DeleteSuccess"] = "Successfully deleted evaluation.";
-            return RedirectToAction("Index", "Cohorts");
-        }
-
-        [Authorize]
-        public ActionResult EmployeeEvalsIndex(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var employee = UnitOfWork.EmployeeRepository.GetByID(id);
-            if (employee == null || !employee.Email.Equals(User.Identity.GetUserName()))
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
-            }
-
-            var employeeEvals = employee.Evaluations.OrderBy(e => e.TypeID);
-            return View(employeeEvals);
         }
 
         private int NumberOfRatersWithRole(Evaluation eval, string role)

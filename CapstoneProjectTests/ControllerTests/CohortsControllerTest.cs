@@ -10,6 +10,7 @@ using System.Web.Mvc;
 
 namespace CapstoneProjectTests.ControllerTests
 {
+    // Fix stupid EF error: Update-Package -Reinstall "EntityFramework" -ProjectName "CapstoneProjectTests"
     [TestClass]
     public class CohortsControllerTest
     {
@@ -44,6 +45,7 @@ namespace CapstoneProjectTests.ControllerTests
                     Raters = new List<Rater>()
                 }
             };
+
             employees = new List<Employee>
             {
                 new Employee

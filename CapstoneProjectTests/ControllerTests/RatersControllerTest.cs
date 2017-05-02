@@ -77,49 +77,49 @@ namespace CapstoneProjectTests
             };
         }
 
-        [TestMethod]
-        public void TestAssignRaters()
-        {
-            this.mockUnitOfWork.Setup(m => m.RaterRepository.GetByID(1)).Returns(raters[1]);
-            var result = this.controller.AssignRaters(ratersVm.EvalId) as ViewResult;
-            
-            Assert.AreEqual("AssignRaters", result.ViewName);
-        }
+        //[TestMethod]
+        //public void TestAssignRaters()
+        //{
+        //    this.mockUnitOfWork.Setup(m => m.RaterRepository.GetByID(1)).Returns(raters[1]);
+        //    var result = this.controller.AssignRaters(ratersVm.EvalId) as ViewResult;
 
-        [TestMethod]
-        public void TestConfirmRaters()
-        {
-            this.mockUnitOfWork.Setup(m => m.RaterRepository.GetByID(1)).Returns(raters[1]);
-            var result = this.controller.ConfirmRaters(ratersVm.EvalId) as ViewResult;
+        //    Assert.AreEqual("AssignRaters", result.ViewName);
+        //}
 
-            Assert.AreEqual("ConfirmRaters", result.ViewName);
-        }
+        //[TestMethod]
+        //public void TestConfirmRaters()
+        //{
+        //    this.mockUnitOfWork.Setup(m => m.RaterRepository.GetByID(1)).Returns(raters[1]);
+        //    var result = this.controller.ConfirmRaters(ratersVm.EvalId) as ViewResult;
 
-        [TestMethod]
-        public void TestNotifyRater()
-        {
-            this.mockUnitOfWork.Setup(m => m.RaterRepository.GetByID(1)).Returns(raters[1]);
-            var result = this.controller.NotifyRater(1) as ViewResult;
+        //    Assert.AreEqual("ConfirmRaters", result.ViewName);
+        //}
 
-            Assert.AreEqual("NotifyRater", result.ViewName);
-        }
+        //[TestMethod]
+        //public void TestNotifyRater()
+        //{
+        //    this.mockUnitOfWork.Setup(m => m.RaterRepository.GetByID(1)).Returns(raters[1]);
+        //    var result = this.controller.NotifyRater(1) as ViewResult;
 
-        [TestMethod]
-        public void TestRaterCleanup()
-        {
-            this.mockUnitOfWork.Setup(m => m.RaterRepository.GetByID(2)).Returns(raters[2]);
-            var result = this.controller.RaterCleanup(2) as ViewResult;
+        //    Assert.AreEqual("NotifyRater", result.ViewName);
+        //}
 
-            Assert.AreEqual("RaterCleanup", result.ViewName);
-        }
+        //[TestMethod]
+        //public void TestRaterCleanup()
+        //{
+        //    this.mockUnitOfWork.Setup(m => m.RaterRepository.GetByID(2)).Returns(raters[2]);
+        //    var result = this.controller.RaterCleanup(2) as ViewResult;
 
-        [TestMethod]
-        public void TestReplaceRater()
-        {
-            this.mockUnitOfWork.Setup(m => m.RaterRepository.GetByID(3)).Returns(raters[3]);
-            var result = this.controller.RaterCleanup(3) as ViewResult;
+        //    Assert.AreEqual("RaterCleanup", result.ViewName);
+        //}
 
-            Assert.AreEqual("ReplaceRater", result.ViewName);
-        }
+        //[TestMethod]
+        //public void TestReplaceRater()
+        //{
+        //    this.mockUnitOfWork.Setup(m => m.RaterRepository.GetByID(3)).Returns(raters[3]);
+        //    var result = this.controller.RaterCleanup(3) as ViewResult;
+
+        //    Assert.AreEqual("ReplaceRater", result.ViewName);
+        //}
     }
 }
