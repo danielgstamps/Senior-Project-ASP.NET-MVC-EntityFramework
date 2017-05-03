@@ -16,9 +16,9 @@ namespace CapstoneProject.ViewModels
         public List<Rater> Raters { get; set; }
         public List<Category> Categories { get; set; }
         public List<int> EmployeeAnswers { get; set; }
-        public List<int> SupervisorAvgAnswers { get; set; }
-        public List<int> CoworkerAvgAnswers { get; set; }
-        public List<int> SuperviseeAvgAnswers { get; set; }
+        public List<double> SupervisorAvgAnswers { get; set; }
+        public List<double> CoworkerAvgAnswers { get; set; }
+        public List<double> SuperviseeAvgAnswers { get; set; }
         public List<double> AllAvgAnswers { get; set; }
     }
 }

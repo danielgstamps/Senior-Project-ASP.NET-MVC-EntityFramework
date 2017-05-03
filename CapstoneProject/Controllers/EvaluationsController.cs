@@ -627,37 +627,15 @@ namespace CapstoneProject.Controllers
             var supervisors = new List<Rater>();
             var coworkers = new List<Rater>();
             var supervisees = new List<Rater>();
-            //GroupRatersByRole(eval, supervisors, coworkers, supervisees);
-            //var ratersToShow = new List<Rater>();
-            //ratersToShow.AddRange(supervisors);
-            //ratersToShow.AddRange(coworkers);
-            //ratersToShow.AddRange(supervisees);
-            //var numOfQuestions = GetNumberOfQuestions(eval);
-
             groupRatersByRole(eval, supervisors, coworkers, supervisees);
+
             var ratersToShow = addRatersToShow(supervisors, coworkers, supervisees);
             var numOfQuestions = getNumberOfQuestions(eval);
             var employeeAnswers = getEmployeeAnswers(eval);
             var supervisorAvgs = getQuestionAvgPerRole(supervisors, numOfQuestions);
             var coworkerAvgs = getQuestionAvgPerRole(coworkers, numOfQuestions);
             var superviseeAvgs = getQuestionAvgPerRole(supervisees, numOfQuestions);
-
-            //var allAvgAnswers = new List<double>();
-            //var allAnswers = new List<List<int>>();
-            //allAnswers.Add(employeeAnswers);
-            //if (!supervisorAvgs.IsNullOrEmpty())
-            //{
-            //    allAnswers.Add(supervisorAvgs);
-            //}
-            //if (!coworkerAvgs.IsNullOrEmpty())
-            //{
-            //    allAnswers.Add(coworkerAvgs);
-            //}
-            //if (!superviseeAvgs.IsNullOrEmpty())
-            //{
-            //    allAnswers.Add(superviseeAvgs);
-            //}
-            //getAvgForAllResponders(numOfQuestions, allAnswers, allAvgAnswers);
+            
             var allAnswers = compileAllAnswers(employeeAnswers, supervisorAvgs, coworkerAvgs, superviseeAvgs);
             var allAvgAnswers = getAvgForAllResponders(numOfQuestions, allAnswers);
 
@@ -677,7 +655,7 @@ namespace CapstoneProject.Controllers
             };
         }
 
-        private static List<double> getAvgForAllResponders(int numOfQuestions, List<List<int>> allAnswers)
+        private static List<double> getAvgForAllResponders(int numOfQuestions, List<List<double>> allAnswers)
         {
             var allAvgAnswers = new List<double>();
             for (int i = 0; i < numOfQuestions; i++)
@@ -702,10 +680,10 @@ namespace CapstoneProject.Controllers
             return ratersToShow;
         }
 
-        private static List<List<int>> compileAllAnswers(List<int> employeeAnswers, List<int> supervisorAvgs, List<int> coworkerAvgs, List<int> superviseeAvgs)
+        private static List<List<double>> compileAllAnswers(List<int> employeeAnswers, List<double> supervisorAvgs, List<double> coworkerAvgs, List<double> superviseeAvgs)
         {
-            var allAnswers = new List<List<int>>();
-            allAnswers.Add(employeeAnswers);
+            var allAnswers = new List<List<double>>();
+            allAnswers.Add(employeeAnswers.Select<int, double>(i => i).ToList());
             if (!supervisorAvgs.IsNullOrEmpty())
             {
                 allAnswers.Add(supervisorAvgs);
@@ -769,13 +747,13 @@ namespace CapstoneProject.Controllers
             return employeeAnswers;
         }
 
-        private List<int> getQuestionAvgPerRole(List<Rater> raters, int numOfQuestions)
+        private List<double> getQuestionAvgPerRole(List<Rater> raters, int numOfQuestions)
         {
             if (raters.IsNullOrEmpty())
             {
-                return new List<int>();
+                return new List<double>();
             }
-            var avgs = new List<int>();
+            var avgs = new List<double>();
             for (var index = 0; index < numOfQuestions; index++)
             {
                 calculateAverage(raters, avgs, index);
@@ -783,10 +761,10 @@ namespace CapstoneProject.Controllers
             return avgs;
         }
 
-        private void calculateAverage(List<Rater> raters, List<int> avgs, int index)
+        private void calculateAverage(List<Rater> raters, List<double> avgs, int index)
         {
-            var totalForQuestion = 0;
-            var avgForQuestion = 0;
+            var totalForQuestion = 0.0;
+            var avgForQuestion = 0.0;
             foreach (var rater in raters)
             {
                 var answer = Convert.ToInt32(rater.Answers.Split(',')[index]);
