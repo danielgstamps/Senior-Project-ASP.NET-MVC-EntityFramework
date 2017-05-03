@@ -659,7 +659,10 @@ namespace CapstoneProject.Controllers
         {
             foreach (var rater in eval.Raters)
             {
-                putRaterInGroup(supervisors, coworkers, supervisees, rater);
+                if (!rater.Disabled)
+                {
+                    putRaterInGroup(supervisors, coworkers, supervisees, rater);
+                }
             }
         }
 

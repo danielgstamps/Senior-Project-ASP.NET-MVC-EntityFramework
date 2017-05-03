@@ -1124,6 +1124,7 @@ C:\Users\Daniel\Desktop\WUDSCO\CapstoneProject\bin\Microsoft.Owin.Security.OAuth
 C:\Users\Daniel\Desktop\WUDSCO\CapstoneProject\bin\Microsoft.Owin.Security.Google.xml
 C:\Users\Daniel\Desktop\WUDSCO\CapstoneProject\bin\Microsoft.Owin.Security.Twitter.xml
 C:\Users\Daniel\Desktop\WUDSCO\CapstoneProject\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+C:\Users\Daniel\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.csprojResolveAssemblyReference.cache
 C:\Users\Daniel\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.Init.resources
 C:\Users\Daniel\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.CohortsNullable.resources
 C:\Users\Daniel\Desktop\WUDSCO\CapstoneProject\obj\Release\CapstoneProject.DataMigrations.EvaluationRefactor.resources
