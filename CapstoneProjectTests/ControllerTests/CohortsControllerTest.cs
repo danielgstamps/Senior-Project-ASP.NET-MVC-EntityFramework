@@ -216,17 +216,6 @@ namespace CapstoneProjectTests.ControllerTests
         }
 
         [TestMethod]
-        public void TestPostCreateInvalidReturnsView()
-        {
-            mockUnitOfWork.Setup(m => m.CohortRepository.GetByID(0)).Returns(cohorts[0]);
-            controller.ModelState.AddModelError("error", "some error");
-
-            var result = controller.Create(null) as ViewResult;
-            Assert.IsNotNull(result);
-            Assert.AreEqual("Create", result.ViewName);
-        }
-
-        [TestMethod]
         public void TestGetDeleteReturnsView()
         {
             mockUnitOfWork.Setup(m => m.CohortRepository.GetByID(0)).Returns(cohorts[0]);

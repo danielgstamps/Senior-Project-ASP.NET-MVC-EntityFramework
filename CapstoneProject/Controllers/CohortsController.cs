@@ -73,6 +73,13 @@ namespace CapstoneProject.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "CohortID,Name")] Cohort cohort)
         {
+            var cohorts = _unitOfWork.CohortRepository.Get();
+            if (cohorts.Any(c => c.Name.Equals(cohort.Name)))
+            {
+                TempData["DuplicateName"] = "A cohort with that name already exists.";
+                return View("Create", cohort);
+            }
+
             if (ModelState.IsValid)
             {
                 _unitOfWork.CohortRepository.Insert(cohort);
@@ -130,7 +137,9 @@ namespace CapstoneProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             var cohortToUpdate = _unitOfWork.CohortRepository.GetByID(id);
+
             if (TryUpdateModel(cohortToUpdate, "",
                new string[] { "Name" }))
             {
