@@ -666,6 +666,8 @@ namespace CapstoneProject.Controllers
                     total += collection[i];
                 }
                 var avg = total / allAnswers.Count;
+                var decimalPlaces = 1;
+                avg = Math.Round(avg, decimalPlaces);
                 allAvgAnswers.Add(avg);
             }
             return allAvgAnswers;
@@ -756,22 +758,21 @@ namespace CapstoneProject.Controllers
             var avgs = new List<double>();
             for (var index = 0; index < numOfQuestions; index++)
             {
-                calculateAverage(raters, avgs, index);
+                avgs.Add(calculateAverage(raters, index));
             }
             return avgs;
         }
 
-        private void calculateAverage(List<Rater> raters, List<double> avgs, int index)
+        private double calculateAverage(List<Rater> raters, int index)
         {
             var totalForQuestion = 0.0;
-            var avgForQuestion = 0.0;
             foreach (var rater in raters)
             {
                 var answer = Convert.ToInt32(rater.Answers.Split(',')[index]);
                 totalForQuestion += answer;
             }
-            avgForQuestion = totalForQuestion / raters.Count;
-            avgs.Add(avgForQuestion);
+            double avgForQuestion = totalForQuestion / raters.Count;
+            return avgForQuestion;
         }
 
         private int NumberOfRatersWithRole(Evaluation eval, string role)
